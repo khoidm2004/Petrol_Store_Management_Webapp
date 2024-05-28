@@ -8,7 +8,7 @@ import {
   doc
 } from "firebase/firestore";
 import { create } from "zustand";
-import { firestore } from "../firebase/firebase";
+import { firestore } from "../firebase/firebase.js";
 
 const usePumpStore = create((set) => ({
   // Map data from array

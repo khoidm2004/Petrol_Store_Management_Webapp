@@ -1,7 +1,7 @@
 //For true admin
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import useShowToast from "./useShowToast";
-import useAuthStore from "../store/authStore";
+import useShowToast from "./useShowToast.js";
+import useAuthStore from "../store/authStore.js";
 import {
   collection,
   doc,

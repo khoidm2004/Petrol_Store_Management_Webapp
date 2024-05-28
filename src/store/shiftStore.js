@@ -4,7 +4,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { create } from "zustand";
-import { firestore } from "../firebase/firebase";
+import { firestore } from "../firebase/firebase.js";
 
 const useShiftStore = create((set) => ({
   // Map data from array

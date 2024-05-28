@@ -1,6 +1,6 @@
 // Hook uses to preview and change the image
 import { useState } from "react";
-import useShowToast from "./useShowToast";
+import useShowToast from "./useShowToast.js";
 
 const usePreviewImage = () => {
   const [selectedFile, setSelectedFile] = useState(null);

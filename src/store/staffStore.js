@@ -8,7 +8,7 @@ import {
   where,
 } from "firebase/firestore";
 import { create } from "zustand";
-import { firestore } from "../firebase/firebase";
+import { firestore } from "../firebase/firebase.js";
 
 const useStaffStore = create((set) => ({
   // Map data from array
