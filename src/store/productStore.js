@@ -18,9 +18,10 @@ const useProductStore = create((set) => ({
   const newProduct = {
     productId: string
     productCode: string
-    name: string
-    price: number
-    status: string
+    productName: string
+    productPrice: number
+    productStatus: string
+    productColor: string
   }
 */
 

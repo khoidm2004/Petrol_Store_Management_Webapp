@@ -5,7 +5,7 @@ import {
   query,
   updateDoc,
   where,
-  doc
+  doc,
 } from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
@@ -29,9 +29,9 @@ const usePumpStore = create((set) => ({
     const newPump = {
         pumpId: string
         pumpCode: string
-        name: string
+        pumpName: string
         tank: object{name:string, tankCode:string}
-        status: string
+        pumpStatus: string
     }
 */
 

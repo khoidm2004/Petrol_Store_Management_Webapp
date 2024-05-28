@@ -31,7 +31,7 @@ const useStaffStore = create((set) => ({
     fullName: string
     phoneNum: string
     email: string (cannot be modified)
-    status: string
+    workingStatus: string
   }
   */
 

@@ -29,10 +29,10 @@ const useTankStore = create((set) => ({
   const newTank = {
     tankId: string,
     tankCode: string
-    name: string
-    volume: number
+    tankName: string
+    tankVolume: number
     product: object{name:string, productId:string}
-    status: string
+    tankStatus: string
   }
 */
 
