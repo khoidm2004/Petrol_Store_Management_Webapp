@@ -58,15 +58,15 @@ const useStaffStore = create((set) => ({
 
   // Modify everything except id
   modifyStaff: async (inputs, showToast) => {
-    const { staff_id, ...updatedStaff } = inputs;
-    const staffDocRef = doc(firestore, "staff", staff_id);
+    const { staffId, ...updatedStaff } = inputs;
+    const staffDocRef = doc(firestore, "staff", staffId);
 
     try {
       await updateDoc(staffDocRef, updatedStaff);
 
       set((state) => ({
         staff: state.staff.map((member) =>
-          member.staff_id === staff_id ? { ...member, ...updatedStaff } : member
+          member.staffId === staffId ? { ...member, ...updatedStaff } : member
         ),
       }));
       showToast("Success", "Staff has been updated successfully", "success");
