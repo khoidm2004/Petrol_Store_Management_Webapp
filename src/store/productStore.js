@@ -16,8 +16,7 @@ const useProductStore = create((set) => ({
 
   /* 
   const newProduct = {
-    productId: string
-    productCode: string
+    productCode: number
     productName: string
     productPrice: number
     productStatus: string
@@ -36,11 +35,12 @@ const useProductStore = create((set) => ({
   },
 
   addProduct: async (newProduct, showToast) => {
+    // Checking validity of productCode
     try {
       const productRef = collection(firestore, "product");
       const q = query(
         productRef,
-        where("product_code", "==", newProduct.product_code)
+        where("productCode", "==", newProduct.productCode)
       );
       const productQuerySnapshot = await getDocs(q);
 
@@ -60,15 +60,28 @@ const useProductStore = create((set) => ({
 
   //Able to modify everything except id
   modifyProduct: async (inputs, showToast) => {
-    const { product_id, ...updatedProduct } = inputs;
-    const productDocRef = doc(firestore, "product", product_id);
-
     try {
+      const { productCode, ...updatedProduct } = inputs;
+      const productDocRef = doc(firestore, "product", productCode);
+
+      // Checking validity of productCode
+      const q = query(
+        collection(firestore, "product"),
+        where("productCode", "==", productCode)
+      );
+      const productQuerySnapshot = await getDocs(q);
+
+      if (!productQuerySnapshot.empty) {
+        showToast("Error", "Product code has been used", "error");
+      }
+
       await updateDoc(productDocRef, updatedProduct);
 
       set((state) => ({
         staff: state.product.map((item) =>
-          item.product_id === product_id ? { ...item, ...updatedProduct } : item
+          item.productCode === productCode
+            ? { ...item, ...updatedProduct }
+            : item
         ),
       }));
       showToast("Success", "Product has been updated successfully", "success");
