@@ -27,9 +27,10 @@ const usePumpStore = create((set) => ({
 
   /*
     const newPump = {
-        pumpId: string
+        pumpId: number
         pumpCode: string
         pumpName: string
+        product: object {code:number,name:string}
         tank: object{name:string, tankCode:string}
         pumpStatus: string
     }
@@ -38,11 +39,20 @@ const usePumpStore = create((set) => ({
   addPump: async (showToast, newPump) => {
     try {
       const pumpRef = collection(firestore, "pump");
-      const q = query(pumpRef, where("pump_code", "==", newPump.pump_code));
-      const pumpQuerySnapshot = await getDocs(q);
 
-      if (!pumpQuerySnapshot.empty) {
+      //Checking pumpCode validity
+      const qCode = query(pumpRef, where("pumpCode", "==", newPump.pumpCode));
+      const pumpCodeQuerySnapshot = await getDocs(qCode);
+      if (!pumpCodeQuerySnapshot.empty) {
         showToast("Error", "Pump code has been used", "error");
+        return;
+      }
+
+      //Checking pumpId validity
+      const qId = query(pumpRef, where("pumpId", "==", newPump.pumpId));
+      const pumpIdQuerySnapshot = await getDocs(qId);
+      if (!pumpIdQuerySnapshot.empty) {
+        showToast("Error", "Pump Id has been used", "error");
         return;
       }
 
@@ -59,15 +69,37 @@ const usePumpStore = create((set) => ({
 
   //Able to modify everything except id
   modifyPump: async (inputs, showToast) => {
-    const { pump_id, ...updatedPump } = inputs;
-    const pumpDocRef = doc(firestore, "pump", pump_id);
-
     try {
+      const { pumpId, ...updatedPump } = inputs;
+      const pumpDocRef = doc(firestore, "pump", pumpId);
+
+      //Checking pumpCode validity
+      const qCode = query(
+        collection(firestore, "pump"),
+        where("pumpCode", "==", newPump.pumpCode)
+      );
+      const pumpCodeQuerySnapshot = await getDocs(qCode);
+      if (!pumpCodeQuerySnapshot.empty) {
+        showToast("Error", "Pump code has been used", "error");
+        return;
+      }
+
+      //Checking pumpId validity
+      const qId = query(
+        collection(firestore, "pump"),
+        where("pumpId", "==", newPump.pumpId)
+      );
+      const pumpIdQuerySnapshot = await getDocs(qId);
+      if (!pumpIdQuerySnapshot.empty) {
+        showToast("Error", "Pump Id has been used", "error");
+        return;
+      }
+
       await updateDoc(pumpDocRef, updatedPump);
 
       set((state) => ({
         pumps: state.pumps.map((pump) =>
-          pump.pump_id === pump_id ? { ...pump, updatedPump } : pump
+          pump.pumpId === pumpId ? { ...pump, updatedPump } : pump
         ),
       }));
       showToast("Success", "Pump has been added successfully", "error");
