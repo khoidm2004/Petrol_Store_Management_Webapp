@@ -30,8 +30,8 @@ const usePumpStore = create((set) => ({
         pumpId: number
         pumpCode: string
         pumpName: string
-        product: object {code:number,name:string}
-        tank: object{name:string, tankCode:string}
+        product: object {productCode:number,productName:string}
+        tank: object{tankName:string, tankCode:string}
         pumpStatus: string
     }
 */

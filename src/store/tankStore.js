@@ -31,7 +31,7 @@ const useTankStore = create((set) => ({
     tankCode: string
     tankName: string
     tankVolume: number
-    product: object{name:string, productId:string}
+    product: object{productName:string, productCode:number}
     tankStatus: string
   }
 */
