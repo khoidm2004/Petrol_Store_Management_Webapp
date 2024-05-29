@@ -1,8 +1,4 @@
-import {
-  addDoc,
-  collection,
-  getDocs,
-} from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
 
@@ -25,9 +21,9 @@ const useShiftStore = create((set) => ({
   const newShift = {
     startTime: number
     endTime: number
-    pumpList: object{name:string, pumpCode:string, firstMeterReadingByMoney:number, firstMeterReadingByLitre:number}
+    pumpList: object{pumpName:string, pumpCode:string, firstMeterReadingByMoney:number, firstMeterReadingByLitre:number}
     employeeList: array[]
-    productList: object{name, productCode, price}
+    productList: object{productName, productCode, productPrice}
   }
   */
 
