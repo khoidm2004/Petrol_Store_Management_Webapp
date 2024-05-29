@@ -63,18 +63,6 @@ const useProductStore = create((set) => ({
     try {
       const { productCode, ...updatedProduct } = inputs;
       const productDocRef = doc(firestore, "product", productCode);
-
-      // Checking validity of productCode
-      const q = query(
-        collection(firestore, "product"),
-        where("productCode", "==", productCode)
-      );
-      const productQuerySnapshot = await getDocs(q);
-
-      if (!productQuerySnapshot.empty) {
-        showToast("Error", "Product code has been used", "error");
-      }
-
       await updateDoc(productDocRef, updatedProduct);
 
       set((state) => ({
