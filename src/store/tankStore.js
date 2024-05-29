@@ -27,7 +27,7 @@ const useTankStore = create((set) => ({
 
   /* 
   const newTank = {
-    tankId: string,
+    tankId: number
     tankCode: string
     tankName: string
     tankVolume: number
@@ -39,10 +39,19 @@ const useTankStore = create((set) => ({
   addTank: async (newTank, showToast) => {
     try {
       const tankRef = collection(firestore, "tank");
-      const q = query(tankRef, where("tank_code", "==", newTank.tank_code));
-      const tankQuerySnapshot = await getDocs(q);
 
-      if (!tankQuerySnapshot.empty) {
+      //Checking tankId validity
+      const qId = query(tankRef, where("tankId", "==", newTank.tankId));
+      const tankIdQuerySnapshot = await getDocs(qId);
+      if (!tankIdQuerySnapshot.empty) {
+        showToast("Error", "Tank Id has been used", "error");
+        return;
+      }
+
+      //Checking tankCode validity
+      const qCode = query(tankRef, where("tankCode", "==", newTank.tankCode));
+      const tankCodeQuerySnapshot = await getDocs(qCode);
+      if (!tankCodeQuerySnapshot.empty) {
         showToast("Error", "Tank code has been used", "error");
         return;
       }
@@ -60,15 +69,14 @@ const useTankStore = create((set) => ({
 
   //Able to modify everything except id
   modifyTank: async (inputs, showToast) => {
-    const { tank_id, ...updatedTank } = inputs;
-    const tankDocRef = doc(firestore, "tank", tank_id);
-
     try {
+      const { tankId, ...updatedTank } = inputs;
+      const tankDocRef = doc(firestore, "tank", tankId);
       await updateDoc(tankDocRef, updatedTank);
 
       set((state) => ({
         tanks: state.tanks.map((tank) =>
-          tank.tank_id === tank_id ? { ...tank, ...updatedTank } : tank
+          tank.tankId === tankId ? { ...tank, ...updatedTank } : tank
         ),
       }));
       showToast("Success", "Tank has been updated successfully", "success");
