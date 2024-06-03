@@ -18,7 +18,7 @@ const useStaffStore = create((set) => ({
     const staffCollection = collection(firestore, "staff");
     const staffSnapshot = await getDocs(staffCollection);
     const staffList = staffSnapshot.docs.map((doc) => ({
-      staffId: doc.id,
+      id: doc.id,
       ...doc.data(),
     }));
 
