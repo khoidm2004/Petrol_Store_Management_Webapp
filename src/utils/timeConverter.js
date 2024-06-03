@@ -1,4 +1,4 @@
-const timeConverter = (timestamp) => {
+export const timeConverter = (timestamp) => {
   const now = Date.now();
   const timeAgo = Math.floor((now - timestamp) / 1000);
 
@@ -10,5 +10,3 @@ const timeConverter = (timestamp) => {
     return `${hourAgo}h`;
   }
 };
-
-module.exports = timeConverter;

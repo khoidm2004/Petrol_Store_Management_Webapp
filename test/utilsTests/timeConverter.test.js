@@ -1,4 +1,4 @@
-const timeConverter = require("../../src/utils/timeConverter");
+import {timeConverter} from "../../src/utils/timeConverter"
 
 describe("utils/timeConverter", () => {
   it("1.should return minutes if time is less than a hour", () => {
