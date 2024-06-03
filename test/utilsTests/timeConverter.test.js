@@ -1,3 +1,4 @@
+import { describe, test, expect } from "@jest/globals";
 import { timeConverter } from "../../src/utils/timeConverter";
 
 describe("utils/timeConverter", () => {
