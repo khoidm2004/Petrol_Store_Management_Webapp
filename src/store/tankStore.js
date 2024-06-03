@@ -27,6 +27,7 @@ const useTankStore = create((set) => ({
 
   /* 
   const newTank = {
+    id: string
     tankId: number
     tankCode: string
     tankName: string
@@ -70,13 +71,13 @@ const useTankStore = create((set) => ({
   //Able to modify everything except id
   modifyTank: async (inputs, showToast) => {
     try {
-      const { tankId, ...updatedTank } = inputs;
-      const tankDocRef = doc(firestore, "tank", tankId);
+      const { id, ...updatedTank } = inputs;
+      const tankDocRef = doc(firestore, "tank", id);
       await updateDoc(tankDocRef, updatedTank);
 
       set((state) => ({
         tanks: state.tanks.map((tank) =>
-          tank.tankId === tankId ? { ...tank, ...updatedTank } : tank
+          tank.id === id ? { ...tank, ...updatedTank } : tank
         ),
       }));
       showToast("Success", "Tank has been updated successfully", "success");
