@@ -27,6 +27,7 @@ const usePumpStore = create((set) => ({
 
   /*
     const newPump = {
+        id: string
         pumpId: number
         pumpCode: string
         pumpName: string
@@ -70,13 +71,13 @@ const usePumpStore = create((set) => ({
   //Able to modify everything except id
   modifyPump: async (inputs, showToast) => {
     try {
-      const { pumpId, ...updatedPump } = inputs;
-      const pumpDocRef = doc(firestore, "pump", pumpId);
+      const { id, ...updatedPump } = inputs;
+      const pumpDocRef = doc(firestore, "pump", id);
       await updateDoc(pumpDocRef, updatedPump);
 
       set((state) => ({
         pumps: state.pumps.map((pump) =>
-          pump.pumpId === pumpId ? { ...pump, updatedPump } : pump
+          pump.id === id ? { ...pump, updatedPump } : pump
         ),
       }));
       showToast("Success", "Pump has been added successfully", "error");
