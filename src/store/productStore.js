@@ -16,6 +16,7 @@ const useProductStore = create((set) => ({
 
   /* 
   const newProduct = {
+    productId: string
     productCode: number
     productName: string
     productPrice: number
@@ -61,15 +62,13 @@ const useProductStore = create((set) => ({
   //Able to modify everything except id
   modifyProduct: async (inputs, showToast) => {
     try {
-      const { productCode, ...updatedProduct } = inputs;
-      const productDocRef = doc(firestore, "product", productCode);
+      const { productId, ...updatedProduct } = inputs;
+      const productDocRef = doc(firestore, "product", productId);
       await updateDoc(productDocRef, updatedProduct);
 
       set((state) => ({
-        staff: state.product.map((item) =>
-          item.productCode === productCode
-            ? { ...item, ...updatedProduct }
-            : item
+        product: state.product.map((item) =>
+          item.productId === productId ? { ...item, ...updatedProduct } : item
         ),
       }));
       showToast("Success", "Product has been updated successfully", "success");
