@@ -3,8 +3,6 @@ import { renderHook } from "@testing-library/react-hooks";
 import { useToast } from "@chakra-ui/react";
 import useShowToast from "../../src/hooks/useShowToast";
 
-
-
 jest.mock("@chakra-ui/react", () => ({
   useToast: jest.fn(),
 }));
