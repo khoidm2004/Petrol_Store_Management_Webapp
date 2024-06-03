@@ -28,7 +28,7 @@ const useProductStore = create((set) => ({
     const ProductCollection = collection(firestore, "product");
     const productSnapshot = await getDocs(ProductCollection);
     const productList = productSnapshot.docs.map((doc) => ({
-      id: doc.id,
+      productId: doc.id,
       ...doc.data(),
     }));
     set({ product: productList });
