@@ -58,10 +58,9 @@ const useStaffStore = create((set) => ({
 
   // Modify everything except id
   modifyStaff: async (inputs, showToast) => {
-    const { staffId, ...updatedStaff } = inputs;
-    const staffDocRef = doc(firestore, "staff", staffId);
-
     try {
+      const { staffId, ...updatedStaff } = inputs;
+      const staffDocRef = doc(firestore, "staff", staffId);
       await updateDoc(staffDocRef, updatedStaff);
 
       set((state) => ({
