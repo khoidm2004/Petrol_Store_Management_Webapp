@@ -8,13 +8,14 @@ import logo from "../../assets/images/logo.png";
 import LoginForm from "../../App.jsx";
 import Staff from "./Staff.jsx";
 import '../CSS/LoginForm.css';
-
 import {
   BrowserRouter,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+import Product from "./Product.jsx";
+import Tank from "./Tank.jsx";
 
 export function Include() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -72,7 +73,23 @@ export function Include() {
               <div className="navbar__li-box">
                 <li className="navbar__li">
                   <AiOutlineUser className='iconmenu'/>
-                  <a href="/staff"> SAN PHAM</a>
+                  <a href="/product"> MAT HANG</a>
+                </li>
+              </div>
+            </ul>
+            <ul className="navbar__list"> 
+              <div className="navbar__li-box">
+                <li className="navbar__li">
+                  <AiOutlineUser className='iconmenu'/>
+                  <a href="/tank"> BE</a>
+                </li>
+              </div>
+            </ul>
+            <ul className="navbar__list"> 
+              <div className="navbar__li-box">
+                <li className="navbar__li">
+                  <AiOutlineUser className='iconmenu'/>
+                  <a href="/shiff"> VOI BOM</a>
                 </li>
               </div>
             </ul>
@@ -100,6 +117,15 @@ export function Include() {
           <Route path="/staff">
             <Staff />
           </Route>
+          <Route path="/product">
+            <Product />
+          </Route>
+          <Route path="/tank">
+            <Tank />
+          </Route>
+          {/* <Route path="/shift">
+            <Shift />
+          </Route> */}
         </Switch>
       </div>
     </BrowserRouter>
