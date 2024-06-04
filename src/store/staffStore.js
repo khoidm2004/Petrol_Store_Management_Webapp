@@ -53,11 +53,7 @@ const useStaffStore = create((set) => ({
       set((state) => ({
         staff: [...state.staff, { id: docRef.id, ...newStaff }],
       }));
-      return {
-        Title: "Success",
-        Message: "Adding Successfully",
-        Status: "success",
-      };
+      showToast("Success", "Staff has been added successfully", "success");
     } catch (error) {
       return {
         Title: "Error",
@@ -68,7 +64,7 @@ const useStaffStore = create((set) => ({
   },
 
   // Modify everything except id
-  modifyStaff: async (inputs) => {
+  modifyStaff: async (inputs, showToast) => {
     try {
       const { staffId, ...updatedStaff } = inputs;
       const staffDocRef = doc(firestore, "staff", staffId);
@@ -79,11 +75,7 @@ const useStaffStore = create((set) => ({
           member.staffId === staffId ? { ...member, ...updatedStaff } : member
         ),
       }));
-      return {
-        Title: "Success",
-        Message: "Modifying Successfully",
-        Status: "success",
-      };
+      showToast("Success", "Staff has been updated successfully", "success");
     } catch (error) {
       return {
         Title: "Error",

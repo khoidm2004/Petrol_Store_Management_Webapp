@@ -19,10 +19,9 @@ const useTankStore = create((set) => ({
     const tankRef = collection(firestore, "tank");
     const tankSnapShot = await getDocs(tankRef);
     const tankList = tankSnapShot.docs.map((doc) => ({
-      id: doc.id,
+      tankId: doc.id,
       ...doc.data(),
     }));
-
     set({ tanks: tankList });
   },
 
