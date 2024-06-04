@@ -57,7 +57,6 @@ const useStaffStore = create((set) => ({
     }
   },
 
-  // Modify everything except id
   modifyStaff: async (inputs, showToast) => {
     try {
       const { staffId, ...updatedStaff } = inputs;

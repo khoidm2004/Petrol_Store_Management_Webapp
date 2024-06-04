@@ -21,8 +21,6 @@ const useTankStore = create((set) => ({
       tankId: doc.id,
       ...doc.data(),
     }));
-
-    // console.log(tankList);
     set({ tanks: tankList });
   },
 
