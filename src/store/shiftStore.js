@@ -34,10 +34,17 @@ const useShiftStore = create((set) => ({
       set((state) => ({
         shifts: [...state.shifts, { id: docRef, ...newShift }],
       }));
-      showToast("Success", "Shift has been added successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Adding Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
-      return;
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 }));
