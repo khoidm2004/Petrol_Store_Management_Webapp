@@ -35,28 +35,35 @@ const useStaffStore = create((set) => ({
   }
   */
 
-  addStaff: async (newStaff, showToast) => {
+  addStaff: async (newStaff) => {
     try {
       const staffRef = collection(firestore, "staff");
       const q = query(staffRef, where("email", "==", newStaff.email));
       const staffQuerySnapshot = await getDocs(q);
 
       if (!staffQuerySnapshot.empty) {
-        showToast("Error", "Email has been registered", "error");
-        return;
+        return {
+          Title: "Error",
+          Message: "Email has been used",
+          Status: "error",
+        };
       }
 
       const docRef = await addDoc(staffRef, newStaff);
       set((state) => ({
         staff: [...state.staff, { id: docRef.id, ...newStaff }],
       }));
-      prompt("Thành công");
-      // showToast("Success", "Staff has been added successfully", "success");
+      showToast("Success", "Staff has been added successfully", "success");
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 
+  // Modify everything except id
   modifyStaff: async (inputs, showToast) => {
     try {
       const { staffId, ...updatedStaff } = inputs;
@@ -68,10 +75,13 @@ const useStaffStore = create((set) => ({
           member.staffId === staffId ? { ...member, ...updatedStaff } : member
         ),
       }));
-      alert("Thành công");
       showToast("Success", "Staff has been updated successfully", "success");
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 }));

@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
+import { Title } from "chart.js";
 
 const useTankStore = create((set) => ({
   // Map data from array
@@ -36,7 +37,7 @@ const useTankStore = create((set) => ({
   }
 */
 
-  addTank: async (newTank, showToast) => {
+  addTank: async (newTank) => {
     try {
       const tankRef = collection(firestore, "tank");
 
@@ -44,31 +45,44 @@ const useTankStore = create((set) => ({
       const qId = query(tankRef, where("tankId", "==", newTank.tankId));
       const tankIdQuerySnapshot = await getDocs(qId);
       if (!tankIdQuerySnapshot.empty) {
-        showToast("Error", "Tank Id has been used", "error");
-        return;
+        return {
+          Title: "Error",
+          Message: "Tank Id has been used",
+          Status: "error",
+        };
       }
 
       //Checking tankCode validity
       const qCode = query(tankRef, where("tankCode", "==", newTank.tankCode));
       const tankCodeQuerySnapshot = await getDocs(qCode);
       if (!tankCodeQuerySnapshot.empty) {
-        showToast("Error", "Tank code has been used", "error");
-        return;
+        return {
+          Title: "Error",
+          Message: "Tank Code has been used",
+          Status: "error",
+        };
       }
 
       const docRef = await addDoc(tankRef, newTank);
       set((state) => ({
         tanks: [...state.tanks, { id: docRef, ...newTank }],
       }));
-      showToast("Success", "Tank has been added successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Adding Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
-      return;
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 
   //Able to modify everything except id
-  modifyTank: async (inputs, showToast) => {
+  modifyTank: async (inputs) => {
     try {
       const { id, ...updatedTank } = inputs;
       const tankDocRef = doc(firestore, "tank", id);
@@ -79,9 +93,17 @@ const useTankStore = create((set) => ({
           tank.id === id ? { ...tank, ...updatedTank } : tank
         ),
       }));
-      showToast("Success", "Tank has been updated successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Modifying Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 }));
