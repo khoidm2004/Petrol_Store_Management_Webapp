@@ -35,7 +35,7 @@ const useProductStore = create((set) => ({
     set({ product: productList });
   },
 
-  addProduct: async (newProduct, showToast) => {
+  addProduct: async (newProduct) => {
     // Checking validity of productCode
     try {
       const productRef = collection(firestore, "product");
@@ -46,16 +46,27 @@ const useProductStore = create((set) => ({
       const productQuerySnapshot = await getDocs(q);
 
       if (!productQuerySnapshot.empty) {
-        showToast("Error", "Product code has been used", "error");
-        return;
+        return {
+          Title: "Error",
+          Message: "Product Code has been used",
+          Status: "error",
+        };
       }
       const docRef = addDoc(productRef, newProduct);
       set((state) => ({
         product: [...state.product, { id: docRef.id, ...newProduct }],
       }));
-      showToast("Success", "Product has been added successfully");
+      return {
+        Title: "Success",
+        Message: "Adding Sucessfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 
@@ -71,9 +82,17 @@ const useProductStore = create((set) => ({
           item.productId === productId ? { ...item, ...updatedProduct } : item
         ),
       }));
-      showToast("Success", "Product has been updated successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Modifying Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 }));

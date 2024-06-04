@@ -37,7 +37,7 @@ const usePumpStore = create((set) => ({
     }
 */
 
-  addPump: async (showToast, newPump) => {
+  addPump: async (newPump) => {
     try {
       const pumpRef = collection(firestore, "pump");
 
@@ -45,26 +45,39 @@ const usePumpStore = create((set) => ({
       const qCode = query(pumpRef, where("pumpCode", "==", newPump.pumpCode));
       const pumpCodeQuerySnapshot = await getDocs(qCode);
       if (!pumpCodeQuerySnapshot.empty) {
-        showToast("Error", "Pump code has been used", "error");
-        return;
+        return {
+          Title: "Error",
+          Message: "Pump Code has been used",
+          Status: "error",
+        };
       }
 
       //Checking pumpId validity
       const qId = query(pumpRef, where("pumpId", "==", newPump.pumpId));
       const pumpIdQuerySnapshot = await getDocs(qId);
       if (!pumpIdQuerySnapshot.empty) {
-        showToast("Error", "Pump Id has been used", "error");
-        return;
+        return {
+          Title: "Error",
+          Message: "Pump Id has been used",
+          Status: "Error",
+        };
       }
 
       const docRef = await addDoc(pumpRef, newPump);
       set((state) => ({
         pumps: [...state.pumps, { id: docRef, newPump }],
       }));
-      showToast("Success", "Pump has been added successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Adding Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
-      return;
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 
@@ -80,9 +93,17 @@ const usePumpStore = create((set) => ({
           pump.id === id ? { ...pump, updatedPump } : pump
         ),
       }));
-      showToast("Success", "Pump has been added successfully", "error");
+      return {
+        Title: "Success",
+        Message: "Modifying Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 }));
