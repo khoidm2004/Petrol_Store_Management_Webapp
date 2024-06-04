@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import './Components/CSS/LoginForm.css';
+import './LoginForm.css';
 import { FaUser, FaLock } from "react-icons/fa";
-import logo from "./assets/images/logo.png";
-import coverimages from "./assets/images/coverimages.png";
-import user from "./assets/images/user.png";
-import useLogin from './hooks/useLogin';
+import logo from "./../assets/images/logo.png";
+import coverimages from "./../assets/images/coverimages.png";
+import user from "./../assets/images/user.png";
+import useLogin from './../hooks/useLogin';
 
 export const LoginForm = () => {
   const { login, loading} = useLogin(); 

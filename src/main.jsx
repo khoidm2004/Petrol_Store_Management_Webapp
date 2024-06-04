@@ -12,7 +12,7 @@
 import React from "react";
 import ReactDOM from 'react-dom/client'
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Include } from './Components/HomePage/Include.jsx';
+import { Include } from './Page/Components/HomePage/Include.jsx';
 // Importing the Bootstrap CSS
 // const rootElement = document.getElementById("root");
 // ReactDOM.render(<Include  />, rootElement);

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import useStaffStore from "../../store/staffStore.js";
+import useStaffStore from "../../../store/staffStore.js";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
-import "../CSS/staff.css";
+import "./staff.css";
 
 export const Staff = () => {
   const staff = useStaffStore((state) => state.staff);
@@ -61,6 +61,7 @@ export const Staff = () => {
 
   const handleAddStaff = async () => {
     try {
+      console.log(newStaff);
       var status = await addStaff(newStaff);
       console.log(status);
       setNewStaff({

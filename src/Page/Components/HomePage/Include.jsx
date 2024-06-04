@@ -4,18 +4,19 @@ import { AiOutlineUnorderedList, AiOutlineClose } from "react-icons/ai";
 import { AiOutlineAppstore, AiOutlineUser, AiTwotoneShopping} from "react-icons/ai";
 import { IoMdPeople } from "react-icons/io";
 import { FaSignOutAlt,FaBoxes } from "react-icons/fa";
-import logo from "../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.png";
 import LoginForm from "../../App.jsx";
-import Staff from "./Staff.jsx";
-import '../CSS/LoginForm.css';
+import Staff from "../../Components/HomePage/Staff.jsx";
+import '../../LoginForm.css';
 import {
   BrowserRouter,
   Switch,
   Route,
   Link
 } from "react-router-dom";
-import Product from "./Product.jsx";
-import Tank from "./Tank.jsx";
+import Product from "../../Components/HomePage/Product.jsx";
+import Tank from "../../Components/HomePage/Tank.jsx";
+import Pump from "./Pump.jsx";
 
 export function Include() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -89,7 +90,7 @@ export function Include() {
               <div className="navbar__li-box">
                 <li className="navbar__li">
                   <AiOutlineUser className='iconmenu'/>
-                  <a href="/shiff"> VOI BOM</a>
+                  <a href="/pump"> VOI BOM</a>
                 </li>
               </div>
             </ul>
@@ -123,9 +124,9 @@ export function Include() {
           <Route path="/tank">
             <Tank />
           </Route>
-          {/* <Route path="/shift">
-            <Shift />
-          </Route> */}
+          <Route path="/pump">
+            <Pump />
+          </Route>
         </Switch>
       </div>
     </BrowserRouter>

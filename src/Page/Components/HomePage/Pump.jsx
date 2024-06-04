@@ -1,30 +1,38 @@
 import { useEffect, useState } from 'react';
-import useTankStore from "../../store/tankStore.js";
-import useProductStore from "../../store/productStore.js";
+import usePumpStore from "../../../store/pumpStore.js";
+import useTankStore from "../../../store/tankStore.js";
+import useProductStore from "../../../store/productStore.js";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
-import useShowToast from '../../hooks/useShowToast.js';
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import 'chart.js/auto';
-import '../CSS/staff.css';
+import './staff.css';
 
+export const Pump = () => {
+    const pumps = usePumpStore((state) => state.pumps);
+    const fetchPump = usePumpStore((state) => state.fetchPump);
+    const addPump = usePumpStore((state) => state.addPump);
+    const modifyPump = usePumpStore((state) => state.modifyPump);
 
-export const Tank = () => {
-    const { tanks, fetchTank, modifyTank, addTank } = useTankStore();
     const { product, fetchProduct} = useProductStore();
+    const { tanks, fetchTank} = useTankStore();
     const [openEmail, setOpenEmail] = useState(null);
-    const showToast = useShowToast(); 
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [addingStaff, setAddingStaff] = useState(false);
     const [newStaff, setNewStaff] = useState({
-        tankCode: "",
-        tankName: "",
-        tankStatus: "On use",
+        tankId: "",
+        pumpCode: "",
+        pumpName: "",
+        pumpStatus: "On use",
         product: {
-            productName: "",
-            productCode: "",
+            productName: "null",
+            productCode: "null",
+        },
+        tank: {
+            tankName: "null",
+            tankCode: "null",
         },
     });
 
@@ -36,6 +44,10 @@ export const Tank = () => {
         }
     };
 
+    useEffect(() => {
+        fetchPump();
+    }, [fetchPump]);
+    
     useEffect(() => {
         fetchTank();
     }, [fetchTank]);
@@ -58,7 +70,7 @@ export const Tank = () => {
         if (editMode && selectedStaff) {
             try {
                 console.log(selectedStaff)
-                await modifyTank(selectedStaff, showToast); 
+                await modifyPump(selectedStaff); 
                 setEditMode(false);
                 setSelectedStaff(null);
             } catch (error) {
@@ -69,19 +81,25 @@ export const Tank = () => {
 
     const handleAddStaff = async () => {
         try {
-            await addTank(newStaff, showToast);
+            console.log(newStaff);
+            await addPump(newStaff);
             setNewStaff({
-                tankCode: "",
-                tankName: "",
-                tankStatus: "On use",
+                pumpId: "",
+                pumpCode: "",
+                pumpName: "",
+                pumpStatus: "On use",
                 product: {
                     productName: "",
                     productCode: "",
                 },
+                tank: {
+                    tankName: "",
+                    tankCode: "",
+                },
             });
             setAddingStaff(false);
         } catch (error) {
-            console.error('Add staff error:', error);
+            // console.error('Add staff error:', error);
         }
     };
 
@@ -98,13 +116,13 @@ export const Tank = () => {
         }]
     };
 
-    const workingStaff = tanks.filter(staffMember => staffMember.tankStatus === "On use");
-    const notWorkingStaff = tanks.filter(staffMember => staffMember.tankStatus === "Not On use");
+    const workingStaff = pumps.filter(staffMember => staffMember.pumpStatus === "On use");
+    const notWorkingStaff = pumps.filter(staffMember => staffMember.pumpStatus === "Not On use");
 
     return (
         <div  className='Staff'>
             <header>
-                <p>THÔNG TIN BỂ</p>
+                <p>THÔNG TIN VÒI BƠM</p>
                 <div className="search-container">
                     <FaMagnifyingGlass className="search-icon" />
                     <input type="text" placeholder="Search..." className="search-input" />
@@ -120,11 +138,11 @@ export const Tank = () => {
                     </thead>
                     <tbody>
                         {workingStaff.map((staffMember) => (
-                            <tr key={staffMember.tankCode} className='col' id='mainstate'>
-                                <td>{staffMember.tankName}</td>
+                            <tr key={staffMember.pumpCode} className='col' id='mainstate'>
+                                <td>{staffMember.pumpName}</td>
                                 <td className='iconmenu'>
-                                    <IoEllipsisVerticalOutline onClick={() => toggleSubMenu(staffMember.tankCode)} />
-                                    {openEmail === staffMember.tankCode && (
+                                    <IoEllipsisVerticalOutline onClick={() => toggleSubMenu(staffMember.pumpCode)} />
+                                    {openEmail === staffMember.pumpCode && (
                                         <table id='secondarystate'>
                                             <tbody>
                                                 <tr className='box'><td onClick={() => handleView(staffMember)}>VIEW</td></tr>
@@ -139,16 +157,20 @@ export const Tank = () => {
                 {selectedStaff && (
                     <div className='viewStaff'>
                         <AiOutlineClose onClick={() => setSelectedStaff(null)} className="close-icon" />
-                        <input type="text" value={selectedStaff.tankName} onChange={(e) => setSelectedStaff({...selectedStaff, tankName: e.target.value})} readOnly={!editMode} /><br/>
-                        <input type="text" value={selectedStaff.tankCode} readOnly /><br/>
-                        <input type="text" value={selectedStaff.tankVolume} onChange={(e) => setSelectedStaff({...selectedStaff, tankVolume: e.target.value})} readOnly={!editMode} /><br/>
-                        <select value={selectedStaff.tankStatus} onChange={(e) => setSelectedStaff({...selectedStaff, tankStatus: e.target.value})} disabled={!editMode}>
+                        <input type="text" value={selectedStaff.pumpName} onChange={(e) => setSelectedStaff({...selectedStaff, pumpName: e.target.value})} readOnly={!editMode} /><br/>
+                        <input type="text" value={selectedStaff.pumpCode} readOnly /><br/>
+                        <select value={selectedStaff.pumpStatus} onChange={(e) => setSelectedStaff({...selectedStaff, pumpStatus: e.target.value})} disabled={!editMode}>
                             <option value="On use">On use</option>
                             <option value="Not On use">Not On use</option>
                         </select>
-                        <select value={product} onChange={(e) => setNewStaff({...newStaff, product: {...newStaff.product, productCode: e.target.value}})} disabled={!editMode}>
+                        <select onChange={(e) => setNewStaff({...newStaff, product: {...newStaff.product, productCode: e.target.value}})} disabled={!editMode}>
                             {product.map((productMem) =>(
                             <option key={productMem.productCode} value={productMem.productCode}>{productMem.productName}</option>
+                            ))}
+                        </select>
+                        <select onChange={(e) => setNewStaff({...newStaff, tank: {...newStaff.tank, tankCode: e.target.value}})} disabled={!editMode}>
+                            {tanks.map((productMem) =>(
+                            <option key={productMem.tankCode} value={productMem.tankCode}>{productMem.tankName}</option>
                             ))}
                         </select>
                         {editMode && (
@@ -158,19 +180,24 @@ export const Tank = () => {
                 )}
                 {addingStaff && (
                     <div className='addStaff'>
-                        <h2>Thêm Bể Mới</h2>
+                        <h2>Thêm Vòi Bơm Mới</h2>
                         <AiOutlineClose onClick={() => setAddingStaff(false)} className="close-icon" />
-                        <input type="text" placeholder="Tank Name" value={newStaff.tankName} onChange={(e) => setNewStaff({...newStaff, tankName: e.target.value})} /><br/>
-                        <input type="text" placeholder="Tank Code" value={newStaff.tankCode} onChange={(e) => setNewStaff({...newStaff, tankCode: e.target.value})} /><br/>
-                        <input type="text" placeholder="Tank Volume" value={newStaff.tankVolume} onChange={(e) => setNewStaff({...newStaff, tankVolume: e.target.value})} /><br/>
-                        <select value={newStaff.tankStatus} onChange={(e) => setNewStaff({...newStaff, tankStatus: e.target.value})}>
+                        <input type="text" placeholder="Pump Name" value={newStaff.pumpName} onChange={(e) => setNewStaff({...newStaff, pumpName: e.target.value})} /><br/>
+                        <input type="text" placeholder="Pump Code" value={newStaff.pumpCode} onChange={(e) => setNewStaff({...newStaff, pumpCode: e.target.value})} /><br/>
+                        <select value={newStaff.pumpStatus} onChange={(e) => setNewStaff({...newStaff, pumpStatus: e.target.value})}>
                             <option value="On use">On use</option>
                             <option value="Not On use">Not On use</option>
                         </select>
 
-                        <select value={product} onChange={(e) => setNewStaff({...newStaff, product: {...newStaff.product, productCode: e.target.value}})}>
+                        <select onChange={(e) => setNewStaff({...newStaff, product: {...newStaff.product, productCode: e.target.value, productName: product.find(p => p.productCode === e.target.value).productName}})}>
                             {product.map((productMem) =>(
-                            <option key={productMem.productCode} value={productMem.productCode}>{productMem.productName}</option>
+                            <option value={productMem.productCode}>{productMem.productName}</option>
+                            ))}
+                        </select>
+
+                        <select onChange={(e) => setNewStaff({...newStaff, tank: {...newStaff.tank, tankCode: e.target.value, tankName: product.find(p => p.tankCode === e.target.value).tankName}})}>
+                            {tanks.map((productMem) =>(
+                            <option value={productMem.tankCode}>{productMem.tankName}</option>
                             ))}
                         </select>
 
@@ -200,11 +227,11 @@ export const Tank = () => {
                     </thead>
                     <tbody>
                         {notWorkingStaff.map((staffMember) => (
-                            <tr key={staffMember.tankCode} className='col' id='mainstate'>
-                                <td>{staffMember.tankName}</td>
+                            <tr key={staffMember.pumpCode} className='col' id='mainstate'>
+                                <td>{staffMember.pumpName}</td>
                                 <td className='iconmenu'>
-                                    <IoEllipsisVerticalOutline className ="icon_secondarystate" onClick={() => toggleSubMenu(staffMember.tankCode)}/>
-                                        {openEmail === staffMember.tankCode && (
+                                    <IoEllipsisVerticalOutline className ="icon_secondarystate" onClick={() => toggleSubMenu(staffMember.pumpCode)}/>
+                                        {openEmail === staffMember.pumpCode && (
                                             <table id='secondarystate'>
                                                 <tbody>
                                                     <tr className='box'><td onClick={() => handleView(staffMember)}>VIEW</td></tr>
@@ -222,4 +249,4 @@ export const Tank = () => {
     )
 }
 
-export default Tank;
+export default Pump;
