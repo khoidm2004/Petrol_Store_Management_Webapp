@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useStaffStore from "../../store/staffStore.js";
+import useTankStore from "../../store/tankStore.js";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import useShowToast from '../../hooks/useShowToast.js';
 import { AiOutlineClose } from "react-icons/ai";
@@ -8,18 +8,25 @@ import { Doughnut } from "react-chartjs-2";
 import 'chart.js/auto';
 import '../CSS/staff.css';
 
-export const Staff = () => {
-    const { staff, fetchStaff, modifyStaff, addStaff } = useStaffStore();
+export const Tank = () => {
+    // const location = useLocation();
+    // const searchParams = new URLSearchParams(location.search);
+    // const id = searchParams.get('id');
+    // console.log(id);
+    const { tanks, fetchTank, modifyTank, addTank } = useTankStore();
     const [openEmail, setOpenEmail] = useState(null);
     const showToast = useShowToast(); 
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [addingStaff, setAddingStaff] = useState(false);
     const [newStaff, setNewStaff] = useState({
-        fullName: "",
-        email: "",
-        phoneNum: "",
-        workingStatus: "isWorking"
+        tankCode: "",
+        tankName: "",
+        tankStatus: "On use",
+        product: {
+            productName: "null",
+            productCode: "null",
+        },
     });
 
     const toggleSubMenu = (email) => {
@@ -31,8 +38,8 @@ export const Staff = () => {
     };
 
     useEffect(() => {
-        fetchStaff();
-    }, [fetchStaff]);
+        fetchTank();
+    }, [fetchTank]);
 
     const handleView = (staffMember) => {
         setSelectedStaff(staffMember);
@@ -48,7 +55,7 @@ export const Staff = () => {
         if (editMode && selectedStaff) {
             try {
                 console.log(selectedStaff)
-                await modifyStaff(selectedStaff, showToast); 
+                await modifyTank(selectedStaff, showToast); 
                 setEditMode(false);
                 setSelectedStaff(null);
             } catch (error) {
@@ -59,12 +66,16 @@ export const Staff = () => {
 
     const handleAddStaff = async () => {
         try {
-            await addStaff(newStaff, showToast);
+            await addTank(newStaff, showToast);
+            console.log(newStaff)
             setNewStaff({
-                fullName: "",
-                email: "",
-                phoneNum: "",
-                workingStatus: "isWorking"
+                tankCode: "",
+                tankName: "",
+                tankStatus: "On use",
+                product: {
+                    productName: "null",
+                    productCode: "null",
+                },
             });
             setAddingStaff(false);
         } catch (error) {
@@ -85,13 +96,13 @@ export const Staff = () => {
         }]
     };
 
-    const workingStaff = staff.filter(staffMember => staffMember.workingStatus === "isWorking");
-    const notWorkingStaff = staff.filter(staffMember => staffMember.workingStatus === "notWorking");
+    const workingStaff = tanks.filter(staffMember => staffMember.tankStatus === "On use");
+    const notWorkingStaff = tanks.filter(staffMember => staffMember.tankStatus === "Not On use");
 
     return (
-        <div  className='Staff'>
+        <div className='Staff'>
             <header>
-                <p>THÔNG TIN NHÂN VIÊN</p>
+                <p>THÔNG TIN MẶT HÀNG</p>
                 <div className="search-container">
                     <FaMagnifyingGlass className="search-icon" />
                     <input type="text" placeholder="Search..." className="search-input" />
@@ -102,16 +113,16 @@ export const Staff = () => {
                 <table className='firsttable'>
                     <thead>
                         <tr className='titleOneline'>
-                            <th colSpan={2}>Đang làm việc</th>
+                            <th colSpan={2}>Đang Kinh doanh</th>
                         </tr>
                     </thead>
                     <tbody>
                         {workingStaff.map((staffMember) => (
-                            <tr key={staffMember.StaffId} className='col' id='mainstate'>
-                                <td>{staffMember.fullName}</td>
+                            <tr key={staffMember.tankCode} className='col' id='mainstate'>
+                                <td>{staffMember.tankName}</td>
                                 <td className='iconmenu'>
-                                    <IoEllipsisVerticalOutline onClick={() => toggleSubMenu(staffMember.email)} />
-                                    {openEmail === staffMember.email && (
+                                    <IoEllipsisVerticalOutline onClick={() => toggleSubMenu(staffMember.tankCode)} />
+                                    {openEmail === staffMember.tankCode && (
                                         <table id='secondarystate'>
                                             <tbody>
                                                 <tr className='box'><td onClick={() => handleView(staffMember)}>VIEW</td></tr>
@@ -126,13 +137,20 @@ export const Staff = () => {
                 {selectedStaff && (
                     <div className='viewStaff'>
                         <AiOutlineClose onClick={() => setSelectedStaff(null)} className="close-icon" />
-                        <input type="text" value={selectedStaff.fullName} onChange={(e) => setSelectedStaff({...selectedStaff, fullName: e.target.value})} readOnly={!editMode} /><br/>
-                        <input type="text" value={selectedStaff.email} readOnly /><br/>
-                        <input type="text" value={selectedStaff.phoneNum} onChange={(e) => setSelectedStaff({...selectedStaff, phoneNum: e.target.value})} readOnly={!editMode} /><br/>
-                        <select value={selectedStaff.workingStatus} onChange={(e) => setSelectedStaff({...selectedStaff, workingStatus: e.target.value})} disabled={!editMode}>
-                            <option value="isWorking">isWorking</option>
-                            <option value="notWorking">notWorking</option>
+                        <input type="text" value={selectedStaff.tankName} onChange={(e) => setSelectedStaff({...selectedStaff, tankName: e.target.value})} readOnly={!editMode} /><br/>
+                        <input type="text" value={selectedStaff.tankCode} readOnly /><br/>
+                        <input type="text" value={selectedStaff.tankVolume} onChange={(e) => setSelectedStaff({...selectedStaff, tankVolume: e.target.value})} readOnly={!editMode} /><br/>
+                        <select value={selectedStaff.tankStatus} onChange={(e) => setSelectedStaff({...selectedStaff,  tankStatus: e.target.value})} disabled={!editMode}>
+                            <option value="On use">On use</option>
+                            <option value="Not On use">Not On use</option>
                         </select>
+                        {selectedStaff.product && (
+                            <select value={selectedStaff.product.productCode} onChange={(e) => setSelectedStaff({...selectedStaff, product: {...selectedStaff.product, productCode: e.target.value}})} disabled={!editMode}>
+                                {tanks.map((tank) => (
+                                    <option key={tank.product.productCode} value={tank.product.productCode}>{tank.product.productName}</option>
+                                ))}
+                            </select>
+                        )}
                         {editMode && (
                             <button className="send" onClick={saveChanges}>OK</button>
                         )}
@@ -140,19 +158,25 @@ export const Staff = () => {
                 )}
                 {addingStaff && (
                     <div className='addStaff'>
-                        <h2>Thêm Nhân Viên Mới</h2>
+                        <h2>Thêm Bể</h2>
                         <AiOutlineClose onClick={() => setAddingStaff(false)} className="close-icon" />
-                        <input type="text" placeholder="Full Name" value={newStaff.fullName} onChange={(e) => setNewStaff({...newStaff, fullName: e.target.value})} /><br/>
-                        <input type="text" placeholder="Email" value={newStaff.email} onChange={(e) => setNewStaff({...newStaff, email: e.target.value})} /><br/>
-                        <input type="text" placeholder="Phone Number" value={newStaff.phoneNum} onChange={(e) => setNewStaff({...newStaff, phoneNum: e.target.value})} /><br/>
-                        <select value={newStaff.workingStatus} onChange={(e) => setNewStaff({...newStaff, workingStatus: e.target.value})}>
-                            <option value="isWorking">isWorking</option>
-                            <option value="notWorking">notWorking</option>
+                        <input type="text" placeholder="Full Name" value={newStaff.tankName} onChange={(e) => setNewStaff({...newStaff, tankName: e.target.value})} /><br/>
+                        <input type="text" placeholder="Ma Hang" value={newStaff.tankCode} onChange={(e) => setNewStaff({...newStaff, tankCode: e.target.value})} /><br/>
+                        <input type="text" placeholder="The Tich" value={newStaff.tankVolume} onChange={(e) => setNewStaff({...newStaff, tankVolume: e.target.value})} /><br/>
+                        <select value={newStaff.tankStatus} onChange={(e) => setNewStaff({...newStaff,  tankStatus: e.target.value})}>
+                            <option value="On use">On use</option>
+                            <option value="Not on use">Not on use</option>
                         </select>
+                        {newStaff.product && (
+                            <select value={newStaff.product.productCode} onChange={(e) => setNewStaff({...newStaff, product: {...newStaff.product, productCode: e.target.value}})}>
+                                {tanks.map((tank) => (
+                                    <option key={tank.product.productCode} value={tank.product.productCode}>{tank.product.productName}</option>
+                                ))}
+                            </select>
+                        )}
                         <button className="send" onClick={handleAddStaff}>THÊM</button>
                     </div>
                 )}
-
                 <div className='chart-container'>
                     <Doughnut
                         data={data}
@@ -167,19 +191,20 @@ export const Staff = () => {
                             }
                         }}
                     />
+                </div>
                 <table className='secondtable'>
                     <thead className='titleOffline'>
                         <tr >
-                            <th colSpan={2}>Đã nghỉ việc</th>
+                            <th colSpan={2}>Ngừng kinh doanh</th>
                         </tr>
                     </thead>
                     <tbody>
                         {notWorkingStaff.map((staffMember) => (
-                            <tr key={staffMember.StaffId} className='col' id='mainstate'>
-                                <td>{staffMember.fullName}</td>
+                            <tr key={staffMember.tankCode} className='col' id='mainstate'>
+                                <td>{staffMember.tankName}</td>
                                 <td className='iconmenu'>
-                                    <IoEllipsisVerticalOutline className ="icon_secondarystate" onClick={() => toggleSubMenu(staffMember.email)}/>
-                                        {openEmail === staffMember.email && (
+                                    <IoEllipsisVerticalOutline className="icon_secondarystate" onClick={() => toggleSubMenu(staffMember.tankCode)}/>
+                                        {openEmail === staffMember.tankCode && (
                                             <table id='secondarystate'>
                                                 <tbody>
                                                     <tr className='box'><td onClick={() => handleView(staffMember)}>VIEW</td></tr>
@@ -191,10 +216,9 @@ export const Staff = () => {
                         ))}
                     </tbody>
                 </table>
-                </div>
             </div>
         </div>
     )
 }
 
-export default Staff;
+export default Tank;
