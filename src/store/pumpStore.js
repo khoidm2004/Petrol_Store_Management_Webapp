@@ -82,7 +82,7 @@ const usePumpStore = create((set) => ({
   },
 
   //Able to modify everything except id
-  modifyPump: async (inputs, showToast) => {
+  modifyPump: async (inputs) => {
     try {
       const { id, ...updatedPump } = inputs;
       const pumpDocRef = doc(firestore, "pump", id);

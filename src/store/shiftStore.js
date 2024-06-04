@@ -27,7 +27,7 @@ const useShiftStore = create((set) => ({
   }
   */
 
-  addShift: async (newShift, showToast) => {
+  addShift: async (newShift) => {
     try {
       const shiftRef = collection(firestore, "shift");
       const docRef = await addDoc(shiftRef, newShift);
