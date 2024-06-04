@@ -32,6 +32,8 @@ const useProductStore = create((set) => ({
       productId: doc.id,
       ...doc.data(),
     }));
+    
+    console.log(productList);
     set({ product: productList });
   },
 
