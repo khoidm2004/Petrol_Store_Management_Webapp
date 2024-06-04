@@ -71,7 +71,7 @@ const useProductStore = create((set) => ({
   },
 
   //Able to modify everything except id
-  modifyProduct: async (inputs, showToast) => {
+  modifyProduct: async (inputs) => {
     try {
       const { productId, ...updatedProduct } = inputs;
       const productDocRef = doc(firestore, "product", productId);
