@@ -54,7 +54,7 @@ export const Staff = () => {
         setEditMode(false);
         setSelectedStaff(null);
       } catch (error) {
-        console.error("Save error:", error);
+        console.error("Save error:", error); 
       }
     }
   };
