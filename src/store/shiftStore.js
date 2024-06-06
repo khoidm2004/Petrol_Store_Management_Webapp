@@ -10,7 +10,7 @@ const useShiftStore = create((set) => ({
     const shiftRef = collection(firestore, "shift");
     const shiftSnapshot = await getDocs(shiftRef);
     const shiftList = shiftSnapshot.docs.map((doc) => ({
-      id: doc.id,
+      shiftId: doc.id,
       ...doc.data(),
     }));
 
@@ -37,7 +37,7 @@ const useShiftStore = create((set) => ({
       await updateDoc(doc(firestore, "shift", shiftId), { shiftId });
 
       set((state) => ({
-        shifts: [...state.shifts, { id: docRef, ...newShift }],
+        shifts: [...state.shifts, { id: docRef, ...newShift, shiftId }],
       }));
       return {
         Title: "Success",
@@ -70,7 +70,6 @@ const useShiftStore = create((set) => ({
         Description: "Modifying Successfully",
         Status: "success",
       };
-      
     } catch (error) {
       return {
         Title: "Error",

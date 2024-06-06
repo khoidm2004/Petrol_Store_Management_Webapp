@@ -10,7 +10,6 @@ import {
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
 
-
 const useTankStore = create((set) => ({
   // Map data from array
   tanks: [],
@@ -66,10 +65,10 @@ const useTankStore = create((set) => ({
       const docRef = await addDoc(tankRef, newTank);
 
       const id = docRef.id;
-      updateDoc(doc(firestore, "tank", id), { id });
+      await updateDoc(doc(firestore, "tank", id), { id });
 
       set((state) => ({
-        tanks: [...state.tanks, { id: docRef, ...newTank }],
+        tanks: [...state.tanks, { id: id, ...newTank, id }],
       }));
       return {
         Title: "Success",
@@ -112,4 +111,4 @@ const useTankStore = create((set) => ({
   },
 }));
 
-export default useTankStore;  
+export default useTankStore;

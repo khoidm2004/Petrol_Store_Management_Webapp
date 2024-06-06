@@ -54,9 +54,9 @@ const useProductStore = create((set) => ({
           Status: "error",
         };
       }
-      const docRef = addDoc(productRef, newProduct);
+      const docRef = await addDoc(productRef, newProduct);
 
-      const productId = (await docRef).id;
+      const productId = docRef.id;
       await updateDoc(doc(firestore, "product", productId), { productId });
 
       set((state) => ({
