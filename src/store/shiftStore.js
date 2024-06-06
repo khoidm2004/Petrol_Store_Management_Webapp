@@ -1,4 +1,10 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
 
@@ -51,7 +57,7 @@ const useShiftStore = create((set) => ({
       };
     }
   },
-  
+
   modifyShift: async (inputs) => {
     try {
       const { shiftId, ...updatedShift } = inputs;
