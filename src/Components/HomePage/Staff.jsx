@@ -18,6 +18,7 @@ export const Staff = () => {
   const [editMode, setEditMode] = useState(false);
   const [addingStaff, setAddingStaff] = useState(false);
   const [newStaff, setNewStaff] = useState({
+    staffId: "",
     fullName: "",
     email: "",
     phoneNum: "",
