@@ -51,6 +51,32 @@ const useShiftStore = create((set) => ({
       };
     }
   },
+  
+  modifyShift: async (inputs) => {
+    try {
+      const { shiftId, ...updatedShift } = inputs;
+      const shiftRef = collection(firestore, "shift", shiftId);
+      await updateDoc(shiftRef, updatedShift);
+
+      set((state) => ({
+        shifts: state.shifts.map((shift) =>
+          shift.shiftId === shiftId ? { ...shift, ...updatedShift } : shift
+        ),
+      }));
+
+      return {
+        Title: "Success",
+        Description: "Modifying Successfully",
+        Status: "success",
+      };
+    } catch (error) {
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
+    }
+  },
 }));
 
 export default useShiftStore;
