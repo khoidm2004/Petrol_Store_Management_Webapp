@@ -5,7 +5,8 @@ import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import 'chart.js/auto'; 
-import './shift.css';
+import './staff.css';
+
 import { timeConverter } from '../../../utils/timeConverter.js';
 export const Shift = () => {
     const shifts = useShiftStore((state) => state.shifts);
@@ -31,6 +32,8 @@ export const Shift = () => {
         },
     });
 
+    console.log(product);
+    console.log()
     useEffect(() => {
         fetchProduct();
     }, [fetchProduct]);
@@ -133,26 +136,37 @@ export const Shift = () => {
                 </table>
 
                 {selectedShift && (
-                    <div className='viewStaff'>
+                    <div className='viewShift'>
                         <AiOutlineClose onClick={() => setSelectedShift(null)} className="close-icon" />
-                        <input type="text" value={selectedShift.startTime} onChange={(e) => setSelectedShift({ ...selectedShift, startTime: e.target.value })} readOnly={!editMode} /><br />
-                        <input type="text" value={selectedShift.endTime} onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })} readOnly={!editMode} /><br />
-                        {Object.entries(selectedShift.pumpList).map(([key, pump]) => (
-                            <div key={key}>
-                                <input type="text" value={pump.pumpName} onChange={(e) => {
-                                    const newPumpList = { ...selectedShift.pumpList };
-                                    newPumpList[key].pumpName = e.target.value;
-                                    setSelectedShift({ ...selectedShift, pumpList: newPumpList });
-                                }} readOnly={!editMode} /><br />
+                        <input type="text" className="time" value={selectedShift.startTime} onChange={(e) => setSelectedShift({ ...selectedShift, startTime: e.target.value })} readOnly={!editMode} /><hr />
+                        <input type="text" className="time" value={selectedShift.endTime} onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })} readOnly={!editMode} /><br />
+                        <div className='Staffs'>
+                            <h2>NHÂN VIÊN</h2>
+                            <div className='Staff'>
+                                {Object.entries(selectedShift.pumpList).map(([key, pump]) => (
+                                <div key={key}>
+                                    <select value={pump.pumpName} onChange={(e) => {
+                                        const newPumpList = { ...selectedShift.pumpList };
+                                        newPumpList[key].pumpName = e.target.value;
+                                        setSelectedShift({ ...selectedShift, pumpList: newPumpList });
+                                    }} disabled={!editMode}>
+                                        {pumpOptions.map(option => (
+                                            <option key={option.code} value={option.name}>
+                                                {option.name}
+                                            </option>
+                                        ))}
+                                    </select><br />
+                                </div>
+                            ))}
                             </div>
-                        ))}
+                        </div>
                         {editMode && (
                             <button className="send" onClick={saveChanges}>OK</button>
                         )}
                     </div>
                 )}
                 {addingShift && (
-                    <div className='addStaff'>
+                    <div className='addShift'>
                         <h2>Thêm Ca Mới</h2>
                         <AiOutlineClose onClick={() => setAddingShift(false)} className="close-icon" />
                         <input type="datetime-local" placeholder="Start Time" value={newShift.startTime} onChange={(e) => setNewShift({ ...newShift, startTime: e.target.value })} />

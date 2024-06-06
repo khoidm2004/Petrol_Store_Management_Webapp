@@ -21,9 +21,11 @@ export const Tank = () => {
     const [selectedTank, setSelectedTank] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [addingTank, setAddingTank] = useState(false);
+    const tankId = Math.floor(100000 + Math.random() * 900000);
+    
     const [newTank, setNewTank] = useState({
     id:"",
-    tankId: "",
+    tankId,
     tankCode: "",
     tankName: "",
     tankStatus: "On use",
@@ -33,6 +35,10 @@ export const Tank = () => {
     },
    });
     
+
+    while(tanks.filter(TankMember => TankMember.tankId === tankId)){
+        const tankId = Math.floor(100000 + Math.random() * 900000);
+    }
 
     const toggleSubMenu = (email) => {
         setOpenEmail(openEmail === email ? null : email);
@@ -84,7 +90,7 @@ export const Tank = () => {
             await addTank(newTank);
             setNewTank({
                 id:"",
-                tankId: "",
+                tankId,
                 tankCode: "",
                 tankName: "",
                 tankVolume: "",

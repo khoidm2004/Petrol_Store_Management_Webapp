@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import useProductStore from "../../store/productStore.js";
+import useProductStore from "../../../store/productStore.js";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import 'chart.js/auto';
-import '../CSS//staff.css';
+import './staff.css';
 
 export const Product = () => {
     const { product, fetchProduct, modifyProduct, addProduct } = useProductStore();
     const [openCode, setOpenCode] = useState(null);
-    const showToast = useShowToast(); 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [addingProduct, setAddingProduct] = useState(false);
@@ -49,7 +48,7 @@ export const Product = () => {
         if (editMode && selectedProduct) {
             try {
                 console.log(selectedProduct)
-                await modifyProduct(selectedProduct, showToast); 
+                await modifyProduct(selectedProduct); 
                 setEditMode(false);
                 setSelectedProduct(null);
             } catch (error) {
@@ -60,7 +59,7 @@ export const Product = () => {
 
     const handleAddProduct = async () => {
         try {
-            await addProduct(newProduct, showToast);
+            await addProduct(newProduct);
             setNewProduct({
                 productId: "",
                 productCode: "",
