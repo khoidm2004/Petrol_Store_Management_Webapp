@@ -18,7 +18,7 @@ const usePumpStore = create((set) => ({
     const pumpRef = collection(firestore, "pump");
     const pumpSnapShot = await getDocs(pumpRef);
     const pumpList = pumpSnapShot.docs.map((doc) => ({
-      Id: doc.id,
+      pid: doc.id,
       ...doc.data(),
     }));
 
@@ -27,7 +27,7 @@ const usePumpStore = create((set) => ({
 
   /*
     const newPump = {
-        id: string
+        pid: string
         pumpId: number
         pumpCode: string
         pumpName: string
@@ -65,11 +65,11 @@ const usePumpStore = create((set) => ({
 
       const docRef = await addDoc(pumpRef, newPump);
 
-      const id = docRef.id;
-      await updateDoc(doc(firestore, "pump", id), { id });
+      const pid = docRef.id;
+      await updateDoc(doc(firestore, "pump", pid), { pid });
 
       set((state) => ({
-        pumps: [...state.pumps, { id: id, ...newPump, id }],
+        pumps: [...state.pumps, { id: pid, ...newPump, pid }],
       }));
       return {
         Title: "Success",
@@ -85,16 +85,16 @@ const usePumpStore = create((set) => ({
     }
   },
 
-  //Able to modify everything except id
+  //Able to modify everything except pid
   modifyPump: async (inputs) => {
     try {
-      const { id, ...updatedPump } = inputs;
-      const pumpDocRef = doc(firestore, "pump", id);
+      const { pid, ...updatedPump } = inputs;
+      const pumpDocRef = doc(firestore, "pump", pid);
       await updateDoc(pumpDocRef, updatedPump);
 
       set((state) => ({
         pumps: state.pumps.map((pump) =>
-          pump.id === id ? { ...pump, ...updatedPump } : pump
+          pump.pid === pid ? { ...pump, ...updatedPump } : pump
         ),
       }));
       return {

@@ -6,7 +6,6 @@ import {
   where,
   doc,
   updateDoc,
-  getDoc,
 } from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
