@@ -6,6 +6,7 @@ import {
   where,
   doc,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
@@ -32,8 +33,7 @@ const useProductStore = create((set) => ({
       productId: doc.id,
       ...doc.data(),
     }));
-    
-    console.log(productList);
+
     set({ product: productList });
   },
 
@@ -55,13 +55,21 @@ const useProductStore = create((set) => ({
         };
       }
       const docRef = addDoc(productRef, newProduct);
+
+      const productId = (await docRef).id;
+      await updateDoc(doc(firestore, "product", productId), { productId });
+
       set((state) => ({
-        product: [...state.product, { id: docRef.id, ...newProduct }],
+        product: [
+          ...state.product,
+          { id: productId, ...newProduct, productId },
+        ],
       }));
       return {
         Title: "Success",
         Message: "Adding Sucessfully",
         Status: "success",
+        productId: productId,
       };
     } catch (error) {
       return {
@@ -81,12 +89,12 @@ const useProductStore = create((set) => ({
 
       set((state) => ({
         product: state.product.map((item) =>
-          item.productId === productId ? { ...item, ...updatedProduct } : item
+          item.productId === productId ? { ...item, ...inputs } : item
         ),
       }));
       return {
         Title: "Success",
-        Message: "Modifying Successfully",
+        Message: "Modifying Sucessfully",
         Status: "success",
       };
     } catch (error) {

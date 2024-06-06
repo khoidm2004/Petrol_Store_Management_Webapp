@@ -18,7 +18,7 @@ const usePumpStore = create((set) => ({
     const pumpRef = collection(firestore, "pump");
     const pumpSnapShot = await getDocs(pumpRef);
     const pumpList = pumpSnapShot.docs.map((doc) => ({
-      id: doc.id,
+      Id: doc.id,
       ...doc.data(),
     }));
 
@@ -64,6 +64,10 @@ const usePumpStore = create((set) => ({
       }
 
       const docRef = await addDoc(pumpRef, newPump);
+
+      const id = docRef.id;
+      await updateDoc(doc(firestore, "pump", id), { id });
+
       set((state) => ({
         pumps: [...state.pumps, { id: docRef, newPump }],
       }));
@@ -82,7 +86,7 @@ const usePumpStore = create((set) => ({
   },
 
   //Able to modify everything except id
-  modifyPump: async (inputs, showToast) => {
+  modifyPump: async (inputs) => {
     try {
       const { id, ...updatedPump } = inputs;
       const pumpDocRef = doc(firestore, "pump", id);

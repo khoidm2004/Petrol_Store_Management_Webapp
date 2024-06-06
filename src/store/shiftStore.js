@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
 
@@ -19,6 +19,7 @@ const useShiftStore = create((set) => ({
 
   /*
   const newShift = {
+    shiftId: string
     startTime: number
     endTime: number
     pumpList: object{pumpName:string, pumpCode:string, firstMeterReadingByMoney:number, firstMeterReadingByLitre:number}
@@ -27,10 +28,14 @@ const useShiftStore = create((set) => ({
   }
   */
 
-  addShift: async (newShift, showToast) => {
+  addShift: async (newShift) => {
     try {
       const shiftRef = collection(firestore, "shift");
       const docRef = await addDoc(shiftRef, newShift);
+
+      const shiftId = docRef.id;
+      await updateDoc(doc(firestore, "shift", shiftId), { shiftId });
+
       set((state) => ({
         shifts: [...state.shifts, { id: docRef, ...newShift }],
       }));
@@ -39,6 +44,33 @@ const useShiftStore = create((set) => ({
         Message: "Adding Successfully",
         Status: "success",
       };
+    } catch (error) {
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
+    }
+  },
+
+  modifyShift: async (inputs) => {
+    try {
+      const { shiftId, ...updatedShift } = inputs;
+      const shiftRef = collection(firestore, "shift", shiftId);
+      await updateDoc(shiftRef, updatedShift);
+
+      set((state) => ({
+        shifts: state.shifts.map((shift) =>
+          shift.shiftId === shiftId ? { ...shift, ...updatedShift } : shift
+        ),
+      }));
+
+      return {
+        Title: "Success",
+        Description: "Modifying Successfully",
+        Status: "success",
+      };
+      
     } catch (error) {
       return {
         Title: "Error",

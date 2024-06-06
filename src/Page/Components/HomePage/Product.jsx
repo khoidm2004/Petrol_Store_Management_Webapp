@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import useProductStore from "../../../store/productStore.js";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
-import 'chart.js/auto';
-import './staff.css';
+import "chart.js/auto";
+import "./staff.css";
 
 export const Product = () => {
     const { product, fetchProduct, modifyProduct, addProduct } = useProductStore();
@@ -46,44 +46,50 @@ export const Product = () => {
 
     const saveChanges = async () => {
         if (editMode && selectedProduct) {
-            try {
-                console.log(selectedProduct)
-                await modifyProduct(selectedProduct); 
-                setEditMode(false);
-                setSelectedProduct(null);
-            } catch (error) {
-                console.error('Save error:', error);
-            }
+          try {
+            console.log(selectedProduct);
+            const result = await modifyProduct(selectedProduct);
+            console.log(result);
+            setEditMode(false);
+            setSelectedProduct(null);
+          } catch (error) {
+            console.error("Save error:", error);
+          }
         }
-    };
+      };
 
-    const handleAddProduct = async () => {
+      const handleAddProduct = async () => {
         try {
-            await addProduct(newProduct);
-            setNewProduct({
-                productId: "",
-                productCode: "",
-                productName: "",
-                productPrice: "",
-                productColor: "",
-                productStatus: "On sale"
-            });
-            setAddingProduct(false);
+            console.log(newProduct);
+          const result = await addProduct(newProduct);
+          console.log(result);
+          setNewProduct({
+            productId: "",
+            productCode: "",
+            productName: "",
+            productPrice: "",
+            productColor: "",
+            productStatus: "On sale",
+          });
+          setAddingProduct(false);
         } catch (error) {
-            console.error('Add Product error:', error);
+          console.error("Add Product error:", error);
         }
-    };
+      };
+
+    const firstNumber = product.filter((ProductMember) => ProductMember.productStatus === "On sale").length;
+    const secondNumber = product.filter((ProductMember) => ProductMember.productStatus === "Not on sale").length;
 
     const data = {
-        labels: ['Red','blue'],
+        labels: ['Đang kinh doanh','Ngừng kinh doanh'],
         datasets: [{
-          label: 'My First Dataset',
-          data: [300, 70],
+          label: 'MẶT HÀNG',
+          data: [firstNumber, secondNumber],
           backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
           ],
-          hoverOffset: 10
+          hoverOffset: 10,
         }]
     };
 

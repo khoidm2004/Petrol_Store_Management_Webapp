@@ -18,7 +18,7 @@ const useStaffStore = create((set) => ({
     const staffCollection = collection(firestore, "staff");
     const staffSnapshot = await getDocs(staffCollection);
     const staffList = staffSnapshot.docs.map((doc) => ({
-      id: doc.id,
+      staffId: doc.id,
       ...doc.data(),
     }));
 
@@ -39,39 +39,61 @@ const useStaffStore = create((set) => ({
     try {
       const staffRef = collection(firestore, "staff");
       const q = query(staffRef, where("email", "==", newStaff.email));
-      // const staffQuerySnapshot = await getDocs(q);
+      const staffQuerySnapshot = await getDocs(q);
 
-      // if (!staffQuerySnapshot.empty) {
-      //   showToast("Error", "Email has been registered", "error");
-      //   return;
-      // }
+      if (!staffQuerySnapshot.empty) {
+        return {
+          Title: "Error",
+          Message: "Email has been used",
+          Status: "error",
+        };
+      }
 
       const docRef = await addDoc(staffRef, newStaff);
+
+      const staffId = docRef.id;
+      await updateDoc(doc(firestore, "staff", staffId), { staffId });
+
       set((state) => ({
         staff: [...state.staff, { id: docRef.id, ...newStaff }],
       }));
-      showToast("Success", "Staff has been added successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Adding Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 
   // Modify everything except id
-  modifyStaff: async (inputs) => {
-    const { StaffId, ...updatedStaff } = inputs;
-    const staffDocRef = doc(firestore, "staff", StaffId);
-
+  modifyStaff: async (inputs, showToast) => {
     try {
+      const { staffId, ...updatedStaff } = inputs;
+      const staffDocRef = doc(firestore, "staff", staffId);
       await updateDoc(staffDocRef, updatedStaff);
 
       set((state) => ({
         staff: state.staff.map((member) =>
-          member.StaffId === StaffId ? { ...member, ...updatedStaff } : member
+          member.staffId === staffId ? { ...member, ...updatedStaff } : member
         ),
       }));
-      // showToast("Success", "Staff has been updated successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Modifying Successfully",
+        Status: "success",
+      };
     } catch (error) {
-      // showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   },
 }));

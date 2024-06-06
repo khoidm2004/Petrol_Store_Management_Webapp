@@ -38,7 +38,6 @@ const useTankStore = create((set) => ({
 */
 
   addTank: async (newTank) => {
-    console.log(newTank)
     try {
       const tankRef = collection(firestore, "tank");
 
@@ -65,6 +64,10 @@ const useTankStore = create((set) => ({
       }
 
       const docRef = await addDoc(tankRef, newTank);
+
+      const id = docRef.id;
+      updateDoc(doc(firestore, "tank", id), { id });
+
       set((state) => ({
         tanks: [...state.tanks, { id: docRef, ...newTank }],
       }));
@@ -84,15 +87,14 @@ const useTankStore = create((set) => ({
 
   //Able to modify everything except id
   modifyTank: async (inputs) => {
-    // console.log(inputs);
     try {
-      const { tankId, ...updatedTank } = inputs;
-      const tankDocRef = doc(firestore, "tank", tankId);
+      const { id, ...updatedTank } = inputs;
+      const tankDocRef = doc(firestore, "tank", id);
       await updateDoc(tankDocRef, updatedTank);
 
       set((state) => ({
         tanks: state.tanks.map((tank) =>
-          tank.tankId === tankId ? { ...tank, ...updatedTank } : tank
+          tank.id === id ? { ...tank, ...updatedTank } : tank
         ),
       }));
       return {
@@ -110,4 +112,4 @@ const useTankStore = create((set) => ({
   },
 }));
 
-export default useTankStore;
+export default useTankStore;  

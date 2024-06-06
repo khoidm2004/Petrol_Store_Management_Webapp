@@ -14,25 +14,28 @@ export const Pump = () => {
     const fetchPump = usePumpStore((state) => state.fetchPump);
     const addPump = usePumpStore((state) => state.addPump);
     const modifyPump = usePumpStore((state) => state.modifyPump);
+    const product = useProductStore((state) => state.product);
+    const fetchProduct = useProductStore((state) => state.fetchProduct);
 
-    const { product, fetchProduct} = useProductStore();
-    const { tanks, fetchTank} = useTankStore();
+    const tanks = useTankStore((state) => state.tanks);
+    const fetchTank = useTankStore((state) => state.fetchTank);
+
     const [openEmail, setOpenEmail] = useState(null);
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [addingStaff, setAddingStaff] = useState(false);
     const [newStaff, setNewStaff] = useState({
-        tankId: "",
+        pumpId: "",
         pumpCode: "",
         pumpName: "",
         pumpStatus: "On use",
         product: {
-            productName: "null",
-            productCode: "null",
+            productName: "",
+            productCode: "",
         },
         tank: {
-            tankName: "null",
-            tankCode: "null",
+            tankName: "",
+            tankCode: "",
         },
     });
 
@@ -56,6 +59,30 @@ export const Pump = () => {
         fetchProduct();
     }, [fetchProduct]);
 
+    useEffect(() => {
+        if (product.length > 0) {
+            setNewStaff((prevState) => ({
+                ...prevState,
+                product: {
+                    productName: product[0].productName,
+                    productCode: product[0].productCode,
+                },
+            }));
+        }
+    }, [product]);
+
+    useEffect(() => {
+        if (tanks.length > 0) {
+            setNewStaff((prevState) => ({
+                ...prevState,
+                tank: {
+                    tankName: tanks[0].tankName,
+                    tankCode: tanks[0].tankCode,
+                },
+            }));
+        }
+    }, [tanks]);
+
     const handleView = (staffMember) => {
         setSelectedStaff(staffMember);
         setEditMode(false);
@@ -69,7 +96,6 @@ export const Pump = () => {
     const saveChanges = async () => {
         if (editMode && selectedStaff) {
             try {
-                console.log(selectedStaff)
                 await modifyPump(selectedStaff); 
                 setEditMode(false);
                 setSelectedStaff(null);
@@ -84,35 +110,39 @@ export const Pump = () => {
             console.log(newStaff);
             await addPump(newStaff);
             setNewStaff({
+                id:"",
                 pumpId: "",
                 pumpCode: "",
                 pumpName: "",
                 pumpStatus: "On use",
-                product: {
-                    productName: "",
-                    productCode: "",
-                },
-                tank: {
-                    tankName: "",
-                    tankCode: "",
-                },
+                product: product.length > 0 ? {
+                    productName: product[0].productName,
+                    productCode: product[0].productCode
+                } : { productName: "", productCode: "" },
+                tank: tanks.length > 0 ? {
+                    tankName: tanks[0].tankName,
+                    tankCode: tanks[0].tankCode
+                } : { tankName: "", tankCode: "" },
             });
             setAddingStaff(false);
         } catch (error) {
-            // console.error('Add staff error:', error);
+            console.error('Add staff error:', error);
         }
     };
+
+    const firstNumber = pumps.filter(staffMember => staffMember.pumpStatus === "On use").length;
+    const secondNumber = pumps.filter(staffMember => staffMember.pumpStatus === "Not On use").length;
 
     const data = {
         labels: ['Red','blue'],
         datasets: [{
-          label: 'My First Dataset',
-          data: [300, 70],
+          label: 'VOI BƠM',
+          data: [firstNumber, secondNumber],
           backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
           ],
-          hoverOffset: 10
+          hoverOffset: 20
         }]
     };
 
@@ -120,7 +150,7 @@ export const Pump = () => {
     const notWorkingStaff = pumps.filter(staffMember => staffMember.pumpStatus === "Not On use");
 
     return (
-        <div  className='Staff'>
+        <div className='Staff'>
             <header>
                 <p>THÔNG TIN VÒI BƠM</p>
                 <div className="search-container">
@@ -163,14 +193,34 @@ export const Pump = () => {
                             <option value="On use">On use</option>
                             <option value="Not On use">Not On use</option>
                         </select>
-                        <select onChange={(e) => setNewStaff({...newStaff, product: {...newStaff.product, productCode: e.target.value}})} disabled={!editMode}>
-                            {product.map((productMem) =>(
-                            <option key={productMem.productCode} value={productMem.productCode}>{productMem.productName}</option>
+                        
+                        <select value={selectedStaff.product.productCode} onChange={(e) => {
+                            const selectedProduct = product.find(p => p.productCode === e.target.value);
+                            setSelectedStaff({
+                                ...selectedStaff,
+                                product: {
+                                    productCode: selectedProduct.productCode,
+                                    productName: selectedProduct.productName
+                                }
+                            });
+                        }} disabled={!editMode}>
+                            {product.map((product) => (
+                                <option key={product.productCode} value={product.productCode}>{product.productName}</option>
                             ))}
                         </select>
-                        <select onChange={(e) => setNewStaff({...newStaff, tank: {...newStaff.tank, tankCode: e.target.value}})} disabled={!editMode}>
-                            {tanks.map((productMem) =>(
-                            <option key={productMem.tankCode} value={productMem.tankCode}>{productMem.tankName}</option>
+
+                        <select value={selectedStaff.tank.tankCode} onChange={(e) => {
+                            const selectedTank = tanks.find(t => t.tankCode === e.target.value);
+                            setSelectedStaff({
+                                ...selectedStaff,
+                                tank: {
+                                    tankCode: selectedTank.tankCode,
+                                    tankName: selectedTank.tankName
+                                }
+                            });
+                        }} disabled={!editMode}>
+                            {tanks.map((tank) => (
+                                <option key={tank.tankCode} value={tank.tankCode}>{tank.tankName}</option>
                             ))}
                         </select>
                         {editMode && (
@@ -188,23 +238,37 @@ export const Pump = () => {
                             <option value="On use">On use</option>
                             <option value="Not On use">Not On use</option>
                         </select>
-
-                        <select onChange={(e) => setNewStaff({...newStaff, product: {...newStaff.product, productCode: e.target.value, productName: product.find(p => p.productCode === e.target.value).productName}})}>
-                            {product.map((productMem) =>(
-                            <option value={productMem.productCode}>{productMem.productName}</option>
+                        <select value={newStaff.product.productCode} onChange={(e) => {
+                            const selectedProduct = product.find(p => p.productCode === e.target.value);
+                            setNewStaff({
+                                ...newStaff,
+                                product: {
+                                    productCode: selectedProduct.productCode,
+                                    productName: selectedProduct.productName
+                                }
+                            });
+                        }}>
+                            {product.map((product) => (
+                                <option key={product.productCode} value={product.productCode}>{product.productName}</option>
                             ))}
                         </select>
-
-                        <select onChange={(e) => setNewStaff({...newStaff, tank: {...newStaff.tank, tankCode: e.target.value, tankName: product.find(p => p.tankCode === e.target.value).tankName}})}>
-                            {tanks.map((productMem) =>(
-                            <option value={productMem.tankCode}>{productMem.tankName}</option>
+                        <select value={newStaff.tank.tankCode} onChange={(e) => {
+                            const selectedTank = tanks.find(t => t.tankCode === e.target.value);
+                            setNewStaff({
+                                ...newStaff,
+                                tank: {
+                                    tankCode: selectedTank.tankCode,
+                                    tankName: selectedTank.tankName
+                                }
+                            });
+                        }}>
+                            {tanks.map((tank) => (
+                                <option key={tank.tankCode} value={tank.tankCode}>{tank.tankName}</option>
                             ))}
                         </select>
-
                         <button className="send" onClick={handleAddStaff}>THÊM</button>
                     </div>
                 )}
-
                 <div className='chart-container'>
                     <Doughnut
                         data={data}
@@ -219,18 +283,18 @@ export const Pump = () => {
                             }
                         }}
                     />
-                <table className='secondtable'>
-                    <thead className='titleOffline'>
-                        <tr >
-                            <th colSpan={2}>Đã nghỉ việc</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {notWorkingStaff.map((staffMember) => (
-                            <tr key={staffMember.pumpCode} className='col' id='mainstate'>
-                                <td>{staffMember.pumpName}</td>
-                                <td className='iconmenu'>
-                                    <IoEllipsisVerticalOutline className ="icon_secondarystate" onClick={() => toggleSubMenu(staffMember.pumpCode)}/>
+                    <table className='secondtable'>
+                        <thead className='titleOffline'>
+                            <tr>
+                                <th colSpan={2}>Đã nghỉ việc</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {notWorkingStaff.map((staffMember) => (
+                                <tr key={staffMember.pumpCode} className='col' id='mainstate'>
+                                    <td>{staffMember.pumpName}</td>
+                                    <td className='iconmenu'>
+                                        <IoEllipsisVerticalOutline className="icon_secondarystate" onClick={() => toggleSubMenu(staffMember.pumpCode)}/>
                                         {openEmail === staffMember.pumpCode && (
                                             <table id='secondarystate'>
                                                 <tbody>
@@ -238,15 +302,15 @@ export const Pump = () => {
                                                     <tr className='box'><td onClick={() => handleEdit(staffMember)}>EDIT</td></tr>
                                                 </tbody>
                                             </table>)}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Pump;

@@ -17,7 +17,7 @@ import {
 import Product from "../../Components/HomePage/Product.jsx";
 import Tank from "../../Components/HomePage/Tank.jsx";
 import Pump from "./Pump.jsx";
-
+import Shift from "./Shift.jsx";
 export function Include() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -38,27 +38,27 @@ export function Include() {
       </header>
       <div className={`body ${isMenuOpen ? 'menu-open' : ''}`}>
         <div className="navbar-menu tab" style={{ width: isMenuOpen ? 200 : 0 }}>
-            <ul className="navbar__list"> 
+            {/* <ul className="navbar__list"> 
               <div className="navbar__li-box">
                 <li className="navbar__li">
                   <AiOutlineAppstore className='iconmenu'/>
                   <a className="active" href="/">Home</a>
                 </li>
               </div>
-            </ul>
-            <ul className="navbar__list"> 
+            </ul> */}
+            {/* <ul className="navbar__list"> 
               <div className="navbar__li-box">
                 <li className="navbar__li">
                   <AiTwotoneShopping className='iconmenu'/>
                   <a href="/"> DOANH THU </a>
                 </li>
               </div>
-            </ul>
+            </ul> */}
             <ul className="navbar__list"> 
               <div className="navbar__li-box">
                 <li className="navbar__li">
                   <IoMdPeople className='iconmenu'/>
-                  <a href="/shiff"> CA BAN</a>
+                  <a href="/shift"> CA BAN</a>
                 </li>
               </div>
             </ul>
@@ -112,10 +112,10 @@ export function Include() {
             </ul>
         </div>
         <Switch>
-          <Route path="/" exact>
+          {/* <Route path="/" exact>
             <LoginForm />
-          </Route>
-          <Route path="/staff">
+          </Route> */}
+          <Route path="/staff" exact>
             <Staff />
           </Route>
           <Route path="/product">
@@ -126,6 +126,9 @@ export function Include() {
           </Route>
           <Route path="/pump">
             <Pump />
+          </Route>
+          <Route path="/shift">
+            <Shift />
           </Route>
         </Switch>
       </div>

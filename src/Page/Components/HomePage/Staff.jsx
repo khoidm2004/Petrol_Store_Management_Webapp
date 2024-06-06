@@ -18,6 +18,7 @@ export const Staff = () => {
   const [editMode, setEditMode] = useState(false);
   const [addingStaff, setAddingStaff] = useState(false);
   const [newStaff, setNewStaff] = useState({
+    staffId: "",
     fullName: "",
     email: "",
     phoneNum: "",
@@ -49,6 +50,7 @@ export const Staff = () => {
   const saveChanges = async () => {
     if (editMode && selectedStaff) {
       try {
+        console.log(selectedStaff);
         var status = await modifyStaff(selectedStaff);
         console.log(status);
         setEditMode(false);
@@ -63,7 +65,7 @@ export const Staff = () => {
     try {
       console.log(newStaff);
       var status = await addStaff(newStaff);
-      console.log(status);
+   
       setNewStaff({
         fullName: "",
         email: "",
@@ -76,12 +78,15 @@ export const Staff = () => {
     }
   };
 
+  const firstNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
+  const secondNumber = staff.filter((staffMember) => staffMember.workingStatus === "ISN'T WORKING").length;
+
   const data = {
-    labels: ["Red", "blue"],
+    labels: ["Đang làm việc", "Đã nghỉ việc "],
     datasets: [
       {
-        label: "My First Dataset",
-        data: [300, 70],
+        label: "NHÂN VIÊN",
+        data: [firstNumber, secondNumber],
         backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
         hoverOffset: 10,
       },
