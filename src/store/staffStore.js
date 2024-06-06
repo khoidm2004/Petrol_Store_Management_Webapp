@@ -57,7 +57,11 @@ const useStaffStore = create((set) => ({
       set((state) => ({
         staff: [...state.staff, { id: docRef.id, ...newStaff }],
       }));
-      showToast("Success", "Staff has been added successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Adding Successfully",
+        Status: "success",
+      };
     } catch (error) {
       return {
         Title: "Error",
@@ -79,7 +83,11 @@ const useStaffStore = create((set) => ({
           member.staffId === staffId ? { ...member, ...updatedStaff } : member
         ),
       }));
-      showToast("Success", "Staff has been updated successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Modifying Successfully",
+        Status: "success",
+      };
     } catch (error) {
       return {
         Title: "Error",
