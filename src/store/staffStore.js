@@ -50,8 +50,11 @@ const useStaffStore = create((set) => ({
       }
 
       const docRef = await addDoc(staffRef, newStaff);
+      const staffId = docRef.id;
+      await updateDoc(doc(firestore, "staff", staffId), { staffId });
+
       set((state) => ({
-        staff: [...state.staff, { id: docRef.id, ...newStaff }],
+        staff: [...state.staff, { id: staffId, ...newStaff, staffId }],
       }));
       return {
         Title: "Success",

@@ -64,8 +64,12 @@ const usePumpStore = create((set) => ({
       }
 
       const docRef = await addDoc(pumpRef, newPump);
+
+      const id = docRef.id;
+      await updateDoc(doc(firestore, "pump", id), { id });
+
       set((state) => ({
-        pumps: [...state.pumps, { id: docRef, newPump }],
+        pumps: [...state.pumps, { id: id, ...newPump, id }],
       }));
       return {
         Title: "Success",

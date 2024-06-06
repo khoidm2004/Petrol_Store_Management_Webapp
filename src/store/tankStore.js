@@ -64,8 +64,12 @@ const useTankStore = create((set) => ({
       }
 
       const docRef = await addDoc(tankRef, newTank);
+
+      const id = docRef.id;
+      await updateDoc(doc(firestore, "tank", id), { id });
+
       set((state) => ({
-        tanks: [...state.tanks, { id: docRef, ...newTank }],
+        tanks: [...state.tanks, { id: id, ...newTank, id }],
       }));
       return {
         Title: "Success",
