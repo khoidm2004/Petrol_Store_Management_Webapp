@@ -80,7 +80,8 @@ export const Tank = () => {
   const handleAddTank = async () => {
     try {
       console.log(newTank);
-      await addTank(newTank);
+      const result = await addTank(newTank);
+      console.log(result);
       setNewTank({
         tid: "",
         tankId: "",

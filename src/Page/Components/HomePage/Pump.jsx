@@ -25,7 +25,7 @@ export const Pump = () => {
   const [editMode, setEditMode] = useState(false);
   const [addingStaff, setAddingStaff] = useState(false);
   const [newStaff, setNewStaff] = useState({
-    pumpsid: "",
+    pid: "",
     pumpId: "",
     pumpCode: "",
     pumpName: "",
