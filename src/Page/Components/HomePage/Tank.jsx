@@ -22,6 +22,7 @@ export const Tank = () => {
     const [editMode, setEditMode] = useState(false);
     const [addingTank, setAddingTank] = useState(false);
     const [newTank, setNewTank] = useState({
+    id:"",
     tankId: "",
     tankCode: "",
     tankName: "",
@@ -82,6 +83,7 @@ export const Tank = () => {
             console.log(newTank);
             await addTank(newTank);
             setNewTank({
+                id:"",
                 tankId: "",
                 tankCode: "",
                 tankName: "",

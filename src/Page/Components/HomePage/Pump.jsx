@@ -25,6 +25,7 @@ export const Pump = () => {
     const [editMode, setEditMode] = useState(false);
     const [addingStaff, setAddingStaff] = useState(false);
     const [newStaff, setNewStaff] = useState({
+        id: "",
         pumpId: "",
         pumpCode: "",
         pumpName: "",
@@ -110,7 +111,6 @@ export const Pump = () => {
             console.log(newStaff);
             await addPump(newStaff);
             setNewStaff({
-                id:"",
                 pumpId: "",
                 pumpCode: "",
                 pumpName: "",
