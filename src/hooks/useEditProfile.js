@@ -42,7 +42,7 @@ const useEditProfile = () => {
       setAuthUser(updatedUser);
       return {
         Title: "Success",
-        Message: "Avatar updated successfully",
+        Message: "Profile updated successfully",
         Status: "Success",
       };
     } catch (error) {
