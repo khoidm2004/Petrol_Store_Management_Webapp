@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useShowToast from "./useShowToast.js";
 import useAuthStore from "../store/authStore";
 import useUserProfileStore from "../store/userProfileStore.js";
 import { firestore, storage } from "../firebase/firebase.js";
@@ -7,8 +6,6 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
 
 const useEditProfile = () => {
-  const showToast = useShowToast();
-
   const [isUpdating, setIsUpdating] = useState(false);
 
   const authUser = useAuthStore((state) => state.user);
@@ -43,12 +40,19 @@ const useEditProfile = () => {
       localStorage.setItem("user-info", JSON.stringify(updatedUser));
       setUserProfile(updatedUser);
       setAuthUser(updatedUser);
-      showToast("Success", "Avatar updated successfully", "success");
+      return {
+        Title: "Success",
+        Message: "Avatar updated successfully",
+        Status: "Success",
+      };
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   };
-
   return { editProfile, isUpdating };
 };
 
