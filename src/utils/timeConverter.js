@@ -1,5 +1,5 @@
 export const timeConverter = (timestamp) => {
-  if (typeof timestamp !== "number" || timestamp.toString().length !== 13) {
+  if (typeof timestamp !== "number") {
     return { Title: "Error", Message: "Invalid timestamp", Status: "error" };
   }
   try {

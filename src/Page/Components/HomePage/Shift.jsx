@@ -26,7 +26,6 @@ export const Shift = () => {
     const [selectedShift, setSelectedShift] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [addingShift, setAddingShift] = useState(false);
-    const time = timeConverter();
     const [newShift, setNewShift] = useState({
         startTime: new Date(),
         endTime: new Date(),
@@ -285,7 +284,9 @@ export const Shift = () => {
                                 <td>{Object.values(shift.employeeList).map(pump => pump.fullName).join(' - ')}</td>
                                 <td>{Object.values(shift.pumpList).map(pump => pump.pumpName).join(' - ')}</td>
                                 <td>{Object.values(shift.productList).map(product => product.productName).join(' - ')}</td>
-                                <td>{shift.startTime} - {shift.endTime}</td>
+                                <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time} -
+                                    {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
+                                </td>
                                 <td className='iconmenu'>
                                     <IoEllipsisVerticalOutline onClick={() => toggleSubMenu(shift)} />
                                     {openCode === shift && (
