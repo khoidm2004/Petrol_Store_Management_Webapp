@@ -5,7 +5,6 @@ import { AiOutlineAppstore, AiOutlineUser, AiTwotoneShopping} from "react-icons/
 import { IoMdPeople } from "react-icons/io";
 import { FaSignOutAlt,FaBoxes } from "react-icons/fa";
 import logo from "../../../assets/images/logo.png";
-import LoginForm from "../../App.jsx";
 import Staff from "../../Components/HomePage/Staff.jsx";
 import '../../LoginForm.css';
 import {
@@ -38,22 +37,6 @@ export function Include() {
       </header>
       <div className={`body ${isMenuOpen ? 'menu-open' : ''}`}>
         <div className="navbar-menu tab" style={{ width: isMenuOpen ? 200 : 0 }}>
-            {/* <ul className="navbar__list"> 
-              <div className="navbar__li-box">
-                <li className="navbar__li">
-                  <AiOutlineAppstore className='iconmenu'/>
-                  <a className="active" href="/">Home</a>
-                </li>
-              </div>
-            </ul> */}
-            {/* <ul className="navbar__list"> 
-              <div className="navbar__li-box">
-                <li className="navbar__li">
-                  <AiTwotoneShopping className='iconmenu'/>
-                  <a href="/"> DOANH THU </a>
-                </li>
-              </div>
-            </ul> */}
             <ul className="navbar__list"> 
               <div className="navbar__li-box">
                 <li className="navbar__li">

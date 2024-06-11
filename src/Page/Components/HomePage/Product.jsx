@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState } from "react";
 import useProductStore from "../../../store/productStore.js";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
@@ -8,19 +9,20 @@ import 'chart.js/auto';
 import './staff.css';
 
 export const Product = () => {
-    const { product, fetchProduct, modifyProduct, addProduct } = useProductStore();
-    const [openCode, setOpenCode] = useState(null);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [editMode, setEditMode] = useState(false);
-    const [addingProduct, setAddingProduct] = useState(false);
-    const [newProduct, setNewProduct] = useState({
-        productId: "",
-        productCode: "",
-        productName: "",
-        productPrice: "",
-        productColor: "",
-        productStatus: "On sale"
-    });
+  const { product, fetchProduct, modifyProduct, addProduct } =
+    useProductStore();
+  const [openCode, setOpenCode] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [addingProduct, setAddingProduct] = useState(false);
+  const [newProduct, setNewProduct] = useState({
+    productId: "",
+    productCode: "",
+    productName: "",
+    productPrice: "",
+    productColor: "",
+    productStatus: "On sale",
+  });
 
   const toggleSubMenu = (Code) => {
     if (openCode === Code) {
@@ -44,48 +46,47 @@ export const Product = () => {
     setEditMode(true);
   };
 
-    const saveChanges = async () => {
-        if (editMode && selectedProduct) {
-            try {
-                console.log(selectedProduct)
-                await modifyProduct(selectedProduct); 
-                setEditMode(false);
-                setSelectedProduct(null);
-            } catch (error) {
-                console.error('Save error:', error);
-            }
-        }
-    };
+  const saveChanges = async () => {
+    if (editMode && selectedProduct) {
+      try {
+        console.log(selectedProduct);
+        await modifyProduct(selectedProduct, showToast);
+        setEditMode(false);
+        setSelectedProduct(null);
+      } catch (error) {
+        console.error("Save error:", error);
+      }
+    }
+  };
 
-    const handleAddProduct = async () => {
-        try {
-            await addProduct(newProduct);
-            setNewProduct({
-                productId: "",
-                productCode: "",
-                productName: "",
-                productPrice: "",
-                productColor: "",
-                productStatus: "On sale"
-            });
-            setAddingProduct(false);
-        } catch (error) {
-            console.error('Add Product error:', error);
-        }
-    };
+  const handleAddProduct = async () => {
+    try {
+      await addProduct(newProduct, showToast);
+      setNewProduct({
+        productId: "",
+        productCode: "",
+        productName: "",
+        productPrice: "",
+        productColor: "",
+        productStatus: "On sale",
+      });
+      setAddingProduct(false);
+    } catch (error) {
+      console.error("Add Product error:", error);
+    }
+  };
 
-    const data = {
-        labels: ['Red','blue'],
-        datasets: [{
-          label: 'My First Dataset',
-          data: [300, 70],
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-          ],
-          hoverOffset: 10
-        }]
-    };
+  const data = {
+    labels: ["Red", "blue"],
+    datasets: [
+      {
+        label: "My First Dataset",
+        data: [300, 70],
+        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        hoverOffset: 10,
+      },
+    ],
+  };
 
   const workingProduct = product.filter(
     (ProductMember) => ProductMember.productStatus === "On sale"

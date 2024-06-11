@@ -10,7 +10,6 @@ import {
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
 
-
 const useTankStore = create((set) => ({
   // Map data from array
   tanks: [],
@@ -19,7 +18,7 @@ const useTankStore = create((set) => ({
     const tankRef = collection(firestore, "tank");
     const tankSnapShot = await getDocs(tankRef);
     const tankList = tankSnapShot.docs.map((doc) => ({
-      tankId: doc.id,
+      tid: doc.id,
       ...doc.data(),
     }));
     set({ tanks: tankList });
@@ -27,7 +26,7 @@ const useTankStore = create((set) => ({
 
   /* 
   const newTank = {
-    id: string
+    tid: string
     tankId: number
     tankCode: string
     tankName: string
@@ -65,11 +64,11 @@ const useTankStore = create((set) => ({
 
       const docRef = await addDoc(tankRef, newTank);
 
-      const id = docRef.id;
-      await updateDoc(doc(firestore, "tank", id), { id });
+      const tid = docRef.id;
+      await updateDoc(doc(firestore, "tank", tid), { tid });
 
       set((state) => ({
-        tanks: [...state.tanks, { id: docRef, ...newTank }],
+        tanks: [...state.tanks, { id: tid, ...newTank, tid }],
       }));
       return {
         Title: "Success",
@@ -88,13 +87,13 @@ const useTankStore = create((set) => ({
   //Able to modify everything except id
   modifyTank: async (inputs) => {
     try {
-      const { id, ...updatedTank } = inputs;
-      const tankDocRef = doc(firestore, "tank", id);
+      const { tid, ...updatedTank } = inputs;
+      const tankDocRef = doc(firestore, "tank", tid);
       await updateDoc(tankDocRef, updatedTank);
 
       set((state) => ({
         tanks: state.tanks.map((tank) =>
-          tank.id === id ? { ...tank, ...updatedTank } : tank
+          tank.tid === tid ? { ...tank, ...updatedTank } : tank
         ),
       }));
       return {
@@ -112,4 +111,4 @@ const useTankStore = create((set) => ({
   },
 }));
 
-export default useTankStore;  
+export default useTankStore;
