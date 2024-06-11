@@ -1,8 +1,7 @@
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../firebase/firebase";
 
 const useReclaimPassword = async (email) => {
-  const auth = getAuth();
-
   try {
     await sendPasswordResetEmail(auth, email);
     return {
