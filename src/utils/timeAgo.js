@@ -1,4 +1,4 @@
-export const timeConverter = (timestamp) => {
+export const timeAgo = (timestamp) => {
   const now = Date.now();
   const timeAgo = Math.floor((now - timestamp) / 1000);
 
