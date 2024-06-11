@@ -28,7 +28,7 @@ const useShiftStore = create((set) => ({
     startTime: number
     endTime: number
     pumpList: object{pumpName:string, pumpCode:string, firstMeterReadingByMoney:number, firstMeterReadingByLitre:number}
-    employeeList: array[]
+    employeeList: object{fullName, email}
     productList: object{productName, productCode, productPrice}
   }
   */
