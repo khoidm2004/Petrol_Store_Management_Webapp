@@ -61,7 +61,7 @@ const useShiftStore = create((set) => ({
   modifyShift: async (inputs) => {
     try {
       const { shiftId, ...updatedShift } = inputs;
-      const shiftRef = collection(firestore, "shift", shiftId);
+      const shiftRef = doc(firestore, "shift", shiftId);
       await updateDoc(shiftRef, updatedShift);
 
       set((state) => ({
