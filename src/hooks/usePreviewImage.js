@@ -1,10 +1,8 @@
 // Hook uses to preview and change the image
 import { useState } from "react";
-import useShowToast from "./useShowToast.js";
 
 const usePreviewImage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const showToast = useShowToast();
   const maxFileSizeInBytes = 2 * 1024 * 1024; // File max size 2MB
 
   const handleImageChange = (e) => {
@@ -24,7 +22,6 @@ const usePreviewImage = () => {
 
       reader.readAsDataURL(file);
     } else {
-      showToast("Error", "Please select an image", "error");
       setSelectedFile(null);
     }
   };

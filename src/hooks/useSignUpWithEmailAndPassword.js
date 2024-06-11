@@ -15,22 +15,20 @@ import { auth, firestore } from "../firebase/firebase";
 const useSignUpWithEmailAndPassword = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-  const showToast = useShowToast();
   const loginUser = useAuthStore();
 
   const signup = async (inputs) => {
-    if (!inputs.fullName || !inputs.phoneNum || !inputs.email || !inputs.pass) {
-      showToast("Warning", "Please fill all the fields", "warning");
-    }
-
     const userRef = collection(firestore, "users");
 
     const q = query(userRef, where("email", "==", inputs.email));
     const querySnapshot = await getDoc(q);
 
     if (!querySnapshot.empty) {
-      showToast("Error", "Email has been registered", "error");
-      return;
+      return {
+        Title: "Error",
+        Message: "Email has been registered",
+        Status: "error",
+      };
     }
 
     try {
@@ -40,8 +38,11 @@ const useSignUpWithEmailAndPassword = () => {
       );
 
       if (!newUser && error) {
-        showToast("Error", error.message, "error");
-        return;
+        return {
+          Title: "Error",
+          Message: error.message,
+          Status: "error",
+        };
       }
 
       if (newUser) {
@@ -59,7 +60,11 @@ const useSignUpWithEmailAndPassword = () => {
         loginUser(userDoc);
       }
     } catch (error) {
-      showToast("Error", error.message, "error");
+      return {
+        Title: "Error",
+        Message: error.message,
+        Status: "error",
+      };
     }
   };
 
