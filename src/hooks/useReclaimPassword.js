@@ -1,15 +1,23 @@
-// import { collection, getDoc, query, where } from "@firebase/firestore";
-// import { firestore } from "../firebase/firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../firebase/firebase";
 
-// const useReclaimPassword = async (inputs) => {
-//   const userRef = collection(firestore, "user");
+const useReclaimPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return {
+      Title: "Success",
+      Message: "Password reset email sent",
+      Status: "success",
+    };
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return {
+      Title: "Error",
+      Message: `Error Code:${errorCode} (${errorMessage})`,
+      Status: "error",
+    };
+  }
+};
 
-//   const q = query(userRef, where("email", "==", inputs.email));
-//   const querySnapshot = await getDoc(q);
-
-//   if(!querySnapshot.empty){
-
-//   }
-// };
-
-// export default useReclaimPassword;
+export default useReclaimPassword;

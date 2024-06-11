@@ -1,12 +1,13 @@
 export const timeConverter = (timestamp) => {
-  const now = Date.now();
-  const timeAgo = Math.floor((now - timestamp) / 1000);
-
-  if (timeAgo < 3600) {
-    const minutesAgo = Math.floor(timeAgo / 60);
-    return `${minutesAgo}m`;
-  } else {
-    const hourAgo = Math.floor(timeAgo / 3600);
-    return `${hourAgo}h`;
+  if (typeof timestamp !== "number" || timestamp.toString().length !== 13) {
+    return { Title: "Error", Message: "Invalid timestamp", Status: "error" };
+  }
+  try {
+    const orgTimestamp = new Date(timestamp);
+    const date = orgTimestamp.toLocaleDateString();
+    const time = orgTimestamp.toLocaleTimeString();
+    return { date, time };
+  } catch (error) {
+    return { Title: "Error", Message: error.message, Status: "error" };
   }
 };
