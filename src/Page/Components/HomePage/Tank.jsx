@@ -21,9 +21,14 @@ export const Tank = () => {
   const [selectedTank, setSelectedTank] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [addingTank, setAddingTank] = useState(false);
+  const tankId = Math.floor(100000 + Math.random() * 900000);
+
+  //   while(tanks.filter(TankMember => TankMember.tankId === tankId)){
+  //     tankId = Math.floor(100000 + Math.random() * 900000);
+  // }
   const [newTank, setNewTank] = useState({
     tid: "",
-    tankId: "",
+    tankId: (tankId),
     tankCode: "",
     tankName: "",
     tankStatus: "On use",
@@ -33,9 +38,10 @@ export const Tank = () => {
     },
   });
 
-  const toggleSubMenu = (email) => {
-    setOpenEmail(openEmail === email ? null : email);
-  };
+    const toggleSubMenu = (email) => {
+        setOpenEmail(openEmail === email ? null : email);
+    };
+
 
   useEffect(() => {
     fetchTank();
@@ -84,7 +90,7 @@ export const Tank = () => {
       console.log(result);
       setNewTank({
         tid: "",
-        tankId: "",
+        tankId,
         tankCode: "",
         tankName: "",
         tankVolume: "",
@@ -109,6 +115,7 @@ export const Tank = () => {
   const secondNumber = tanks.filter(
     (TankMember) => TankMember.tankStatus === "Not On use"
   ).length;
+
   const data = {
     labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
     datasets: [
@@ -121,12 +128,9 @@ export const Tank = () => {
     ],
   };
 
-  const workingTank = tanks.filter(
-    (TankMember) => TankMember.tankStatus === "On use"
-  );
-  const notWorkingTank = tanks.filter(
-    (TankMember) => TankMember.tankStatus === "Not On use"
-  );
+  const workingTank = tanks.filter(TankMember => TankMember.tankStatus === "On use");
+  const notWorkingTank = tanks.filter(TankMember => TankMember.tankStatus === "Not On use");
+
 
   return (
     <div className="Staff">

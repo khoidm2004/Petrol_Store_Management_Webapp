@@ -24,9 +24,14 @@ export const Pump = () => {
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [addingStaff, setAddingStaff] = useState(false);
+  const pumpId = Math.floor(100000 + Math.random() * 900000);
+
+  // while(pumps.filter(TankMember => TankMember.pumpId === pumpId)){
+  //   pumpId = Math.floor(100000 + Math.random() * 900000);
+  // }
   const [newStaff, setNewStaff] = useState({
     pid: "",
-    pumpId: "",
+    pumpId: (pumpId),
     pumpCode: "",
     pumpName: "",
     pumpStatus: "On use",
@@ -113,7 +118,7 @@ export const Pump = () => {
       console.log(result);
       setNewStaff({
         pid: "",
-        pumpId: "",
+        pumpId: (pumpId),
         pumpCode: "",
         pumpName: "",
         pumpStatus: "On use",

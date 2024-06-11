@@ -1,11 +1,12 @@
+
 import { useEffect, useState } from "react";
 import useProductStore from "../../../store/productStore.js";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
-import "chart.js/auto";
-import "./staff.css";
+import 'chart.js/auto';
+import './staff.css';
 
 export const Product = () => {
   const { product, fetchProduct, modifyProduct, addProduct } =
