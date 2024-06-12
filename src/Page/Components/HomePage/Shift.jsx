@@ -9,7 +9,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { CgAddR } from "react-icons/cg";
 import { FaRegMinusSquare } from "react-icons/fa";
 import 'chart.js/auto'; 
-import './staff.css';
+import './Staff.css';
 
 import { timeConverter } from '../../../utils/timeConverter.js';
 

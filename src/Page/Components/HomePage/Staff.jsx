@@ -5,7 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
-import "./staff.css";
+import "./Staff.css";
 
 export const Staff = () => {
   const staff = useStaffStore((state) => state.staff);

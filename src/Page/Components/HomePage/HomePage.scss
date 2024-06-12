@@ -60,7 +60,9 @@ p{
 //   background-color: $borderLeftColor;
 //   cursor: pointer;
 // }
-
+header{
+  display: flex;
+}
 .body{
   display: flex;
   transition: margin-left 0.5s ease;
