@@ -10,15 +10,16 @@
 // )
 
 import React from "react";
-import ReactDOM from 'react-dom/client'
+import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Include } from './Page/Components/HomePage/Include.jsx';
+import { Include } from "./Page/Components/HomePage/Include.jsx";
+import App from "./Page/App.jsx";
 // Importing the Bootstrap CSS
 // const rootElement = document.getElementById("root");
 // ReactDOM.render(<Include  />, rootElement);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Include />
-  </React.StrictMode>,
-)
+    <App />
+  </React.StrictMode>
+);
