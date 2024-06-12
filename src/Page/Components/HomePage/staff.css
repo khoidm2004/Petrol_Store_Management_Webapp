@@ -18,29 +18,36 @@ body {
 }
 
 .search-input {
-    padding: 5px 10px;
     border: none;
-    border-radius: 4px;
+    outline: none;
+    border-bottom: 2px solid black;
+    margin: 5px;
     outline: none;
     font-size: 14px;
-    width: 155px;
-    height: 49px;
+    width: 140px;
+    height: 40px;
+    color: black;
 }
 
 .push {
-    border-radius: 8px;
-    border: 2px solid #166BCC;
+    border: none;
+    outline: none;
+    border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     background: #166BCC;
-    width: 155px;
-    height: 49px;
+    width: 115px;
+    height: 40px;
     color: #FFF; /* White */
     text-align: center;
-    font-family: Poppins, sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
-    margin-bottom: 5px;
-    margin-left: 5px;
+    margin: 5px;
+}
+
+p{
+    margin: auto;
+    margin-left: 10px;
+    font-weight: bold;
 }
 
 .Staff {
@@ -49,73 +56,81 @@ body {
 
 .Staff > .Staffs {
     display: flex;
+    width: 100%;
 }
 
 .firsttable {
     margin-top: 10px;
-    border: 2px solid #166BCC;
+    border: 1px solid #166BCC;
     background: #FFF;
-    color: #333; /* Dark gray */
-    width: 80%;
+    color: #333;
+    width: 70%;
+    text-transform: capitalize;
+}
+
+.chart-container {
+    width: 30%;
+    max-height: 200px; 
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .secondtable {
     margin-top: 20px;
     margin-left: 20px;
-    border: 2px solid #166BCC;
+    border: 1px solid #166BCC;
     background: #FFF;
     color: #333; /* Dark gray */
     width: 90%;
+    text-transform: capitalize;
 }
 
 .secondtable > thead > tr > th {
     background-color: #F3F7FC;
-    color:  #F00; /* Red */
+    color:  #F00;
     font-weight: 700;
+    border-bottom: 1px solid rgb(255, 255, 255);
 }
 
-th {
+.firsttable > thead > tr > th {
     background-color: #F3F7FC;
-    color: #00B507; /* Green */
+    color: #00B507;
     font-weight: 700;
+    border-bottom: 1px solid rgb(255, 255, 255);
 }
 
 td, th {
     padding: 10px;
+    border-bottom: 1px solid black;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-td:last-child {
+.icon_editview{
     position: relative;
-}
-
-.iconmenu {
     text-align: right;
     padding-right: 15px;
+    width: 150px;
+    font-size: 20px;
 }
 
-.icon_secondarystate {
-    position: relative;
-}
-
-#secondarystate {
+.secondarystate {
     position: absolute;
     top: 0%;
-    left: 0%;
     background: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1;
+    width: 100px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
 }
 
-#secondarystate td {
+.secondarystate tr {
     padding: 10px;
     cursor: pointer;
 }
 
-#secondarystate td:hover {
+.secondarystate tr:hover {
     background-color: #f0f0f0;
 }
 
@@ -125,15 +140,60 @@ td:last-child {
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 20px;
+    padding: 40px;
+    padding-right: 0px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
+    border-radius: 20px;
     z-index: 1000;
     width: 90%;
     max-width: 400px;
 }
 
-.viewShift, .addShift {
+.viewStaff input, .viewStaff select,.addStaff input,.addStaff select{
+    width: 90%;
+    height: 40px;
+    margin-bottom: 30px;
+    border: 0 solid white;
+    border-bottom: 1px solid black;
+    padding-left: 10px;
+}
+
+
+
+.viewStaff button, .addStaff button{
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    background: #166BCC;
+    width: 88%;
+    height: 45px;
+    color: #FFF; /* White */
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 5px;
+} 
+
+.viewStaff button:hover, .addStaff button:hover{
+    background-color: #0a2c51;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.close-icon:hover {
+    background-color:  #0a2c51;
+    border-radius: 50%;
+    color: white;
+}
+
+/* .viewShift, .addShift {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -149,52 +209,4 @@ td:last-child {
 
 .viewStaff h2, .addStaff h2, .viewShift h2, .addShift h2 {
     text-align: center;
-}
-
-hr {
-    width: 10px;
-    border: #166BCC;
-}
-
-.time {
-    width: 6px solid #ccc;
-}
-
-.send {
-    color: #FFF; /* White */
-    text-align: center;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-}
-
-.send:hover {
-    background-color: #004999;
-}
-
-.close-icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-}
-
-.chart-container {
-    max-width: 50%;
-    max-height: 200px; 
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-input, select{
-    width: 90%;
-    height: 40px;
-    border: 0 solid white;
-    border-bottom: 1px solid black;
-}
-
-h5{
-    width: 170px;
-}
+} */

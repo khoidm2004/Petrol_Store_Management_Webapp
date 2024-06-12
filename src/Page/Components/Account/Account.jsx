@@ -40,7 +40,7 @@ export const Account = () => {
       console.log(selectedFile)
       console.log(profile)
       if (selectedFile) {
-        const success = await useEditProfile(profile, selectedFile);
+        const success = await EditProfile(profile, selectedFile);
         if (success) {
           console.log('Profile updated successfully');
           localStorage.setItem('user-info', JSON.stringify(profile));

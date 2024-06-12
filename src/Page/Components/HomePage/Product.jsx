@@ -122,12 +122,12 @@ export const Product = () => {
             {workingProduct.map((ProductMember) => (
               <tr key={ProductMember.productId} className="col" id="mainstate">
                 <td>{ProductMember.productName}</td>
-                <td className="iconmenu">
-                  <IoEllipsisVerticalOutline
+                <td className="icon_editview">
+                  <IoEllipsisVerticalOutline className="icon_menu"
                     onClick={() => toggleSubMenu(ProductMember.productCode)}
                   />
                   {openCode === ProductMember.productCode && (
-                    <table id="secondarystate">
+                    <table className="secondarystate">
                       <tbody>
                         <tr className="box">
                           <td onClick={() => handleView(ProductMember)}>
@@ -297,13 +297,13 @@ export const Product = () => {
                   id="mainstate"
                 >
                   <td>{ProductMember.productName}</td>
-                  <td className="iconmenu">
+                  <td className="icon_editview">
                     <IoEllipsisVerticalOutline
-                      className="icon_secondarystate"
+                      className="icon_menu"
                       onClick={() => toggleSubMenu(ProductMember.productCode)}
                     />
                     {openCode === ProductMember.productCode && (
-                      <table id="secondarystate">
+                      <table className="secondarystate">
                         <tbody>
                           <tr className="box">
                             <td onClick={() => handleView(ProductMember)}>

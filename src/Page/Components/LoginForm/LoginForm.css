@@ -86,7 +86,7 @@ form {
   text-decoration: underline;
 }
 
-button {
+form button {
   margin-top: 10px;
   width: 90%;
   height: 45px;
@@ -105,6 +105,23 @@ button {
   height: auto;
   margin-left: 220px;
 }
+
+.modals{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  max-width: 300px;
+}
+
+.modals h2{
+  text-align: center;
+}
+
 
 @media screen and (max-width: 1400px) {
   #coverimage {

@@ -196,12 +196,12 @@ export const Pump = () => {
             {workingStaff.map((staffMember) => (
               <tr key={staffMember.pumpCode} className="col" id="mainstate">
                 <td>{staffMember.pumpName}</td>
-                <td className="iconmenu">
-                  <IoEllipsisVerticalOutline
+                <td className="icon_editview">
+                  <IoEllipsisVerticalOutline className="icon_menu"
                     onClick={() => toggleSubMenu(staffMember.pumpCode)}
                   />
                   {openEmail === staffMember.pumpCode && (
-                    <table id="secondarystate">
+                    <table className="secondarystate">
                       <tbody>
                         <tr className="box">
                           <td onClick={() => handleView(staffMember)}>VIEW</td>
@@ -405,13 +405,13 @@ export const Pump = () => {
               {notWorkingStaff.map((staffMember) => (
                 <tr key={staffMember.pumpCode} className="col" id="mainstate">
                   <td>{staffMember.pumpName}</td>
-                  <td className="iconmenu">
+                  <td className="icon_editview">
                     <IoEllipsisVerticalOutline
-                      className="icon_secondarystate"
+                      cclassName="icon_menu"
                       onClick={() => toggleSubMenu(staffMember.pumpCode)}
                     />
                     {openEmail === staffMember.pumpCode && (
-                      <table id="secondarystate">
+                      <table className="secondarystate">
                         <tbody>
                           <tr className="box">
                             <td onClick={() => handleView(staffMember)}>

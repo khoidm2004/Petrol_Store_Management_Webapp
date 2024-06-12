@@ -127,12 +127,12 @@ export const Staff = () => {
             {workingStaff.map((staffMember) => (
               <tr key={staffMember.StaffId} className="col" id="mainstate">
                 <td>{staffMember.fullName}</td>
-                <td className="iconmenu">
-                  <IoEllipsisVerticalOutline
+                <td className="icon_editview">
+                  <IoEllipsisVerticalOutline className="icon_menu"
                     onClick={() => toggleSubMenu(staffMember.email)}
                   />
                   {openEmail === staffMember.email && (
-                    <table id="secondarystate">
+                    <table className="secondarystate">
                       <tbody>
                         <tr className="box">
                           <td onClick={() => handleView(staffMember)}>VIEW</td>
@@ -267,13 +267,13 @@ export const Staff = () => {
               {notWorkingStaff.map((staffMember) => (
                 <tr key={staffMember.StaffId} className="col" id="mainstate">
                   <td>{staffMember.fullName}</td>
-                  <td className="iconmenu">
+                  <td className="icon_editview">
                     <IoEllipsisVerticalOutline
-                      className="icon_secondarystate"
+                      className="icon_menu"
                       onClick={() => toggleSubMenu(staffMember.email)}
                     />
                     {openEmail === staffMember.email && (
-                      <table id="secondarystate">
+                      <table className="secondarystate">
                         <tbody>
                           <tr className="box">
                             <td onClick={() => handleView(staffMember)}>
@@ -293,101 +293,6 @@ export const Staff = () => {
               ))}
             </tbody>
           </table>
-
-          {selectedStaff && (
-            <div className="viewStaff">
-              <AiOutlineClose
-                onClick={() => setSelectedStaff(null)}
-                className="close-icon"
-              />
-              <input
-                type="text"
-                value={selectedStaff.fullName}
-                onChange={(e) =>
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    fullName: e.target.value,
-                  })
-                }
-                readOnly={!editMode}
-              />
-              <br />
-              <input type="text" value={selectedStaff.email} readOnly />
-              <br />
-              <input
-                type="text"
-                value={selectedStaff.phoneNum}
-                onChange={(e) =>
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    phoneNum: e.target.value,
-                  })
-                }
-                readOnly={!editMode}
-              />
-              <br />
-              <select
-                value={selectedStaff.workingStatus}
-                onChange={(e) =>
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    workingStatus: e.target.value,
-                  })
-                }
-                disabled={!editMode}
-              >
-                <option value="IS WORKING">IS WORKING</option>
-                <option value="ISN'T WORKING">ISN'T WORKING</option>
-              </select>
-              {editMode && <button onClick={saveChanges}>OK</button>}
-            </div>
-          )}
-          {addingStaff && (
-            <div className="addStaff">
-              <h2>Thêm Nhân Viên Mới</h2>
-              <AiOutlineClose
-                onClick={() => setAddingStaff(false)}
-                className="close-icon"
-              />
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={newStaff.fullName}
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, fullName: e.target.value })
-                }
-              />
-              <br />
-              <input
-                type="text"
-                placeholder="Email"
-                value={newStaff.email}
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, email: e.target.value })
-                }
-              />
-              <br />
-              <input
-                type="text"
-                placeholder="Phone Number"
-                value={newStaff.phoneNum}
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, phoneNum: e.target.value })
-                }
-              />
-              <br />
-              <select
-                value={newStaff.workingStatus}
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, workingStatus: e.target.value })
-                }
-              >
-                <option value="IS WORKING">IS WORKING</option>
-                <option value="ISN'T WORKING">ISN'T WORKING</option>
-              </select>
-              <button onClick={handleAddStaff}>THÊM</button>
-            </div>
-          )}
         </div>
       </div>
     </div>

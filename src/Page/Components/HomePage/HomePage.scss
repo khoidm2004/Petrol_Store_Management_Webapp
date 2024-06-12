@@ -8,6 +8,7 @@ $borderLeftColor:#58b5fc;
   margin: 0;
 }
 
+
 p{
   width: 100%;
 }
@@ -21,14 +22,19 @@ p{
   width: 0;
   background-color:$backgroundColor;
   box-shadow: 1px 1px 7px rgba(0,0,0,0.15);
-  transition: all 0.5s ease;
+  transition: width 0.5s ease;
   margin-top: 0px;
 }
 
-.burger > .iconmenu {
-  width: 60px;
+.burger > .tab_menu {
+  width: 30px;
   height: 30px;
+  margin-top: 20px;
+  margin-left: 20px;
   cursor: pointer;
+  // background-color: #dce0e9;
+  border-radius: 40%;
+  box-shadow: #58b5fc;
 }
 
 .navbar__list {
@@ -39,7 +45,8 @@ p{
 }
 
 .navbar__li {
-  display: block;
+  display: flex;
+  align-items: center;
   padding: 10px 20px;
   font-size: 16px;
   color: $textcolor;
@@ -51,18 +58,28 @@ p{
   padding: 10px 0;
 }
 
+.menu-text {
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.body:not(.menu-open) .menu-text {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
 .navbar__li-box:hover {
   border-left: 7px solid $borderLeftColor;
   cursor: pointer;
 }
 
-// .navbar__li-box:hover {
-//   background-color: $borderLeftColor;
-//   cursor: pointer;
-// }
-header{
+header {
   display: flex;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .body{
   display: flex;
   transition: margin-left 0.5s ease;
@@ -74,4 +91,12 @@ a{
   font-size: 15px;
   font-weight: bold;
 }
+#logo{
+  margin-left: 15px;
+}
 
+.title{
+  text-align: center;
+  margin: auto;
+  font-weight: bold;
+}

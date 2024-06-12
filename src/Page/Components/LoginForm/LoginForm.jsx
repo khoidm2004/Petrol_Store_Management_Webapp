@@ -1,12 +1,18 @@
-import { useState } from "react";
-import "./LoginForm.css";
+import { useState } from 'react';
+import './LoginForm.css';
+import { FaUser, FaLock } from "react-icons/fa";
 import coverimages from "../../../assets/images/coverimages.png";
 import user from "../../../assets/images/user.png";
-import useLogin from "../../../hooks/useLogin";
+import useLogin from '../../../hooks/useLogin';
+import { AiOutlineClose } from "react-icons/ai";
+import useReclaimPassword from '../../../hooks/useReclaimPassword';
 
-const LoginForm = () => {
+export const LoginForm = () => {
   const { login, loading } = useLogin();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetStatus, setResetStatus] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,7 +24,29 @@ const LoginForm = () => {
     try {
       login(formData);
     } catch (error) {
-      console.error("Login error:", error);
+      console.error('Login error:', error);
+    }
+  };
+
+  const handleResetClick = () => {
+    setShowResetModal(true);
+  };
+
+  const handleResetCancel = () => {
+    setShowResetModal(false);
+    setResetEmail(''); 
+    setResetStatus('');
+  };
+
+  const handleResetSubmit = async () => {
+    try {
+      const status = await useReclaimPassword(resetEmail);
+        console.log(status);
+        setShowResetModal(false);
+        setResetEmail('');
+        setResetStatus('');
+    } catch (error) {
+      console.error('Reset password error:', error);
     }
   };
 
@@ -52,7 +80,7 @@ const LoginForm = () => {
               />
             </div>
             <div className="remember-forgot">
-              <a href="#/">Forgot password ?</a>
+              <a href="#/" onClick={handleResetClick} >Forgot account? </a>
             </div>
           </div>
           <button type="submit" disabled={loading} onClick={handleSubmit}>
@@ -66,6 +94,22 @@ const LoginForm = () => {
           tòa nhà Detech, 8c Tôn Thất Thuyết, quận Nam Từ Liêm, Hà Nội{" "}
         </p>
       </footer>
+      {showResetModal && (
+        <div className="modals">
+          <div className="modal-content">
+            <AiOutlineClose onClick={handleResetCancel} className="close-icon" />
+            <h2>Reset Password</h2>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+            />
+            <button onClick={handleResetSubmit}>Submit</button>
+            {resetStatus && <p className="reset-status">{resetStatus}</p>}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

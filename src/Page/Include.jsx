@@ -12,6 +12,8 @@ import Pump from "./Components/HomePage/Pump.jsx";
 import Shift from "./Components/HomePage/Shift.jsx";
 import Staff from "./Components/HomePage/Staff.jsx";
 import Account from "./Components/Account/Account.jsx";
+import Revenue from "./Components/HomePage/Doanhthu.jsx";
+import { BsDisplay } from "react-icons/bs";
 
 export function Include() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,14 +21,15 @@ export function Include() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
   return (
     <BrowserRouter>
       <header>
         <div className="burger" onClick={toggleMenu}>
           {isMenuOpen ? (
-            <AiOutlineClose className="iconmenu" />
+            <AiOutlineClose className="tab_menu" />
           ) : (
-            <AiOutlineUnorderedList className="iconmenu" />
+            <AiOutlineUnorderedList className="tab_menu" />
           )}
         </div>
         <img src={logo} alt="Logo" id="logo" />
@@ -36,73 +39,77 @@ export function Include() {
         </p>
       </header>
       <div className={`body ${isMenuOpen ? "menu-open" : ""}`}>
-        <div
-          className="navbar-menu tab"
-          style={{ width: isMenuOpen ? 200 : 0 }}
-        >
+        <div className="navbar-menu tab" style={{ width: isMenuOpen ? 200 : 0 }}>
           <ul className="navbar__list">
             <div className="navbar__li-box">
               <li className="navbar__li">
-                <IoMdPeople className="iconmenu" />
-                <a href="/shift"> CA BAN</a>
+                <IoMdPeople className="icon_menu" />
+                <a className="menu-text" href="/revenue"> DOANH THU</a>
               </li>
             </div>
           </ul>
           <ul className="navbar__list">
             <div className="navbar__li-box">
               <li className="navbar__li">
-                <FaBoxes className="iconmenu" />
-                <a href="/staff"> NHAN VIEN</a>
+                <IoMdPeople className="icon_menu" />
+                <a className="menu-text" href="/shift"> CA BAN</a>
               </li>
             </div>
           </ul>
           <ul className="navbar__list">
             <div className="navbar__li-box">
               <li className="navbar__li">
-                <AiOutlineUser className="iconmenu" />
-                <a href="/product"> MAT HANG</a>
+                <FaBoxes className="icon_menu" />
+                <a className="menu-text" href="/staff"> NHAN VIEN</a>
               </li>
             </div>
           </ul>
           <ul className="navbar__list">
             <div className="navbar__li-box">
               <li className="navbar__li">
-                <AiOutlineUser className="iconmenu" />
-                <a href="/tank"> BE</a>
+                <AiOutlineUser className="icon_menu" />
+                <a className="menu-text" href="/product"> MAT HANG</a>
               </li>
             </div>
           </ul>
           <ul className="navbar__list">
             <div className="navbar__li-box">
               <li className="navbar__li">
-                <AiOutlineUser className="iconmenu" />
-                <a href="/pump"> VOI BOM</a>
+                <AiOutlineUser className="icon_menu" />
+                <a className="menu-text" href="/tank"> BE</a>
               </li>
             </div>
           </ul>
           <ul className="navbar__list">
             <div className="navbar__li-box">
               <li className="navbar__li">
-                <AiOutlineUser className="iconmenu" />
-                <a href="/account"> TAI KHOAN</a>
+                <AiOutlineUser className="icon_menu" />
+                <a className="menu-text" href="/pump"> VOI BOM</a>
               </li>
             </div>
           </ul>
           <ul className="navbar__list">
             <div className="navbar__li-box">
               <li className="navbar__li">
-                <FaSignOutAlt className="iconmenu" />
-                <a href="/out"> DANG XUAT</a>
+                <AiOutlineUser className="icon_menu" />
+                <a className="menu-text" href="/account"> TAI KHOAN</a>
               </li>
             </div>
           </ul>
-
+          <ul className="navbar__list">
+            <div className="navbar__li-box">
+              <li className="navbar__li">
+                <FaSignOutAlt className="icon_menu" />
+                <a className="menu-text" href="/out"> DANG XUAT</a>
+              </li>
+            </div>
+          </ul>
         </div>
         <Switch>
-          {/* <Route path="/" exact>
-            <LoginForm />
-          </Route> */}
-          <Route path="/staff" >
+          <Route path="/revenue" exact>
+            <Revenue />
+          </Route>
+          <Route path="/staff">
             <Staff />
           </Route>
           <Route path="/product">
@@ -125,3 +132,6 @@ export function Include() {
     </BrowserRouter>
   );
 }
+
+export default Include;
+

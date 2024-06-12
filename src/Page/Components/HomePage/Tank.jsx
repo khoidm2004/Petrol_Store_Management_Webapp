@@ -159,12 +159,12 @@ export const Tank = () => {
             {workingTank.map((TankMember) => (
               <tr key={TankMember.tankCode} className="col" id="mainstate">
                 <td>{TankMember.tankName}</td>
-                <td className="iconmenu">
-                  <IoEllipsisVerticalOutline
+                <td className="icon_editview">
+                  <IoEllipsisVerticalOutline className="icon_menu"
                     onClick={() => toggleSubMenu(TankMember.tankCode)}
                   />
                   {openEmail === TankMember.tankCode && (
-                    <table id="secondarystate">
+                    <table className="secondarystate">
                       <tbody>
                         <tr className="box">
                           <td onClick={() => handleView(TankMember)}>VIEW</td>
@@ -338,13 +338,13 @@ export const Tank = () => {
               {notWorkingTank.map((TankMember) => (
                 <tr key={TankMember.tankCode} className="col" id="mainstate">
                   <td>{TankMember.tankName}</td>
-                  <td className="iconmenu">
+                  <td className="icon_editview">
                     <IoEllipsisVerticalOutline
-                      className="icon_secondarystate"
+                      className="icon_menu"
                       onClick={() => toggleSubMenu(TankMember.tankCode)}
                     />
                     {openEmail === TankMember.tankCode && (
-                      <table id="secondarystate">
+                      <table className="secondarystate">
                         <tbody>
                           <tr className="box">
                             <td onClick={() => handleView(TankMember)}>VIEW</td>
