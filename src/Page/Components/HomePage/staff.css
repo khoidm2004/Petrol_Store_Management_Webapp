@@ -1,20 +1,20 @@
 body {
-    background-color: #FBFDFF;
+  background-color: #fbfdff;
 }
 
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .search-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .search-icon {
-    color: #333; /* Dark gray */
-    margin-right: 10px;
+  color: #333; /* Dark gray */
+  margin-right: 10px;
 }
 
 .search-input {
@@ -51,7 +51,7 @@ p{
 }
 
 .Staff {
-    padding: 20px; 
+  padding: 20px;
 }
 
 .Staff > .Staffs {
