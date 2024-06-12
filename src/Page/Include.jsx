@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import './HomePage.scss';
+import '../Page/Components/HomePage/HomePage.scss';
 import { AiOutlineUnorderedList, AiOutlineClose } from "react-icons/ai";
 import { AiOutlineAppstore, AiOutlineUser, AiTwotoneShopping} from "react-icons/ai";
 import { IoMdPeople } from "react-icons/io";
 import { FaSignOutAlt,FaBoxes } from "react-icons/fa";
-import logo from "../../../assets/images/logo.png";
-import Staff from "../../Components/HomePage/Staff.jsx";
-import '../../LoginForm.css';
+import logo from "../assets/images/logo.png";
+import Staff from "./Components/HomePage/Staff.jsx";
+import './LoginForm.css';
 import {
   BrowserRouter,
   Switch,
   Route,
   Link
 } from "react-router-dom";
-import Product from "../../Components/HomePage/Product.jsx";
-import Tank from "../../Components/HomePage/Tank.jsx";
-import Pump from "./Pump.jsx";
-import Shift from "./Shift.jsx";
+import Product from "./Components/HomePage/Product.jsx";
+import Tank from "./Components/HomePage/Tank.jsx";
+import Pump from "./Components/HomePage/Pump.jsx";
+import Shift from "./Components/HomePage/Shift.jsx";
+import Account from "./Components/Account/Account.jsx";
 export function Include() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -41,6 +42,14 @@ export function Include() {
               <div className="navbar__li-box">
                 <li className="navbar__li">
                   <IoMdPeople className='iconmenu'/>
+                  <a href="/shift"> DOANH THU</a>
+                </li>
+              </div>
+            </ul>
+            <ul className="navbar__list"> 
+              <div className="navbar__li-box">
+                <li className="navbar__li">
+                  <IoMdPeople className='iconmenu'/>
                   <a href="/shift"> CA BAN</a>
                 </li>
               </div>
@@ -60,7 +69,7 @@ export function Include() {
                   <a href="/product"> MAT HANG</a>
                 </li>
               </div>
-            </ul>
+            </ul> 
             <ul className="navbar__list"> 
               <div className="navbar__li-box">
                 <li className="navbar__li">
@@ -81,7 +90,7 @@ export function Include() {
               <div className="navbar__li-box">
                 <li className="navbar__li">
                   <AiOutlineUser className='iconmenu'/>
-                  <a href="/money"> TAI KHOAN</a>
+                  <a href="/account"> TAI KHOAN</a>
                 </li>
               </div>
             </ul>
@@ -98,7 +107,7 @@ export function Include() {
           {/* <Route path="/" exact>
             <LoginForm />
           </Route> */}
-          <Route path="/staff" exact>
+          <Route path="/staff" >
             <Staff />
           </Route>
           <Route path="/product">
@@ -112,6 +121,9 @@ export function Include() {
           </Route>
           <Route path="/shift">
             <Shift />
+          </Route>
+          <Route path="/account">
+            <Account />
           </Route>
         </Switch>
       </div>

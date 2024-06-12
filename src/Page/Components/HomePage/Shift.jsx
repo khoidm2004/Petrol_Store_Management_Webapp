@@ -258,6 +258,7 @@ export const Shift = () => {
         }));
     };
 
+    // console.log(timeConverter(Date.parse(shifts.endTime)));
     return (
         <div className='Staff'>
             <header>
@@ -285,7 +286,8 @@ export const Shift = () => {
                                 <td>{Object.values(shift.pumpList).map(pump => pump.pumpName).join(' - ')}</td>
                                 <td>{Object.values(shift.productList).map(product => product.productName).join(' - ')}</td>
                                 <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time} -
-                                    {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
+                                    {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time} -
+
                                 </td>
                                 <td className='iconmenu'>
                                     <IoEllipsisVerticalOutline onClick={() => toggleSubMenu(shift)} />
