@@ -1,0 +1,228 @@
+
+.revenue {
+    padding: 20px;
+    width: 100%;
+    background-color: #FBFDFF;
+  }
+  
+  .tilte_revenue {
+    margin-bottom: 20px;
+  }
+  
+  .tilte_revenue h1,
+  .tilte_revenue p {
+    text-align: center;
+  }
+  
+  .Row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .Column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Định dạng cho biểu đồ cột */
+  .barChart,
+  .doughnutChart {
+    width: 48%; 
+    height: 350px;
+    padding: 0px 0px 45px 0px;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px 8px 0px 0px;
+    border: 1px solid #166BCC;
+    border-top: 0px;
+    border-bottom: 0px;
+  }
+
+  .title_xemChitiet{
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border: 1px solid #166BCC;
+    border-bottom: 0px;
+    background-color: #F3F7FC;
+    color: #6E707E;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px 8px 0px 0px;
+  }
+
+  .button_xemChitiet button{
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border: 1px solid #166BCC;
+    border-top: 0px;
+    background-color: #F3F7FC;
+    color: #6E707E;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 0px 0px 6px 6px;
+  }
+
+  /* ------------------ */
+  
+  .object_button button {
+    background-color: #0061F2;
+    width: 100%;
+    padding: 8px 10px;
+    color: #FEFEFE;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-top: 2px solid black;
+    border-radius: 0px 0px 8px 8px;
+    transition: background-color 0.3s ease;
+  }
+
+  .object_button button:hover {
+      background-color: #004bb5;
+  }
+
+  .object_body {
+      margin-bottom: 20px;
+      width: 150px;
+      background-color: #0061F2;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .object_body:hover, .barChart:hover,
+  .doughnutChart:hover{
+      transform: translateY(-2px);
+      border-color: #004bb5;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+  }
+
+  .object_name {
+      width: 80%;
+      padding: 10px;
+      text-align: center;
+  }
+
+  .object_image_body {
+      font-size: 20px;
+      padding-right: 10px;
+      width: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .object_body h6 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: #BFC1F8;
+  }
+
+  .object_body p {
+      font-size: 1rem;
+      margin: 0;
+      color: #FFFFFF;
+  }
+
+  .row_image {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+  }
+
+
+  /* ---------------- */
+  .doanh_thuTable {
+      margin-top: 20px;
+  }
+
+  .doanh_thu {
+      width: 60%;
+  }
+
+
+  .ton_kho{
+    width: 37%;
+  }
+
+  .borders{
+    border: 2px solid #166BCC;
+    border-radius: 0px 0px 9px 9px;
+    border-top:  0px;
+  }
+  .container {
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #166BCC;
+    border-bottom: 0px;
+    border-radius: 9px 9px 0px 0px;
+    width: 100%;
+    background-color: #ffffff;
+  }
+  
+  .date-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table th,
+  .table td {
+    text-align: center;
+    padding: 10px;
+    border: 0px solid #ddd;
+    border-bottom: 1px solid black;
+  }
+  
+  
+@media (max-width: 768px) {
+    .Row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .Column {
+        width: 100%;
+    }
+
+    .object_body {
+        width: 90%;
+    }
+
+    .tilte_revenue h1 {
+        font-size: 20px;
+    }
+
+    .tilte_revenue p {
+        font-size: 14px;
+    }
+
+    .container {
+      width: 95%;
+    }
+  
+    .table-container {
+      overflow-x: auto;
+    }
+  
+    .table {
+      font-size: 14px;
+    }
+}

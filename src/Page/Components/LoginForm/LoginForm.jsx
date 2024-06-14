@@ -39,19 +39,21 @@ export const LoginForm = () => {
   };
 
   const handleResetSubmit = async () => {
+    console.log(resetEmail)
     try {
+      
       const status = await useReclaimPassword(resetEmail);
-        console.log(status);
-        setShowResetModal(false);
-        setResetEmail('');
-        setResetStatus('');
+      console.log(status);
+      setShowResetModal(false);
+      setResetEmail('');
+      setResetStatus('');
     } catch (error) {
       console.error('Reset password error:', error);
     }
   };
 
   return (
-    <div>
+    <div className={`login-form-container ${showResetModal ? 'modal-open' : ''}`}>
       <main>
         <img src={coverimages} alt="" id="coverimage" />
         <form>
@@ -80,7 +82,7 @@ export const LoginForm = () => {
               />
             </div>
             <div className="remember-forgot">
-              <a href="#/" onClick={handleResetClick} >Forgot account? </a>
+              <a href="#/" onClick={handleResetClick}>Forgot account? </a>
             </div>
           </div>
           <button type="submit" disabled={loading} onClick={handleSubmit}>
@@ -91,24 +93,27 @@ export const LoginForm = () => {
       <footer>
         <p className="footer">
           <span style={{ fontWeight: 700 }}>Văn phòng giao dịch:</span> Tầng 15,
-          tòa nhà Detech, 8c Tôn Thất Thuyết, quận Nam Từ Liêm, Hà Nội{" "}
+          tòa nhà Detech, 8c Tôn Thất Thuyết, quận Nam Từ Liêm, Hà Nội
         </p>
       </footer>
       {showResetModal && (
-        <div className="modals">
-          <div className="modal-content">
-            <AiOutlineClose onClick={handleResetCancel} className="close-icon" />
-            <h2>Reset Password</h2>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={resetEmail}
-              onChange={(e) => setResetEmail(e.target.value)}
-            />
-            <button onClick={handleResetSubmit}>Submit</button>
+        <>
+          <div className="overlay" onClick={handleResetCancel}></div>
+          <div className="modals">
+            <div className="modal-content">
+              <AiOutlineClose onClick={handleResetCancel} className="close-icon" />
+              <h2>RESET PASSWORD</h2>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+              />
+            </div>
+            <button onClick={handleResetSubmit}>SUBMIT</button>
             {resetStatus && <p className="reset-status">{resetStatus}</p>}
           </div>
-        </div>
+        </>
       )}
     </div>
   );
