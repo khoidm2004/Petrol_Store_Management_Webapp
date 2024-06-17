@@ -110,6 +110,58 @@ const usePumpStore = create((set) => ({
       };
     }
   },
+
+  // Search pump using id || code || name
+  searchPump: async (inputs) => {
+    try {
+      const pumpRef = collection(firestore, "pump");
+
+      const qId = query(pumpRef, where("pumpId", "==", parseInt(inputs))); // Automatically convert to number
+      const qCode = query(pumpRef, where("pumpCode", "==", inputs));
+      const qName = query(pumpRef, where("pumpName", "==", inputs));
+
+      const pumpIdQuerySnapshot = await getDocs(qId);
+      const pumpCodeQuerySnapshot = await getDocs(qCode);
+      const pumpNameQuerySnapshot = await getDocs(qName);
+
+      if (
+        pumpIdQuerySnapshot.empty &&
+        pumpCodeQuerySnapshot.empty &&
+        pumpNameQuerySnapshot.empty
+      ) {
+        return { Title: "Error", Message: "Pump Not Found", Status: "error" };
+      }
+
+      if (!pumpIdQuerySnapshot.empty) {
+        const pumpList1 = pumpIdQuerySnapshot.docs.map((doc) => ({
+          pid: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ pumps: pumpList1 });
+      }
+
+      if (!pumpCodeQuerySnapshot.empty) {
+        const pumpList2 = pumpCodeQuerySnapshot.docs.map((doc) => ({
+          pid: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ pumps: pumpList2 });
+      }
+
+      if (!pumpNameQuerySnapshot.empty) {
+        const pumpList3 = pumpNameQuerySnapshot.docs.map((doc) => ({
+          pid: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ pumps: pumpList3 });
+      }
+    } catch (error) {
+      return { Title: "Error", Message: error.message, Status: "error" };
+    }
+  },
 }));
 
 export default usePumpStore;

@@ -110,6 +110,57 @@ const useTankStore = create((set) => ({
       };
     }
   },
+
+  // Search using tank id || code || name
+  searchTank: async (inputs) => {
+    try {
+      const tankRef = collection(firestore, "tank");
+      const qId = query(tankRef, where("tankId", "==", parseInt(inputs))); // Automatically convert to number
+      const qCode = query(tankRef, where("tankCode", "==", inputs));
+      const qName = query(tankRef, where("tankName", "==", inputs));
+
+      const tankIdQuerySnapshot = await getDocs(qId);
+      const tankCodeQuerySnapshot = await getDocs(qCode);
+      const tankNameQuerySnapshot = await getDocs(qName);
+
+      if (
+        tankIdQuerySnapshot.empty &&
+        tankCodeQuerySnapshot.empty &&
+        tankNameQuerySnapshot.empty
+      ) {
+        return { Title: "Error", Message: "Tank Not Found", Status: "error" };
+      }
+
+      if (!tankIdQuerySnapshot.empty) {
+        const tankList1 = tankIdQuerySnapshot.docs.map((doc) => ({
+          tid: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ tanks: tankList1 });
+      }
+
+      if (!tankCodeQuerySnapshot.empty) {
+        const tankList2 = tankCodeQuerySnapshot.docs.map((doc) => ({
+          tid: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ tanks: tankList2 });
+      }
+
+      if (!tankNameQuerySnapshot.empty) {
+        const tankList3 = tankNameQuerySnapshot.docs.map((doc) => ({
+          tid: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ tanks: tankList3 });
+      }
+    } catch (error) {
+      return { Title: "Error", Message: error.message, Status: "error" };
+    }
+  },
 }));
 
 export default useTankStore;

@@ -102,6 +102,47 @@ const useProductStore = create((set) => ({
       };
     }
   },
+
+  // Search product using product Code || name
+  searchProduct: async (inputs) => {
+    try {
+      const productRef = collection(firestore, "product");
+
+      const qCode = query(productRef, where("productCode", "==", inputs));
+      const qName = query(productRef, where("productName", "==", inputs));
+
+      const productCodeQuerySnapshot = await getDocs(qCode);
+      const productNameQuerySnapshot = await getDocs(qName);
+
+      if (productCodeQuerySnapshot.empty && productNameQuerySnapshot.empty) {
+        return {
+          Title: "Error",
+          Message: "Product Not Found",
+          Status: "error",
+        };
+      }
+
+      if (!productCodeQuerySnapshot.empty) {
+        const productList1 = productCodeQuerySnapshot.docs.map((doc) => ({
+          productId: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ product: productList1 });
+      }
+
+      if (!productNameQuerySnapshot.empty) {
+        const productList2 = productNameQuerySnapshot.docs.map((doc) => ({
+          productId: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ product: productList2 });
+      }
+    } catch (error) {
+      return { Title: "Error", Message: error.message, Status: "error" };
+    }
+  },
 }));
 
 export default useProductStore;
