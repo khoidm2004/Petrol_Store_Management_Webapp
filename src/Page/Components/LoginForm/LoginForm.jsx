@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './LoginForm.css';
 import { FaUser, FaLock } from "react-icons/fa";
+import { AiOutlineClose } from "react-icons/ai";
 import coverimages from "../../../assets/images/coverimages.png";
 import user from "../../../assets/images/user.png";
-import useLogin from '../../../hooks/useLogin';
-import { AiOutlineClose } from "react-icons/ai";
+import useLogin from '../../../hooks/useLogin.js';
 import useReclaimPassword from '../../../hooks/useReclaimPassword';
 
-export const LoginForm = () => {
+const LoginForm = ({ setLoggedIn }) => {
   const { login, loading } = useLogin();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showResetModal, setShowResetModal] = useState(false);
@@ -20,9 +20,13 @@ export const LoginForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData);
     e.preventDefault();
     try {
-      login(formData);
+      const status = login(formData);
+      console.log(status)
+      setLoggedIn(true);
+      // window.location.href = '/home/revenue';
     } catch (error) {
       console.error('Login error:', error);
     }
@@ -34,16 +38,13 @@ export const LoginForm = () => {
 
   const handleResetCancel = () => {
     setShowResetModal(false);
-    setResetEmail(''); 
+    setResetEmail('');
     setResetStatus('');
   };
 
   const handleResetSubmit = async () => {
-    console.log(resetEmail)
     try {
-      
       const status = await useReclaimPassword(resetEmail);
-      console.log(status);
       setShowResetModal(false);
       setResetEmail('');
       setResetStatus('');
@@ -55,10 +56,10 @@ export const LoginForm = () => {
   return (
     <div className={`login-form-container ${showResetModal ? 'modal-open' : ''}`}>
       <main>
-        <img src={coverimages} alt="" id="coverimage" />
+        <img src={coverimages} alt="Cover" id="coverimage" />
         <form>
           <div className="wrapper">
-            <img src={user} alt="" id="userlogo" />
+            <img src={user} alt="User" id="userlogo" />
             <div className="input-box">
               <input
                 type="text"
@@ -82,7 +83,7 @@ export const LoginForm = () => {
               />
             </div>
             <div className="remember-forgot">
-              <a href="#/" onClick={handleResetClick}>Forgot account? </a>
+              <a href="#/" onClick={handleResetClick}>Forgot account?</a>
             </div>
           </div>
           <button type="submit" disabled={loading} onClick={handleSubmit}>

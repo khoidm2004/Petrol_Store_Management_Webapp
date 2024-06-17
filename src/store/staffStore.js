@@ -96,6 +96,42 @@ const useStaffStore = create((set) => ({
       };
     }
   },
+
+  // Search using email or fullname
+  searchStaff: async (inputs) => {
+    try {
+      const staffRef = collection(firestore, "staff");
+      const qEmail = query(staffRef, where("email", "==", inputs));
+      const qFullName = query(staffRef, where("fullName", "==", inputs));
+      
+      const staffEmailQuerySnapshot = await getDocs(qEmail);
+      const staffFullNameQuerySnapshot = await getDocs(qFullName);
+
+      if (staffEmailQuerySnapshot.empty && staffFullNameQuerySnapshot.empty) {
+        return { Title: "Error", Message: "Staff Not Found", Status: "error" };
+      }
+
+      if (!staffEmailQuerySnapshot.empty) {
+        const staffList1 = staffEmailQuerySnapshot.docs.map((doc) => ({
+          staffId: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ staff: staffList1 });
+      }
+
+      if (!staffFullNameQuerySnapshot.empty) {
+        const staffList2 = staffEmailQuerySnapshot.docs.map((doc) => ({
+          staffId: doc.id,
+          ...doc.data(),
+        }));
+
+        set({ staff: staffList2 });
+      }
+    } catch (error) {
+      return { Title: "Error", Message: error.message, Status: "error" };
+    }
+  },
 }));
 
 export default useStaffStore;

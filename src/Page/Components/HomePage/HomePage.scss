@@ -46,7 +46,6 @@ p{
 .navbar__li {
   display: flex;
   align-items: center;
-  padding: 10px 20px;
   font-size: 16px;
   color: $textcolor;
   font-family: "Lato", sans-serif;
@@ -58,6 +57,8 @@ p{
 }
 
 .menu-text {
+  width: 100%;
+  padding: 10px 20px;
   white-space: nowrap;
   overflow: hidden;
   transition: opacity 0.3s ease;
