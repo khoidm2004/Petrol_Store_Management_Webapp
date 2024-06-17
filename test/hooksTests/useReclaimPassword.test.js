@@ -16,7 +16,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe("useReclaimPassword hook", () => {
+describe("hooks/useReclaimPassword", () => {
   it("1.should send password reset email and return success message", async () => {
     sendPasswordResetEmail.mockResolvedValueOnce();
 
