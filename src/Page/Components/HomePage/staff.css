@@ -1,322 +1,344 @@
 body {
-    background-color: #fbfdff;
-  }
-  
-  * {
-    padding: 0;
-    margin: 0;
-  }
-  
-  .search-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .search-icon {
-    color: #333; /* Dark gray */
-    margin-right: 10px;
-  }
-  
-  .search-input {
-      border: none;
-      outline: none;
-      border-bottom: 2px solid black;
-      margin: 5px;
-      outline: none;
-      font-size: 14px;
-      width: 140px;
-      height: 40px;
-      color: black;
-  }
-  
-  .push {
-      border: none;
-      outline: none;
-      border-radius: 4px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-      background: #166BCC;
-      width: 115px;
-      height: 40px;
-      color: #FFF; /* White */
-      text-align: center;
-      font-size: 18px;
-      font-weight: 700;
-      margin: 5px;
-  }
-  
-  p{
-      margin: auto;
-      margin-left: 10px;
-      font-weight: bold;
-  }
-  
-  .Staff {
-    padding: 20px;
-  }
-  
-  .Staff > .Staffs {
-      display: flex;
-      width: 100%;
-  }
-  
-  .firsttable {
-      margin-top: 10px;
-      border: 1px solid #166BCC;
-      background: #FFF;
-      color: #333;
-      width: 70%;
-      text-transform: capitalize;
-  }
-  
-  .firsttable_shift {
-      margin-top: 10px;
-      border: 1px solid #166BCC;
-      background: #FFF;
-      color: #333;
-      width: 100%;
-      text-transform: capitalize;
-  }
-  
-  .chart-container {
-      width: 30%;
-      max-height: 200px; 
-      position: relative;
-      display: flex;
-      flex-direction: column;
-  }
-  
-  .secondtable {
-      margin-top: 20px;
-      margin-left: 20px;
-      border: 1px solid #166BCC;
-      background: #FFF;
-      color: #333; /* Dark gray */
-      width: 90%;
-      text-transform: capitalize;
-  }
-  
-  .secondtable > thead > tr > th {
-      background-color: #F3F7FC;
-      color:  #F00;
-      font-weight: 700;
-      border-bottom: 1px solid rgb(255, 255, 255);
-  }
-  
-  .firsttable > thead > tr > th {
-      background-color: #F3F7FC;
-      color: #00B507;
-      font-weight: 700;
-      border-bottom: 1px solid rgb(255, 255, 255);
-  }
-  
-  .firsttable_shift > thead > tr > th {
-      background-color: #F3F7FC;
-      color: #00B507;
-      font-weight: 700;
-      border-bottom: 1px solid rgb(255, 255, 255);
-  }
-  
-  td, th {
-      padding: 10px;
-      border-bottom: 1px solid black;
-  }
-  
-  .icon_editview{
-      position: relative;
-      text-align: right;
-      padding-right: 15px;
-      width: 150px;
-      font-size: 20px;
-  }
-  
-  .secondarystate {
-      position: absolute;
-      top: 0%;
-      background: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      z-index: 1;
-      width: 100px;
-      text-align: center;
-      font-size: 10px;
-      font-weight: bold;
-  }
-  
-  .secondarystate tr {
-      padding: 10px;
-      cursor: pointer;
-  }
-  
-  .secondarystate tr:hover {
-      background-color: #f0f0f0;
-  }
-  
-  .viewStaff, .addStaff {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 40px;
-      padding-right: 0px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-      border-radius: 20px;
-      z-index: 1000;
-      width: 90%;
-      max-width: 400px;
-  }
-  
-  .viewStaff input, .viewStaff select,.addStaff input,.addStaff select{
-      width: 90%;
-      height: 40px;
-      margin-bottom: 30px;
-      border: 0 solid white;
-      border-bottom: 1px solid black;
-      padding-left: 10px;
-  }
-  
-  
-  
-  .viewStaff button, .addStaff button{
-      border: none;
-      outline: none;
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-      background: #166BCC;
-      width: 88%;
-      height: 45px;
-      color: #FFF; /* White */
-      text-align: center;
-      font-size: 18px;
-      font-weight: 700;
-      margin: 5px;
-  } 
-  
-  .viewStaff button:hover, .addStaff button:hover{
-      background-color: #0a2c51;
-  }
-  
-  .close-icon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-      font-size: 30px;
-      transition: transform 0.3s ease, color 0.3s ease;
-    }
-    
-  .close-icon:hover, .tab_menu:hover {
-      transform: scale(1.1);
-      color: #145ca4;
-  }
-
-.viewShift, .addShift {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #FCFDFF;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
-    z-index: 1000;
-    width: 90%;
-    max-width: 800px;
-    overflow: auto; 
-    max-height: 500px;
+  background-color: #fbfdff;
 }
 
-.viewStaff h2, .addStaff h2, .viewShift h2, .addShift h2 {
-    text-align: center;
+* {
+  padding: 0;
+  margin: 0;
 }
 
-.viewShift .close-icon, .addShift .close-icon {
-    cursor: pointer;
-    float: right;
-    font-size: 1.5em;
-    color: #ff0000;
+.search-container {
+  display: flex;
+  align-items: center;
 }
 
-.viewShift .close-icon:hover, .addShift .close-icon:hover {
-    color: #cc0000;
+.search-icon {
+  color: #333; /* Dark gray */
+  margin-right: 10px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid black;
+  margin: 5px;
+  outline: none;
+  font-size: 14px;
+  width: 140px;
+  height: 40px;
+  color: black;
+}
+
+.push {
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background: #166bcc;
+  width: 115px;
+  height: 40px;
+  color: #fff; /* White */
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px;
+}
+
+p {
+  margin: auto;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.Staff {
+  padding: 20px;
+}
+
+.Staff > .Staffs {
+  display: flex;
+  width: 100%;
+}
+
+.firsttable {
+  margin-top: 10px;
+  border: 1px solid #166bcc;
+  background: #fff;
+  color: #333;
+  width: 70%;
+  text-transform: capitalize;
+}
+
+.firsttable_shift {
+  margin-top: 10px;
+  border: 1px solid #166bcc;
+  background: #fff;
+  color: #333;
+  width: 100%;
+  text-transform: capitalize;
+}
+
+.chart-container {
+  width: 30%;
+  max-height: 200px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.secondtable {
+  margin-top: 20px;
+  margin-left: 20px;
+  border: 1px solid #166bcc;
+  background: #fff;
+  color: #333; /* Dark gray */
+  width: 90%;
+  text-transform: capitalize;
+}
+
+.secondtable > thead > tr > th {
+  background-color: #f3f7fc;
+  color: #f00;
+  font-weight: 700;
+  border-bottom: 1px solid rgb(255, 255, 255);
+}
+
+.firsttable > thead > tr > th {
+  background-color: #f3f7fc;
+  color: #00b507;
+  font-weight: 700;
+  border-bottom: 1px solid rgb(255, 255, 255);
+}
+
+.firsttable_shift > thead > tr > th {
+  background-color: #f3f7fc;
+  color: #00b507;
+  font-weight: 700;
+  border-bottom: 1px solid rgb(255, 255, 255);
+}
+
+td,
+th {
+  padding: 10px;
+  border-bottom: 1px solid black;
+}
+
+.icon_editview {
+  position: relative;
+  text-align: right;
+  padding-right: 15px;
+  width: 150px;
+  font-size: 20px;
+}
+
+.secondarystate {
+  position: absolute;
+  top: 0%;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  width: 100px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.secondarystate tr {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.secondarystate tr:hover {
+  background-color: #f0f0f0;
+}
+
+.viewStaff,
+.addStaff {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 40px;
+  padding-right: 0px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+}
+
+.viewStaff input,
+.viewStaff select,
+.addStaff input,
+.addStaff select {
+  width: 90%;
+  height: 40px;
+  margin-bottom: 30px;
+  border: 0 solid white;
+  border-bottom: 1px solid black;
+  padding-left: 10px;
+}
+
+.viewStaff button,
+.addStaff button {
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background: #166bcc;
+  width: 88%;
+  height: 45px;
+  color: #fff; /* White */
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px;
+}
+
+.viewStaff button:hover,
+.addStaff button:hover {
+  background-color: #0a2c51;
+}
+
+.close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 30px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.close-icon:hover,
+.tab_menu:hover {
+  transform: scale(1.1);
+  color: #145ca4;
+}
+
+.viewShift,
+.addShift {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fcfdff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  z-index: 1000;
+  width: 90%;
+  max-width: 800px;
+  overflow: auto;
+  max-height: 500px;
+}
+
+.viewStaff h2,
+.addStaff h2,
+.viewShift h2,
+.addShift h2 {
+  text-align: center;
+}
+
+.viewShift .close-icon,
+.addShift .close-icon {
+  cursor: pointer;
+  float: right;
+  font-size: 1.5em;
+  color: #ff0000;
+}
+
+.viewShift .close-icon:hover,
+.addShift .close-icon:hover {
+  color: #cc0000;
 }
 
 /* Input and Label Styles */
-.viewShift label, .addShift label {
-    display: block;
-    font-weight: bold;
-    margin-top: 10px;
-    color: #0B6ECA;
+.viewShift label,
+.addShift label {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #0b6eca;
 }
 
-.viewShift input[type="datetime-local"], .viewShift input[type="number"],
-.addShift input[type="datetime-local"], .addShift input[type="number"],
-.viewShift select, .addShift select {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border:none;
-    border-bottom: 1px solid black;
-    box-sizing: border-box;
-    background-color: #FCFDFF;
+.viewShift input[type="datetime-local"],
+.viewShift input[type="number"],
+.addShift input[type="datetime-local"],
+.addShift input[type="number"],
+.viewShift select,
+.addShift select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: none;
+  border-bottom: 1px solid black;
+  box-sizing: border-box;
+  background-color: #fcfdff;
 }
 
-.viewShift hr, .addShift hr {
-    border: 0.5px solid #ddd;
-    margin: 10px 0;
+.viewShift hr,
+.addShift hr {
+  border: 0.5px solid #ddd;
+  margin: 10px 0;
 }
 
 /* Product and Pump Lists */
-.product-item, .pump-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.product-item,
+.pump-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.product-item select, .pump-item select {
-    flex: 1;
+.product-item select,
+.pump-item select {
+  flex: 1;
 }
 
-.product-it em input[type="number"], .pump-item input[type="number"] {
-    width: 100px;
-}
-  
-.push_icon:hover, .pull_icon:hover {
-    transform: scale(1.1);
-    color: #145ca4;
+.product-it em input[type="number"],
+.pump-item input[type="number"] {
+  width: 100px;
 }
 
-.pull_icon{
-    cursor: pointer;
-    color: #1EC411;
-    font-size: 1.0em;
-    transition: transform 0.3s ease, color 0.3s ease;
+.push_icon:hover,
+.pull_icon:hover {
+  transform: scale(1.1);
+  color: #145ca4;
 }
 
-.push_icon{
-    cursor: pointer;
-    color: #F80000;
-    font-size: 1.0em;
+.pull_icon {
+  cursor: pointer;
+  color: #1ec411;
+  font-size: 1em;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.viewShift button, .addShift button{
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-    background: #166BCC;
-    width: 17%;
-    color: #FFF; 
-    text-align: center;
-    font-size: 20px;
-    font-weight: 700;
-    margin-left: 80%;
-} 
-
-.viewShift button:hover, .addShift button:hover{
-    background-color: #0a2c51;
+.push_icon {
+  cursor: pointer;
+  color: #f80000;
+  font-size: 1em;
 }
 
+.viewShift button,
+.addShift button {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background: #166bcc;
+  width: 17%;
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 80%;
+}
+
+.viewShift button:hover,
+.addShift button:hover {
+  background-color: #0a2c51;
+}
