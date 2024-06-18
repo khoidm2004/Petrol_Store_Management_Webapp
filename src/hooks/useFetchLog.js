@@ -6,7 +6,7 @@ const useFetchLog = async () => {
     const logCollection = collection(firestore, "log");
     const logSnapshot = await getDocs(logCollection);
     const logList = logSnapshot.docs.map((doc) => ({
-      logId: logId,
+      logId: doc.id,
       ...doc.data(),
     }));
     return { logList };
