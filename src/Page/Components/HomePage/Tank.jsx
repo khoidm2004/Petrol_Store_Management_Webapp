@@ -83,10 +83,10 @@ export const Tank = () => {
     }
   };
 
-  const handleAddTank = async () => {
+  const handleAddTank = () => {
     try {
       console.log(newTank);
-      const result = await addTank(newTank);
+      const result = addTank(newTank);
       console.log(result);
       setNewTank({
         tid: "",
@@ -131,9 +131,26 @@ export const Tank = () => {
   const workingTank = tanks.filter(TankMember => TankMember.tankStatus === "On use");
   const notWorkingTank = tanks.filter(TankMember => TankMember.tankStatus === "Not On use");
 
+  const [showOverlay, setShowOverlay] = useState(true);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="Staff">
+      {showOverlay && 
+       <div className="overlay">
+        <div class="loader">
+          <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+          </svg>
+        </div>
+      </div>}
       <header>
         <p>THÔNG TIN BỂ</p>
         <div className="search-container">

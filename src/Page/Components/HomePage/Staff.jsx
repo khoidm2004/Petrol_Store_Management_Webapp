@@ -6,12 +6,15 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import "./Staff.css";
+import Popup from '../Popup/Popup';
 
 export const Staff = () => {
   const staff = useStaffStore((state) => state.staff);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
   const addStaff = useStaffStore((state) => state.addStaff);
   const modifyStaff = useStaffStore((state) => state.modifyStaff);
+  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
+  
 
   const [openEmail, setOpenEmail] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
@@ -61,11 +64,14 @@ export const Staff = () => {
     }
   };
 
-  const handleAddStaff = async () => {
+  const handleAddStaff = () => {
     try {
       console.log(newStaff);
-      var status = await addStaff(newStaff);
-   
+      var result = addStaff(newStaff);
+      console.log(result);
+      if(result.Status === 'error'){
+        setPopup({ show: true, title: result.Title, message: result.Message });
+      }
       setNewStaff({
         fullName: "",
         email: "",
@@ -100,8 +106,30 @@ export const Staff = () => {
     (staffMember) => staffMember.workingStatus === "ISN'T WORKING"
   );
 
+  const closePopup = () => {
+    setPopup({ show: false, title: '', message: '' });
+  };
+
+  const [showOverlay, setShowOverlay] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
     <div className="Staff">
+      {showOverlay && 
+       <div className="overlay">
+        <div class="loader">
+          <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+          </svg>
+        </div>
+      </div>}
       <header>
         <p>THÔNG TIN NHÂN VIÊN</p>
         <div className="search-container">
@@ -154,7 +182,7 @@ export const Staff = () => {
               onClick={() => setSelectedStaff(null)}
               className="close-icon"
             />
-            <input
+            <input 
               type="text"
               value={selectedStaff.fullName}
               onChange={(e) =>
@@ -165,7 +193,7 @@ export const Staff = () => {
             <br />
             <input type="text" value={selectedStaff.email} readOnly />
             <br />
-            <input
+            <input 
               type="text"
               value={selectedStaff.phoneNum}
               onChange={(e) =>
@@ -201,7 +229,7 @@ export const Staff = () => {
               onClick={() => setAddingStaff(false)}
               className="close-icon"
             />
-            <input
+            <input required
               type="text"
               placeholder="Full Name"
               value={newStaff.fullName}
@@ -210,7 +238,7 @@ export const Staff = () => {
               }
             />
             <br />
-            <input
+            <input 
               type="text"
               placeholder="Email"
               value={newStaff.email}
@@ -295,6 +323,7 @@ export const Staff = () => {
           </table>
         </div>
       </div>
+      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );
 };

@@ -130,8 +130,26 @@ export const Revenue = () => {
     ],
   };
 
+  const [showOverlay, setShowOverlay] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="revenue">
+       {showOverlay && 
+       <div className="overlay">
+        <div class="loader">
+          <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+          </svg>
+        </div>
+      </div>}
       <div className="tilte_revenue">
         <h1>Chuyên gia Xăng dầu số hàng đầu Việt Nam</h1>
         <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>

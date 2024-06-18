@@ -1,11 +1,12 @@
+// LoginForm.js
 import React, { useState } from 'react';
 import './LoginForm.css';
-import { FaUser, FaLock } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 import coverimages from "../../../assets/images/coverimages.png";
 import user from "../../../assets/images/user.png";
 import useLogin from '../../../hooks/useLogin.js';
 import useReclaimPassword from '../../../hooks/useReclaimPassword';
+import Popup from '../Popup/Popup';
 
 const LoginForm = ({ setLoggedIn }) => {
   const { login, loading } = useLogin();
@@ -13,6 +14,7 @@ const LoginForm = ({ setLoggedIn }) => {
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetStatus, setResetStatus] = useState('');
+  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,15 +22,19 @@ const LoginForm = ({ setLoggedIn }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData);
+    // console.log(formData)
     e.preventDefault();
     try {
-      const status = login(formData);
-      console.log(status)
+      const result = await login(formData);
       setLoggedIn(true);
-      // window.location.href = '/home/revenue';
+      console.log(result);
+      if(result.Title === "Success"){
+        window.location.href = '/home/revenue';
+      }else{
+        setPopup({ show: true, title: result.Title, message: result.Message });
+      }
     } catch (error) {
-      console.error('Login error:', error);
+      setPopup({ show: true, title: 'Login Error', message: 'Invalid email or password' });
     }
   };
 
@@ -49,8 +55,12 @@ const LoginForm = ({ setLoggedIn }) => {
       setResetEmail('');
       setResetStatus('');
     } catch (error) {
-      console.error('Reset password error:', error);
+      setPopup({ show: true, title: 'Reset Password Error', message: 'Unable to reset password' });
     }
+  };
+
+  const closePopup = () => {
+    setPopup({ show: false, title: '', message: '' });
   };
 
   return (
@@ -116,6 +126,7 @@ const LoginForm = ({ setLoggedIn }) => {
           </div>
         </>
       )}
+      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );
 };

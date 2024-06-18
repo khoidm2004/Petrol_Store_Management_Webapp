@@ -40,20 +40,9 @@ export const Account = () => {
 
   const handleSave = async () => {
     try {
-      console.log(selectedFile);
-      console.log(profile);
       if (selectedFile) {
-        const success = await editProfile(profile, selectedFile);
+        const result = await editProfile(profile, selectedFile);
         setSelectedFile(null);
-        if (success) {
-          console.log("Profile updated successfully");
-          localStorage.setItem("user-info", JSON.stringify(profile));
-        } else {
-          console.error("Failed to update profile");
-        }
-      } else {
-        localStorage.setItem("user-info", JSON.stringify(profile));
-        console.log("Profile data updated successfully");
       }
     } catch (error) {
       return { Title: "Error" };

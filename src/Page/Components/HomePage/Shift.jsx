@@ -109,10 +109,10 @@ export const Shift = () => {
         }
     };
 
-    const handleAddShift = async () => {
+    const handleAddShift = () => {
         try {
             console.log(newShift);
-            var status = await addShift(newShift);
+            var status = addShift(newShift);
             console.log(status);
             setNewShift({
                 startTime: new Date(),
@@ -258,9 +258,27 @@ export const Shift = () => {
         }));
     };
 
-    // console.log(timeConverter(Date.parse(shifts.endTime)));
+    const [showOverlay, setShowOverlay] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowOverlay(false);
+      }, 2000);
+  
+      return () => clearTimeout(timer);
+    }, []);
+    
+
     return (
         <div className='Staff'>
+            {showOverlay && 
+                <div className="overlay">
+                    <div class="loader">
+                        <svg class="circular" viewBox="25 25 50 50">
+                            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                        </svg>
+                    </div>
+                </div>}
             <header>
                 <p>THÔNG TIN CA BÁN HÀNG</p>
                 <div className="search-container">

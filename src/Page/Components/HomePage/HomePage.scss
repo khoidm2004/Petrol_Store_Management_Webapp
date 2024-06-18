@@ -1,102 +1,131 @@
 @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
-$backgroundColor: white;
-$textcolor:#000000;
-$borderLeftColor:#58b5fc;
 
-*{
+$backgroundColor: #f8f9fa;
+$textColor: #333;
+$borderLeftColor: #58b5fc;
+$activeColor: #007bff;
+$hoverColor: #0253cd;
+$submenuBackground: #e1edf9;
+
+* {
   padding: 0;
   margin: 0;
 }
 
-
-p{
+p {
   width: 100%;
 }
 
-.Staff{
+.Staff {
   width: 100%;
 }
 
 .navbar-menu {
-  height:100vh;
+  height: 100vh;
   width: 0;
-  background-color:$backgroundColor;
-  box-shadow: 1px 1px 7px rgba(0,0,0,0.15);
+  background-color: $backgroundColor;
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.15);
   transition: width 0.5s ease;
-  margin-top: 0px;
+  margin-top: 0;
+  overflow: hidden;
 }
 
 .burger > .tab_menu {
   width: 30px;
   height: 30px;
-  margin-top: 20px;
-  margin-left: 20px;
   cursor: pointer;
-  border-radius: 40%;
-  box-shadow: #58b5fc;
 }
 
 .navbar__list {
   list-style-type: none;
   padding: 0;
   margin: 0;
-
 }
 
 .navbar__li {
   display: flex;
   align-items: center;
   font-size: 16px;
-  color: $textcolor;
+  color: $textColor;
   font-family: "Lato", sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.navbar__li.active {
+  background-color: $activeColor;
+  color: white;
 }
 
 .navbar__li-box {
-  padding: 10px 0;
+  width: 100%;
 }
 
 .menu-text {
-  width: 100%;
-  padding: 10px 20px;
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
-  transition: opacity 0.3s ease;
+  text-overflow: ellipsis;
 }
 
-.body:not(.menu-open) .menu-text {
-  opacity: 0;
-  pointer-events: none;
-}
-
-
-.navbar__li-box:hover {
+.navbar__li-box:hover,
+.navbar__li-box.active {
   border-left: 7px solid $borderLeftColor;
+  background-color: $hoverColor;
   cursor: pointer;
+}
+
+.navbar__li-box:hover .menu-text,
+.navbar__li-box.active .menu-text {
+  color: white;
 }
 
 header {
   display: flex;
+  align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0px 20px;
 }
 
-.body{
+#logo {
+  margin-left: 15px;
+}
+
+.title {
+  text-align: center;
+  margin: auto;
+  font-weight: bold;
+}
+
+.body {
   display: flex;
   transition: margin-left 0.5s ease;
 }
 
-a{
+a {
   text-decoration: none;
-  color: #000000;
+  color: inherit;
   font-size: 15px;
   font-weight: bold;
 }
-#logo{
-  margin-left: 15px;
+
+.submenu {
+  list-style-type: none;
+  padding-left: 20px;
+  background-color: $submenuBackground;
 }
 
-.title{
-  text-align: center;
-  margin: auto;
-  font-weight: bold;
+.submenu .navbar__li {
+  padding: 5px 20px;
+}
+
+.submenu .navbar__li:hover {
+  background-color: $hoverColor;
+  color: white;
+}
+
+.submenu .navbar__li.active {
+  background-color: $activeColor;
+  color: white;
 }

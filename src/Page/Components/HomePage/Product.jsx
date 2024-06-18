@@ -59,9 +59,9 @@ export const Product = () => {
     }
   };
 
-  const handleAddProduct = async () => {
+  const handleAddProduct = () => {
     try {
-      await addProduct(newProduct, showToast);
+      addProduct(newProduct);
       setNewProduct({
         productId: "",
         productCode: "",
@@ -95,8 +95,27 @@ export const Product = () => {
     (ProductMember) => ProductMember.productStatus === "Not on sale"
   );
 
+  const [showOverlay, setShowOverlay] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="Staff">
+      {showOverlay && 
+       <div className="overlay">
+        <div class="loader">
+          <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+          </svg>
+        </div>
+      </div>}
+
       <header>
         <p>THÔNG TIN MẶT HÀNG</p>
         <div className="search-container">
