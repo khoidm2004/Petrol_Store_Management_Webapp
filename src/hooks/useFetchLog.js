@@ -1,12 +1,17 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
-const useFetchLog = async () => {
+const useFetchLog = async (limitAmount) => {
   try {
     const logCollection = collection(firestore, "log");
-    const logSnapshot = await getDocs(logCollection);
+    const qLog = query(
+      logCollection,
+      orderBy("startTime", "desc"),
+      limit(limitAmount)
+    );
+    const logSnapshot = await getDocs(qLog);
     const logList = logSnapshot.docs.map((doc) => ({
-      logId: logId,
+      logId: doc.id,
       ...doc.data(),
     }));
     return { logList };
