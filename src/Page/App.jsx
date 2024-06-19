@@ -11,7 +11,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginForm setLoggedIn={setLoggedIn} />} />
-        <Route path="/home/*" element={<Include setLoggedIn={setLoggedIn} />} />
+        <Route path="/*" element={<Include setLoggedIn={setLoggedIn} />} />
       </Routes>
     </BrowserRouter>
   );

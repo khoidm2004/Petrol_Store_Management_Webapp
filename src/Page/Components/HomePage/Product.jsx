@@ -1,19 +1,17 @@
 
 import { useEffect, useState } from "react";
 import useProductStore from "../../../store/productStore.js";
-import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
+import { TbEyeEdit } from "react-icons/tb";
 import 'chart.js/auto';
 import './Staff.css';
 
 export const Product = () => {
   const { product, fetchProduct, modifyProduct, addProduct } =
     useProductStore();
-  const [openCode, setOpenCode] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [addingProduct, setAddingProduct] = useState(false);
   const [newProduct, setNewProduct] = useState({
     productId: "",
@@ -24,34 +22,20 @@ export const Product = () => {
     productStatus: "On sale",
   });
 
-  const toggleSubMenu = (Code) => {
-    if (openCode === Code) {
-      setOpenCode(null);
-    } else {
-      setOpenCode(Code);
-    }
-  };
 
   useEffect(() => {
     fetchProduct();
   }, [fetchProduct]);
 
-  const handleView = (ProductMember) => {
-    setSelectedProduct(ProductMember);
-    setEditMode(false);
-  };
-
   const handleEdit = (ProductMember) => {
     setSelectedProduct(ProductMember);
-    setEditMode(true);
   };
 
   const saveChanges = async () => {
-    if (editMode && selectedProduct) {
+    if (selectedProduct) {
       try {
         console.log(selectedProduct);
         await modifyProduct(selectedProduct, showToast);
-        setEditMode(false);
         setSelectedProduct(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -77,12 +61,12 @@ export const Product = () => {
   };
 
   const data = {
-    labels: ["Red", "blue"],
+    labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
     datasets: [
       {
         label: "My First Dataset",
         data: [300, 70],
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        backgroundColor: ["Green", "Red"],
         hoverOffset: 10,
       },
     ],
@@ -134,7 +118,8 @@ export const Product = () => {
         <table className="firsttable">
           <thead>
             <tr className="titleOneline">
-              <th colSpan={2}>Đang hoạt động</th>
+              <th>Đang hoạt động</th>
+              <th>Chi tiết</th>
             </tr>
           </thead>
           <tbody>
@@ -142,38 +127,25 @@ export const Product = () => {
               <tr key={ProductMember.productId} className="col" id="mainstate">
                 <td>{ProductMember.productName}</td>
                 <td className="icon_editview">
-                  <IoEllipsisVerticalOutline className="icon_menu"
-                    onClick={() => toggleSubMenu(ProductMember.productCode)}
+                  <TbEyeEdit className="icon_menu"
+                    onClick={() => handleEdit(ProductMember)}
                   />
-                  {openCode === ProductMember.productCode && (
-                    <table className="secondarystate">
-                      <tbody>
-                        <tr className="box">
-                          <td onClick={() => handleView(ProductMember)}>
-                            VIEW
-                          </td>
-                        </tr>
-                        <tr className="box">
-                          <td onClick={() => handleEdit(ProductMember)}>
-                            EDIT
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         {selectedProduct && (
-          <div className="viewStaff">
+          <>  
+            <div className="overlay" onClick={() => setSelectedProduct(null)}></div>
+            <div className="viewStaff">
             <AiOutlineClose
               onClick={() => setSelectedProduct(null)}
               className="close-icon"
             />
             <input
               type="text"
+              placeholder="Product Name"
               value={selectedProduct.productName}
               onChange={(e) =>
                 setSelectedProduct({
@@ -181,13 +153,13 @@ export const Product = () => {
                   productName: e.target.value,
                 })
               }
-              readOnly={!editMode}
             />
             <br />
-            <input type="text" value={selectedProduct.productCode} readOnly />
+            <input  placeholder="Product Code" type="text" value={selectedProduct.productCode} readOnly />
             <br />
             <input
               type="text"
+              placeholder="Product Price"
               value={selectedProduct.productPrice}
               onChange={(e) =>
                 setSelectedProduct({
@@ -195,11 +167,11 @@ export const Product = () => {
                   productPrice: e.target.value,
                 })
               }
-              readOnly={!editMode}
             />
             <br />
             <input
               type="text"
+              placeholder="Product Color"
               value={selectedProduct.productColor}
               onChange={(e) =>
                 setSelectedProduct({
@@ -207,7 +179,6 @@ export const Product = () => {
                   productColor: e.target.value,
                 })
               }
-              readOnly={!editMode}
             />
             <br />
             <select
@@ -218,20 +189,20 @@ export const Product = () => {
                   productStatus: e.target.value,
                 })
               }
-              disabled={!editMode}
             >
               <option value="On sale">On sale</option>
               <option value="Not on sale">Not on sale</option>
             </select>
-            {editMode && (
               <button className="send" onClick={saveChanges}>
                 OK
               </button>
-            )}
           </div>
+          </>
         )}
         {addingProduct && (
-          <div className="addStaff">
+          <>
+            <div className="overlay" onClick={() => setAddingProduct(false)}></div>
+            <div className="addStaff">
             <h2>Thêm Mặt Hàng Mới</h2>
             <AiOutlineClose
               onClick={() => setAddingProduct(false)}
@@ -286,6 +257,7 @@ export const Product = () => {
               THÊM
             </button>
           </div>
+          </>
         )}
 
         <div className="chart-container">
@@ -302,7 +274,8 @@ export const Product = () => {
               },
             }}
           />
-          <table className="secondtable">
+
+          {/* <table className="secondtable">
             <thead className="titleOffline">
               <tr>
                 <th colSpan={2}>Ngừng hoạt động</th>
@@ -310,8 +283,7 @@ export const Product = () => {
             </thead>
             <tbody>
               {notWorkingProduct.map((ProductMember) => (
-                <tr
-                  key={ProductMember.productId}
+                <tr key={ProductMember.productId}
                   className="col"
                   id="mainstate"
                 >
@@ -341,7 +313,7 @@ export const Product = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
         </div>
       </div>
     </div>

@@ -17,6 +17,9 @@ import Revenue from "./Components/HomePage/Doanhthu.jsx";
 import Logout from "./Components/HomePage/Logout.jsx";
 import logo from "../assets/images/logo.png";
 import "./Components/HomePage/HomePage.scss";
+import { GiFuelTank } from "react-icons/gi";
+import { PiGasPumpBold } from "react-icons/pi";
+import { AiOutlineProduct } from "react-icons/ai";
 
 const Include = ({ setLoggedIn }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,22 +56,22 @@ const Include = ({ setLoggedIn }) => {
         <div className="navbar-menu tab" style={{ width: isMenuOpen ? 200 : 0 }}>
           <ul className="navbar__list">
             <div className="navbar__li-box">
-              <li className={`navbar__li ${isActive('/home/revenue') ? 'active' : ''}`}>
-                <Link className="menu-text" to="/home/revenue">
+              <li className={`navbar__li ${isActive('/revenue') ? 'active' : ''}`}>
+                <Link className="menu-text" to="/revenue">
                   <TbReportSearch className="icon_menu" /> DOANH THU
                 </Link>
               </li>
             </div>
             <div className="navbar__li-box">
-              <li className={`navbar__li ${isActive('/home/shift') ? 'active' : ''}`}>
-                <Link className="menu-text" to="/home/shift">
+              <li className={`navbar__li ${isActive('/shift') ? 'active' : ''}`}>
+                <Link className="menu-text" to="/shift">
                   <AiOutlineShopping className="icon_menu" /> CA BÁN
                 </Link>
               </li>
             </div>
             <div className="navbar__li-box">
-              <li className={`navbar__li ${isActive('/home/staff') ? 'active' : ''}`}>
-                <Link className="menu-text" to="/home/staff">
+              <li className={`navbar__li ${isActive('/staff') ? 'active' : ''}`}>
+                <Link className="menu-text" to="/staff">
                   <IoMdPeople className="icon_menu" /> NHÂN VIÊN
                 </Link>
               </li>
@@ -81,18 +84,20 @@ const Include = ({ setLoggedIn }) => {
               </li>
               {isProductSubMenuOpen && (
                 <ul className="submenu">
-                  <li className={`navbar__li ${isActive('/home/product') ? 'active' : ''}`}>
-                    <Link className="menu-text" to="/home/product">
+                  <li className={`navbar__li ${isActive('/product') ? 'active' : ''}`}>
+                    <Link className="menu-text menu-text-tab2" to="/product">
                       MẶT HÀNG
                     </Link>
                   </li>
-                  <li className={`navbar__li ${isActive('/home/tank') ? 'active' : ''}`}>
-                    <Link className="menu-text" to="/home/tank">
+                  <li className={`navbar__li ${isActive('/tank') ? 'active' : ''}`}>
+                    <Link className="menu-text menu-text-tab2" to="/tank">
+                  
                       BỂ
                     </Link>
                   </li>
-                  <li className={`navbar__li ${isActive('/home/pump') ? 'active' : ''}`}>
-                    <Link className="menu-text" to="/home/pump">
+                  <li className={`navbar__li ${isActive('/pump') ? 'active' : ''}`}>
+                    <Link className="menu-text menu-text-tab2" to="/pump">
+                  
                       VÒI BƠM
                     </Link>
                   </li>
@@ -100,15 +105,15 @@ const Include = ({ setLoggedIn }) => {
               )}
             </div>
             <div className="navbar__li-box">
-              <li className={`navbar__li ${isActive('/home/account') ? 'active' : ''}`}>
-                <Link className="menu-text" to="/home/account">
+              <li className={`navbar__li ${isActive('/account') ? 'active' : ''}`}>
+                <Link className="menu-text" to="/account">
                   <MdAccountCircle className="icon_menu" /> TÀI KHOẢN
                 </Link>
               </li>
             </div>
             <div className="navbar__li-box">
-              <li className={`navbar__li ${isActive('/home/logout') ? 'active' : ''}`}>
-                <Link className="menu-text" to="/home/logout">
+              <li className={`navbar__li ${isActive('/logout') ? 'active' : ''}`}>
+                <Link className="menu-text" to="/logout">
                   <IoLogOut className="icon_menu" /> ĐĂNG XUẤT
                 </Link>
               </li>

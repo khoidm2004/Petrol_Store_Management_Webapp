@@ -84,7 +84,7 @@ export const Account = () => {
               type="email"
               name="email"
               value={profile.email}
-              onChange={handleChange}
+              onChange={handleChange} className="email"
             />
 
             <label htmlFor="phoneNum">PHONE NUMBER</label>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
-import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
+import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./Staff.css";
 
@@ -17,15 +17,10 @@ export const Tank = () => {
   const product = useProductStore((state) => state.product); // Corrected state key for products
   const fetchProduct = useProductStore((state) => state.fetchProduct);
 
-  const [openEmail, setOpenEmail] = useState(null);
   const [selectedTank, setSelectedTank] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [addingTank, setAddingTank] = useState(false);
   const tankId = Math.floor(100000 + Math.random() * 900000);
 
-  //   while(tanks.filter(TankMember => TankMember.tankId === tankId)){
-  //     tankId = Math.floor(100000 + Math.random() * 900000);
-  // }
   const [newTank, setNewTank] = useState({
     tid: "",
     tankId: (tankId),
@@ -37,11 +32,6 @@ export const Tank = () => {
       productCode: "",
     },
   });
-
-    const toggleSubMenu = (email) => {
-        setOpenEmail(openEmail === email ? null : email);
-    };
-
 
   useEffect(() => {
     fetchTank();
@@ -60,22 +50,16 @@ export const Tank = () => {
     }
   }, [product]);
 
-  const handleView = (TankMember) => {
-    setSelectedTank(TankMember);
-    setEditMode(false);
-  };
 
   const handleEdit = (TankMember) => {
     setSelectedTank(TankMember);
-    setEditMode(true);
   };
 
   const saveChanges = async () => {
-    if (editMode && selectedTank) {
+    if (selectedTank) {
       try {
         console.log(selectedTank);
         await modifyTank(selectedTank);
-        setEditMode(false);
         setSelectedTank(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -122,7 +106,7 @@ export const Tank = () => {
       {
         label: "Bể",
         data: [firstNumber, secondNumber],
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        backgroundColor: ["Green", "Red"],
         hoverOffset: 10,
       },
     ],
@@ -169,7 +153,8 @@ export const Tank = () => {
         <table className="firsttable">
           <thead>
             <tr className="titleOneline">
-              <th colSpan={2}>Đang Kinh doanh</th>
+              <th>Đang Kinh doanh</th>
+              <th>Chi tiết</th>
             </tr>
           </thead>
           <tbody>
@@ -177,50 +162,41 @@ export const Tank = () => {
               <tr key={TankMember.tankCode} className="col" id="mainstate">
                 <td>{TankMember.tankName}</td>
                 <td className="icon_editview">
-                  <IoEllipsisVerticalOutline className="icon_menu"
-                    onClick={() => toggleSubMenu(TankMember.tankCode)}
+                  <TbEyeEdit className="icon_menu"
+                    onClick={() => handleEdit(TankMember)}
                   />
-                  {openEmail === TankMember.tankCode && (
-                    <table className="secondarystate">
-                      <tbody>
-                        <tr className="box">
-                          <td onClick={() => handleView(TankMember)}>VIEW</td>
-                        </tr>
-                        <tr className="box">
-                          <td onClick={() => handleEdit(TankMember)}>EDIT</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         {selectedTank && (
-          <div className="viewStaff">
+          <>  
+            <div className="overlay" onClick={() => setSelectedTank(null)}></div>
+            <div className="viewStaff">
+            <h2>Bể</h2>
             <AiOutlineClose
               onClick={() => setSelectedTank(null)}
               className="close-icon"
             />
             <input
               type="text"
+              placeholder="Tank Name"
               value={selectedTank.tankName}
               onChange={(e) =>
                 setSelectedTank({ ...selectedTank, tankName: e.target.value })
               }
-              readOnly={!editMode}
             />
             <br />
-            <input type="text" value={selectedTank.tankCode} readOnly />
+            <input type="text" placeholder="Tank Code" value={selectedTank.tankCode} readOnly />
             <br />
             <input
               type="text"
+              placeholder="Tank Volume"
               value={selectedTank.tankVolume}
               onChange={(e) =>
                 setSelectedTank({ ...selectedTank, tankVolume: e.target.value })
               }
-              readOnly={!editMode}
             />
             <br />
             <select
@@ -228,7 +204,6 @@ export const Tank = () => {
               onChange={(e) =>
                 setSelectedTank({ ...selectedTank, tankStatus: e.target.value })
               }
-              disabled={!editMode}
             >
               <option value="On use">On use</option>
               <option value="Not On use">Not On use</option>
@@ -247,23 +222,25 @@ export const Tank = () => {
                   },
                 });
               }}
-              disabled={!editMode}
             >
-              {product.map((product) => (
-                <option key={product.productCode} value={product.productCode}>
-                  {product.productName}
-                </option>
-              ))}
-            </select>
-            {editMode && (
+              <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
+                {product.map((product) => (
+                  <option key={product.productCode} value={product.productCode}>
+                    {product.productCode} - {product.productName}
+                  </option>
+                ))}
+              </optgroup>
+            </select>         
               <button className="send" onClick={saveChanges}>
                 OK
               </button>
-            )}
           </div>
+          </>
         )}
         {addingTank && (
-          <div className="addStaff">
+          <>  
+            <div className="overlay" onClick={() => setAddingTank(false)}></div>
+            <div className="addStaff">
             <h2>Thêm Bể Mới</h2>
             <AiOutlineClose
               onClick={() => setAddingTank(false)}
@@ -319,16 +296,19 @@ export const Tank = () => {
                 });
               }}
             >
-              {product.map((product) => (
-                <option key={product.productCode} value={product.productCode}>
-                  {product.productName}
-                </option>
-              ))}
+              <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
+                {product.map((product) => (
+                  <option key={product.productCode} value={product.productCode}>
+                    {product.productCode} - {product.productName}
+                  </option>
+                ))}
+                </optgroup>
             </select>
             <button className="send" onClick={handleAddTank}>
               THÊM
             </button>
           </div>
+          </>
         )}
 
         <div className="chart-container">
@@ -345,7 +325,7 @@ export const Tank = () => {
               },
             }}
           />
-          <table className="secondtable">
+          {/* <table className="secondtable">
             <thead className="titleOffline">
               <tr>
                 <th colSpan={2}>Đã nghỉ việc</th>
@@ -376,7 +356,7 @@ export const Tank = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
         </div>
       </div>
     </div>

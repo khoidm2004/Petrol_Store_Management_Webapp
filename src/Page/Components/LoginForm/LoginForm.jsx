@@ -29,7 +29,7 @@ const LoginForm = ({ setLoggedIn }) => {
       setLoggedIn(true);
       console.log(result);
       if(result.Title === "Success"){
-        window.location.href = '/home/revenue';
+        window.location.href = '/revenue';
       }else{
         setPopup({ show: true, title: result.Title, message: result.Message });
       }

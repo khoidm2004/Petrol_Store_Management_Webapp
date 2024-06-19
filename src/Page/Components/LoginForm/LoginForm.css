@@ -52,7 +52,7 @@ form {
   padding: 30px 20px;
 }
 
-.input-box input, input[type="email"] {
+.input-box input, #email {
   width: 75%;
   height: 100%;
   background-color: transparent;
@@ -175,16 +175,6 @@ form button:hover {
   background: rgb(124 122 122 / 52%);
   z-index: 999;
 }
-
-/* .login-form-container.modal-open {
-  pointer-events: none;
-}
-
-.login-form-container.modal-open main,
-.login-form-container.modal-open footer,
-.login-form-container.modal-open form {
-  pointer-events: none;
-} */
 
 @media screen and (max-width: 1400px) {
   #coverimage {

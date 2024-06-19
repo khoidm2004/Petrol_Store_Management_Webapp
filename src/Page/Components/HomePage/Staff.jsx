@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useStaffStore from "../../../store/staffStore.js";
-import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import { TbEyeEdit } from "react-icons/tb";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import "./Staff.css";
@@ -15,10 +15,7 @@ export const Staff = () => {
   const modifyStaff = useStaffStore((state) => state.modifyStaff);
   const [popup, setPopup] = useState({ show: false, title: '', message: '' });
   
-
-  const [openEmail, setOpenEmail] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [addingStaff, setAddingStaff] = useState(false);
   const [newStaff, setNewStaff] = useState({
     staffId: "",
@@ -28,35 +25,21 @@ export const Staff = () => {
     workingStatus: "IS WORKING",
   });
 
-  const toggleSubMenu = (email) => {
-    if (openEmail === email) {
-      setOpenEmail(null);
-    } else {
-      setOpenEmail(email);
-    }
-  };
-
   useEffect(() => {
     fetchStaff();
   }, [fetchStaff]);
 
-  const handleView = (staffMember) => {
-    setSelectedStaff(staffMember);
-    setEditMode(false);
-  };
 
   const handleEdit = (staffMember) => {
     setSelectedStaff(staffMember);
-    setEditMode(true);
   };
 
   const saveChanges = async () => {
-    if (editMode && selectedStaff) {
+    if (selectedStaff) {
       try {
         console.log(selectedStaff);
         var status = await modifyStaff(selectedStaff);
         console.log(status);
-        setEditMode(false);
         setSelectedStaff(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -93,7 +76,7 @@ export const Staff = () => {
       {
         label: "NHÂN VIÊN",
         data: [firstNumber, secondNumber],
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        backgroundColor: ["GREEN", "RED"],
         hoverOffset: 10,
       },
     ],
@@ -148,88 +131,80 @@ export const Staff = () => {
         <table className="firsttable">
           <thead>
             <tr className="titleOneline">
-              <th colSpan={2}>Đang làm việc</th>
+              <th>Đang làm việc</th>
+              <th>Chi tiết</th>
             </tr>
           </thead>
           <tbody>
             {workingStaff.map((staffMember) => (
               <tr key={staffMember.StaffId} className="col" id="mainstate">
-                <td>{staffMember.fullName}</td>
+                <td>{staffMember.fullName} - {staffMember.email}</td>
                 <td className="icon_editview">
-                  <IoEllipsisVerticalOutline className="icon_menu"
-                    onClick={() => toggleSubMenu(staffMember.email)}
+                  <TbEyeEdit className="icon_menu"
+                    onClick={() => handleEdit(staffMember)}
                   />
-                  {openEmail === staffMember.email && (
-                    <table className="secondarystate">
-                      <tbody>
-                        <tr className="box">
-                          <td onClick={() => handleView(staffMember)}>VIEW</td>
-                        </tr>
-                        <tr className="box">
-                          <td onClick={() => handleEdit(staffMember)}>EDIT</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         {selectedStaff && (
-          <div className="viewStaff">
-            <AiOutlineClose
-              onClick={() => setSelectedStaff(null)}
-              className="close-icon"
-            />
-            <input 
-              type="text"
-              value={selectedStaff.fullName}
-              onChange={(e) =>
-                setSelectedStaff({ ...selectedStaff, fullName: e.target.value })
-              }
-              readOnly={!editMode}
-            />
-            <br />
-            <input type="text" value={selectedStaff.email} readOnly />
-            <br />
-            <input 
-              type="text"
-              value={selectedStaff.phoneNum}
-              onChange={(e) =>
-                setSelectedStaff({ ...selectedStaff, phoneNum: e.target.value })
-              }
-              readOnly={!editMode}
-            />
-            <br />
-            <select
-              value={selectedStaff.workingStatus}
-              onChange={(e) =>
-                setSelectedStaff({
-                  ...selectedStaff,
-                  workingStatus: e.target.value,
-                })
-              }
-              disabled={!editMode}
-            >
-              <option value="IS WORKING">IS WORKING</option>
-              <option value="ISN'T WORKING">ISN'T WORKING</option>
-            </select>
-            {editMode && (
-              <button className="send" onClick={saveChanges}>
-                OK
-              </button>
-            )}
+          <>
+            <div className="overlay" onClick={() => setSelectedStaff(null)}></div>
+            <div className="viewStaff">
+              <h2>NHÂN VIÊN</h2>
+              <AiOutlineClose
+                onClick={() => setSelectedStaff(null)}
+                className="close-icon"
+              />
+              <input 
+                type="text" 
+                placeholder="Full Name"
+                value={selectedStaff.fullName}
+                onChange={(e) =>
+                  setSelectedStaff({ ...selectedStaff, fullName: e.target.value })
+                }
+              />
+              <br />
+              <input placeholder="Email" type="text" value={selectedStaff.email} readOnly />
+              <br />
+              <input 
+                type="text" 
+                placeholder="Phone Number"
+                value={selectedStaff.phoneNum}
+                onChange={(e) =>
+                  setSelectedStaff({ ...selectedStaff, phoneNum: e.target.value })
+                }
+              />
+              <br />
+              <select
+                value={selectedStaff.workingStatus}
+                onChange={(e) =>
+                  setSelectedStaff({
+                    ...selectedStaff,
+                    workingStatus: e.target.value,
+                  })
+                }
+              >
+                <option value="IS WORKING">IS WORKING</option>
+                <option value="ISN'T WORKING">ISN'T WORKING</option>
+              </select>
+                <button className="send" onClick={saveChanges}>
+                  OK
+                </button>
           </div>
+          </>
         )}
         {addingStaff && (
-          <div className="addStaff">
+          <>
+            <div className="overlay" onClick={() => setAddingStaff(false)}></div>
+            <div className="addStaff">
             <h2>Thêm Nhân Viên Mới</h2>
             <AiOutlineClose
               onClick={() => setAddingStaff(false)}
               className="close-icon"
             />
-            <input required
+            <input
               type="text"
               placeholder="Full Name"
               value={newStaff.fullName}
@@ -269,6 +244,7 @@ export const Staff = () => {
               THÊM
             </button>
           </div>
+          </>
         )}
 
         <div className="chart-container">
@@ -285,7 +261,7 @@ export const Staff = () => {
               },
             }}
           />
-          <table className="secondtable">
+          {/* <table className="secondtable">
             <thead className="titleOffline">
               <tr>
                 <th colSpan={2}>Đã nghỉ việc</th>
@@ -320,7 +296,7 @@ export const Staff = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
         </div>
       </div>
       {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}

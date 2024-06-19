@@ -1,46 +1,28 @@
 import { useEffect, useState } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { FaSignOutAlt, FaBoxes } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { IoEllipsisVerticalOutline } from "react-icons/io5";
-import useProductStore from "../../../store/productStore.js";
+import { TbEyeEdit } from "react-icons/tb";
 import usePumpStore from "../../../store/pumpStore.js";
-
 import "./Revenue.css";
-
-const data = {
-  "2024-06-14": [
-    { time: "40p", tiêuHao: 40000 },
-    { time: "40p", tiêuHao: 40000 },
-    { time: "40p", tiêuHao: 40000 },
-  ],
-  "2024-06-13": [
-    { time: "40p", tiêuHao: 30000 },
-    { time: "40p", tiêuHao: 30000 },
-    { time: "40p", tiêuHao: 30000 },
-  ],
-  "2024-06-15": [
-    { time: "40p", tiêuHao: 20000 },
-    { time: "40p", tiêuHao: 20000 },
-    { time: "40p", tiêuHao: 20000 },
-  ],
-};
+import useFetchLog from "../../../hooks/useFetchLog.js";
+import { timeConverter } from "../../../utils/timeConverter.js";
+import { AiOutlineClose } from "react-icons/ai";
+import { GiFuelTank } from "react-icons/gi";
+import { PiGasPumpBold } from "react-icons/pi";
+import { AiOutlineProduct } from "react-icons/ai";
+import { IoMdPeople } from "react-icons/io";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 
 export const Revenue = () => {
   const pumps = usePumpStore((state) => state.pumps);
   const fetchPump = usePumpStore((state) => state.fetchPump);
-  const addPump = usePumpStore((state) => state.addPump);
-  const modifyPump = usePumpStore((state) => state.modifyPump);
-  const product = useProductStore((state) => state.product);
-  const fetchProduct = useProductStore((state) => state.fetchProduct);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const formattedSelectedDate = selectedDate.toISOString().slice(0, 10);
-  const dailyData = data[formattedSelectedDate];
-  const total = dailyData
-    ? dailyData.reduce((sum, item) => sum + item.tiêuHao, 0)
-    : 0;
+  const [dailyData, setDailyData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [logExists, setLogExists] = useState(false);
 
   const handleDateChange = (e) => {
     const newDate = new Date(e.target.value);
@@ -52,55 +34,27 @@ export const Revenue = () => {
     day: "numeric",
     month: "long",
     year: "numeric",
-  });
-
-  const [openEmail, setOpenEmail] = useState(null);
-  const [newStaff, setNewStaff] = useState({
-    pid: "",
-    pumpId: "",
-    pumpName: "",
-    product: {
-      productName: "",
-    },
-    pumNumber: {
-      pumpFrist: "",
-      pumpSecond: "",
-    },
-  });
-
-  const toggleSubMenu = (email) => {
-    if (openEmail === email) {
-      setOpenEmail(null);
-    } else {
-      setOpenEmail(email);
-    }
-  };
+  }); 
 
   useEffect(() => {
     fetchPump();
   }, [fetchPump]);
 
-  const handleView = (staffMember) => {
-    setSelectedStaff(staffMember);
-    setEditMode(false);
-  };
-
-  const handleEdit = (staffMember) => {
-    setSelectedStaff(staffMember);
-    setEditMode(true);
-  };
-
-  const saveChanges = async () => {
-    if (editMode && selectedStaff) {
-      try {
-        await modifyPump(selectedStaff);
-        setEditMode(false);
-        setSelectedStaff(null);
-      } catch (error) {
-        console.error("Save error:", error);
+  useEffect(() => {
+    const fetchLogs = async () => {
+      const result = await useFetchLog();
+      if (result.Status !== "error") {
+        const logs = result.logList.filter(log => {
+          const logDate = new Date(log.startTime).toISOString().slice(0, 10);
+          return logDate === formattedSelectedDate;
+        });
+        setDailyData(logs);
+        setTotal(logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0));
       }
-    }
-  };
+    };
+
+    fetchLogs();
+  }, [formattedSelectedDate]);
 
   const doughnutData = {
     labels: ["Thể tích bể", "Số lượng hàng tồn"],
@@ -144,9 +98,9 @@ export const Revenue = () => {
     <div className="revenue">
        {showOverlay && 
        <div className="overlay">
-        <div class="loader">
-          <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        <div className="loader">
+          <svg className="circular" viewBox="25 25 50 50">
+            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
           </svg>
         </div>
       </div>}
@@ -157,7 +111,7 @@ export const Revenue = () => {
       <div className="Row">
         <div className="barChart">
           <div className="title_xemChitiet">
-            DOANH THU SAN LUONG
+            DOANH THU SẢN LƯỢNG
           </div>
           <Bar
             data={barData}
@@ -186,74 +140,45 @@ export const Revenue = () => {
       </div>
 
       <br />
-      <b>
       <br />
       <br />
       <br />
-      </b>
+ 
       <div className="Row">
         <div className="Column doanh_thu">
           <div className="Row row_image">
             <div className="object_body">
-              <div className="Row">
-                <div className="object_name">
-                  <h6>NHÂN VIÊN</h6>
-                  <p>30</p>
-                </div>
-                <div className="object_image_body">
-                  <FaSignOutAlt className="icon_image" />
-                </div>
-              </div>
-              <div className="object_button">
-                <button>Xem chi tiết</button>
-              </div>
+              <div className="object_box"> 4 </div>
+              <Link className="object_a" to="/staff">
+                <IoMdPeople /> 
+                <span>NHÂN VIÊN</span> 
+              </Link>
             </div>
             <div className="object_body">
-              <div className="Row">
-                <div className="object_name">
-                  <h6>MẶT HÀNG</h6>
-                  <p>6</p>
-                </div>
-                <div className="object_image_body">
-                  <FaBoxes className="icon_image" />
-                </div>
-              </div>
-              <div className="object_button">
-                <button>Xem chi tiết</button>
-              </div>
+              <div className="object_box"> 5 </div>
+              <Link  to="/product" className="object_a">
+                <AiOutlineProduct /> 
+                <span>MẶT HÀNG</span>
+              </Link>
             </div>
             <div className="object_body">
-              <div className="Row">
-                <div className="object_name">
-                  <h6>BỂ</h6>
-                  <p>4</p>
-                </div>
-                <div className="object_image_body">
-                  <FaBoxes className="icon_image" />
-                </div>
-              </div>
-              <div className="object_button">
-                <button>Xem chi tiết</button>
-              </div>
+              <div className="object_box"> 6 </div>
+              <Link to="/pump" className="object_a">
+                <PiGasPumpBold />
+                <span>VÒI BƠM</span>
+              </Link>
             </div>
             <div className="object_body">
-              <div className="Row">
-                <div className="object_name">
-                  <h6>VÒI BƠM</h6>
-                  <p>13</p>
-                </div>
-                <div className="object_image_body">
-                  <FaSignOutAlt className="icon_image" />
-                </div>
-              </div>
-              <div className="object_button">
-                <button>Xem chi tiết</button>
-              </div>
+              <div className="object_box"> 7 </div>
+              <Link to="/tank"className="object_a">
+                <GiFuelTank />
+                <span> BỂ </span>
+              </Link>
             </div>
           </div>
 
           <header>
-            <h4>DOANH THU VOI BƠM</h4>
+            <h4>DOANH THU VÒI BƠM</h4>
             <div className="search-container">
               <FaMagnifyingGlass className="search-icon" />
               <input
@@ -269,8 +194,8 @@ export const Revenue = () => {
               <thead>
                 <tr className="titleOneline">
                   <th>Tên vòi bơm</th>
-                  <th>Mặt hàng vòi bơm</th>
-                  <th colSpan={2}>Số đầu - số cuối</th>
+                  <th>Số đầu - số cuối</th>
+                  <th>Chi tiết</th>
                 </tr>
               </thead>
               <tbody>
@@ -281,33 +206,16 @@ export const Revenue = () => {
                     id="mainstate"
                   >
                     <td>{staffMember.pumpName}</td>
-                    <td>{staffMember.product.productName}</td>
                     <td>
                       {staffMember.pumNumber
-                        ? `${staffMember.pumNumber.pumpFrist} - ${staffMember.pumNumber.pumSecond}`
+                        ? `${staffMember.pumNumber.pumpFrist} - ${staffMember.pumNumber.pumpSecond}`
                         : "Chưa có dữ liệu"}
                     </td>
                     <td className="icon_editview">
-                      <IoEllipsisVerticalOutline
+                      <TbEyeEdit
                         className="icon_menu"
-                        onClick={() => toggleSubMenu(staffMember.pumpCode)}
+                        onClick={() =>  handleEdit(staffMember)}
                       />
-                      {openEmail === staffMember.pumpCode && (
-                        <table className="secondarystate">
-                          <tbody>
-                            <tr className="box">
-                              <td onClick={() => handleView(staffMember)}>
-                                VIEW
-                              </td>
-                            </tr>
-                            <tr className="box">
-                              <td onClick={() => handleEdit(staffMember)}>
-                                EDIT
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      )}
                     </td>
                   </tr>
                 ))}
@@ -334,35 +242,92 @@ export const Revenue = () => {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>Time</th>
-                      <th>Tiêu hao</th>
+                      <th>Giờ phát sinh</th>
+                      <th>Thành tiền</th>
                     </tr>
                   </thead>
                   <tbody>
                     {dailyData &&
                       dailyData.map((item, index) => (
                         <tr key={index}>
-                          <td>{item.time}</td>
-                          <td>
-                            {item.tiêuHao.toLocaleString("vi-VN")}
-                          </td>
+                          <td>{timeConverter(item.startTime).time}</td>
+                          <td>{item.totalAmount}</td>
                         </tr>
                       ))}
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colSpan={2}>
-                        Tổng: {total.toLocaleString("vi-VN")}
-                      </td>
+                      <td className="left_sum"> Tổng: </td>
+                      <td className="right_sum">{total.toLocaleString("vi-VN")}</td>
                     </tr>
                   </tfoot>
                 </table>
               </div>
             </div>
           </div>
-          <div className="button_xemChitiet borders">
+          <div className="button_xemChitiet borders" onClick={() => setLogExists(true)}>
             <button>Xem chi tiết</button>
           </div>
+          {logExists && (
+          <>  
+            <div className="overlay" onClick={() => setLogExists(false)}></div>
+            <div className="viewShift">
+            <AiOutlineClose
+              onClick={() => setLogExists(false)}
+              className="close_icon"
+            />
+            <h4>LƯỢNG TỒN TRONG CA</h4>
+            <hr/>
+            <div>
+              <div className="date-selector">
+                <input
+                  type="date"
+                  id="date"
+                  value={formattedSelectedDate}
+                  onChange={handleDateChange}
+                />
+              </div>
+
+              <div className="content">
+                <h4>{formattedDate}</h4>
+                <div className="table-container">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Giờ phát sinh</th>
+                        <th>Mặt hàng</th>
+                        <th>Vòi bơm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dailyData &&
+                        dailyData.map((item, index) => (
+                          <tr key={index}>
+                            <td>{timeConverter(item.startTime).time}</td>
+                            <td>{item.productName}</td>
+                            <td>{item.pumpName}</td>
+                            <td>{item.productPrice}</td>
+                            <td>{item.quantity}</td>
+                            <td>{item.totalAmount}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th className="left_sum"> Tổng: </th>
+                        <th className="right_sum" colSpan={5}>{total.toLocaleString("vi-VN")}</th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div> 
+          </div>
+          </>
+        )}
         </div>
       </div>
     </div>

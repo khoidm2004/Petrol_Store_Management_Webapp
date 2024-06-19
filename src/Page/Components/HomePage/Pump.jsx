@@ -6,6 +6,7 @@ import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
+import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./Staff.css";
 
@@ -156,7 +157,7 @@ export const Pump = () => {
       {
         label: "VOI BƠM",
         data: [firstNumber, secondNumber],
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        backgroundColor: ["Green","Red"],
         hoverOffset: 20,
       },
     ],
@@ -207,7 +208,8 @@ export const Pump = () => {
         <table className="firsttable">
           <thead>
             <tr className="titleOneline">
-              <th colSpan={2}>Đang Kinh doanh</th>
+              <th>Đang Kinh doanh</th>
+              <th>Chi tiết</th>
             </tr>
           </thead>
           <tbody>
@@ -215,42 +217,33 @@ export const Pump = () => {
               <tr key={staffMember.pumpCode} className="col" id="mainstate">
                 <td>{staffMember.pumpName}</td>
                 <td className="icon_editview">
-                  <IoEllipsisVerticalOutline className="icon_menu"
-                    onClick={() => toggleSubMenu(staffMember.pumpCode)}
+                  <TbEyeEdit className="icon_menu"
+                    onClick={() => handleEdit(staffMember)}
                   />
-                  {openEmail === staffMember.pumpCode && (
-                    <table className="secondarystate">
-                      <tbody>
-                        <tr className="box">
-                          <td onClick={() => handleView(staffMember)}>VIEW</td>
-                        </tr>
-                        <tr className="box">
-                          <td onClick={() => handleEdit(staffMember)}>EDIT</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         {selectedStaff && (
-          <div className="viewStaff">
+          <>
+            <div className="overlay" onClick={() => setSelectedStaff(null)}></div>
+            <div className="viewStaff">
+            <h2>VÒI BƠM</h2>
             <AiOutlineClose
               onClick={() => setSelectedStaff(null)}
               className="close-icon"
             />
             <input
               type="text"
+              placeholder="Pump Name"
               value={selectedStaff.pumpName}
               onChange={(e) =>
                 setSelectedStaff({ ...selectedStaff, pumpName: e.target.value })
               }
-              readOnly={!editMode}
             />
             <br />
-            <input type="text" value={selectedStaff.pumpCode} readOnly />
+            <input type="text" placeholder="Pump Code" value={selectedStaff.pumpCode} readOnly />
             <br />
             <select
               value={selectedStaff.pumpStatus}
@@ -260,7 +253,6 @@ export const Pump = () => {
                   pumpStatus: e.target.value,
                 })
               }
-              disabled={!editMode}
             >
               <option value="On use">On use</option>
               <option value="Not On use">Not On use</option>
@@ -280,13 +272,14 @@ export const Pump = () => {
                   },
                 });
               }}
-              disabled={!editMode}
             >
-              {product.map((product) => (
-                <option key={product.productCode} value={product.productCode}>
-                  {product.productName}
-                </option>
-              ))}
+              <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
+                {product.map((product) => (
+                  <option key={product.productCode} value={product.productCode}>
+                    {product.productCode} - {product.productName}
+                  </option>
+                ))}
+              </optgroup>
             </select>
 
             <select
@@ -303,23 +296,25 @@ export const Pump = () => {
                   },
                 });
               }}
-              disabled={!editMode}
             >
-              {tanks.map((tank) => (
-                <option key={tank.tankCode} value={tank.tankCode}>
-                  {tank.tankName}
-                </option>
-              ))}
+              <optgroup label="Tên Bể - Mã Bể">
+                {tanks.map((tank) => (
+                  <option key={tank.tankCode} value={tank.tankCode}>
+                    {tank.tankName}
+                  </option>
+                ))}
+              </optgroup>
             </select>
-            {editMode && (
               <button className="send" onClick={saveChanges}>
                 OK
               </button>
-            )}
           </div>
+          </>
         )}
         {addingStaff && (
-          <div className="addStaff">
+          <>  
+            <div className="overlay" onClick={() => setAddingStaff(false)}></div>
+            <div className="addStaff">
             <h2>Thêm Vòi Bơm Mới</h2>
             <AiOutlineClose
               onClick={() => setAddingStaff(false)}
@@ -333,7 +328,7 @@ export const Pump = () => {
                 setNewStaff({ ...newStaff, pumpName: e.target.value })
               }
             />
-            <br />
+            <br/>
             <input
               type="text"
               placeholder="Pump Code"
@@ -367,11 +362,13 @@ export const Pump = () => {
                 });
               }}
             >
-              {product.map((product) => (
-                <option key={product.productCode} value={product.productCode}>
-                  {product.productName}
-                </option>
-              ))}
+              <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
+                {product.map((product) => (
+                  <option key={product.productCode} value={product.productCode}>
+                    {product.productCode} - {product.productName}
+                  </option>
+                ))}
+              </optgroup>
             </select>
             <select
               value={newStaff.tank.tankCode}
@@ -388,16 +385,19 @@ export const Pump = () => {
                 });
               }}
             >
-              {tanks.map((tank) => (
-                <option key={tank.tankCode} value={tank.tankCode}>
-                  {tank.tankName}
-                </option>
-              ))}
+              <optgroup label="Mã Bể - Tên Bể">
+                {tanks.map((tank) => (
+                  <option key={tank.tankCode} value={tank.tankCode}>
+                    {tank.tankCode} - {tank.tankName}
+                  </option>
+                ))}
+              </optgroup>
             </select>
             <button className="send" onClick={handleAddStaff}>
               THÊM
             </button>
           </div>
+          </>
         )}
         <div className="chart-container">
           <Doughnut
@@ -413,7 +413,7 @@ export const Pump = () => {
               },
             }}
           />
-          <table className="secondtable">
+          {/* <table className="secondtable">
             <thead className="titleOffline">
               <tr>
                 <th colSpan={2}>Đã nghỉ việc</th>
@@ -448,7 +448,7 @@ export const Pump = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
         </div>
       </div>
     </div>

@@ -28,6 +28,8 @@ p {
   transition: width 0.5s ease;
   margin-top: 0;
   overflow: hidden;
+  position: sticky;
+  top: 0;
 }
 
 .burger > .tab_menu {
@@ -49,7 +51,7 @@ p {
   color: $textColor;
   font-family: "Lato", sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
-  padding: 10px 20px;
+  padding: 15px 20px;
   cursor: pointer;
 }
 
@@ -65,20 +67,17 @@ p {
 .menu-text {
   flex: 1;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.menu-text-tab2{
+  font-size: 14px;
+  padding-left: 10px;
+}
 .navbar__li-box:hover,
 .navbar__li-box.active {
   border-left: 7px solid $borderLeftColor;
-  background-color: $hoverColor;
   cursor: pointer;
-}
-
-.navbar__li-box:hover .menu-text,
-.navbar__li-box.active .menu-text {
-  color: white;
 }
 
 header {
@@ -86,6 +85,7 @@ header {
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0px 20px;
+  height: 50px;
 }
 
 #logo {
@@ -95,7 +95,8 @@ header {
 .title {
   text-align: center;
   margin: auto;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight:bold;
 }
 
 .body {
@@ -106,7 +107,7 @@ header {
 a {
   text-decoration: none;
   color: inherit;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -117,7 +118,7 @@ a {
 }
 
 .submenu .navbar__li {
-  padding: 5px 20px;
+  padding: 10px 20px;
 }
 
 .submenu .navbar__li:hover {

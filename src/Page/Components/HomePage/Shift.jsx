@@ -3,14 +3,12 @@ import useShiftStore from '../../../store/shiftStore.js';
 import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
-import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { TbEyeEdit } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
 import { FaRegMinusSquare } from "react-icons/fa";
 import 'chart.js/auto'; 
 import './Staff.css';
-
 import { timeConverter } from '../../../utils/timeConverter.js';
 
 export const Shift = () => {
@@ -22,9 +20,7 @@ export const Shift = () => {
     const { product, fetchProduct } = useProductStore();
     const { staff, fetchStaff } = useStaffStore();
     const { pumps, fetchPump } = usePumpStore();
-    const [openCode, setOpenCode] = useState(null);
     const [selectedShift, setSelectedShift] = useState(null);
-    const [editMode, setEditMode] = useState(false);
     const [addingShift, setAddingShift] = useState(false);
     const [newShift, setNewShift] = useState({
         startTime: new Date(),
@@ -77,31 +73,16 @@ export const Shift = () => {
         }
     }, [staff]);
 
-    const toggleSubMenu = (id) => {
-        if (openCode === id) {
-            setOpenCode(null); 
-        } else {
-            setOpenCode(id);  
-        }
-    };
-
-    const handleView = (shift) => {
-        setSelectedShift(shift);
-        setEditMode(false);
-    };
-
     const handleEdit = (shift) => {
         setSelectedShift(shift);
-        setEditMode(true);
     };
 
     const saveChanges = async () => {
-        if (editMode && selectedShift) {
+        if (selectedShift) {
             try {
                 console.log(selectedShift)
                 const status = await modifyShift(selectedShift);
                 console.log(status); 
-                setEditMode(false);
                 setSelectedShift(null);
             } catch (error) {
                 console.error('Save error:', error);
@@ -281,10 +262,6 @@ export const Shift = () => {
                 </div>}
             <header>
                 <p>THÔNG TIN CA BÁN HÀNG</p>
-                <div className="search-container">
-                    <FaMagnifyingGlass className="search-icon" />
-                    <input type="text" placeholder="Search..." className="search-input" />
-                </div>
                 <button type="button" className='push' onClick={() => setAddingShift(true)}>THÊM</button>
             </header>
             <div className='Staff'>
@@ -294,7 +271,8 @@ export const Shift = () => {
                             <th>Mã nhân viên</th>
                             <th>Mã vòi bơm</th>
                             <th>Mã mặt hàng</th>
-                            <th colSpan={2}>Thời gian làm</th>
+                            <th>Thời gian làm</th>
+                            <th className='view_chitiet'>Chi tiết</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -303,20 +281,12 @@ export const Shift = () => {
                                 <td>{Object.values(shift.employeeList).map(pump => pump.fullName).join(' - ')}</td>
                                 <td>{Object.values(shift.pumpList).map(pump => pump.pumpName).join(' - ')}</td>
                                 <td>{Object.values(shift.productList).map(product => product.productName).join(' - ')}</td>
-                                <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time} -
-                                    {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time} -
+                                <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time}
+                                <br></br> {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
 
                                 </td>
                                 <td className="icon_editview">
-                                    <IoEllipsisVerticalOutline className="icon_menu" onClick={() => toggleSubMenu(shift)} />
-                                    {openCode === shift && (
-                                        <table className="secondarystate">
-                                            <tbody>
-                                                <tr className='box'><td onClick={() => handleView(shift)}>VIEW</td></tr>
-                                                <tr className='box'><td onClick={() => handleEdit(shift)}>EDIT</td></tr>
-                                            </tbody>
-                                        </table>
-                                    )}
+                                    <TbEyeEdit className="icon_menu" onClick={() => handleEdit(shift)} />
                                 </td>
                             </tr>
                         )): (
@@ -328,16 +298,18 @@ export const Shift = () => {
                 </table>
 
                 {selectedShift && (
-                    <div className='viewShift' value="">
-                          <br></br>
-                        <AiOutlineClose onClick={() => setSelectedShift(null)} className="close-icon" />
+                    <>
+                        <div className="overlay" onClick={() => setSelectedShift(null)}></div>
+                        <div className='viewShift' value="">
+                        <AiOutlineClose onClick={() => setSelectedShift(null)} className="close_icon" />
+                        <h2>Ca Bán Hàng </h2>
                             <label htmlFor="">Thời gian bắt đầu</label>
-                        <input type="datetime-local" className="time"  value={selectedShift.startTime} onChange={(e) => setSelectedShift({ ...selectedShift, startTime: e.target.value })} readOnly={!editMode} /><hr />
+                        <input type="datetime-local" className="time"  value={selectedShift.startTime} onChange={(e) => setSelectedShift({ ...selectedShift, startTime: e.target.value })}/><hr />
                             <label htmlFor="">Thời gian kết thúc</label>
-                        <input type="datetime-local" className="time"  value={selectedShift.endTime} onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })} readOnly={!editMode} /><br />
+                        <input type="datetime-local" className="time"  value={selectedShift.endTime} onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })}/><br />
                         <hr />
                             <div className='Staffs'>
-                                <h5>NHÂN VIÊN <CgAddR className='pull_icon' onClick={handleAddEmployee} style={{ display: editMode ? 'block' : 'none' }} /></h5>
+                                <h5>NHÂN VIÊN <CgAddR className='pull_icon' onClick={handleAddEmployee} /></h5>
                                 <div className='Staff'>
                                     {Object.entries(selectedShift.employeeList).map(([key, employee]) => (
                                         <div key={key} className='product-item'>
@@ -351,27 +323,28 @@ export const Shift = () => {
                                                             ...selectedShift.employeeList,
                                                             [key]: {
                                                                 ...selectedShift.employeeList[key],
-                                                                fullName: selectedStaff.fullName,
                                                                 email: selectedStaff.email,
+                                                                fullName: selectedStaff.fullName,
                                                             }
                                                         }
                                                     });
-                                                }}
-                                                disabled={!editMode}>
-                                                {staff.map((newStaff) => (
-                                                    <option key={newStaff.email} value={newStaff.email}>
-                                                        {newStaff.fullName} - {newStaff.email}
-                                                    </option>
-                                                ))}
+                                                }}>
+                                                <optgroup label="Gmail - Name">
+                                                    {staff.map((newStaff) => (
+                                                            <option key={newStaff.email} value={newStaff.email}>
+                                                                    {newStaff.email} - {newStaff.fullName} 
+                                                            </option>
+                                                    ))}
+                                                 </optgroup>
                                             </select>
-                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveEmployee(key)} style={{ display: editMode ? 'block' : 'none' }}/>
+                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveEmployee(key)}/>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                             <hr />
                             <div className='Staffs'>
-                                <h5>MẶT HÀNG <CgAddR className='pull_icon' onClick={handleAddProduct} style={{ display: editMode ? 'block' : 'none' }} /> </h5>
+                                <h5>MẶT HÀNG <CgAddR className='pull_icon' onClick={handleAddProduct} /> </h5>
                                 <div className='Staff'>
                                     {Object.entries(selectedShift.productList).map(([key, products]) => (
                                         <div key={key} className='product-item'>
@@ -391,22 +364,23 @@ export const Shift = () => {
                                                             }
                                                         }
                                                     });
-                                                }}
-                                                disabled={!editMode}>
+                                                }}>
+                                                <optgroup label='Mã Mặt Hàng - Tên Mặt Hàng - Gía Mặt Hàng'>
                                                 {product.map((newproduct) => (
                                                     <option key={newproduct.productCode} value={newproduct.productCode}>
-                                                        {newproduct.productName} - {newproduct.productPrice} - {newproduct.productCode}
+                                                        {newproduct.productCode} - {newproduct.productName} - {newproduct.productPrice}
                                                     </option>
                                                 ))}
+                                                </optgroup>
                                             </select>
-                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveProduct(key)} style={{ display: editMode ? 'block' : 'none' }}/>
+                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveProduct(key)}/>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                             <hr />
                             <div className='Staffs'>
-                                <h5>VÒI BƠM <CgAddR className='pull_icon' onClick={handleAddPump} style={{ display: editMode ? 'block' : 'none' }} /> </h5>
+                                <h5>VÒI BƠM <CgAddR className='pull_icon' onClick={handleAddPump} /> </h5>
                                 <div className='Staff'>
                                     {Object.entries(selectedShift.pumpList).map(([key, pump]) => (
                                         <div key={key} className='pump-item'>
@@ -427,16 +401,16 @@ export const Shift = () => {
                                                             }
                                                         }
                                                     });
-                                                }}
-                                                disabled={!editMode}
-                                            >
-                                                {pumps.map((newpump) => (
-                                                    <option key={newpump.pumpCode} value={newpump.pumpCode}>
-                                                        {newpump.pumpName} - {newpump.pumpCode}
-                                                    </option>
-                                                ))}
+                                                }}>
+                                                <optgroup label='Mã Vòi Bơm - Tên Vòi Bơm'>
+                                                    {pumps.map((newpump) => (
+                                                        <option key={newpump.pumpCode} value={newpump.pumpCode}>
+                                                            {newpump.pumpName} - {newpump.pumpCode}
+                                                        </option>
+                                                    ))}
+                                                </optgroup>
                                             </select>
-                                            <input type="number" value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
+                                            <input type="number" placeholder='firstMeterReadingByLitre' value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
                                                 ...selectedShift,
                                                 pumpList: {
                                                     ...selectedShift.pumpList,
@@ -445,8 +419,8 @@ export const Shift = () => {
                                                         firstMeterReadingByLitre: e.target.value
                                                     }
                                                 }
-                                            })} disabled={!editMode} />
-                                            <input type="number" value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
+                                            })} />
+                                            <input type="number" placeholder="firstMeterReadingByMoney"value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
                                                 ...selectedShift,
                                                 pumpList: {
                                                     ...selectedShift.pumpList,
@@ -455,22 +429,22 @@ export const Shift = () => {
                                                         firstMeterReadingByMoney: e.target.value
                                                     }
                                                 }
-                                            })} disabled={!editMode} />
-                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemovePump(key)} style={{ display: editMode ? 'block' : 'none' }}/>
+                                            })} />
+                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemovePump(key)} />
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            
-                        {editMode && (
-                            <button className="send" onClick={saveChanges}>OK</button>
-                        )}
+                            <button className="send" onClick={saveChanges}>LƯU</button>
                     </div>
+                    </>
                 )}
                 {addingShift && (
-                    <div className='addShift'>
+                    <>  
+                        <div className="overlay" onClick={() => setAddingShift(false)}></div>
+                        <div className='addShift'>
+                        <AiOutlineClose onClick={() => setAddingShift(false)} className="close_icon" />
                         <h2>Thêm Ca Mới </h2>
-                        <AiOutlineClose onClick={() => setAddingShift(false)} className="close-icon" />
                             <label htmlFor="">Thời gian bắt đầu</label>
                         <input type="datetime-local" placeholder="Start Time" value={newShift.startTime} onChange={(e) => setNewShift({ ...newShift, startTime: e.target.value })} /><br></br>
                             <label htmlFor="">Thời gian kết thúc</label>
@@ -497,11 +471,13 @@ export const Shift = () => {
                                                     }
                                                 });
                                             }}>
-                                            {staff.map((newStaff) => (
-                                                <option key={newStaff.email} value={newStaff.email}>
-                                                    {newStaff.email} - {newStaff.fullName}
-                                                </option>
-                                            ))}
+                                            <optgroup label="Gmail - Name">
+                                                {staff.map((newStaff) => (
+                                                        <option key={newStaff.email} value={newStaff.email}>
+                                                                {newStaff.email} - {newStaff.fullName} 
+                                                        </option>
+                                                ))}
+                                            </optgroup>
                                         </select>
                                         <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveNewEmployee(key)} />
                                     </div>
@@ -531,11 +507,13 @@ export const Shift = () => {
                                                     }
                                                 });
                                             }}>
-                                            {product.map((newproduct) => (
-                                                <option key={newproduct.productCode} value={newproduct.productCode}>
-                                                    {newproduct.productName} - {newproduct.productPrice} - {newproduct.productCode}
-                                                </option>
-                                            ))}
+                                            <optgroup label='Mã Mặt Hàng - Tên Mặt Hàng - Gía Mặt Hàng'>
+                                                {product.map((newproduct) => (
+                                                    <option key={newproduct.productCode} value={newproduct.productCode}>
+                                                        {newproduct.productCode} - {newproduct.productName} - {newproduct.productPrice}
+                                                    </option>
+                                                ))}
+                                            </optgroup>
                                         </select>
                                         <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveNewProduct(key)} />
                                     </div>
@@ -565,11 +543,13 @@ export const Shift = () => {
                                                     }
                                                 });
                                             }}>
-                                            {pumps.map((newpump) => (
-                                                <option key={newpump.pumpCode} value={newpump.pumpCode}>
-                                                    {newpump.pumpName} - {newpump.pumpCode}
-                                                </option>
-                                            ))}
+                                            <optgroup label='Mã Vòi Bơm - Tên Vòi Bơm'>
+                                                {pumps.map((newpump) => (
+                                                    <option key={newpump.pumpCode} value={newpump.pumpCode}>
+                                                        {newpump.pumpName} - {newpump.pumpCode}
+                                                    </option>
+                                                ))}
+                                            </optgroup>
                                         </select>
                                         <input type="number" value={pump.firstMeterReadingByLitre} placeholder='firstMeterReadingByLitre ' onChange={(e) => setNewShift({
                                             ...newShift,
@@ -598,6 +578,7 @@ export const Shift = () => {
                         </div>
                         <button className="send" onClick={handleAddShift}>THÊM</button>
                     </div>
+                    </>
                 )}
             </div>
         </div>
