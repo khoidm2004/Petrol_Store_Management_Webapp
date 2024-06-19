@@ -6,7 +6,6 @@ import { jest, describe, it, expect } from "@jest/globals";
 import { renderHook } from "@testing-library/react-hooks";
 import { act } from "react";
 import usePreviewImage from "../../src/hooks/usePreviewImage";
-import { render } from "react-dom";
 
 describe("hooks/usePreviewImage", () => {
   it("1.should initialize with no selected file", () => {
