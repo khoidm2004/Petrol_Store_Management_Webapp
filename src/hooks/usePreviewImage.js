@@ -3,6 +3,7 @@ import { useState } from "react";
 
 const usePreviewImage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [error, setError] = useState(null);
   const maxFileSizeInBytes = 2 * 1024 * 1024; // File max size 2MB
 
   const handleImageChange = (e) => {
@@ -10,25 +11,28 @@ const usePreviewImage = () => {
     if (file && file.type.startsWith("image/")) {
       if (file.size > maxFileSizeInBytes) {
         setSelectedFile(null);
-        return {
+        setError({
           Title: "Error",
           Message: "File size must be less than 2MB",
           Status: "error",
-        };
+        });
+        return;
       }
 
       const reader = new FileReader();
 
       reader.onloadend = () => {
         setSelectedFile(reader.result);
+        setError(null);
       };
 
       reader.readAsDataURL(file);
     } else {
       setSelectedFile(null);
+      setError(null);
     }
   };
-  return { selectedFile, setSelectedFile, handleImageChange };
+  return { selectedFile, error, setSelectedFile, handleImageChange };
 };
 
 export default usePreviewImage;

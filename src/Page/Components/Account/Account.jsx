@@ -16,7 +16,7 @@ export const Account = () => {
     avatar: user.avatar || "",
   });
 
-  const { selectedFile, setSelectedFile, handleImageChange } =
+  const { selectedFile, error, setSelectedFile, handleImageChange } =
     usePreviewImage();
 
   const { editProfile, isLoading } = useEditProfile();
