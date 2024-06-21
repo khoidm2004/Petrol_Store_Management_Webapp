@@ -30,18 +30,22 @@ p {
   overflow: hidden;
   position: sticky;
   top: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .burger > .tab_menu {
   width: 30px;
   height: 30px;
+  position: sticky;
+  top: 0;
   cursor: pointer;
 }
 
 .navbar__list {
-  list-style-type: none;
   padding: 0;
   margin: 0;
+  flex: 1;
 }
 
 .navbar__li {
@@ -70,10 +74,11 @@ p {
   text-overflow: ellipsis;
 }
 
-.menu-text-tab2{
+.menu-text-tab2 {
   font-size: 14px;
   padding-left: 10px;
 }
+
 .navbar__li-box:hover,
 .navbar__li-box.active {
   border-left: 7px solid $borderLeftColor;
@@ -96,7 +101,7 @@ header {
   text-align: center;
   margin: auto;
   font-size: 13px;
-  font-weight:bold;
+  font-weight: bold;
 }
 
 .body {
@@ -130,3 +135,4 @@ a {
   background-color: $activeColor;
   color: white;
 }
+

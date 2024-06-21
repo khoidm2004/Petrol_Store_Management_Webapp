@@ -39,13 +39,6 @@ const Include = ({ setLoggedIn }) => {
   return (
     <>
       <header>
-        <div className="burger" onClick={toggleMenu}>
-          {isMenuOpen ? (
-            <AiOutlineClose className="tab_menu" />
-          ) : (
-            <AiOutlineUnorderedList className="tab_menu" />
-          )}
-        </div>
         <img src={logo} alt="Logo" id="logo" />
         <p className="title">
           CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
@@ -78,7 +71,7 @@ const Include = ({ setLoggedIn }) => {
             </div>
             <div className="navbar__li-box">
               <li className="navbar__li" onClick={toggleProductSubMenu}>
-                <span className="menu-text"  style={{ fontWeight: 'bold' }}>
+                <span className="menu-text" style={{ fontWeight: 'bold' }}>
                   <FaBoxes className="icon_menu" /> SẢN PHẨM
                 </span>
               </li>
@@ -91,34 +84,43 @@ const Include = ({ setLoggedIn }) => {
                   </li>
                   <li className={`navbar__li ${isActive('/tank') ? 'active' : ''}`}>
                     <Link className="menu-text menu-text-tab2" to="/tank">
-                  
                       BỂ
                     </Link>
                   </li>
                   <li className={`navbar__li ${isActive('/pump') ? 'active' : ''}`}>
                     <Link className="menu-text menu-text-tab2" to="/pump">
-                  
                       VÒI BƠM
                     </Link>
                   </li>
                 </ul>
               )}
             </div>
-            <div className="navbar__li-box">
-              <li className={`navbar__li ${isActive('/account') ? 'active' : ''}`}>
-                <Link className="menu-text" to="/account">
-                  <MdAccountCircle className="icon_menu" /> TÀI KHOẢN
-                </Link>
-              </li>
-            </div>
-            <div className="navbar__li-box">
-              <li className={`navbar__li ${isActive('/logout') ? 'active' : ''}`}>
-                <Link className="menu-text" to="/logout">
-                  <IoLogOut className="icon_menu" /> ĐĂNG XUẤT
-                </Link>
-              </li>
-            </div>
           </ul>
+          <div className="bottom-menu">
+            <ul className="navbar__list">
+              <div className="navbar__li-box">
+                <li className={`navbar__li ${isActive('/account') ? 'active' : ''}`}>
+                  <Link className="menu-text" to="/account">
+                    <MdAccountCircle className="icon_menu" /> TÀI KHOẢN
+                  </Link>
+                </li>
+              </div>
+              <div className="navbar__li-box">
+                <li className={`navbar__li ${isActive('/logout') ? 'active' : ''}`}>
+                  <Link className="menu-text" to="/logout">
+                    <IoLogOut className="icon_menu" /> ĐĂNG XUẤT
+                  </Link>
+                </li>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div className="burger" onClick={toggleMenu}>
+          {isMenuOpen ? (
+            <AiOutlineClose className="tab_menu" />
+          ) : (
+            <AiOutlineUnorderedList className="tab_menu" />
+          )}
         </div>
         <Routes>
           <Route path="revenue" element={<Revenue />} />

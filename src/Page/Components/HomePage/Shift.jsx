@@ -249,7 +249,18 @@ export const Shift = () => {
       return () => clearTimeout(timer);
     }, []);
     
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage] = useState(10);
+    const indexOfLastStaff = currentPage * perPage;
+    const indexOfFirstStaff = indexOfLastStaff - perPage;
+    const displayedStaff =  shifts.slice(indexOfFirstStaff, indexOfLastStaff);
 
+    const totalPages = Math.ceil(shifts.length / perPage);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+      };
+    
     return (
         <div className='Staff'>
             {showOverlay && 
@@ -264,39 +275,62 @@ export const Shift = () => {
                 <p>THÔNG TIN CA BÁN HÀNG</p>
                 <button type="button" className='push' onClick={() => setAddingShift(true)}>THÊM</button>
             </header>
-            <div className='Staff'>
-                <table className='firsttable_shift'>
-                    <thead>
-                        <tr className='titleOneline'>
-                            <th>Mã nhân viên</th>
-                            <th>Mã vòi bơm</th>
-                            <th>Mã mặt hàng</th>
-                            <th>Thời gian làm</th>
-                            <th className='view_chitiet'>Chi tiết</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {shifts.length > 0 ? shifts.map((shift) => (
-                            <tr className='col' id='mainstate' key={shift.id}>
-                                <td>{Object.values(shift.employeeList).map(pump => pump.fullName).join(' - ')}</td>
-                                <td>{Object.values(shift.pumpList).map(pump => pump.pumpName).join(' - ')}</td>
-                                <td>{Object.values(shift.productList).map(product => product.productName).join(' - ')}</td>
-                                <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time}
-                                <br></br> {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
-
-                                </td>
-                                <td className="icon_editview">
-                                    <TbEyeEdit className="icon_menu" onClick={() => handleEdit(shift)} />
-                                </td>
+            <div>
+                <div className="box_staff">
+                    <table className='firsttable_shift'>
+                        <thead>
+                            <tr className='titleOneline'>
+                                <th>STT</th>
+                                <th>Mã nhân viên</th>
+                                <th>Mã vòi bơm</th>
+                                <th>Mã mặt hàng</th>
+                                <th>Thời gian làm</th>
+                                <th className='view_chitiet'>Chi tiết</th>
                             </tr>
-                        )): (
-                            <tr>
-                                <td colSpan={5}>Chưa tồn tại ca bán hàng</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {shifts.length > 0 ? shifts.map((shift, index) => (
+                                <tr className='col' id='mainstate' key={shift.id}>
+                                   <td>{indexOfFirstStaff + index + 1}</td>
+                                    <td>{Object.values(shift.employeeList).map(pump => pump.fullName).join(' - ')}</td>
+                                    <td>{Object.values(shift.pumpList).map(pump => pump.pumpName).join(' - ')}</td>
+                                    <td>{Object.values(shift.productList).map(product => product.productName).join(' - ')}</td>
+                                    <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time}
+                                    <br></br> {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
 
+                                    </td>
+                                    <td className="icon_editview">
+                                        <TbEyeEdit className="icon_menu" onClick={() => handleEdit(shift)} />
+                                    </td>
+                                </tr>
+                            )): (
+                                <tr>
+                                    <td colSpan={5}>Chưa tồn tại ca bán hàng</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                    {displayedStaff.length > 0 && (
+                        <div className="pagination">
+                        <p>
+                            <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, shifts.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{shifts.length}&nbsp;</span> entries
+                        </p>
+                        <ul className="pagination-list">
+                            <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                            </li>
+                            {Array.from({ length: totalPages }, (_, index) => (
+                                <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                                </li>
+                            ))}
+                            <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                            </li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
                 {selectedShift && (
                     <>
                         <div className="overlay" onClick={() => setSelectedShift(null)}></div>

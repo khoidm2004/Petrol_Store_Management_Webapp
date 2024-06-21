@@ -2,24 +2,30 @@ import { useEffect, useState } from "react";
 import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
 import { AiOutlineClose } from "react-icons/ai";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./Staff.css";
+import Popup from '../Popup/Popup';
 
 export const Tank = () => {
   const tanks = useTankStore((state) => state.tanks);
   const fetchTank = useTankStore((state) => state.fetchTank);
   const addTank = useTankStore((state) => state.addTank);
   const modifyTank = useTankStore((state) => state.modifyTank);
+  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
 
-  const product = useProductStore((state) => state.product); // Corrected state key for products
+  const product = useProductStore((state) => state.product); 
   const fetchProduct = useProductStore((state) => state.fetchProduct);
 
   const [selectedTank, setSelectedTank] = useState(null);
   const [addingTank, setAddingTank] = useState(false);
   const tankId = Math.floor(100000 + Math.random() * 900000);
+
+  const [viewMode, setViewMode] = useState("use");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [newTank, setNewTank] = useState({
     tid: "",
@@ -68,10 +74,16 @@ export const Tank = () => {
   };
 
   const handleAddTank = () => {
+    if (!newTank.tankName || !newTank.tankCode || !newTank.tankVolume) {
+      setPopup({
+        show: true,
+        title: 'Lỗi',
+        message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+      });
+      return;
+    }
     try {
-      console.log(newTank);
       const result = addTank(newTank);
-      console.log(result);
       setNewTank({
         tid: "",
         tankId,
@@ -115,6 +127,25 @@ export const Tank = () => {
   const workingTank = tanks.filter(TankMember => TankMember.tankStatus === "On use");
   const notWorkingTank = tanks.filter(TankMember => TankMember.tankStatus === "Not On use");
 
+  const filteredStaff = (viewMode === "use" ? workingTank : notWorkingTank).filter(
+    (TankMember) =>
+      TankMember.tankCode.toString().includes(searchQuery) ||
+      TankMember.tankName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const indexOfLastStaff = currentPage * perPage;
+  const indexOfFirstStaff = indexOfLastStaff - perPage;
+  const displayedStaff = filteredStaff.slice(indexOfFirstStaff, indexOfLastStaff);
+
+  const totalPages = Math.ceil(filteredStaff.length / perPage);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const closePopup = () => {
+    setPopup({ show: false, title: '', message: '' });
+  };
+
   const [showOverlay, setShowOverlay] = useState(true);
   
   useEffect(() => {
@@ -138,8 +169,11 @@ export const Tank = () => {
       <header>
         <p>THÔNG TIN BỂ</p>
         <div className="search-container">
-          <FaMagnifyingGlass className="search-icon" />
-          <input type="text" placeholder="Search..." className="search-input" />
+          {/* <FaMagnifyingGlass className="search-icon" /> */}
+          <input type="text" placeholder="Search..." className="search-input"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
         <button
           type="button"
@@ -150,26 +184,63 @@ export const Tank = () => {
         </button>
       </header>
       <div className="Staffs">
-        <table className="firsttable">
-          <thead>
-            <tr className="titleOneline">
-              <th>Đang Kinh doanh</th>
-              <th>Chi tiết</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workingTank.map((TankMember) => (
-              <tr key={TankMember.tankCode} className="col" id="mainstate">
-                <td>{TankMember.tankName}</td>
-                <td className="icon_editview">
-                  <TbEyeEdit className="icon_menu"
-                    onClick={() => handleEdit(TankMember)}
-                  />
+        <div className="box_staff">
+          <table className="firsttable">
+            <thead>
+              <tr className="titleOneline">
+                <th>STT</th>
+                <th>
+                  <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
+                    <option value="use">Đang làm việc</option>
+                    <option value="notUse">Ngừng làm việc</option>
+                  </select>
+                </th>
+                <th>Chi tiết</th>
+              </tr>
+            </thead>
+            <tbody>
+            {displayedStaff.length > 0 ? (
+              displayedStaff.map((TankMember, index) => (
+                <tr key={TankMember.tankCode} className="col" id="mainstate">
+                  <td>{indexOfFirstStaff + index + 1}</td>
+                  <td>{TankMember.tankName} - {TankMember.tankCode}</td>
+                  <td className="icon_editview">
+                    <TbEyeEdit className="icon_menu"
+                      onClick={() => handleEdit(TankMember)}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className="no-data">
+                  {searchQuery ? "Không tìm thấy thông tin bể." : "Chưa có thông tin bể."}
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            )}
+            </tbody>
+          </table>
+          {displayedStaff.length > 0 && (
+          <div className="pagination">
+            <p>
+            <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> entries
+            </p>
+            <ul className="pagination-list">
+              <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+              </li>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                  <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                </li>
+              ))}
+              <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+              </li>
+            </ul>
+          </div>
+          )}
+        </div>
         {selectedTank && (
           <>  
             <div className="overlay" onClick={() => setSelectedTank(null)}></div>
@@ -325,40 +396,9 @@ export const Tank = () => {
               },
             }}
           />
-          {/* <table className="secondtable">
-            <thead className="titleOffline">
-              <tr>
-                <th colSpan={2}>Đã nghỉ việc</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notWorkingTank.map((TankMember) => (
-                <tr key={TankMember.tankCode} className="col" id="mainstate">
-                  <td>{TankMember.tankName}</td>
-                  <td className="icon_editview">
-                    <IoEllipsisVerticalOutline
-                      className="icon_menu"
-                      onClick={() => toggleSubMenu(TankMember.tankCode)}
-                    />
-                    {openEmail === TankMember.tankCode && (
-                      <table className="secondarystate">
-                        <tbody>
-                          <tr className="box">
-                            <td onClick={() => handleView(TankMember)}>VIEW</td>
-                          </tr>
-                          <tr className="box">
-                            <td onClick={() => handleEdit(TankMember)}>EDIT</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
         </div>
       </div>
+      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );
 };

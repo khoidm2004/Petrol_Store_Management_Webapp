@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import useProductStore from "../../../store/productStore.js";
 import { AiOutlineClose } from "react-icons/ai";
@@ -6,13 +5,19 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import 'chart.js/auto';
+import Popup from '../Popup/Popup';
 import './Staff.css';
 
 export const Product = () => {
-  const { product, fetchProduct, modifyProduct, addProduct } =
-    useProductStore();
+  const product = useProductStore((state) => state.product);
+  const fetchProduct = useProductStore((state) => state.fetchProduct);
+  const modifyProduct = useProductStore((state) => state.modifyProduct);
+  const addProduct = useProductStore((state) => state.addProduct);
+
+  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [addingProduct, setAddingProduct] = useState(false);
+
   const [newProduct, setNewProduct] = useState({
     productId: "",
     productCode: "",
@@ -21,9 +26,13 @@ export const Product = () => {
     productColor: "",
     productStatus: "On sale",
   });
+  const [viewMode, setViewMode] = useState("sale");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showOverlay, setShowOverlay] = useState(true);
 
-
-  useEffect(() => {
+  useEffect(() => { 
     fetchProduct();
   }, [fetchProduct]);
 
@@ -34,8 +43,7 @@ export const Product = () => {
   const saveChanges = async () => {
     if (selectedProduct) {
       try {
-        console.log(selectedProduct);
-        await modifyProduct(selectedProduct, showToast);
+        await modifyProduct(selectedProduct);
         setSelectedProduct(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -44,6 +52,16 @@ export const Product = () => {
   };
 
   const handleAddProduct = () => {
+    if (!newProduct.productCode || !newProduct.productName || !newProduct.productPrice 
+      || !newProduct.productPrice) {
+      setPopup({
+        show: true,
+        title: 'Lỗi',
+        message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+      });
+      return;
+    }
+
     try {
       addProduct(newProduct);
       setNewProduct({
@@ -79,7 +97,25 @@ export const Product = () => {
     (ProductMember) => ProductMember.productStatus === "Not on sale"
   );
 
-  const [showOverlay, setShowOverlay] = useState(true);
+  const filteredStaff = (viewMode === "sale" ? workingProduct : notWorkingProduct).filter(
+    (ProductMember) =>
+      ProductMember.productCode.toString().includes(searchQuery) ||
+      ProductMember.productName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const indexOfLastStaff = currentPage * perPage;
+  const indexOfFirstStaff = indexOfLastStaff - perPage;
+  const displayedStaff = filteredStaff.slice(indexOfFirstStaff, indexOfLastStaff);
+
+  const totalPages = Math.ceil(filteredStaff.length / perPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const closePopup = () => {
+    setPopup({ show: false, title: '', message: '' });
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -93,9 +129,9 @@ export const Product = () => {
     <div className="Staff">
       {showOverlay && 
        <div className="overlay">
-        <div class="loader">
-          <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        <div className="loader">
+          <svg className="circular" viewBox="25 25 50 50">
+            <circle className="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
           </svg>
         </div>
       </div>}
@@ -103,8 +139,11 @@ export const Product = () => {
       <header>
         <p>THÔNG TIN MẶT HÀNG</p>
         <div className="search-container">
-          <FaMagnifyingGlass className="search-icon" />
-          <input type="text" placeholder="Search..." className="search-input" />
+          {/* <FaMagnifyingGlass className="search-icon" /> */}
+          <input type="text" placeholder="Search..." className="search-input" 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
         <button
           type="button"
@@ -115,26 +154,63 @@ export const Product = () => {
         </button>
       </header>
       <div className="Staffs">
-        <table className="firsttable">
-          <thead>
-            <tr className="titleOneline">
-              <th>Đang hoạt động</th>
-              <th>Chi tiết</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workingProduct.map((ProductMember) => (
-              <tr key={ProductMember.productId} className="col" id="mainstate">
-                <td>{ProductMember.productName}</td>
-                <td className="icon_editview">
-                  <TbEyeEdit className="icon_menu"
-                    onClick={() => handleEdit(ProductMember)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="box_staff">
+          <table className="firsttable">
+            <thead>
+              <tr className="titleOneline">
+                <th>STT</th>
+                <th>
+                    <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
+                      <option value="sale">Đang kinh doanh</option>
+                      <option value="notSale">Ngừng kinh doanh</option>
+                    </select>
+                </th>
+                <th>Chi tiết</th>
+              </tr> 
+            </thead>
+            <tbody>
+              {displayedStaff.length > 0 ? (
+                displayedStaff.map((ProductMember, index) => (
+                  <tr key={ProductMember.productId} className="col" id="mainstate">
+                    <td>{indexOfFirstStaff + index + 1}</td>
+                    <td>{ProductMember.productName} - {ProductMember.productCode}</td>
+                    <td className="icon_editview">
+                      <TbEyeEdit className="icon_menu"
+                        onClick={() => handleEdit(ProductMember)}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="no-data">
+                    {searchQuery ? "Không tìm thấy thông tin mặt hàng." : "Chưa có thông tin mặt hàng."}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          {displayedStaff.length > 0 && (
+            <div className="pagination">
+                <p>
+                  <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> entries
+                </p>
+                <ul className="pagination-list">
+                  <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                  </li>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                      <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                    </li>
+                  ))}
+                  <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                  </li>
+                </ul>
+            </div>
+          )}
+        </div>
         {selectedProduct && (
           <>  
             <div className="overlay" onClick={() => setSelectedProduct(null)}></div>
@@ -274,48 +350,9 @@ export const Product = () => {
               },
             }}
           />
-
-          {/* <table className="secondtable">
-            <thead className="titleOffline">
-              <tr>
-                <th colSpan={2}>Ngừng hoạt động</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notWorkingProduct.map((ProductMember) => (
-                <tr key={ProductMember.productId}
-                  className="col"
-                  id="mainstate"
-                >
-                  <td>{ProductMember.productName}</td>
-                  <td className="icon_editview">
-                    <IoEllipsisVerticalOutline
-                      className="icon_menu"
-                      onClick={() => toggleSubMenu(ProductMember.productCode)}
-                    />
-                    {openCode === ProductMember.productCode && (
-                      <table className="secondarystate">
-                        <tbody>
-                          <tr className="box">
-                            <td onClick={() => handleView(ProductMember)}>
-                              VIEW
-                            </td>
-                          </tr>
-                          <tr className="box">
-                            <td onClick={() => handleEdit(ProductMember)}>
-                              EDIT
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
         </div>
       </div>
+      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );
 };

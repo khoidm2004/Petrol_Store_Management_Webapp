@@ -9,6 +9,7 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./Staff.css";
+import Popup from '../Popup/Popup';
 
 export const Pump = () => {
   const pumps = usePumpStore((state) => state.pumps);
@@ -21,15 +22,16 @@ export const Pump = () => {
   const tanks = useTankStore((state) => state.tanks);
   const fetchTank = useTankStore((state) => state.fetchTank);
 
-  const [openEmail, setOpenEmail] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [addingStaff, setAddingStaff] = useState(false);
   const pumpId = Math.floor(100000 + Math.random() * 900000);
 
-  // while(pumps.filter(TankMember => TankMember.pumpId === pumpId)){
-  //   pumpId = Math.floor(100000 + Math.random() * 900000);
-  // }
+  const [viewMode, setViewMode] = useState("use");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
+
   const [newStaff, setNewStaff] = useState({
     pid: "",
     pumpId: (pumpId),
@@ -45,14 +47,6 @@ export const Pump = () => {
       tankCode: "",
     },
   });
-
-  const toggleSubMenu = (email) => {
-    if (openEmail === email) {
-      setOpenEmail(null);
-    } else {
-      setOpenEmail(email);
-    }
-  };
 
   useEffect(() => {
     fetchPump();
@@ -90,21 +84,15 @@ export const Pump = () => {
     }
   }, [tanks]);
 
-  const handleView = (staffMember) => {
-    setSelectedStaff(staffMember);
-    setEditMode(false);
-  };
 
   const handleEdit = (staffMember) => {
     setSelectedStaff(staffMember);
-    setEditMode(true);
   };
 
   const saveChanges = async () => {
-    if (editMode && selectedStaff) {
+    if (selectedStaff) {
       try {
         await modifyPump(selectedStaff);
-        setEditMode(false);
         setSelectedStaff(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -113,10 +101,17 @@ export const Pump = () => {
   };
 
   const handleAddStaff = () => {
+    if (!newStaff.pumpCode || !newStaff.pumpName) {
+      setPopup({
+        show: true,
+        title: 'Lỗi',
+        message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+      });
+      return;
+    }
+
     try {
-      console.log(newStaff);
       const result = addPump(newStaff);
-      console.log(result);
       setNewStaff({
         pid: "",
         pumpId: (pumpId),
@@ -170,8 +165,28 @@ export const Pump = () => {
     (staffMember) => staffMember.pumpStatus === "Not On use"
   );
 
+  const filteredStaff = (viewMode === "use" ? workingStaff : notWorkingStaff).filter(
+    (staffMember) =>
+      staffMember.pumpCode.toString().includes(searchQuery) ||
+      staffMember.pumpName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const indexOfLastStaff = currentPage * perPage;
+  const indexOfFirstStaff = indexOfLastStaff - perPage;
+  const displayedStaff = filteredStaff.slice(indexOfFirstStaff, indexOfLastStaff);
+
+  const totalPages = Math.ceil(filteredStaff.length / perPage);
+
   const [showOverlay, setShowOverlay] = useState(true);
   
+  const closePopup = () => {
+    setPopup({ show: false, title: '', message: '' });
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowOverlay(false);
@@ -193,8 +208,11 @@ export const Pump = () => {
       <header>
         <p>THÔNG TIN VÒI BƠM</p>
         <div className="search-container">
-          <FaMagnifyingGlass className="search-icon" />
-          <input type="text" placeholder="Search..." className="search-input" />
+          {/* <FaMagnifyingGlass className="search-icon" /> */}
+          <input type="text" placeholder="Search..." className="search-input"
+           value={searchQuery}
+           onChange={(e) => setSearchQuery(e.target.value)}
+           />
         </div>
         <button
           type="button"
@@ -205,26 +223,63 @@ export const Pump = () => {
         </button>
       </header>
       <div className="Staffs">
-        <table className="firsttable">
-          <thead>
-            <tr className="titleOneline">
-              <th>Đang Kinh doanh</th>
-              <th>Chi tiết</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workingStaff.map((staffMember) => (
-              <tr key={staffMember.pumpCode} className="col" id="mainstate">
-                <td>{staffMember.pumpName}</td>
-                <td className="icon_editview">
-                  <TbEyeEdit className="icon_menu"
-                    onClick={() => handleEdit(staffMember)}
-                  />
+        <div className="box_staff">
+          <table className="firsttable">
+            <thead>
+              <tr className="titleOneline">
+                <th>STT</th>
+                <th>
+                  <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
+                    <option value="use">Đang kinh doanh</option>
+                    <option value="noUse">Ngừng kinh doanh</option>
+                  </select>
+                </th>
+                <th>Chi tiết</th>
+              </tr>
+            </thead>
+            <tbody>
+            {displayedStaff.length > 0 ? (
+              displayedStaff.map((staffMember, index) => (
+                <tr key={staffMember.pumpCode} className="col" id="mainstate">
+                  <td>{indexOfFirstStaff + index + 1}</td>
+                  <td>{staffMember.pumpName} - {staffMember.pumpCode}</td>
+                  <td className="icon_editview">
+                    <TbEyeEdit className="icon_menu"
+                      onClick={() => handleEdit(staffMember)}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className="no-data">
+                  {searchQuery ? "Không tìm thấy thông tin Vòi bơm." : "Chưa có thông tin vòi bơm."}
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            )}
+            </tbody>
+          </table>
+          {displayedStaff.length > 0 && (
+            <div className="pagination">
+              <p>
+                <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> entries
+              </p>
+              <ul className="pagination-list">
+                <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                  <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                </li>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                    <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                  </li>
+                ))}
+                <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                  <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
         {selectedStaff && (
           <>
             <div className="overlay" onClick={() => setSelectedStaff(null)}></div>
@@ -413,44 +468,9 @@ export const Pump = () => {
               },
             }}
           />
-          {/* <table className="secondtable">
-            <thead className="titleOffline">
-              <tr>
-                <th colSpan={2}>Đã nghỉ việc</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notWorkingStaff.map((staffMember) => (
-                <tr key={staffMember.pumpCode} className="col" id="mainstate">
-                  <td>{staffMember.pumpName}</td>
-                  <td className="icon_editview">
-                    <IoEllipsisVerticalOutline
-                      cclassName="icon_menu"
-                      onClick={() => toggleSubMenu(staffMember.pumpCode)}
-                    />
-                    {openEmail === staffMember.pumpCode && (
-                      <table className="secondarystate">
-                        <tbody>
-                          <tr className="box">
-                            <td onClick={() => handleView(staffMember)}>
-                              VIEW
-                            </td>
-                          </tr>
-                          <tr className="box">
-                            <td onClick={() => handleEdit(staffMember)}>
-                              EDIT
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
         </div>
       </div>
+      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );
 };

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useStaffStore from "../../../store/staffStore.js";
 import { AiOutlineClose } from "react-icons/ai";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import { TbEyeEdit } from "react-icons/tb";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
@@ -14,7 +13,7 @@ export const Staff = () => {
   const addStaff = useStaffStore((state) => state.addStaff);
   const modifyStaff = useStaffStore((state) => state.modifyStaff);
   const [popup, setPopup] = useState({ show: false, title: '', message: '' });
-  
+
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [addingStaff, setAddingStaff] = useState(false);
   const [newStaff, setNewStaff] = useState({
@@ -25,10 +24,14 @@ export const Staff = () => {
     workingStatus: "IS WORKING",
   });
 
+  const [viewMode, setViewMode] = useState("working");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     fetchStaff();
   }, [fetchStaff]);
-
 
   const handleEdit = (staffMember) => {
     setSelectedStaff(staffMember);
@@ -37,9 +40,7 @@ export const Staff = () => {
   const saveChanges = async () => {
     if (selectedStaff) {
       try {
-        console.log(selectedStaff);
         var status = await modifyStaff(selectedStaff);
-        console.log(status);
         setSelectedStaff(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -48,11 +49,18 @@ export const Staff = () => {
   };
 
   const handleAddStaff = () => {
+    if (!newStaff.fullName || !newStaff.email || !newStaff.phoneNum) {
+      setPopup({
+        show: true,
+        title: 'Lỗi',
+        message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+      });
+      return;
+    }
+  
     try {
-      console.log(newStaff);
       var result = addStaff(newStaff);
-      console.log(result);
-      if(result.Status === 'error'){
+      if (result.Status === 'error') {
         setPopup({ show: true, title: result.Title, message: result.Message });
       }
       setNewStaff({
@@ -89,12 +97,27 @@ export const Staff = () => {
     (staffMember) => staffMember.workingStatus === "ISN'T WORKING"
   );
 
+  const filteredStaff = (viewMode === "working" ? workingStaff : notWorkingStaff).filter(
+    (staffMember) =>
+      staffMember.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      staffMember.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const indexOfLastStaff = currentPage * perPage;
+  const indexOfFirstStaff = indexOfLastStaff - perPage;
+  const displayedStaff = filteredStaff.slice(indexOfFirstStaff, indexOfLastStaff);
+
+  const totalPages = Math.ceil(filteredStaff.length / perPage);
+
   const closePopup = () => {
     setPopup({ show: false, title: '', message: '' });
   };
 
-  const [showOverlay, setShowOverlay] = useState(true);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
+  const [showOverlay, setShowOverlay] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowOverlay(false);
@@ -102,7 +125,7 @@ export const Staff = () => {
 
     return () => clearTimeout(timer);
   }, []);
-  
+
   return (
     <div className="Staff">
       {showOverlay && 
@@ -116,8 +139,14 @@ export const Staff = () => {
       <header>
         <p>THÔNG TIN NHÂN VIÊN</p>
         <div className="search-container">
-          <FaMagnifyingGlass className="search-icon" />
-          <input type="text" placeholder="Search..." className="search-input" />
+          {/* <FaMagnifyingGlass className="search-icon" /> */}
+          <input
+            type="text"
+            placeholder="Search..."
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
         <button
           type="button"
@@ -128,27 +157,80 @@ export const Staff = () => {
         </button>
       </header>
       <div className="Staffs">
-        <table className="firsttable">
-          <thead>
-            <tr className="titleOneline">
-              <th>Đang làm việc</th>
-              <th>Chi tiết</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workingStaff.map((staffMember) => (
-              <tr key={staffMember.StaffId} className="col" id="mainstate">
-                <td>{staffMember.fullName} - {staffMember.email}</td>
-                <td className="icon_editview">
-                  <TbEyeEdit className="icon_menu"
-                    onClick={() => handleEdit(staffMember)}
-                  />
-                </td>
+        <div className="box_staff">
+          <table className="firsttable">
+            <thead>
+              <tr className="titleOneline">
+                <th>STT</th>
+                <th>
+                  <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
+                    <option value="working">Đang làm việc</option>
+                    <option value="notWorking">Ngừng làm việc</option>
+                  </select>
+                </th>
+                <th>Chi tiết</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {selectedStaff && (
+            </thead>
+            <tbody>
+              {displayedStaff.length > 0 ? (
+                displayedStaff.map((staffMember, index) => (
+                  <tr key={staffMember.staffId} className="col" id="mainstate">
+                    <td>{indexOfFirstStaff + index + 1}</td>
+                    <td>{staffMember.fullName} - {staffMember.email}</td>
+                    <td className="icon_editview">
+                      <TbEyeEdit className="icon_menu"
+                        onClick={() => handleEdit(staffMember)}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="no-data">
+                    {searchQuery ? "Không tìm thấy thông tin nhân viên." : "Chưa có thông tin nhân viên."}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          {displayedStaff.length > 0 && (
+            <div className="pagination">
+              <p>
+                <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> entries
+              </p>
+              <ul className="pagination-list">
+                <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                  <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                </li>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                    <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                  </li>
+                ))}
+                <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                  <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+        <div className="chart-container">
+          <Doughnut
+            data={data}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "",
+                },
+              },
+            }}
+          />
+        </div>
+      </div>
+      {selectedStaff && (
           <>
             <div className="overlay" onClick={() => setSelectedStaff(null)}></div>
             <div className="viewStaff">
@@ -157,8 +239,8 @@ export const Staff = () => {
                 onClick={() => setSelectedStaff(null)}
                 className="close-icon"
               />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Full Name"
                 value={selectedStaff.fullName}
                 onChange={(e) =>
@@ -168,8 +250,8 @@ export const Staff = () => {
               <br />
               <input placeholder="Email" type="text" value={selectedStaff.email} readOnly />
               <br />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Phone Number"
                 value={selectedStaff.phoneNum}
                 onChange={(e) =>
@@ -189,116 +271,64 @@ export const Staff = () => {
                 <option value="IS WORKING">IS WORKING</option>
                 <option value="ISN'T WORKING">ISN'T WORKING</option>
               </select>
-                <button className="send" onClick={saveChanges}>
-                  OK
-                </button>
-          </div>
+              <button className="send" onClick={saveChanges}>
+                OK
+              </button>
+            </div>
           </>
         )}
         {addingStaff && (
           <>
             <div className="overlay" onClick={() => setAddingStaff(false)}></div>
             <div className="addStaff">
-            <h2>Thêm Nhân Viên Mới</h2>
-            <AiOutlineClose
-              onClick={() => setAddingStaff(false)}
-              className="close-icon"
-            />
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={newStaff.fullName}
-              onChange={(e) =>
-                setNewStaff({ ...newStaff, fullName: e.target.value })
-              }
-            />
-            <br />
-            <input 
-              type="text"
-              placeholder="Email"
-              value={newStaff.email}
-              onChange={(e) =>
-                setNewStaff({ ...newStaff, email: e.target.value })
-              }
-            />
-            <br />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={newStaff.phoneNum}
-              onChange={(e) =>
-                setNewStaff({ ...newStaff, phoneNum: e.target.value })
-              }
-            />
-            <br />
-            <select
-              value={newStaff.workingStatus}
-              onChange={(e) =>
-                setNewStaff({ ...newStaff, workingStatus: e.target.value })
-              }
-            >
-              <option value="IS WORKING">IS WORKING</option>
-              <option value="ISN'T WORKING">ISN'T WORKING</option>
-            </select>
-            <button className="send" onClick={handleAddStaff}>
-              THÊM
-            </button>
-          </div>
+              <h2>Thêm Nhân Viên Mới</h2>
+              <AiOutlineClose
+                onClick={() => setAddingStaff(false)}
+                className="close-icon"
+              />
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={newStaff.fullName}
+                onChange={(e) =>
+                  setNewStaff({ ...newStaff, fullName: e.target.value })
+                }
+              />
+              <br />
+              <input
+                type="text"
+                placeholder="Email"
+                value={newStaff.email}
+                onChange={(e) =>
+                  setNewStaff({ ...newStaff, email: e.target.value })
+                }
+              />
+              <br />
+              <input
+                type="text"
+                placeholder="Phone Number"
+                value={newStaff.phoneNum}
+                onChange={(e) =>
+                  setNewStaff({ ...newStaff, phoneNum: e.target.value })
+                }
+              />
+              <br />
+              <select
+                value={newStaff.workingStatus}
+                onChange={(e) =>
+                  setNewStaff({ ...newStaff, workingStatus: e.target.value })
+                }
+              >
+                <option value="IS WORKING">IS WORKING</option>
+                <option value="ISN'T WORKING">ISN'T WORKING</option>
+              </select>
+              <button className="send" onClick={handleAddStaff}>
+                THÊM
+              </button>
+            </div>
           </>
         )}
-
-        <div className="chart-container">
-          <Doughnut
-            data={data}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                title: {
-                  display: true,
-                  text: "",
-                },
-              },
-            }}
-          />
-          {/* <table className="secondtable">
-            <thead className="titleOffline">
-              <tr>
-                <th colSpan={2}>Đã nghỉ việc</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notWorkingStaff.map((staffMember) => (
-                <tr key={staffMember.StaffId} className="col" id="mainstate">
-                  <td>{staffMember.fullName}</td>
-                  <td className="icon_editview">
-                    <IoEllipsisVerticalOutline
-                      className="icon_menu"
-                      onClick={() => toggleSubMenu(staffMember.email)}
-                    />
-                    {openEmail === staffMember.email && (
-                      <table className="secondarystate">
-                        <tbody>
-                          <tr className="box">
-                            <td onClick={() => handleView(staffMember)}>
-                              VIEW
-                            </td>
-                          </tr>
-                          <tr className="box">
-                            <td onClick={() => handleEdit(staffMember)}>
-                              EDIT
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
-        </div>
-      </div>
+        
       {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );

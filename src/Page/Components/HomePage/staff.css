@@ -20,13 +20,21 @@ body {
 .search-input {
   border: none;
   outline: none;
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid black;
   margin: 5px;
-  outline: none;
   font-size: 14px;
   width: 140px;
   height: 40px;
+  background-color: #fbfdff;
   color: black;
+  transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 6px rgba(182, 147, 147, 0.3);
+  width: 200px;
+  background-color: #d6ebff;
+  border-bottom: 1px solid #000000;
 }
 
 .push {
@@ -57,7 +65,7 @@ p {
 }
 
 .Staff {
-  padding: 20px;
+  padding: 20px 50px 20px 20px;
 }
 
 .Staff > .Staffs {
@@ -66,21 +74,30 @@ p {
 }
 
 .firsttable {
-  margin-top: 10px;
-  border: 1px solid #166bcc;
+  border-top: 1px solid #166bcc;
   background: #fff;
   color: #333;
-  width: 70%;
   text-transform: capitalize;
+  width: 100%;
 }
 
 .firsttable_shift {
-  margin-top: 10px;
-  border: 1px solid #166bcc;
+  border-top: 1px solid #166bcc;
   background: #fff;
   color: #333;
-  width: 100%;
   text-transform: capitalize;
+  width: 100%;
+}
+
+.firsttable select {
+  background-color: transparent;
+  color: inherit;
+  font-weight: bold;
+  border: none;
+  border-bottom: 0.5px solid black;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
 }
 
 .chart-container {
@@ -91,41 +108,30 @@ p {
   flex-direction: column;
 }
 
-.secondtable {
-  margin-top: 20px;
-  margin-left: 20px;
-  border: 1px solid #166bcc;
-  background: #fff;
-  color: #333; /* Dark gray */
-  width: 90%;
-  text-transform: capitalize;
+.box_staff{ 
+  width: 100%;
+  padding: 10px 10px 0px 10px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
 }
 
-.secondtable > thead > tr > th {
+thead > tr > th {
   background-color: #f3f7fc;
-  color: #f00;
   font-weight: 700;
-  border-bottom: 1px solid rgb(255, 255, 255);
-}
-
-.firsttable > thead > tr > th {
-  background-color: #f3f7fc;
-  color: #00b507;
-  font-weight: 700;
-  border-bottom: 1px solid rgb(255, 255, 255);
-}
-
-.firsttable_shift > thead > tr > th {
-  background-color: #f3f7fc;
-  color: #00b507;
-  font-weight: 700;
-  border-bottom: 1px solid rgb(255, 255, 255);
+  border-bottom: 1px solid #166bcc;
 }
 
 td,
 th {
-  padding: 10px;
+  padding: 6px;
   border-bottom: 1px solid black;
+}
+
+tr:hover{
+  background-color: #f3f7fc; 
+  color: #0f0f0f;
+  border-bottom: 1px solid #166bcc;
 }
 
 .icon_editview {
@@ -134,27 +140,6 @@ th {
   padding-right: 15px;
   width: 80px;
   font-size: 20px;
-}
-
-.secondarystate {
-  position: absolute;
-  top: 0%;
-  background: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  width: 100px;
-  text-align: center;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.secondarystate tr {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.secondarystate tr:hover {
-  background-color: #f0f0f0;
 }
 
 .viewStaff,
@@ -354,4 +339,48 @@ th {
 .viewShift button:hover,
 .addShift button:hover {
   background-color: #0a2c51;
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.pagination p {
+  display: flex;
+}
+
+.pagination-list {
+  display: flex;
+}
+
+.pagination-item {
+  display: inline-block;
+}
+
+.pagination-item button {
+  background-color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-item button:hover {
+  background-color: #f3f7fc;
+}
+
+.pagination-item.disabled button {
+  background-color: #e6e6e6;
+  color: black;
+  cursor: not-allowed;
+}
+
+.pagination-item.active button {
+  background-color: #0056b3;
+  color: white;
 }
