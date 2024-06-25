@@ -3,10 +3,12 @@ import "./Account.css";
 import usePreviewImage from "../../../hooks/usePreviewImage";
 import useEditProfile from "../../../hooks/useEditProfile";
 import { AiOutlineClose } from "react-icons/ai";
+import useChangePassword from "../../../hooks/useChangePassword";
+import Popup from '../Popup/Popup';
 
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
-
+  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
   const [profile, setProfile] = useState({
     uid: user.uid,
     fullName: user.fullName || "",
@@ -67,20 +69,24 @@ export const Account = () => {
     setFormPass({ ...formPass, [name]: value });
   };
 
-  const handleChangePassword = async (e) => {
-    // console.log(formData)
-    e.preventDefault();
-    try {
-      const result = await login(formData);
-      setLoggedIn(true);
-      console.log(result);
-      if(result.Title === "Success"){
-        window.location.href = '/revenue';
-      }else{
-        setPopup({ show: true, title: result.Title, message: result.Message });
+  const handleChangePassword = async() => {
+    if(formPass.pass === formPass.passNew){
+      try {
+        // console.log(formPass.pass)
+        const result = await useChangePassword(formPass.pass);
+        console.log(result);
+        if(result){
+          setPopup({ show: true, title: 'Thành công', message: 'Đổi thành công'});
+        }else{
+          setPopup({ show: true, title: result.Title, message: result.Message });
+        }
+        setLoggedIn(true);
+      
+      } catch (error) {
+      
       }
-    } catch (error) {
-      setPopup({ show: true, title: 'Login Error', message: 'Invalid email or password' });
+    }else{
+      setPopup({ show: true, title: 'Lỗi', message: 'Không trùng pass' });
     }
   };
 
