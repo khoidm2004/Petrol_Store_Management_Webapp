@@ -3,7 +3,6 @@ import { Doughnut, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { TbEyeEdit } from "react-icons/tb";
-import usePumpStore from "../../../store/pumpStore.js";
 import "./Revenue.css";
 import useFetchLog from "../../../hooks/FetchHooks/useFetchLog.js";
 import { timeConverter } from "../../../utils/timeConverter.js";
@@ -13,12 +12,20 @@ import { PiGasPumpBold } from "react-icons/pi";
 import { AiOutlineProduct } from "react-icons/ai";
 import { IoMdPeople } from "react-icons/io";
 import { Link } from "react-router-dom";
-import useShiftStore from "../../../store/shiftStore.js";
 import useFetchRevenue from "../../../hooks/FetchHooks/useFetchRevenue.js";
 import useFetchLeft from "../../../hooks/FetchHooks/useFetchLeft.js";
 import useFetchPumpRevenue from "../../../hooks/FetchHooks/useFetchPumpRevenue.js";
 
+import useTankStore from '../../../store/tankStore.js';
+import useProductStore from "../../../store/productStore.js";
+import usePumpStore from "../../../store/pumpStore.js";
+import useStaffStore from "../../../store/staffStore.js";
 export const Revenue = () => {
+  const { product, fetchProduct } = useProductStore();
+  const { staff, fetchStaff } = useStaffStore();
+  const { pumps, fetchPump } = usePumpStore();
+  const { tanks, fetchTank } = useTankStore();
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const formattedSelectedDate = selectedDate.toISOString().slice(0, 10);
   const [dailyData, setDailyData] = useState([]);
@@ -42,10 +49,17 @@ export const Revenue = () => {
     day: "numeric"
   });
 
-  // useEffect(() => {
-  //   fetchShift();
-  //   fetchPump();
-  // }, [fetchShift, fetchPump]);
+  useEffect(() => {
+      fetchProduct();
+      fetchTank();
+      fetchPump();
+      fetchStaff();
+  }, [fetchProduct, fetchTank, fetchPump, fetchStaff]);
+
+  const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
+  const productNumber = product.filter((staffMember) => staffMember.productStatus === "On sale").length;
+  const pumpNumber = pumps.filter((staffMember) => staffMember.pumpStatus === "On use").length;
+  const tankNumber = tanks.filter((staffMember) => staffMember.tankStatus === "On use").length;
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -66,7 +80,6 @@ export const Revenue = () => {
     fetchLogs();
   }, [formattedSelectedDate]);
 
-  console.log(dailyData)
   // Tồn kho
   useEffect(() => {
     const fetchData = async () => {
@@ -404,28 +417,28 @@ export const Revenue = () => {
                 <br />
           <div className="Row row_image">
             <div className="object_body">
-              <div className="object_box"> 4 </div>
+              <div className="object_box"> {staffNumber} </div>
               <Link className="object_a" to="/staff">
                 <IoMdPeople />
                 <span>NHÂN VIÊN</span>
               </Link>
             </div>
             <div className="object_body">
-              <div className="object_box"> 5 </div>
+              <div className="object_box"> {productNumber} </div>
               <Link to="/product" className="object_a">
                 <AiOutlineProduct />
                 <span>MẶT HÀNG</span>
               </Link>
             </div>
             <div className="object_body">
-              <div className="object_box"> 6 </div>
+              <div className="object_box"> {pumpNumber} </div>
               <Link to="/pump" className="object_a">
                 <PiGasPumpBold />
                 <span>VÒI BƠM</span>
               </Link>
             </div>
             <div className="object_body">
-              <div className="object_box"> 7 </div>
+              <div className="object_box"> {tankNumber} </div>
               <Link to="/tank" className="object_a">
                 <GiFuelTank />
                 <span> BỂ </span>

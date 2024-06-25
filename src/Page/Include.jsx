@@ -39,7 +39,16 @@ const Include = ({ setLoggedIn }) => {
   return (
     <>
       <header>
-        <img src={logo} alt="Logo" id="logo" />
+        <a href="http://localhost:5173/revenue">
+          <img src={logo} alt="Logo" id="logo" />
+        </a>
+        <div className="burger" onClick={toggleMenu}>
+          {isMenuOpen ? (
+            <AiOutlineClose className="tab_menu" />
+          ) : (
+            <AiOutlineUnorderedList className="tab_menu" />
+          )}
+        </div>
         <p className="title">
           CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
           PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
@@ -114,13 +123,6 @@ const Include = ({ setLoggedIn }) => {
               </div>
             </ul>
           </div>
-        </div>
-        <div className="burger" onClick={toggleMenu}>
-          {isMenuOpen ? (
-            <AiOutlineClose className="tab_menu" />
-          ) : (
-            <AiOutlineUnorderedList className="tab_menu" />
-          )}
         </div>
         <Routes>
           <Route path="revenue" element={<Revenue />} />

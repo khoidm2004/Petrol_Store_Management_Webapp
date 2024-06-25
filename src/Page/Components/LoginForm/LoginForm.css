@@ -185,10 +185,6 @@ form button:hover {
   form {
     margin: auto;
   }
-
-  footer {
-    position: fixed;
-  }
 }
 
 @media screen and (max-width: 768px) {

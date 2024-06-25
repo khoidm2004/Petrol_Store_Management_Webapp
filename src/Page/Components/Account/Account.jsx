@@ -60,7 +60,6 @@ export const Account = () => {
   
   const handleResetCancel = () => {
     setShowResetModal(false);
-    setResetEmail('');
     setResetStatus('');
   };
 
@@ -72,7 +71,8 @@ export const Account = () => {
   const handleChangePassword = async() => {
     if(formPass.pass === formPass.passNew){
       try {
-        // console.log(formPass.pass)
+        console.log(formPass.pass)
+        console.log(typeof(formPass.pass))
         const result = await useChangePassword(formPass.pass);
         console.log(result);
         if(result){
@@ -80,8 +80,7 @@ export const Account = () => {
         }else{
           setPopup({ show: true, title: result.Title, message: result.Message });
         }
-        setLoggedIn(true);
-      
+        
       } catch (error) {
       
       }
@@ -91,7 +90,8 @@ export const Account = () => {
   };
 
   return (
-    <div className="Staff">
+    <div>
+      <div className="Staff">
       <div className="text-account">ACCOUNT</div>
       <div className="page_account">
         <div className="profile_image_section">
@@ -189,6 +189,13 @@ export const Account = () => {
           </button>
         </div>
       </div>
+    </div>
+      <footer className="footer_account">
+        <p className="footer">
+          <span style={{ fontWeight: 700 }}>Văn phòng giao dịch:</span> Tầng 15,
+          tòa nhà Detech, 8c Tôn Thất Thuyết, quận Nam Từ Liêm, Hà Nội
+        </p>
+      </footer>
     </div>
   );
 };
