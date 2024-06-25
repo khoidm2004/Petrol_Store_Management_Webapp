@@ -139,7 +139,6 @@ export const Staff = () => {
       <header>
         <p>THÔNG TIN NHÂN VIÊN</p>
         <div className="search-container">
-          {/* <FaMagnifyingGlass className="search-icon" /> */}
           <input
             type="text"
             placeholder="Search..."

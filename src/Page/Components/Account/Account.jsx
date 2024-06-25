@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./Account.css";
 import usePreviewImage from "../../../hooks/usePreviewImage";
 import useEditProfile from "../../../hooks/useEditProfile";
+import { AiOutlineClose } from "react-icons/ai";
 
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
@@ -47,6 +48,22 @@ export const Account = () => {
     } catch (error) {
       return { Title: "Error" };
     }
+  };
+
+  const [resetEmail, setResetEmail] = useState('');
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetStatus, setResetStatus] = useState('');
+  const handleResetClick = () => {
+    setShowResetModal(true);
+  };
+  
+  const handleResetCancel = () => {
+    setShowResetModal(false);
+    setResetEmail('');
+    setResetStatus('');
+  };
+
+  const handleResetSubmit = async () => {
   };
 
   return (
@@ -104,14 +121,36 @@ export const Account = () => {
             />
 
             <label htmlFor="pass">PASSWORD</label>
-            <input
-              readOnly
-              type="password"
-              name="pass"
-              value={profile.pass}
-              onChange={handleChange}
-            />
+            <div className="row_image">
+              <input
+                readOnly
+                type="password"
+                name="pass"
+                value={profile.pass}
+                onChange={handleChange}
+              />
+              <button onClick={handleResetClick}></button>
+            </div>
           </div>
+          {showResetModal && (
+            <>
+              <div className="overlay" onClick={handleResetCancel}></div>
+              <div className="modals">
+                <div className="modal-content">
+                  <AiOutlineClose onClick={handleResetCancel} className="close-icon" />
+                  <h2>RESET PASSWORD</h2>
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                  />
+                </div>
+                <button onClick={handleResetSubmit}>SUBMIT</button>
+                {resetStatus && <p className="reset-status">{resetStatus}</p>}
+              </div>
+            </>
+          )}
 
           <button type="button" className="button_account" onClick={handleSave}>
             SAVE
