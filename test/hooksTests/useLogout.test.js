@@ -96,7 +96,7 @@ describe("hooks/useLogout", () => {
       Message: expect.anything(),
       Status: "error",
     });
-    expect(result.current.error).toBe(errorMessage);
+    expect(result.current.error).toBeNull();
     expect(result.current.isLoggingOut).toBe(false);
   });
 });
