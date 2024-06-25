@@ -364,10 +364,44 @@ export const Revenue = () => {
       <br />
       <br />
       <br />
-      <br />
+
 
       <div className="Row">
         <div className="Column doanh_thu">
+          <header>
+            <p>DOANH THU VÒI BƠM</p>
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search..."
+                className="search-input"
+              />
+            </div>
+          </header>
+
+          <div className="doanh_thuTable">
+            <table className="firsttable_shift">
+              <thead>
+                <tr className="titleOneline">
+                  <th>Tên mặt hàng</th>
+                  <th>Tên vòi bơm</th>
+                  <th>Số đầu - số cuối</th>
+                </tr>
+              </thead>
+              <tbody>
+                {revenueData.map((staffMember) => (
+                  <tr key={staffMember.pid} className="col" id="mainstate">
+                    <td>{staffMember.productName}</td>
+                    <td>{staffMember.pumpName}</td>
+                    <td>
+                      {staffMember.fNum} - {staffMember.lNum}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+                <br />
           <div className="Row row_image">
             <div className="object_body">
               <div className="object_box"> 4 </div>
@@ -397,46 +431,6 @@ export const Revenue = () => {
                 <span> BỂ </span>
               </Link>
             </div>
-          </div>
-
-          <header>
-            <p>DOANH THU VÒI BƠM</p>
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="search-input"
-              />
-            </div>
-          </header>
-
-          <div className="doanh_thuTable">
-            <table className="firsttable_shift">
-              <thead>
-                <tr className="titleOneline">
-                  <th>Tên mặt hàng</th>
-                  <th>Tên vòi bơm</th>
-                  <th>Số đầu - số cuối</th>
-                </tr>
-              </thead>
-              <tbody>
-                {revenueData.map((staffMember) => (
-                  <tr key={staffMember.pid} className="col" id="mainstate">
-                    <td>{staffMember.productName}</td>
-                    <td>{staffMember.pumpName}</td>
-                    <td>
-                      {staffMember.fNum} - {staffMember.lNum}
-                    </td>
-                    {/* <td className="icon_editview">
-                      <TbEyeEdit
-                        className="icon_menu"
-                        onClick={() => handleEdit(staffMember)}
-                      />
-                    </td> */}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
         <div className="Column ton_kho">

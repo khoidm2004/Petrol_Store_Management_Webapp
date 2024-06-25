@@ -113,7 +113,7 @@ const LoginForm = ({ setLoggedIn }) => {
           <div className="modals">
             <div className="modal-content">
               <AiOutlineClose onClick={handleResetCancel} className="close-icon" />
-              <h2>RESET PASSWORD</h2>
+              <h2>ĐỔI MẬT KHẨU</h2>
               <input
                 type="email"
                 placeholder="Enter your email"

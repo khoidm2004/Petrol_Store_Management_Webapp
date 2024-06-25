@@ -21,7 +21,7 @@ export const Account = () => {
     usePreviewImage();
 
   const { editProfile, isLoading } = useEditProfile();
-
+  const [formPass, setFormPass] = useState({ pass: '', passNew: '' }) 
   useEffect(() => {
     if (selectedFile) {
       setProfile((prevProfile) => ({
@@ -50,7 +50,6 @@ export const Account = () => {
     }
   };
 
-  const [resetEmail, setResetEmail] = useState('');
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetStatus, setResetStatus] = useState('');
   const handleResetClick = () => {
@@ -63,7 +62,26 @@ export const Account = () => {
     setResetStatus('');
   };
 
-  const handleResetSubmit = async () => {
+  const handleChangePass = (e) => {
+    const { name, value } = e.target;
+    setFormPass({ ...formPass, [name]: value });
+  };
+
+  const handleChangePassword = async (e) => {
+    // console.log(formData)
+    e.preventDefault();
+    try {
+      const result = await login(formData);
+      setLoggedIn(true);
+      console.log(result);
+      if(result.Title === "Success"){
+        window.location.href = '/revenue';
+      }else{
+        setPopup({ show: true, title: result.Title, message: result.Message });
+      }
+    } catch (error) {
+      setPopup({ show: true, title: 'Login Error', message: 'Invalid email or password' });
+    }
   };
 
   return (
@@ -129,7 +147,7 @@ export const Account = () => {
                 value={profile.pass}
                 onChange={handleChange}
               />
-              <button onClick={handleResetClick}></button>
+              <button onClick={handleResetClick}>Đổi mật khẩu</button>
             </div>
           </div>
           {showResetModal && (
@@ -138,15 +156,23 @@ export const Account = () => {
               <div className="modals">
                 <div className="modal-content">
                   <AiOutlineClose onClick={handleResetCancel} className="close-icon" />
-                  <h2>RESET PASSWORD</h2>
+                  <h2>Đổi mật khẩu</h2>
                   <input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={resetEmail}
-                    onChange={(e) => setResetEmail(e.target.value)}
+                    type="password"
+                    name="pass"
+                    placeholder="Mật khẩu mới"
+                    value={formPass.pass}
+                    onChange={handleChangePass}
+                  />
+                  <input
+                    type="password"
+                    name="passNew"
+                    placeholder="Nhập lại mật khẩu"
+                    value={formPass.passNew}
+                    onChange={handleChangePass}
                   />
                 </div>
-                <button onClick={handleResetSubmit}>SUBMIT</button>
+                <button onClick={handleChangePassword}>SUBMIT</button>
                 {resetStatus && <p className="reset-status">{resetStatus}</p>}
               </div>
             </>
