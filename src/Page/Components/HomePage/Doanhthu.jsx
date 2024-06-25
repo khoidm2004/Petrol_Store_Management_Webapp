@@ -16,13 +16,9 @@ import { Link } from "react-router-dom";
 import useShiftStore from "../../../store/shiftStore.js";
 import useFetchRevenue from "../../../hooks/FetchHooks/useFetchRevenue.js";
 import useFetchLeft from "../../../hooks/FetchHooks/useFetchLeft.js";
+import useFetchPumpRevenue from "../../../hooks/FetchHooks/useFetchPumpRevenue.js";
 
 export const Revenue = () => {
-  const pumps = usePumpStore((state) => state.pumps);
-  const fetchPump = usePumpStore((state) => state.fetchPump);
-  const shifts = useShiftStore((state) => state.shifts);
-  const fetchShift = useShiftStore((state) => state.fetchShift);
-
   const [selectedDate, setSelectedDate] = useState(new Date());
   const formattedSelectedDate = selectedDate.toISOString().slice(0, 10);
   const [dailyData, setDailyData] = useState([]);
@@ -46,10 +42,10 @@ export const Revenue = () => {
     day: "numeric"
   });
 
-  useEffect(() => {
-    fetchShift();
-    fetchPump();
-  }, [fetchShift, fetchPump]);
+  // useEffect(() => {
+  //   fetchShift();
+  //   fetchPump();
+  // }, [fetchShift, fetchPump]);
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -70,12 +66,6 @@ export const Revenue = () => {
     fetchLogs();
   }, [formattedSelectedDate]);
 
-  // const currentDate =new Date(new Date().toISOString().slice(0, 10));
-  // const fomartCurrent = currentDate.toLocaleDateString("vi-VN", {
-  //     month: "numeric",
-  //     year: "numeric",
-  //     day: "numeric"
-  //   });
   console.log(dailyData)
   // Tồn kho
   useEffect(() => {
@@ -175,8 +165,22 @@ export const Revenue = () => {
     ],
   };
 
+  const [revenueData, setRevenueData] = useState([]);
 
+  useEffect(() => {
+    const fetchRevenueData = async () => {
+      try {
+        const revenueList = await useFetchPumpRevenue();
+        setRevenueData(revenueList);
+      } catch (error) {
+        console.error('Error fetching revenue data:', error);
+      }
+    };
 
+    fetchRevenueData();
+  }, []);
+
+  console.log(revenueData);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleRowClick = (item) => {
@@ -410,26 +414,25 @@ export const Revenue = () => {
             <table className="firsttable_shift">
               <thead>
                 <tr className="titleOneline">
+                  <th>Tên mặt hàng</th>
                   <th>Tên vòi bơm</th>
                   <th>Số đầu - số cuối</th>
-                  <th>Chi tiết</th>
                 </tr>
               </thead>
               <tbody>
-                {pumps.map((staffMember) => (
-                  <tr key={staffMember.pumpCode} className="col" id="mainstate">
+                {revenueData.map((staffMember) => (
+                  <tr key={staffMember.pid} className="col" id="mainstate">
+                    <td>{staffMember.productName}</td>
                     <td>{staffMember.pumpName}</td>
                     <td>
-                      {staffMember.pumNumber
-                        ? `${staffMember.pumNumber.pumpFrist} - ${staffMember.pumNumber.pumpSecond}`
-                        : "Chưa có dữ liệu"}
+                      {staffMember.fNum} - {staffMember.lNum}
                     </td>
-                    <td className="icon_editview">
+                    {/* <td className="icon_editview">
                       <TbEyeEdit
                         className="icon_menu"
                         onClick={() => handleEdit(staffMember)}
                       />
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
