@@ -18,7 +18,7 @@ const useFetchRevenue = async (limitAmount) => {
     );
     const revenueSnapshot = await getDocs(qRevenue);
     const revenueList = revenueSnapshot.docs.map((doc) => ({
-      rid: doc.id,
+      rid: doc.rid,
       ...doc.data(),
     }));
     return revenueList;

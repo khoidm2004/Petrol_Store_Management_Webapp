@@ -13,8 +13,9 @@ import { PiGasPumpBold } from "react-icons/pi";
 import { AiOutlineProduct } from "react-icons/ai";
 import { IoMdPeople } from "react-icons/io";
 import { Link } from "react-router-dom";
-import useFetchRevenue from "../../../store/revenueStore.js";
 import useShiftStore from "../../../store/shiftStore.js";
+import useFetchRevenue from "../../../hooks/FetchHooks/useFetchRevenue.js";
+import useFetchLeft from "../../../hooks/FetchHooks/useFetchLeft.js";
 
 export const Revenue = () => {
   const pumps = usePumpStore((state) => state.pumps);
@@ -31,7 +32,8 @@ export const Revenue = () => {
   const [logExists, setLogExists] = useState(false);
   const [showBarDetail, setShowBarDetail] = useState(false);
   const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
-  const [revenueData, setRevenueData] = useState([]);
+
+  const [leftData, setLeftData] = useState([]);
 
   const handleDateChange = (e) => {
     const newDate = new Date(e.target.value);
@@ -52,14 +54,15 @@ export const Revenue = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       const result = await useFetchLog();
+      console.log(result);
       if (result.Status !== "error") {
-        const logs = result.logList.filter((log) => {
-          const logDate = new Date(log.startTime).toISOString().slice(0, 10);
+        const logs = result.filter((log) => {
+          const logDate = new Date(new Date(log.logList.startTime).toISOString().slice(0, 10));
           return logDate === formattedSelectedDate;
         });
         setDailyData(logs);
         setTotal(
-          logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0)
+          logs.reduce((sum, item) => sum + parseInt(item.logList.totalAmount), 0)
         );
       }
     };
@@ -67,18 +70,24 @@ export const Revenue = () => {
     fetchLogs();
   }, [formattedSelectedDate]);
 
+  // const currentDate =new Date(new Date().toISOString().slice(0, 10));
+  // const fomartCurrent = currentDate.toLocaleDateString("vi-VN", {
+  //     month: "numeric",
+  //     year: "numeric",
+  //     day: "numeric"
+  //   });
+  console.log(dailyData)
   // Tồn kho
-
   useEffect(() => {
     const fetchData = async () => {
-      const result = await useFetchRevenue();
-      setRevenueData(result.revenueList);
-      const totalIncome = result.revenueList.reduce(
-        (sum, item) => sum + parseInt(item.income),
+      const result = await useFetchLeft();
+      setLeftData(result);
+      const totalQuantity = result.reduce(
+        (sum, item) => sum + parseInt(item.leftProduct.productQuantity),
         0
       );
-      const totalQuantity = result.revenueList.reduce(
-        (sum, item) => sum + parseInt(item.quantity),
+      const totalIncome = result.reduce(
+        (sum, item) => sum + parseInt(item.leftTank.tankVolume),
         0
       );
       setTotalIncome(totalIncome);
@@ -101,22 +110,28 @@ export const Revenue = () => {
 
   const [showOverlay, setShowOverlay] = useState(true);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setShowOverlay(false);
-  //   }, 2000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Doanh thu va san luong
   const [Datarevenue, setDataRevenue] = useState([]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await useFetchRevenue();
-      setDataRevenue(result.revenueList);
+    const fetchRevenueData = async () => {
+      try {
+        const revenueList = await useFetchRevenue();
+        setDataRevenue(revenueList);
+      } catch (error) {
+        console.error('Error fetching revenue data:', error);
+      }
     };
-    fetchData();
+
+    fetchRevenueData();
   }, []);
 
   const currentDate =new Date(new Date().toISOString().slice(0, 10));
@@ -125,6 +140,7 @@ export const Revenue = () => {
       year: "numeric",
       day: "numeric"
     });
+
   const currentData = Datarevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === fomartCurrent) || {
     items: [],
   };
@@ -139,7 +155,6 @@ export const Revenue = () => {
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
 
-  console.log(detailedData)
   const barData = {
     labels: currentData.items.map((item) => item.productName),
     datasets: [
@@ -160,10 +175,11 @@ export const Revenue = () => {
     ],
   };
 
+
+
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleRowClick = (item) => {
-    console.log(item);
     setSelectedItem(item);
   };
 
@@ -265,8 +281,8 @@ export const Revenue = () => {
               onClick={() => {
                 setShowDoughnutDetail(true);
                 setSelectedItem(true);
-                if (revenueData.length > 0) {
-                  handleRowClick(revenueData[0]);
+                if (leftData.length > 0) {
+                  handleRowClick(leftData[0]);
                 }
               }}
             >
@@ -290,15 +306,17 @@ export const Revenue = () => {
                       <tr>
                         <th>Bể</th>
                         <th>Thể tích bể</th>
-                        <th>Số lượng hàng tồn</th>
+                        <th>Mặt hàng tồn</th>
+                        <th>Số lượng </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {revenueData.map((item, index) => (
+                      {leftData.map((item, index) => (
                         <tr key={index} onClick={() => handleRowClick(item)}>
-                          <td>{item.nameTank}</td>
-                          <td>{item.income}</td>
-                          <td>{item.quantity}</td>
+                          <td>{item.leftTank.tankName}</td>
+                          <td>{item.leftTank.tankVolume}</td>
+                          <td>{item.leftProduct.productName}</td>
+                          <td>{item.leftProduct.productQuantity}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -313,8 +331,8 @@ export const Revenue = () => {
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  selectedItem.income,
-                                  selectedItem.quantity,
+                                  selectedItem.leftTank.tankVolume,
+                                  selectedItem.leftProduct.productQuantity,
                                 ],
                                 backgroundColor: [
                                   "rgb(255, 99, 132)",
@@ -513,8 +531,7 @@ export const Revenue = () => {
                               <tr key={index}>
                                 <td>
                                   {
-                                    timeConverter(Date.parse(item.startTime))
-                                      .time
+                                    timeConverter(Date.parse(item.startTime)).time
                                   }
                                 </td>
                                 <td>{item.productName}</td>
