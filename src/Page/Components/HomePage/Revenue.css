@@ -46,7 +46,7 @@
     border: 1px solid #166BCC;
     border-bottom: 0px;
     background-color: #F3F7FC;
-    color: #6E707E;
+    font-weight: bold;
     text-align: left;
     cursor: pointer;
     border-radius: 8px 8px 0px 0px;
@@ -187,14 +187,31 @@
     overflow-x: auto;
   }
   
-  .table thead th,
+  .table thead th{
+    text-align: center;
+    border: 0px solid #ddd;
+    background-color: #f3f7fc;
+    font-weight: 700;
+    border-bottom: 1px solid #166bcc;
+    cursor: pointer;
+  }
+
   .table tbody td {
     text-align: center;
     padding: 10px;
     border: 0px solid #ddd;
     border-bottom: 1px solid black;
+    cursor: pointer;
   }
-  
+
+    
+  .table tbody tr:hover{
+    background-color: #f3f7fc; 
+    color: #0f0f0f;
+    border-bottom: 1px solid #166bcc;
+  }
+
+    
   .left_sum{
     text-align: left;
     font-weight: bold;

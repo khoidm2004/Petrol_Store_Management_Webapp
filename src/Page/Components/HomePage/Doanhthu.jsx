@@ -128,13 +128,13 @@
 
     const [showOverlay, setShowOverlay] = useState(true);
     
-    // useEffect(() => {
-    //   const timer = setTimeout(() => {
-    //     setShowOverlay(false);
-    //   }, 2000);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowOverlay(false);
+      }, 2000);
 
-    //   return () => clearTimeout(timer);
-    // }, []);
+      return () => clearTimeout(timer);
+    }, []);
 
     const currentDate = new Date().toISOString().slice(0, 10);
     const currentData = data.find(entry => entry.date === currentDate) || { items: [] };
@@ -212,7 +212,7 @@
                 <div className="content">
                   <h4>{formattedDate}</h4>
                   <div className="table-container">
-                    <table className="table">
+                    <table className="table firsttable">
                       <thead>
                         <tr>
                           <th>Mặt hàng</th>
