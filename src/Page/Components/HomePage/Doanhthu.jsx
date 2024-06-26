@@ -35,6 +35,7 @@ export const Revenue = () => {
 
   const [leftData, setLeftData] = useState([]);
 
+  console.log(tanks);
   const handleDateChange = (e) => {
     const newDate = new Date(e.target.value);
     setSelectedDate(newDate);
@@ -95,7 +96,7 @@ export const Revenue = () => {
       setTotalQuantity(totalQuantity);
     };
     fetchData();
-  }, []);
+  }, [tanks]);
 
   const doughnutData = {
     labels: ["Thể tích bể", "Số lượng hàng tồn"],
@@ -133,7 +134,7 @@ export const Revenue = () => {
     };
 
     fetchRevenueData();
-  }, []);
+  }, [Datarevenue]);
 
   const currentDate =new Date(new Date().toISOString().slice(0, 10));
   const fomartCurrent = currentDate.toLocaleDateString("vi-VN", {
@@ -156,7 +157,6 @@ export const Revenue = () => {
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
 
-  // console.log(currentData);
   const barData = {
     labels: currentData.items.map((item) => item.productName),
     datasets: [
@@ -503,6 +503,23 @@ export const Revenue = () => {
                     </tr>
                   </tfoot>
                 </table>
+                {displayedStaff.length > 0 && (
+                    <div className="pagination_1" style={{ textAlign: 'center'}}>
+                      <ul>
+                        <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                        </li>
+                        {Array.from({ length: totalPages }, (_, index) => (
+                          <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                            <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                          </li>
+                        ))}
+                        <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
               </div>
             </div>
           </div>
