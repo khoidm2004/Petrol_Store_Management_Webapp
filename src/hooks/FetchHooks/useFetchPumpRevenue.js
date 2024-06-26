@@ -1,5 +1,5 @@
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
+import { firestore } from "../../firebase/firebase";
 
 const useFetchRevenue = async (limitAmount) => {
   try {
@@ -11,7 +11,7 @@ const useFetchRevenue = async (limitAmount) => {
     );
     const revenueSnapshot = await getDocs(qRevenue);
     const revenueList = revenueSnapshot.docs.map((doc) => ({
-      rid: doc.id,
+      rid: doc.rid,
       ...doc.data(),
     }));
     return revenueList;

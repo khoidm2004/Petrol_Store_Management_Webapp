@@ -1,5 +1,5 @@
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
+import { firestore } from "../../firebase/firebase";
 
 const useFetchLog = async (limitAmount) => {
   try {
