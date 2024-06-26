@@ -21,6 +21,7 @@ export const Tank = () => {
   const [selectedTank, setSelectedTank] = useState(null);
   const [addingTank, setAddingTank] = useState(false);
   const tankId = Math.floor(100000 + Math.random() * 900000);
+  const quantity_left = Math.floor(1000 + Math.random() * 900000);
 
   const [viewMode, setViewMode] = useState("use");
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,6 +37,7 @@ export const Tank = () => {
     product: {
       productName: "",
       productCode: "",
+      quantity_left: (quantity_left),
     },
   });
 
@@ -51,6 +53,7 @@ export const Tank = () => {
         product: {
           productName: product[0].productName,
           productCode: product[0].productCode,
+          quantity_left: (quantity_left),
         },
       });
     }
@@ -86,7 +89,7 @@ export const Tank = () => {
       const result = addTank(newTank);
       setNewTank({
         tid: "",
-        tankId,
+        tankId:(tankId),
         tankCode: 0,
         tankName: "",
         tankStatus: "ON USE",
@@ -95,8 +98,9 @@ export const Tank = () => {
             ? {
                 productName: product[0].productName,
                 productCode: product[0].productCode,
+                quantity_left: (quantity_left),
               }
-            : { productName: "", productCode: "" },
+            : { productName: "", productCode: "" , quantity_left: (quantity_left)},
       });
       setAddingTank(false);
     } catch (error) {
@@ -260,6 +264,15 @@ export const Tank = () => {
             <br />
             <input type="text" placeholder="Tank Code" value={parseInt(selectedTank.tankCode)} readOnly />
             <br />
+            <input
+              type="text"
+              placeholder="Tank Volume"
+              value={parseInt(selectedTank.tankVolume)}
+              onChange={(e) =>
+                setSelectedTank({ ...selectedTank, tankVolume: parseInt(e.target.value) })
+              }
+            />
+            <br />
             <select
               value={selectedTank.tankStatus}
               onChange={(e) =>
@@ -322,6 +335,14 @@ export const Tank = () => {
               placeholder="Tank Code"
               onChange={(e) =>
                 setNewTank({ ...newTank, tankCode: parseInt(e.target.value) })
+              }
+            />
+            <br />
+            <input
+              type="text"
+              placeholder="Tank Volume"
+              onChange={(e) =>
+                setNewTank({ ...newTank, tankVolume: parseInt(e.target.value) })
               }
             />
             <br />

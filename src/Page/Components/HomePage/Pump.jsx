@@ -461,9 +461,8 @@ export const Pump = () => {
               <input
                 type="text"
                 placeholder="Pump Code"
-                value={parseInt(newStaff.pumpCode)}
                 onChange={(e) =>
-                  setNewStaff({ ...newStaff, pumpCode: e.target.value })
+                  setNewStaff({ ...newStaff, pumpCode: parseInt(e.target.value) })
                 }
               />
               <br />
