@@ -81,8 +81,9 @@ export const Account = () => {
 
         const result = await useChangePassword(
           formPass.pass,
-          email_local.email,
-          email_local.pass
+          profile.email,
+          profile.pass,
+          profile.uid
         );
         if (result) {
           setPopup({

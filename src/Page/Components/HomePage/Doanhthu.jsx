@@ -76,7 +76,10 @@ export const Revenue = () => {
     fetchLogs();
   }, [formattedSelectedDate]);
 
+<<<<<<< HEAD
+=======
   // console.log(logExists);
+>>>>>>> afe1d7a459e386db7a3cde3660b7b19aef2ecba4
   // Tồn kho
   useEffect(() => {
     const fetchData = async () => {
