@@ -4,11 +4,12 @@ import usePreviewImage from "../../../hooks/usePreviewImage";
 import useEditProfile from "../../../hooks/useEditProfile";
 import { AiOutlineClose } from "react-icons/ai";
 import useChangePassword from "../../../hooks/useChangePassword";
-import Popup from '../Popup/Popup';
+import Popup from "../Popup/Popup";
+import useLogout from "../../../hooks/useLogout";
 
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
-  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
+  const [popup, setPopup] = useState({ show: false, title: "", message: "" });
   const [profile, setProfile] = useState({
     uid: user.uid,
     fullName: user.fullName || "",
@@ -23,7 +24,7 @@ export const Account = () => {
     usePreviewImage();
 
   const { editProfile, isLoading } = useEditProfile();
-  const [formPass, setFormPass] = useState({ pass: '', passNew: '' }) 
+  const [formPass, setFormPass] = useState({ pass: "", passNew: "" });
   useEffect(() => {
     if (selectedFile) {
       setProfile((prevProfile) => ({
@@ -53,11 +54,11 @@ export const Account = () => {
   };
 
   const [showResetModal, setShowResetModal] = useState(false);
-  const [resetStatus, setResetStatus] = useState('');
+  const [resetStatus, setResetStatus] = useState("");
   const handleResetClick = () => {
     setShowResetModal(true);
   };
-  
+
   const handleResetCancel = () => {
     setShowResetModal(false);
     setResetStatus('');
@@ -68,27 +69,46 @@ export const Account = () => {
     setFormPass({ ...formPass, [name]: value });
   };
 
-  const handleChangePassword = async() => {
-    if(formPass.pass === formPass.passNew){
+
+  const email_local = JSON.parse(localStorage.getItem('user-info'));
+  console.log(email_local.email);
+  console.log(email_local.pass);
+  const handleChangePassword = async () => {
+    const email_local = JSON.parse(localStorage.getItem('user-info'));
+    if (formPass.pass === formPass.passNew) {
       try {
-        console.log(formPass.pass)
-        console.log(typeof(formPass.pass))
-        const result = await useChangePassword(formPass.pass);
-        console.log(result);
-        if(result){
-          setPopup({ show: true, title: 'Thành công', message: 'Đổi thành công'});
-        }else{
-          setPopup({ show: true, title: result.Title, message: result.Message });
+        console.log(formPass)
+        const result = await useChangePassword(
+          formPass.pass,
+          email_local.email,
+          email_local.pass
+        );
+        if (result) {
+          setPopup({
+            show: true,
+            title: "Thành công",
+            message: "Đổi thành công",
+          });
+          useLogout();
+          window.location.href = 'http://localhost:5173/';
+        } else {
+          setPopup({
+            show: true,
+            title: result.Title,
+            message: result.Message,
+          });
         }
-        
       } catch (error) {
-      
       }
     }else{
       setPopup({ show: true, title: 'Lỗi', message: 'Không trùng pass' });
+
     }
   };
 
+  const closePopup = () => {
+    setPopup({ show: false, title: '', message: '' });
+  };
   return (
     <div>
       <div className="Staff">
@@ -125,7 +145,8 @@ export const Account = () => {
               type="email"
               name="email"
               value={profile.email}
-              onChange={handleChange} className="email"
+              onChange={handleChange}
+              className="email"
             />
 
             <label htmlFor="phoneNum">PHONE NUMBER</label>
@@ -161,7 +182,10 @@ export const Account = () => {
               <div className="overlay" onClick={handleResetCancel}></div>
               <div className="modals">
                 <div className="modal-content">
-                  <AiOutlineClose onClick={handleResetCancel} className="close-icon" />
+                  <AiOutlineClose
+                    onClick={handleResetCancel}
+                    className="close-icon"
+                  />
                   <h2>Đổi mật khẩu</h2>
                   <input
                     type="password"
@@ -196,6 +220,7 @@ export const Account = () => {
           tòa nhà Detech, 8c Tôn Thất Thuyết, quận Nam Từ Liêm, Hà Nội
         </p>
       </footer>
+      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );
 };

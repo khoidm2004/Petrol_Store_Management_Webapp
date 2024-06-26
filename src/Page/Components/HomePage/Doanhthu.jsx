@@ -43,7 +43,7 @@ export const Revenue = () => {
     setSelectedDate(newDate);
   };
 
-  const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
+  const formattedDate = new Date(selectedDate).toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
     day: "numeric"
@@ -64,22 +64,19 @@ export const Revenue = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       const result = await useFetchLog();
-      console.log(result);
       if (result.Status !== "error") {
-        const logs = result.filter((log) => {
-          const logDate = new Date(new Date(log.logList.startTime).toISOString().slice(0, 10));
+        const logs = result.filter(log => {
+          const logDate =new Date(log.startTime).toISOString().slice(0, 10);  
           return logDate === formattedSelectedDate;
         });
         setDailyData(logs);
-        setTotal(
-          logs.reduce((sum, item) => sum + parseInt(item.logList.totalAmount), 0)
-        );
+        setTotal(logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0));
       }
     };
-
     fetchLogs();
   }, [formattedSelectedDate]);
 
+  // console.log(logExists);
   // Tồn kho
   useEffect(() => {
     const fetchData = async () => {
@@ -193,13 +190,24 @@ export const Revenue = () => {
     fetchRevenueData();
   }, []);
 
-  console.log(revenueData);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleRowClick = (item) => {
     setSelectedItem(item);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const indexOfLastStaff = currentPage * perPage;
+  const indexOfFirstStaff = indexOfLastStaff - perPage;
+  const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+
+  console.log(dailyData)
+  const totalPages = Math.ceil(dailyData.length / perPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   return (
     <div className="revenue">
       {/* {showOverlay && 
@@ -561,6 +569,26 @@ export const Revenue = () => {
                           </tr>
                         </tfoot>
                       </table>
+                      {displayedStaff.length > 0 && (
+                        <div className="pagination">
+                          <p>
+                            <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, displayedStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{displayedStaff.length}&nbsp;</span> entries
+                          </p>
+                          <ul className="pagination-list">
+                            <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                            </li>
+                            {Array.from({ length: totalPages }, (_, index) => (
+                              <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                              </li>
+                            ))}
+                            <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -2,7 +2,6 @@ import { doc, getDoc } from "@firebase/firestore";
 import useAuthStore from "../store/authStore";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../firebase/firebase";
-import { Title } from "chart.js";
 
 const useLogin = () => {
   const [signInWithEmailAndPassword, loading, error] =

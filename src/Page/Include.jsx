@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { AiOutlineUnorderedList, AiOutlineClose } from "react-icons/ai";
 import { TbReportSearch } from "react-icons/tb";
 import { IoMdPeople } from "react-icons/io";
 import { FaBoxes } from "react-icons/fa";
@@ -17,6 +16,8 @@ import Revenue from "./Components/HomePage/Doanhthu.jsx";
 import Logout from "./Components/HomePage/Logout.jsx";
 import logo from "../assets/images/logo.png";
 import "./Components/HomePage/HomePage.scss";
+import { FaArrowCircleRight } from "react-icons/fa";
+import { FaArrowCircleLeft } from "react-icons/fa";
 import { GiFuelTank } from "react-icons/gi";
 import { PiGasPumpBold } from "react-icons/pi";
 import { AiOutlineProduct } from "react-icons/ai";
@@ -42,13 +43,6 @@ const Include = ({ setLoggedIn }) => {
         <a href="http://localhost:5173/revenue">
           <img src={logo} alt="Logo" id="logo" />
         </a>
-        <div className="burger" onClick={toggleMenu}>
-          {isMenuOpen ? (
-            <AiOutlineClose className="tab_menu" />
-          ) : (
-            <AiOutlineUnorderedList className="tab_menu" />
-          )}
-        </div>
         <p className="title">
           CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
           PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
@@ -105,6 +99,15 @@ const Include = ({ setLoggedIn }) => {
               )}
             </div>
           </ul>
+
+          <div className="burger" onClick={toggleMenu}>
+              {isMenuOpen ? (
+                 <FaArrowCircleLeft className="tab_menu tab_close"/>
+              ) : (
+               <></>
+              )}
+            </div>
+          
           <div className="bottom-menu">
             <ul className="navbar__list">
               <div className="navbar__li-box">
@@ -123,6 +126,14 @@ const Include = ({ setLoggedIn }) => {
               </div>
             </ul>
           </div>
+          
+        </div>
+        <div className="burger" onClick={toggleMenu}>
+          {isMenuOpen ? (
+            <></>
+          ) : (
+            <FaArrowCircleRight className="tab_menu"/>
+          )}
         </div>
         <Routes>
           <Route path="revenue" element={<Revenue />} />
