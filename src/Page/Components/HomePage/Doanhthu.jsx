@@ -3,7 +3,6 @@ import { Doughnut, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { TbEyeEdit } from "react-icons/tb";
-import usePumpStore from "../../../store/pumpStore.js";
 import "./Revenue.css";
 import useFetchLog from "../../../hooks/FetchHooks/useFetchLog.js";
 import { timeConverter } from "../../../utils/timeConverter.js";
@@ -13,12 +12,20 @@ import { PiGasPumpBold } from "react-icons/pi";
 import { AiOutlineProduct } from "react-icons/ai";
 import { IoMdPeople } from "react-icons/io";
 import { Link } from "react-router-dom";
-import useShiftStore from "../../../store/shiftStore.js";
 import useFetchRevenue from "../../../hooks/FetchHooks/useFetchRevenue.js";
 import useFetchLeft from "../../../hooks/FetchHooks/useFetchLeft.js";
 import useFetchPumpRevenue from "../../../hooks/FetchHooks/useFetchPumpRevenue.js";
 
+import useTankStore from '../../../store/tankStore.js';
+import useProductStore from "../../../store/productStore.js";
+import usePumpStore from "../../../store/pumpStore.js";
+import useStaffStore from "../../../store/staffStore.js";
 export const Revenue = () => {
+  const { product, fetchProduct } = useProductStore();
+  const { staff, fetchStaff } = useStaffStore();
+  const { pumps, fetchPump } = usePumpStore();
+  const { tanks, fetchTank } = useTankStore();
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const formattedSelectedDate = selectedDate.toISOString().slice(0, 10);
   const [dailyData, setDailyData] = useState([]);
@@ -36,35 +43,43 @@ export const Revenue = () => {
     setSelectedDate(newDate);
   };
 
-  const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
+  const formattedDate = new Date(selectedDate).toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
     day: "numeric"
   });
 
-  // useEffect(() => {
-  //   fetchShift();
-  //   fetchPump();
-  // }, [fetchShift, fetchPump]);
+  useEffect(() => {
+      fetchProduct();
+      fetchTank();
+      fetchPump();
+      fetchStaff();
+  }, [fetchProduct, fetchTank, fetchPump, fetchStaff]);
+
+  const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
+  const productNumber = product.filter((staffMember) => staffMember.productStatus === "On sale").length;
+  const pumpNumber = pumps.filter((staffMember) => staffMember.pumpStatus === "On use").length;
+  const tankNumber = tanks.filter((staffMember) => staffMember.tankStatus === "On use").length;
 
   useEffect(() => {
     const fetchLogs = async () => {
       const result = await useFetchLog();
       if (result.Status !== "error") {
-        const logs = result.filter((log) => {
-          const logDate = new Date(new Date(log.logList.startTime).toISOString().slice(0, 10));
+        const logs = result.filter(log => {
+          const logDate =new Date(log.startTime).toISOString().slice(0, 10);  
           return logDate === formattedSelectedDate;
         });
         setDailyData(logs);
-        setTotal(
-          logs.reduce((sum, item) => sum + parseInt(item.logList.totalAmount), 0)
-        );
+        setTotal(logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0));
       }
     };
-
     fetchLogs();
   }, [formattedSelectedDate]);
 
+<<<<<<< HEAD
+=======
+  // console.log(logExists);
+>>>>>>> afe1d7a459e386db7a3cde3660b7b19aef2ecba4
   // Tồn kho
   useEffect(() => {
     const fetchData = async () => {
@@ -184,6 +199,18 @@ export const Revenue = () => {
     setSelectedItem(item);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const indexOfLastStaff = currentPage * perPage;
+  const indexOfFirstStaff = indexOfLastStaff - perPage;
+  const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+
+  console.log(dailyData)
+  const totalPages = Math.ceil(dailyData.length / perPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   return (
     <div className="revenue">
       {/* {showOverlay && 
@@ -380,17 +407,17 @@ export const Revenue = () => {
             <table className="firsttable_shift">
               <thead>
                 <tr className="titleOneline">
-                  <th>Tên mặt hàng</th>
-                  <th>Tên vòi bơm</th>
-                  <th>Số đầu - số cuối</th>
+                  <th className="right">Vòi bơm</th>
+                  <th className="right">Mặt hàng</th>
+                  <th className="right">Số đầu - số cuối</th>
                 </tr>
               </thead>
               <tbody>
                 {revenueData.map((staffMember) => (
                   <tr key={staffMember.pid} className="col" id="mainstate">
-                    <td>{staffMember.productName}</td>
-                    <td>{staffMember.pumpName}</td>
-                    <td>
+                    <td className="right">{staffMember.pumpName}</td>
+                    <td className="right">{staffMember.productName}</td>
+                    <td className="right">
                       {staffMember.fNum} - {staffMember.lNum}
                     </td>
                   </tr>
@@ -401,28 +428,28 @@ export const Revenue = () => {
                 <br />
           <div className="Row row_image">
             <div className="object_body">
-              <div className="object_box"> 4 </div>
+              <div className="object_box"> {staffNumber} </div>
               <Link className="object_a" to="/staff">
                 <IoMdPeople />
                 <span>NHÂN VIÊN</span>
               </Link>
             </div>
             <div className="object_body">
-              <div className="object_box"> 5 </div>
+              <div className="object_box"> {productNumber} </div>
               <Link to="/product" className="object_a">
                 <AiOutlineProduct />
                 <span>MẶT HÀNG</span>
               </Link>
             </div>
             <div className="object_body">
-              <div className="object_box"> 6 </div>
+              <div className="object_box"> {pumpNumber} </div>
               <Link to="/pump" className="object_a">
                 <PiGasPumpBold />
                 <span>VÒI BƠM</span>
               </Link>
             </div>
             <div className="object_body">
-              <div className="object_box"> 7 </div>
+              <div className="object_box"> {tankNumber} </div>
               <Link to="/tank" className="object_a">
                 <GiFuelTank />
                 <span> BỂ </span>
@@ -545,6 +572,26 @@ export const Revenue = () => {
                           </tr>
                         </tfoot>
                       </table>
+                      {displayedStaff.length > 0 && (
+                        <div className="pagination">
+                          <p>
+                            <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, displayedStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{displayedStaff.length}&nbsp;</span> entries
+                          </p>
+                          <ul className="pagination-list">
+                            <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                            </li>
+                            {Array.from({ length: totalPages }, (_, index) => (
+                              <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                              </li>
+                            ))}
+                            <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

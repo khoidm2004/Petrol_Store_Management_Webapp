@@ -221,7 +221,7 @@
     text-align: center;
     font-weight: bold;
   }
-  
+
 
 @media (max-width: 768px) {
     .Row {
@@ -273,6 +273,9 @@
   animation: spin 1s infinite linear; 
 }
 
+.right{
+  text-align: right;
+}
 @keyframes spin {
   0% { transform: rotate(0deg); } 
   100% { transform: rotate(360deg); } 

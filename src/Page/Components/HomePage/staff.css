@@ -95,10 +95,13 @@ p {
   color: inherit;
   font-weight: bold;
   border: none;
-  border-bottom: 0.5px solid black;
   outline: none;
   cursor: pointer;
   width: 100%;
+}
+
+.firsttable select:hover {
+  border-bottom: 0.5px solid black;
 }
 
 .chart-container {
@@ -382,4 +385,8 @@ tr:hover {
 .pagination-item.active button {
   background-color: #0056b3;
   color: white;
+}
+
+.boc{
+  width: 100%;
 }

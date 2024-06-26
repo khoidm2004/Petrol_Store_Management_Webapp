@@ -5,9 +5,11 @@ import useEditProfile from "../../../hooks/useEditProfile";
 import { AiOutlineClose } from "react-icons/ai";
 import useChangePassword from "../../../hooks/useChangePassword";
 import Popup from "../Popup/Popup";
+import useLogout from "../../../hooks/useLogout";
 
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
+  const { handleLogout } = useLogout();
   const [popup, setPopup] = useState({ show: false, title: "", message: "" });
   const [profile, setProfile] = useState({
     uid: user.uid,
@@ -60,8 +62,7 @@ export const Account = () => {
 
   const handleResetCancel = () => {
     setShowResetModal(false);
-    setResetEmail("");
-    setResetStatus("");
+    setResetStatus('');
   };
 
   const handleChangePass = (e) => {
@@ -69,23 +70,30 @@ export const Account = () => {
     setFormPass({ ...formPass, [name]: value });
   };
 
+
+  const email_local = JSON.parse(localStorage.getItem('user-info'));
+  // console.log(email_local.email);
+  // console.log(email_local.pass);
   const handleChangePassword = async () => {
+    const email_local = JSON.parse(localStorage.getItem('user-info'));
     if (formPass.pass === formPass.passNew) {
       try {
-        // console.log(formPass.pass)
+
         const result = await useChangePassword(
           formPass.pass,
           profile.email,
           profile.pass,
           profile.uid
         );
-        console.log(result);
         if (result) {
           setPopup({
             show: true,
             title: "Thành công",
             message: "Đổi thành công",
           });
+          const test = await handleLogout();
+          console.log(test);
+          window.location.href = 'http://localhost:5173/';
         } else {
           setPopup({
             show: true,
@@ -93,15 +101,20 @@ export const Account = () => {
             message: result.Message,
           });
         }
-        setLoggedIn(true);
-      } catch (error) {}
-    } else {
-      setPopup({ show: true, title: "Lỗi", message: "Không trùng pass" });
+      } catch (error) {
+      }
+    }else{
+      setPopup({ show: true, title: 'Lỗi', message: 'Không trùng pass' });
+
     }
   };
 
+  const closePopup = () => {
+    setPopup({ show: false, title: '', message: '' });
+  };
   return (
-    <div className="Staff">
+    <div>
+      <div className="Staff">
       <div className="text-account">ACCOUNT</div>
       <div className="page_account">
         <div className="profile_image_section">
@@ -203,6 +216,14 @@ export const Account = () => {
           </button>
         </div>
       </div>
+    </div>
+      <footer className="footer_account">
+        <p className="footer">
+          <span style={{ fontWeight: 700 }}>Văn phòng giao dịch:</span> Tầng 15,
+          tòa nhà Detech, 8c Tôn Thất Thuyết, quận Nam Từ Liêm, Hà Nội
+        </p>
+      </footer>
+      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
     </div>
   );
 };
