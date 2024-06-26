@@ -62,9 +62,9 @@ export const Revenue = () => {
   }, [fetchProduct, fetchTank, fetchPump, fetchStaff]);
 
   const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
-  const productNumber = product.filter((staffMember) => staffMember.productStatus === "On sale").length;
-  const pumpNumber = pumps.filter((staffMember) => staffMember.pumpStatus === "On use").length;
-  const tankNumber = tanks.filter((staffMember) => staffMember.tankStatus === "On use").length;
+  const productNumber = product.filter((staffMember) => staffMember.productStatus === "ON SALE").length;
+  const pumpNumber = pumps.filter((staffMember) => staffMember.pumpStatus === "ON USE").length;
+  const tankNumber = tanks.filter((staffMember) => staffMember.tankStatus === "ON USE").length;
 
   useEffect(() => {
     const fetchLogs = async () => {

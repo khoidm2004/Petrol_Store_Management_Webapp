@@ -281,9 +281,9 @@ export const Shift = () => {
                         <thead>
                             <tr className='titleOneline'>
                                 <th>STT</th>
-                                <th>Mã nhân viên</th>
-                                <th>Mã vòi bơm</th>
-                                <th>Mã mặt hàng</th>
+                                <th>Nhân viên</th>
+                                <th>Vòi bơm</th>
+                                <th>Mặt hàng</th>
                                 <th>Thời gian làm</th>
                                 <th className='view_chitiet'>Chi tiết</th>
                             </tr>
