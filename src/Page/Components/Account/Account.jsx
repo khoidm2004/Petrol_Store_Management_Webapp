@@ -112,7 +112,6 @@ export const Account = () => {
     setPopup({ show: false, title: '', message: '' });
   };
   return (
-    <div>
       <div className="Staff">
       <div className="text-account">ACCOUNT</div>
       <div className="page_account">
@@ -175,8 +174,9 @@ export const Account = () => {
                 name="pass"
                 value={profile.pass}
                 onChange={handleChange}
+                className="changePassWord"
               />
-              <button onClick={handleResetClick}>Đổi mật khẩu</button>
+              <button className="buttonChangePass " onClick={handleResetClick}>Đổi mật khẩu</button>
             </div>
           </div>
           {showResetModal && (
@@ -215,7 +215,6 @@ export const Account = () => {
           </button>
         </div>
       </div>
-    </div>
       <footer className="footer_account">
         <p className="footer">
           <span style={{ fontWeight: 700 }}>Văn phòng giao dịch:</span> Tầng 15,

@@ -52,6 +52,7 @@
     color: #166BCC;
     font-weight: bold;
     font-size: 25px;
+    padding-left: 125px;
 }
 
 .page_account {
@@ -198,6 +199,26 @@
     background: #f3f7fc;
     padding: 20px 20px;
     text-align: center;
+}
+
+.profile_info .changePassWord{
+    width: 70%;
+}
+
+.buttonChangePass{
+    border: none;
+    background-color: #135ba1;
+    border: 1px solid black;
+    font-weight: bold;
+    color: white;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.buttonChangePass:hover {
+    background: #e9eff4; 
+    box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
+    transform: scale(1.05); 
+    color: rgb(0, 0, 0); 
 }
 
 @media (min-width: 768px) {
