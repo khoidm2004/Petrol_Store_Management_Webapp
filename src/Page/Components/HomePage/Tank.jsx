@@ -21,7 +21,7 @@ export const Tank = () => {
   const [selectedTank, setSelectedTank] = useState(null);
   const [addingTank, setAddingTank] = useState(false);
   const tankId = Math.floor(100000 + Math.random() * 900000);
-  const quantity_left = Math.floor(1000 + Math.random() * 900000);
+  const quantity_left = Math.floor(100 + Math.random() * 9);
 
   const [viewMode, setViewMode] = useState("use");
   const [currentPage, setCurrentPage] = useState(1);

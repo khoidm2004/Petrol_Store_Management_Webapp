@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { TbEyeEdit } from "react-icons/tb";
 import "./Revenue.css";
 import useFetchLog from "../../../hooks/FetchHooks/useFetchLog.js";
 import { timeConverter } from "../../../utils/timeConverter.js";
@@ -13,7 +11,6 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { IoMdPeople } from "react-icons/io";
 import { Link } from "react-router-dom";
 import useFetchRevenue from "../../../hooks/FetchHooks/useFetchRevenue.js";
-import useFetchLeft from "../../../hooks/FetchHooks/useFetchLeft.js";
 import useFetchPumpRevenue from "../../../hooks/FetchHooks/useFetchPumpRevenue.js";
 
 import useTankStore from '../../../store/tankStore.js';
@@ -84,14 +81,14 @@ export const Revenue = () => {
   // Tồn kho
   useEffect(() => {
     const fetchData = async () => {
-      const result = await useFetchLeft();
-      setLeftData(result);
-      const totalQuantity = result.reduce(
-        (sum, item) => sum + parseInt(item.leftProduct.productQuantity),
+      console.log(tanks);
+      setLeftData(tanks);
+      const totalQuantity = tanks.reduce(
+        (sum, item) => sum + parseInt(item.product.quantity_left),
         0
       );
-      const totalIncome = result.reduce(
-        (sum, item) => sum + parseInt(item.leftTank.tankVolume),
+      const totalIncome = tanks.reduce(
+        (sum, item) => sum + parseInt(item.tankVolume),
         0
       );
       setTotalIncome(totalIncome);
@@ -347,10 +344,10 @@ export const Revenue = () => {
                     <tbody>
                       {leftData.map((item, index) => (
                         <tr key={index} onClick={() => handleRowClick(item)}>
-                          <td>{item.leftTank.tankName}</td>
-                          <td>{item.leftTank.tankVolume}</td>
-                          <td>{item.leftProduct.productName}</td>
-                          <td>{item.leftProduct.productQuantity}</td>
+                          <td>{item.tankName}</td>
+                          <td>{item.tankVolume}</td>
+                          <td>{item.product.productName}</td>
+                          <td>{item.product.quantity_left}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -365,8 +362,8 @@ export const Revenue = () => {
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  selectedItem.leftTank.tankVolume,
-                                  selectedItem.leftProduct.productQuantity,
+                                  selectedItem.tankVolume,
+                                  selectedItem.product.quantity_left,
                                 ],
                                 backgroundColor: [
                                   "rgb(255, 99, 132)",
@@ -578,7 +575,8 @@ export const Revenue = () => {
                           </tr>
                         </tfoot>
                       </table>
-                      {displayedStaff.length > 0 && (
+                    </div>
+                    {displayedStaff.length > 0 && (
                         <div className="pagination">
                           <p>
                             <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, displayedStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{displayedStaff.length}&nbsp;</span> entries
@@ -598,7 +596,6 @@ export const Revenue = () => {
                           </ul>
                         </div>
                       )}
-                    </div>
                   </div>
                 </div>
               </div>
