@@ -20,11 +20,11 @@ export const Product = () => {
 
   const [newProduct, setNewProduct] = useState({
     productId: "",
-    productCode: "",
+    productCode: 0,
     productName: "",
-    productPrice: "",
+    productPrice: 0,
     productColor: "",
-    productStatus: "On sale",
+    productStatus: "ON SALE",
   });
   const [viewMode, setViewMode] = useState("sale");
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,14 +63,15 @@ export const Product = () => {
     }
 
     try {
+      console.log(typeof(newProduct.productCode))
       addProduct(newProduct);
       setNewProduct({
         productId: "",
-        productCode: "",
+        productCode: 0,
         productName: "",
-        productPrice: "",
+        productPrice: 0,
         productColor: "",
-        productStatus: "On sale",
+        productStatus: "ON SALE",
       });
       setAddingProduct(false);
     } catch (error) {
@@ -78,12 +79,15 @@ export const Product = () => {
     }
   };
 
+  const firstNumber = product.filter((staffMember) => staffMember.productStatus === "ON SALE").length;
+  const secondNumber = product.filter((staffMember) => staffMember.productStatus === "NOT ON SALE").length;
+
   const data = {
     labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
     datasets: [
       {
         label: "Mặt hàng",
-        data: [300, 70],
+        data: [firstNumber, secondNumber],
         backgroundColor: ["Green", "Red"],
         hoverOffset: 10,
       },
@@ -91,10 +95,10 @@ export const Product = () => {
   };
 
   const workingProduct = product.filter(
-    (ProductMember) => ProductMember.productStatus === "On sale"
+    (ProductMember) => ProductMember.productStatus === "ON SALE"
   );
   const notWorkingProduct = product.filter(
-    (ProductMember) => ProductMember.productStatus === "Not on sale"
+    (ProductMember) => ProductMember.productStatus === "NOT ON SALE"
   );
 
   const filteredStaff = (viewMode === "sale" ? workingProduct : notWorkingProduct).filter(
@@ -231,16 +235,16 @@ export const Product = () => {
               }
             />
             <br />
-            <input  placeholder="Product Code" type="text" value={selectedProduct.productCode} readOnly />
+            <input  placeholder="Product Code" type="number" value={parseInt(selectedProduct.productCode)} readOnly />
             <br />
             <input
-              type="text"
+              type="number"
               placeholder="Product Price"
               value={selectedProduct.productPrice}
               onChange={(e) =>
                 setSelectedProduct({
                   ...selectedProduct,
-                  productPrice: e.target.value,
+                  productPrice: parseInt(e.target.value),
                 })
               }
             />
@@ -266,8 +270,8 @@ export const Product = () => {
                 })
               }
             >
-              <option value="On sale">Đang kinh doanh</option>
-              <option value="Not on sale">Ngừng kinh doanh</option>
+              <option value="ON SALE">Đang kinh doanh</option>
+              <option value="NOT ON SALE">Ngừng kinh doanh</option>
             </select>
               <button className="send" onClick={saveChanges}>
                 OK
@@ -294,20 +298,18 @@ export const Product = () => {
             />
             <br />
             <input
-              type="text"
+              type="number"
               placeholder="Product Code"
-              value={newProduct.productCode}
               onChange={(e) =>
-                setNewProduct({ ...newProduct, productCode: e.target.value })
+                setNewProduct({ ...newProduct, productCode: parseInt(e.target.value) })
               }
             />
             <br />
             <input
-              type="text"
+              type="number"
               placeholder="Product Price"
-              value={newProduct.productPrice}
               onChange={(e) =>
-                setNewProduct({ ...newProduct, productPrice: e.target.value })
+                setNewProduct({ ...newProduct, productPrice: parseInt(e.target.value) })
               }
             />
             <br />
@@ -326,8 +328,8 @@ export const Product = () => {
                 setNewProduct({ ...newProduct, productStatus: e.target.value })
               }
             >
-              <option value="On sale">Đang kinh doanh</option>
-              <option value="Not on sale">Ngừng kinh doanh</option>
+              <option value="ON SALE">Đang kinh doanh</option>
+              <option value="NOT ON SALE">Ngừng kinh doanh</option>
             </select>
             <button className="send" onClick={handleAddProduct}>
               THÊM

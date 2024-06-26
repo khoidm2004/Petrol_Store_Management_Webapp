@@ -35,9 +35,9 @@ export const Pump = () => {
   const [newStaff, setNewStaff] = useState({
     pid: "",
     pumpId: pumpId,
-    pumpCode: "",
+    pumpCode: 0,
     pumpName: "",
-    pumpStatus: "On use",
+    pumpStatus: "ON USE",
     product: {
       productName: "",
       productCode: "",
@@ -114,9 +114,9 @@ export const Pump = () => {
       setNewStaff({
         pid: "",
         pumpId: pumpId,
-        pumpCode: "",
+        pumpCode: 0,
         pumpName: "",
-        pumpStatus: "On use",
+        pumpStatus: "ON USE",
         product:
           product.length > 0
             ? {
@@ -139,10 +139,10 @@ export const Pump = () => {
   };
 
   const firstNumber = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "On use"
+    (staffMember) => staffMember.pumpStatus === "ON USE"
   ).length;
   const secondNumber = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "Not On use"
+    (staffMember) => staffMember.pumpStatus === "NOT ON USE"
   ).length;
 
   const data = {
@@ -158,10 +158,10 @@ export const Pump = () => {
   };
 
   const workingStaff = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "On use"
+    (staffMember) => staffMember.pumpStatus === "ON USE"
   );
   const notWorkingStaff = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "Not On use"
+    (staffMember) => staffMember.pumpStatus === "NOT ON USE"
   );
 
   const filteredStaff = (
@@ -364,7 +364,7 @@ export const Pump = () => {
               <input
                 type="text"
                 placeholder="Pump Code"
-                value={selectedStaff.pumpCode}
+                value={parseInt(selectedStaff.pumpCode)}
                 readOnly
               />
               <br />
@@ -377,8 +377,8 @@ export const Pump = () => {
                   })
                 }
                   ><optgroup label="Hoạt động">
-                      <option value="On use">Đang hoạt động</option>
-                      <option value="Not On use">Ngừng hoạt động</option>
+                      <option value="ON USE">Đang hoạt động</option>
+                      <option value="NOT ON USE">Ngừng hoạt động</option>
                   </optgroup>
                 </select>
               <select
@@ -461,7 +461,7 @@ export const Pump = () => {
               <input
                 type="text"
                 placeholder="Pump Code"
-                value={newStaff.pumpCode}
+                value={parseInt(newStaff.pumpCode)}
                 onChange={(e) =>
                   setNewStaff({ ...newStaff, pumpCode: e.target.value })
                 }
@@ -473,8 +473,8 @@ export const Pump = () => {
                   setNewStaff({ ...newStaff, pumpStatus: e.target.value })
                 }
               ><optgroup label="Hoạt động">
-                  <option value="On use">Đang kinh doanh</option>
-                  <option value="Not On use">Ngừng kinh doanh</option>
+                  <option value="ON USE">Đang kinh doanh</option>
+                  <option value="NOT ON USE">Ngừng kinh doanh</option>
               </optgroup>
               </select>
               <select

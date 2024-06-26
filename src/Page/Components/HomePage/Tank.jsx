@@ -30,9 +30,9 @@ export const Tank = () => {
   const [newTank, setNewTank] = useState({
     tid: "",
     tankId: (tankId),
-    tankCode: "",
+    tankCode: 0,
     tankName: "",
-    tankStatus: "On use",
+    tankStatus: "ON USE",
     product: {
       productName: "",
       productCode: "",
@@ -87,10 +87,9 @@ export const Tank = () => {
       setNewTank({
         tid: "",
         tankId,
-        tankCode: "",
+        tankCode: 0,
         tankName: "",
-        tankVolume: "",
-        tankStatus: "On use",
+        tankStatus: "ON USE",
         product:
           product.length > 0
             ? {
@@ -106,10 +105,10 @@ export const Tank = () => {
   };
 
   const firstNumber = tanks.filter(
-    (TankMember) => TankMember.tankStatus === "On use"
+    (TankMember) => TankMember.tankStatus === "ON USE"
   ).length;
   const secondNumber = tanks.filter(
-    (TankMember) => TankMember.tankStatus === "Not On use"
+    (TankMember) => TankMember.tankStatus === "NOT ON USE"
   ).length;
 
   const data = {
@@ -124,8 +123,8 @@ export const Tank = () => {
     ],
   };
 
-  const workingTank = tanks.filter(TankMember => TankMember.tankStatus === "On use");
-  const notWorkingTank = tanks.filter(TankMember => TankMember.tankStatus === "Not On use");
+  const workingTank = tanks.filter(TankMember => TankMember.tankStatus === "ON USE");
+  const notWorkingTank = tanks.filter(TankMember => TankMember.tankStatus === "NOT ON USE");
 
   const filteredStaff = (viewMode === "use" ? workingTank : notWorkingTank).filter(
     (TankMember) =>
@@ -259,16 +258,7 @@ export const Tank = () => {
               }
             />
             <br />
-            <input type="text" placeholder="Tank Code" value={selectedTank.tankCode} readOnly />
-            <br />
-            <input
-              type="text"
-              placeholder="Tank Volume"
-              value={selectedTank.tankVolume}
-              onChange={(e) =>
-                setSelectedTank({ ...selectedTank, tankVolume: e.target.value })
-              }
-            />
+            <input type="text" placeholder="Tank Code" value={parseInt(selectedTank.tankCode)} readOnly />
             <br />
             <select
               value={selectedTank.tankStatus}
@@ -276,8 +266,8 @@ export const Tank = () => {
                 setSelectedTank({ ...selectedTank, tankStatus: e.target.value })
               }
             ><optgroup label="Hoạt động">
-              <option value="On use">Đang kinh doanh</option>
-              <option value="Not On use">Ngừng kinh doanh</option>
+              <option value="ON USE">Đang kinh doanh</option>
+              <option value="NOT ON USE">Ngừng kinh doanh</option>
             </optgroup>
             </select>
             <select
@@ -330,18 +320,8 @@ export const Tank = () => {
             <input
               type="text"
               placeholder="Tank Code"
-              value={newTank.tankCode}
               onChange={(e) =>
-                setNewTank({ ...newTank, tankCode: e.target.value })
-              }
-            />
-            <br />
-            <input
-              type="text"
-              placeholder="Tank Volume"
-              value={newTank.tankVolume}
-              onChange={(e) =>
-                setNewTank({ ...newTank, tankVolume: e.target.value })
+                setNewTank({ ...newTank, tankCode: parseInt(e.target.value) })
               }
             />
             <br />
@@ -351,8 +331,8 @@ export const Tank = () => {
                 setNewTank({ ...newTank, tankStatus: e.target.value })
               }
             ><optgroup label="Hoạt động">
-                <option value="On use">Đang kinh doanh</option>
-                <option value="Not On use">Ngừng kinh doanh</option>
+                <option value="ON USE">Đang kinh doanh</option>
+                <option value="NOT ON USE">Ngừng kinh doanh</option>
             </optgroup>
             </select>
             <select

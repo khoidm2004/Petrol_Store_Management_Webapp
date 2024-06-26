@@ -73,6 +73,10 @@ p {
   width: 100%;
 }
 
+option{
+  background-color: white;
+}
+
 .firsttable {
   border-top: 1px solid #166bcc;
   background: #fff;
@@ -200,9 +204,6 @@ tr:hover {
   color: #145ca4;
 }
 
-/* .pump_width{
-  width: 40%;
-} */
 .viewShift,
 .addShift {
   position: fixed;
@@ -292,7 +293,7 @@ tr:hover {
 
 .product-it em input[type="number"],
 .pump-item input[type="number"] {
-  width: 100px;
+  width: 210px;
 }
 
 .push_icon:hover,
@@ -329,22 +330,25 @@ tr:hover {
 
 .viewShift button,
 .addShift button {
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  background: #166bcc;
   width: 17%;
-  color: #fff;
   text-align: center;
   font-size: 20px;
   font-weight: 700;
-  margin-left: 80%;
+  margin-left: 83%;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background: #166bcc;
+  padding: 8px 8px;
+  color: #fff; 
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .viewShift button:hover,
 .addShift button:hover {
-  background-color: #0a2c51;
+  box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
+  transform: scale(1.05); 
+  background-color: #135BA1;
 }
 
 .pagination {

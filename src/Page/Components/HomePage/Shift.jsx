@@ -26,7 +26,7 @@ export const Shift = () => {
         startTime: new Date(),
         endTime: new Date(),
         pumpList:{
-            "Pump1": { pumpName: "", pumpCode: "", firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN }},
+            "Pump1": { pumpName: "", pumpCode: parseInt(""), firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN }},
         employeeList:  {
             "Staff1": { fullName: "", email: ""}},
         productList: {
@@ -444,7 +444,7 @@ export const Shift = () => {
                                                     ))}
                                                 </optgroup>
                                             </select>
-                                            <input  className='pump_width' type="number" placeholder='firstMeterReadingByLitre' value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
+                                            <input type="number" placeholder='firstMeterReadingByLitre' value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
                                                 ...selectedShift,
                                                 pumpList: {
                                                     ...selectedShift.pumpList,
@@ -454,7 +454,7 @@ export const Shift = () => {
                                                     }
                                                 }
                                             })} />
-                                            <input  className='pump_width' type="number" placeholder="firstMeterReadingByMoney"value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
+                                            <input type="number" placeholder="firstMeterReadingByMoney"value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
                                                 ...selectedShift,
                                                 pumpList: {
                                                     ...selectedShift.pumpList,

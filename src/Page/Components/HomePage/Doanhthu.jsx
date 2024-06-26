@@ -43,12 +43,17 @@ export const Revenue = () => {
     setSelectedDate(newDate);
   };
 
-  const formattedDate = new Date(selectedDate).toLocaleDateString("vi-VN", {
+  const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
     day: "numeric"
   });
 
+  const formatDatestring = (dateString) => {
+    const [day, month, year] = dateString.split('/');
+    return `Ngày ${day} tháng ${month} năm ${year}`;
+  };
+  
   useEffect(() => {
       fetchProduct();
       fetchTank();
@@ -154,6 +159,7 @@ export const Revenue = () => {
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
 
+  // console.log(currentData);
   const barData = {
     labels: currentData.items.map((item) => item.productName),
     datasets: [
@@ -201,7 +207,7 @@ export const Revenue = () => {
   const indexOfFirstStaff = indexOfLastStaff - perPage;
   const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
 
-  console.log(dailyData)
+  // console.log(dailyData)
   const totalPages = Math.ceil(dailyData.length / perPage);
 
   const handlePageChange = (page) => {
@@ -257,7 +263,7 @@ export const Revenue = () => {
                   />
                 </div>
                 <div className="content">
-                  <h4>{formattedDate}</h4>
+                  <h4>{formatDatestring(formattedDate)}</h4>
                   <div className="table-container">
                     <table className="table firsttable">
                       <thead>
@@ -315,7 +321,11 @@ export const Revenue = () => {
           </div>
         </div>
         {showDoughnutDetail && (
-          <>
+          <>  
+            <div
+                className="overlay"
+                onClick={() => setShowDoughnutDetail(false)}
+              ></div>
             <div className="viewShift">
               <AiOutlineClose
                 onClick={() => setShowDoughnutDetail(false)}
@@ -467,7 +477,7 @@ export const Revenue = () => {
             </div>
 
             <div className="content">
-              <h4>{formattedDate}</h4>
+              <h4>{formatDatestring(formattedDate)}</h4>
               <div className="table-container">
                 <table className="table">
                   <thead>
@@ -529,7 +539,7 @@ export const Revenue = () => {
                   </div>
 
                   <div className="content">
-                    <h4>{formattedDate}</h4>
+                    <h4>{formatDatestring(formattedDate)}</h4>
                     <div className="table-container">
                       <table className="table">
                         <thead>

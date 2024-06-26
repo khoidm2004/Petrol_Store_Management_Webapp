@@ -37,15 +37,17 @@ p {
 .burger > .tab_menu {
   width: 30px;
   height: 30px;
-  background-color: white; 
+  background-color: #fbfdff00; 
   color: #58b5fc;
   position: sticky;
   top: 0;
   cursor: pointer;
 }
+
 .burger{
   text-align: center;
 }
+
 .burger > .tab_close {
   background-color: #f8f9fa; 
   text-align: center;

@@ -92,8 +92,7 @@ export const Account = () => {
             message: "Đổi thành công",
           });
           const test = await handleLogout();
-          console.log(test);
-          window.location.href = 'http://localhost:5173/';
+          window.location.href = '/';
         } else {
           setPopup({
             show: true,

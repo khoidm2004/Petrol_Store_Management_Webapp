@@ -59,12 +59,18 @@
     border: 1px solid #166BCC;
     border-top: 0px;
     background-color: #F3F7FC;
-    color: #6E707E;
+    color: #000000;
     text-align: left;
     cursor: pointer;
     border-radius: 0px 0px 6px 6px;
+    position: relative;
+    overflow: hidden;
   }
 
+  .button_xemChitiet button:hover{
+    color: #004bb5;
+    font-weight: 500;
+  }
   /* ------------------ */
 
   .object_body {
@@ -199,14 +205,14 @@
   .table tbody td {
     text-align: center;
     padding: 10px;
-    border: 0px solid #ddd;
     border-bottom: 1px solid black;
     cursor: pointer;
   }
 
-    
+  
+
   .table tbody tr:hover{
-    background-color: #f3f7fc; 
+    background-color: #1f62b4; 
     color: #0f0f0f;
     border-bottom: 1px solid #166bcc;
   }
