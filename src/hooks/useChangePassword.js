@@ -6,7 +6,7 @@ import {
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, firestore } from "../firebase/firebase";
 
-const useChangePassword = async (newPassword, email, currentPassword) => {
+const useChangePassword = async (newPassword, email, currentPassword, uid) => {
   const user = auth.currentUser;
   if (!user) {
     return { Title: "Error", Message: "No user is signed in", Status: "error" };
@@ -17,9 +17,10 @@ const useChangePassword = async (newPassword, email, currentPassword) => {
     await reauthenticateWithCredential(user, credential);
 
     await updatePassword(user, newPassword);
-    const userRef = doc(firestore, "user", user.uid);
+
+    const userRef = doc(firestore, "user", uid);
     await updateDoc(userRef, { pass: newPassword });
-    
+
     return {
       Title: "Success",
       Message: "Password updated successfully",

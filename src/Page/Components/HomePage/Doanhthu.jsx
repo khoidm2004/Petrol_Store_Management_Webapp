@@ -50,7 +50,6 @@ export const Revenue = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       const result = await useFetchLog();
-      console.log(result);
       if (result.Status !== "error") {
         const logs = result.filter((log) => {
           const logDate = new Date(new Date(log.logList.startTime).toISOString().slice(0, 10));
@@ -66,7 +65,6 @@ export const Revenue = () => {
     fetchLogs();
   }, [formattedSelectedDate]);
 
-  console.log(dailyData)
   // Tồn kho
   useEffect(() => {
     const fetchData = async () => {
@@ -180,7 +178,6 @@ export const Revenue = () => {
     fetchRevenueData();
   }, []);
 
-  console.log(revenueData);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleRowClick = (item) => {

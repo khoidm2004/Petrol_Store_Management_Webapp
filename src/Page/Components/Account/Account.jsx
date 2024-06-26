@@ -75,8 +75,9 @@ export const Account = () => {
         // console.log(formPass.pass)
         const result = await useChangePassword(
           formPass.pass,
-          "admin@gmail.com",
-          "admin123"
+          profile.email,
+          profile.pass,
+          profile.uid
         );
         console.log(result);
         if (result) {
