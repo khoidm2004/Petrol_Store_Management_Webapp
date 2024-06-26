@@ -222,7 +222,7 @@ export const Staff = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: "",
+                  text: "NHÂN VIÊN",
                 },
               },
             }}
@@ -267,8 +267,8 @@ export const Staff = () => {
                   })
                 }
               >
-                <option value="IS WORKING">IS WORKING</option>
-                <option value="ISN'T WORKING">ISN'T WORKING</option>
+                <option value="IS WORKING">Đang làm việc</option>
+                <option value="ISN'T WORKING">Ngừng làm việc</option>
               </select>
               <button className="send" onClick={saveChanges}>
                 OK
@@ -318,8 +318,8 @@ export const Staff = () => {
                   setNewStaff({ ...newStaff, workingStatus: e.target.value })
                 }
               >
-                <option value="IS WORKING">IS WORKING</option>
-                <option value="ISN'T WORKING">ISN'T WORKING</option>
+                <option value="IS WORKING">Đang làm việc</option>
+                <option value="ISN'T WORKING">Ngừng làm việc</option>
               </select>
               <button className="send" onClick={handleAddStaff}>
                 THÊM

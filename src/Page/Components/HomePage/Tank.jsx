@@ -191,8 +191,8 @@ export const Tank = () => {
                 <th>STT</th>
                 <th>
                   <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
-                    <option value="use">Đang làm việc</option>
-                    <option value="notUse">Ngừng làm việc</option>
+                    <option value="use">Đang kinh doanh</option>
+                    <option value="notUse">Ngừng kinh doanh</option>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -275,9 +275,10 @@ export const Tank = () => {
               onChange={(e) =>
                 setSelectedTank({ ...selectedTank, tankStatus: e.target.value })
               }
-            >
-              <option value="On use">On use</option>
-              <option value="Not On use">Not On use</option>
+            ><optgroup label="Hoạt động">
+              <option value="On use">Đang kinh doanh</option>
+              <option value="Not On use">Ngừng kinh doanh</option>
+            </optgroup>
             </select>
             <select
               value={selectedTank.product.productCode}
@@ -349,9 +350,10 @@ export const Tank = () => {
               onChange={(e) =>
                 setNewTank({ ...newTank, tankStatus: e.target.value })
               }
-            >
-              <option value="On use">On use</option>
-              <option value="Not On use">Not On use</option>
+            ><optgroup label="Hoạt động">
+                <option value="On use">Đang kinh doanh</option>
+                <option value="Not On use">Ngừng kinh doanh</option>
+            </optgroup>
             </select>
             <select
               onChange={(e) => {

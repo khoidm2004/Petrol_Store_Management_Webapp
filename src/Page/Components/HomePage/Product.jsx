@@ -82,7 +82,7 @@ export const Product = () => {
     labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
     datasets: [
       {
-        label: "My First Dataset",
+        label: "Mặt hàng",
         data: [300, 70],
         backgroundColor: ["Green", "Red"],
         hoverOffset: 10,
@@ -266,8 +266,8 @@ export const Product = () => {
                 })
               }
             >
-              <option value="On sale">On sale</option>
-              <option value="Not on sale">Not on sale</option>
+              <option value="On sale">Đang kinh doanh</option>
+              <option value="Not on sale">Ngừng kinh doanh</option>
             </select>
               <button className="send" onClick={saveChanges}>
                 OK
@@ -326,8 +326,8 @@ export const Product = () => {
                 setNewProduct({ ...newProduct, productStatus: e.target.value })
               }
             >
-              <option value="On sale">On sale</option>
-              <option value="Not on sale">Not on sale</option>
+              <option value="On sale">Đang kinh doanh</option>
+              <option value="Not on sale">Ngừng kinh doanh</option>
             </select>
             <button className="send" onClick={handleAddProduct}>
               THÊM
@@ -345,7 +345,7 @@ export const Product = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: "",
+                  text: "MẶT HÀNG",
                 },
               },
             }}

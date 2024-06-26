@@ -42,21 +42,20 @@ body {
   border: none;
   outline: none;
   border-radius: 2px;
-  background: #00267184;
+  background: #166BCC;
   min-width: 80px;
   height: 40px;
   color: #ffffff;
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-  padding: 0 16px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .push:hover {
-  background-color: #003ba6;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  color: #f0f0f0;
+  box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
+  transform: scale(1.05); 
+  background-color: #135BA1;
 }
 
 p {
@@ -156,7 +155,7 @@ tr:hover {
   padding: 40px;
   padding-right: 0px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  border-radius: 20px;
+  border-radius: 10px;
   z-index: 1000;
   width: 90%;
   max-width: 400px;
@@ -177,22 +176,23 @@ tr:hover {
 .viewStaff button,
 .addStaff button {
   border: none;
-  outline: none;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background: #166bcc;
   width: 88%;
-  height: 45px;
-  color: #fff; /* White */
+  padding: 10px 10px;
+  color: #fff; 
   text-align: center;
-  font-size: 18px;
   font-weight: 700;
   margin: 5px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .viewStaff button:hover,
 .addStaff button:hover {
-  background-color: #0a2c51;
+  box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
+  transform: scale(1.05); 
+  background-color: #135BA1;
 }
 
 .tab_menu:hover {
@@ -200,6 +200,9 @@ tr:hover {
   color: #145ca4;
 }
 
+/* .pump_width{
+  width: 40%;
+} */
 .viewShift,
 .addShift {
   position: fixed;

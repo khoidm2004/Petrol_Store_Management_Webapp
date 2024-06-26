@@ -444,7 +444,7 @@ export const Shift = () => {
                                                     ))}
                                                 </optgroup>
                                             </select>
-                                            <input type="number" placeholder='firstMeterReadingByLitre' value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
+                                            <input  className='pump_width' type="number" placeholder='firstMeterReadingByLitre' value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
                                                 ...selectedShift,
                                                 pumpList: {
                                                     ...selectedShift.pumpList,
@@ -454,7 +454,7 @@ export const Shift = () => {
                                                     }
                                                 }
                                             })} />
-                                            <input type="number" placeholder="firstMeterReadingByMoney"value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
+                                            <input  className='pump_width' type="number" placeholder="firstMeterReadingByMoney"value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
                                                 ...selectedShift,
                                                 pumpList: {
                                                     ...selectedShift.pumpList,

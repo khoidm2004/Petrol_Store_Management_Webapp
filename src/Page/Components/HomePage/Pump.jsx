@@ -248,9 +248,10 @@ export const Pump = () => {
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
-                  >
-                    <option value="use">Đang kinh doanh</option>
-                    <option value="noUse">Ngừng kinh doanh</option>
+                  ><optgroup label="Hoạt động">
+                      <option value="use">Đang kinh doanh</option>
+                      <option value="noUse">Ngừng kinh doanh</option>
+                  </optgroup>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -375,11 +376,11 @@ export const Pump = () => {
                     pumpStatus: e.target.value,
                   })
                 }
-              >
-                <option value="On use">On use</option>
-                <option value="Not On use">Not On use</option>
-              </select>
-
+                  ><optgroup label="Hoạt động">
+                      <option value="On use">Đang hoạt động</option>
+                      <option value="Not On use">Ngừng hoạt động</option>
+                  </optgroup>
+                </select>
               <select
                 value={selectedStaff.product.productCode}
                 onChange={(e) => {
@@ -471,9 +472,10 @@ export const Pump = () => {
                 onChange={(e) =>
                   setNewStaff({ ...newStaff, pumpStatus: e.target.value })
                 }
-              >
-                <option value="On use">On use</option>
-                <option value="Not On use">Not On use</option>
+              ><optgroup label="Hoạt động">
+                  <option value="On use">Đang kinh doanh</option>
+                  <option value="Not On use">Ngừng kinh doanh</option>
+              </optgroup>
               </select>
               <select
                 value={newStaff.product.productCode}

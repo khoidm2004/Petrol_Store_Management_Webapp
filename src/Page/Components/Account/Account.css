@@ -32,19 +32,21 @@
 
 .button_account {
     width: 120px;
-    font-size: 1rem;
     text-align: center;
     padding: 5px;
     margin-top: 10px;
     cursor: pointer;
     font-weight: bold;
     border: none;
+    border-radius: 2px;
     color: #FDFDFD;
     background-color: #166BCC;
-    transition: background-color 0.3s; 
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .button_account:hover {
+    box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
+    transform: scale(1.05); 
     background-color: #135BA1;
 }
 
@@ -118,10 +120,14 @@
     transition: background-color 0.3s, border-bottom-color 0.3s; 
 }
 
-.profile_info input:focus {
+input::placeholder {
+    color: black;
+}
+
+select:focus, input:focus {
     background-color: #d1e7fd; 
     border-bottom-color: #166BCC;
-    border: 0px solid;
+    outline: none;
 }
 
 
@@ -166,19 +172,31 @@
     color: #145ca4;
   }
   
+  .modal-content input {
+    width: 80%;
+    border: none;
+    margin: 10px;
+    border-bottom: 1px solid black;
+  }
+
   .modal-content + button {
     width: 100%;
     padding: 10px;
     margin: 30px 20px 0px 0px;
     background-color: #166BCC;
-    color: #FFE8E8;
+    color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     border-radius: 0px 0px 8px 8px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   }
-  
+  .modal-content + button:hover{
+    box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
+    background-color: #135BA1;
+  }
+
   .overlay {
     position: fixed;
     top: 0;
@@ -188,7 +206,7 @@
     background: rgb(124 122 122 / 52%);
     z-index: 999;
   }
-  
+
 .footer_account{
     width: 100%;
     bottom: 0;
@@ -207,18 +225,19 @@
 
 .buttonChangePass{
     border: none;
-    background-color: #135ba1;
-    border: 1px solid black;
+    padding: 0px 10px;
+    border-radius: 2px;
+    background-color: #166BCC;
     font-weight: bold;
+    cursor: pointer;
     color: white;
     transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .buttonChangePass:hover {
-    background: #e9eff4; 
     box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
     transform: scale(1.05); 
-    color: rgb(0, 0, 0); 
+    background-color: #135BA1;
 }
 
 @media (min-width: 768px) {
