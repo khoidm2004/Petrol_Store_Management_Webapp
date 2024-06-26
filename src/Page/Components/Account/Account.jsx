@@ -9,6 +9,7 @@ import useLogout from "../../../hooks/useLogout";
 
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
+  const { handleLogout } = useLogout();
   const [popup, setPopup] = useState({ show: false, title: "", message: "" });
   const [profile, setProfile] = useState({
     uid: user.uid,
@@ -71,13 +72,13 @@ export const Account = () => {
 
 
   const email_local = JSON.parse(localStorage.getItem('user-info'));
-  console.log(email_local.email);
-  console.log(email_local.pass);
+  // console.log(email_local.email);
+  // console.log(email_local.pass);
   const handleChangePassword = async () => {
     const email_local = JSON.parse(localStorage.getItem('user-info'));
     if (formPass.pass === formPass.passNew) {
       try {
-        console.log(formPass)
+
         const result = await useChangePassword(
           formPass.pass,
           email_local.email,
@@ -89,7 +90,8 @@ export const Account = () => {
             title: "Thành công",
             message: "Đổi thành công",
           });
-          useLogout();
+          const test = await handleLogout();
+          console.log(test);
           window.location.href = 'http://localhost:5173/';
         } else {
           setPopup({

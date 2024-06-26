@@ -404,17 +404,17 @@ export const Revenue = () => {
             <table className="firsttable_shift">
               <thead>
                 <tr className="titleOneline">
-                  <th>Tên mặt hàng</th>
-                  <th>Tên vòi bơm</th>
-                  <th>Số đầu - số cuối</th>
+                  <th className="right">Vòi bơm</th>
+                  <th className="right">Mặt hàng</th>
+                  <th className="right">Số đầu - số cuối</th>
                 </tr>
               </thead>
               <tbody>
                 {revenueData.map((staffMember) => (
                   <tr key={staffMember.pid} className="col" id="mainstate">
-                    <td>{staffMember.productName}</td>
-                    <td>{staffMember.pumpName}</td>
-                    <td>
+                    <td className="right">{staffMember.pumpName}</td>
+                    <td className="right">{staffMember.productName}</td>
+                    <td className="right">
                       {staffMember.fNum} - {staffMember.lNum}
                     </td>
                   </tr>

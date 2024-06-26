@@ -7,6 +7,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, firestore } from "../firebase/firebase";
 
 const useChangePassword = async (newPassword, email, currentPassword) => {
+  console.log(newPassword, email, currentPassword);
   const user = auth.currentUser;
   if (!user) {
     return { Title: "Error", Message: "No user is signed in", Status: "error" };
