@@ -4,15 +4,15 @@ import { AiOutlineClose } from "react-icons/ai";
 import { TbEyeEdit } from "react-icons/tb";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
-import "./Staff.css";
-import Popup from '../Popup/Popup';
+import "./staff.css";
+import Popup from "../Popup/Popup";
 
 export const Staff = () => {
   const staff = useStaffStore((state) => state.staff);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
   const addStaff = useStaffStore((state) => state.addStaff);
   const modifyStaff = useStaffStore((state) => state.modifyStaff);
-  const [popup, setPopup] = useState({ show: false, title: '', message: '' });
+  const [popup, setPopup] = useState({ show: false, title: "", message: "" });
 
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [addingStaff, setAddingStaff] = useState(false);
@@ -41,6 +41,7 @@ export const Staff = () => {
     if (selectedStaff) {
       try {
         var status = await modifyStaff(selectedStaff);
+        console.log(status);
         setSelectedStaff(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -62,8 +63,8 @@ export const Staff = () => {
     if (!newStaff.fullName || !newStaff.email || !newStaff.phoneNum) {
       setPopup({
         show: true,
-        title: 'Thông báo',
-        message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+        title: "Thông báo",
+        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
       });
       return;
     }
@@ -71,8 +72,8 @@ export const Staff = () => {
     if (!validateEmail(newStaff.email)) {
       setPopup({
         show: true,
-        title: 'Thông báo',
-        message: 'Vui lòng nhập đúng định dạng email.',
+        title: "Thông báo",
+        message: "Vui lòng nhập đúng định dạng email.",
       });
       return;
     }
@@ -80,17 +81,17 @@ export const Staff = () => {
     if (!validatePhoneNumber(newStaff.phoneNum)) {
       setPopup({
         show: true,
-        title: 'Thông báo',
-        message: 'Vui lòng nhập số điện thoại gồm 10 chữ số.',
+        title: "Thông báo",
+        message: "Vui lòng nhập số điện thoại gồm 10 chữ số.",
       });
       return;
     }
-  
+
     try {
       var result = await addStaff(newStaff);
       setPopup({
         show: true,
-        title: 'Thông báo',
+        title: "Thông báo",
         message: result.Message,
       });
       setNewStaff({
@@ -105,8 +106,12 @@ export const Staff = () => {
     }
   };
 
-  const firstNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
-  const secondNumber = staff.filter((staffMember) => staffMember.workingStatus === "ISN'T WORKING").length;
+  const firstNumber = staff.filter(
+    (staffMember) => staffMember.workingStatus === "IS WORKING"
+  ).length;
+  const secondNumber = staff.filter(
+    (staffMember) => staffMember.workingStatus === "ISN'T WORKING"
+  ).length;
 
   const data = {
     labels: ["Đang làm việc", "Đã nghỉ việc "],
@@ -127,7 +132,9 @@ export const Staff = () => {
     (staffMember) => staffMember.workingStatus === "ISN'T WORKING"
   );
 
-  const filteredStaff = (viewMode === "working" ? workingStaff : notWorkingStaff).filter(
+  const filteredStaff = (
+    viewMode === "working" ? workingStaff : notWorkingStaff
+  ).filter(
     (staffMember) =>
       staffMember.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       staffMember.email.toLowerCase().includes(searchQuery.toLowerCase())
@@ -135,12 +142,15 @@ export const Staff = () => {
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
-  const displayedStaff = filteredStaff.slice(indexOfFirstStaff, indexOfLastStaff);
+  const displayedStaff = filteredStaff.slice(
+    indexOfFirstStaff,
+    indexOfLastStaff
+  );
 
   const totalPages = Math.ceil(filteredStaff.length / perPage);
 
   const closePopup = () => {
-    setPopup({ show: false, title: '', message: '' });
+    setPopup({ show: false, title: "", message: "" });
   };
 
   const handlePageChange = (page) => {
@@ -158,14 +168,23 @@ export const Staff = () => {
 
   return (
     <div className="revenue">
-      {showOverlay && 
-       <div className="overlay">
-        <div className="loader">
-          <svg className="circular" viewBox="25 25 50 50">
-            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
-          </svg>
+      {showOverlay && (
+        <div className="overlay">
+          <div className="loader">
+            <svg className="circular" viewBox="25 25 50 50">
+              <circle
+                className="path"
+                cx="50"
+                cy="50"
+                r="20"
+                fill="none"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+              />
+            </svg>
+          </div>
         </div>
-      </div>}
+      )}
       <header className="header_staff">
         <p>THÔNG TIN NHÂN VIÊN</p>
         <div className="search-container">
@@ -192,7 +211,10 @@ export const Staff = () => {
               <tr className="titleOneline">
                 <th>STT</th>
                 <th>
-                  <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
+                  <select
+                    onChange={(e) => setViewMode(e.target.value)}
+                    value={viewMode}
+                  >
                     <option value="working">Đang làm việc</option>
                     <option value="notWorking">Ngừng làm việc</option>
                   </select>
@@ -205,9 +227,12 @@ export const Staff = () => {
                 displayedStaff.map((staffMember, index) => (
                   <tr key={staffMember.staffId} className="col" id="mainstate">
                     <td>{indexOfFirstStaff + index + 1}</td>
-                    <td>{staffMember.fullName} - {staffMember.email}</td>
+                    <td>
+                      {staffMember.fullName} - {staffMember.email}
+                    </td>
                     <td className="icon_editview">
-                      <TbEyeEdit className="icon_menu"
+                      <TbEyeEdit
+                        className="icon_menu"
                         onClick={() => handleEdit(staffMember)}
                       />
                     </td>
@@ -216,32 +241,67 @@ export const Staff = () => {
               ) : (
                 <tr>
                   <td colSpan="3" className="no-data">
-                    {searchQuery ? "Không tìm thấy thông tin nhân viên." : "Chưa có thông tin nhân viên."}
+                    {searchQuery
+                      ? "Không tìm thấy thông tin nhân viên."
+                      : "Chưa có thông tin nhân viên."}
                   </td>
                 </tr>
               )}
               <tr>
                 <td colSpan="3">
-                {displayedStaff.length > 0 && (
-                  <div className="pagination">
-                    <p>
-                      <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, filteredStaff.length)} của {filteredStaff.length} mục </span> 
-                    </p>
-                    <ul className="pagination-list">
-                      <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                      </li>
-                      {Array.from({ length: totalPages }, (_, index) => (
-                        <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                          <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                  {displayedStaff.length > 0 && (
+                    <div className="pagination">
+                      <p>
+                        <span>Đang hiển thị &nbsp;</span>{" "}
+                        <span>{indexOfFirstStaff + 1}&nbsp;</span>
+                        <span> đến &nbsp;</span>
+                        <span>
+                          {Math.min(indexOfLastStaff, filteredStaff.length)}
+                          &nbsp;
+                        </span>{" "}
+                        <span>của &nbsp;</span>{" "}
+                        <span>{filteredStaff.length}&nbsp;</span> mục
+                      </p>
+                      <ul className="pagination-list">
+                        <li
+                          className={`pagination-item ${
+                            currentPage === 1 ? "disabled" : ""
+                          }`}
+                        >
+                          <button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                          >
+                            Previous
+                          </button>
                         </li>
-                      ))}
-                      <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
+                        {Array.from({ length: totalPages }, (_, index) => (
+                          <li
+                            key={index}
+                            className={`pagination-item ${
+                              currentPage === index + 1 ? "active" : ""
+                            }`}
+                          >
+                            <button onClick={() => handlePageChange(index + 1)}>
+                              {index + 1}
+                            </button>
+                          </li>
+                        ))}
+                        <li
+                          className={`pagination-item ${
+                            currentPage === totalPages ? "disabled" : ""
+                          }`}
+                        >
+                          <button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                          >
+                            Next
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </td>
               </tr>
             </tbody>
@@ -279,14 +339,22 @@ export const Staff = () => {
                 placeholder="Full Name"
                 value={selectedStaff.fullName}
                 onChange={(e) =>
-                  setSelectedStaff({ ...selectedStaff, fullName: e.target.value })
+                  setSelectedStaff({
+                    ...selectedStaff,
+                    fullName: e.target.value,
+                  })
                 }
               />
             </label>
             <br />
             <label>
               Email
-              <input placeholder="Email" type="text" value={selectedStaff.email} readOnly />
+              <input
+                placeholder="Email"
+                type="text"
+                value={selectedStaff.email}
+                readOnly
+              />
             </label>
             <br />
             <label>
@@ -296,7 +364,10 @@ export const Staff = () => {
                 placeholder="Phone Number"
                 value={selectedStaff.phoneNum}
                 onChange={(e) =>
-                  setSelectedStaff({ ...selectedStaff, phoneNum: e.target.value })
+                  setSelectedStaff({
+                    ...selectedStaff,
+                    phoneNum: e.target.value,
+                  })
                 }
               />
             </label>
@@ -306,7 +377,10 @@ export const Staff = () => {
               <select
                 value={selectedStaff.workingStatus}
                 onChange={(e) =>
-                  setSelectedStaff({ ...selectedStaff, workingStatus: e.target.value })
+                  setSelectedStaff({
+                    ...selectedStaff,
+                    workingStatus: e.target.value,
+                  })
                 }
               >
                 <option value="IS WORKING">Đang làm việc</option>
@@ -386,14 +460,14 @@ export const Staff = () => {
         </>
       )}
 
-    {popup.show && (
-      <Popup
-        title={popup.title}
-        message={popup.message}
-        onClose={closePopup}
-      />
-    )}
+      {popup.show && (
+        <Popup
+          title={popup.title}
+          message={popup.message}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };
- export default Staff;
+export default Staff;
