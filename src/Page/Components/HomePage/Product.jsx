@@ -6,7 +6,7 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import 'chart.js/auto';
 import Popup from '../Popup/Popup';
-import './Staff.css';
+import './staff.css';
 
 
 export const Product = () => {
@@ -267,7 +267,7 @@ export const Product = () => {
             <br />
             <label> Màu
               <input
-                type="color"
+                type="text"
                 placeholder="Product Color"
                 value={selectedProduct.productColor}
                 onChange={(e) =>
@@ -341,7 +341,7 @@ export const Product = () => {
             <br />
             <label> Màu
               <input
-                type="color"
+                type="text"
                 placeholder="Product Color"
                 value={newProduct.productColor}
                 onChange={(e) =>
