@@ -384,7 +384,7 @@ tr:hover {
 
 }
 
-@media (min-width: 768px) and (max-width: 1399px) {
+@media (min-width: 768px) and (max-width: 1500px) {
   .Staffs {
     flex-direction: row;
     align-items: flex-start;

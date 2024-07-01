@@ -18,6 +18,7 @@ export const Shift = () => {
     const addShift = useShiftStore((state) => state.addShift);
     const modifyShift = useShiftStore((state) => state.modifyShift);
 
+
     const { product, fetchProduct } = useProductStore();
     const { staff, fetchStaff } = useStaffStore();
     const { pumps, fetchPump } = usePumpStore();
@@ -332,7 +333,7 @@ export const Shift = () => {
                                 {displayedStaff.length > 0 && (
                                     <div className="pagination">
                                     <p>
-                                        <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, shifts.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{shifts.length}&nbsp;</span> entries
+                                        <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, shifts.length)} của {shifts.length} mục </span>
                                     </p>
                                     <ul className="pagination-list">
                                         <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>

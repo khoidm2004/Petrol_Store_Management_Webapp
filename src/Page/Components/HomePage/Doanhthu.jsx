@@ -144,6 +144,9 @@ export const Revenue = () => {
   const currentData = datarevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
     items: [],
   };
+
+  if(curr)
+  console.log(currentData)
   
   const selectDate = new Date(formattedSelectedDate);
   const formatDate = selectDate.toLocaleDateString("vi-VN", {
@@ -152,6 +155,7 @@ export const Revenue = () => {
     day: "numeric"
   });
   
+  console.log()
   const detailedData = datarevenue.find(
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };

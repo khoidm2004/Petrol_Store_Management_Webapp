@@ -225,7 +225,7 @@ export const Staff = () => {
                 {displayedStaff.length > 0 && (
                   <div className="pagination">
                     <p>
-                      <span>Đang hiển thị &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span> đến &nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>của &nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> mục
+                      <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, filteredStaff.length)} của {filteredStaff.length} mục </span> 
                     </p>
                     <ul className="pagination-list">
                       <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
