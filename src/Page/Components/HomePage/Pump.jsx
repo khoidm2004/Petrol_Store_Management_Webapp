@@ -8,7 +8,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
-import "./Staff.css";
+import "./staff.css";
 import Popup from "../Popup/Popup";
 
 export const Pump = () => {

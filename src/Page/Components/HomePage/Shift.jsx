@@ -8,7 +8,7 @@ import { TbEyeEdit } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
 import { FaRegMinusSquare } from "react-icons/fa";
 import 'chart.js/auto'; 
-import './Staff.css';
+import './staff.css';
 import Popup from "../Popup/Popup";
 import { timeConverter } from '../../../utils/timeConverter.js';
 

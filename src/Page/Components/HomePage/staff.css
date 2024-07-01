@@ -372,6 +372,7 @@ tr:hover {
   display: flex;
   flex-direction: column;
 }
+
 /* Responsive Design */
 @media (min-width: 1400px) {
   .chart-container {
@@ -381,7 +382,6 @@ tr:hover {
   .box_staff {
     width: 60%;
   }
-
 }
 
 @media (min-width: 768px) and (max-width: 1500px) {

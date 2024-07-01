@@ -5,7 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
-import "./Staff.css";
+import "./staff.css";
 import Popup from '../Popup/Popup';
 
 export const Tank = () => {

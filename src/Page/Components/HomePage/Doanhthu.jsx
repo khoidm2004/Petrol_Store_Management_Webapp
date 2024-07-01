@@ -141,12 +141,15 @@ export const Revenue = () => {
     day: "numeric"
   });
   
-  const currentData = datarevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
-    items: [],
-  };
+  const filteredData = datarevenue.filter(entry => {
+    return timeConverter(Date.parse(entry.date)).date === currentDate;
+  });
 
-  if(curr)
-  console.log(currentData)
+  console.log(filteredData);
+
+  const currentData = {
+      items: filteredData.length > 0 ? filteredData : [],
+  };
   
   const selectDate = new Date(formattedSelectedDate);
   const formatDate = selectDate.toLocaleDateString("vi-VN", {
@@ -155,11 +158,10 @@ export const Revenue = () => {
     day: "numeric"
   });
   
-  console.log()
   const detailedData = datarevenue.find(
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
-  
+
   const barData = {
     labels: currentData.items.map((item) => item.productName),
     datasets: [
