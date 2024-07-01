@@ -39,9 +39,9 @@ const Include = ({ setLoggedIn }) => {
 
   return (
     <>
-      <header>
+      <header className="header">
         <a href="http://localhost:5173/revenue">
-          <img src={logo} alt="Logo" id="logo" />
+          <span id="logo">PIACOM</span>
         </a>
         <p className="title">
           CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />

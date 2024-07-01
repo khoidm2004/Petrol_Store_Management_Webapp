@@ -34,8 +34,8 @@ export const Revenue = () => {
   const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
 
   const [leftData, setLeftData] = useState([]);
+  const [searchQueryTank, setSearchQueryTank] = useState("");
 
-  console.log(tanks);
   const handleDateChange = (e) => {
     const newDate = new Date(e.target.value);
     setSelectedDate(newDate);
@@ -82,7 +82,6 @@ export const Revenue = () => {
   // Tồn kho
   useEffect(() => {
     const fetchData = async () => {
-      console.log(tanks);
       setLeftData(tanks);
       const totalQuantity = tanks.reduce(
         (sum, item) => sum + parseInt(item.product.quantity_left),
@@ -121,7 +120,7 @@ export const Revenue = () => {
   }, []);
 
   // Doanh thu va san luong
-  const [Datarevenue, setDataRevenue] = useState([]);
+  const [datarevenue, setDataRevenue] = useState([]);
 
   useEffect(() => {
     const fetchRevenueData = async () => {
@@ -132,31 +131,31 @@ export const Revenue = () => {
         console.error('Error fetching revenue data:', error);
       }
     };
-
+  
     fetchRevenueData();
-  }, [Datarevenue]);
-
-  const currentDate =new Date(new Date().toISOString().slice(0, 10));
-  const fomartCurrent = currentDate.toLocaleDateString("vi-VN", {
-      month: "numeric",
-      year: "numeric",
-      day: "numeric"
-    });
-
-  const currentData = Datarevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === fomartCurrent) || {
+  }, [datarevenue]);
+  
+  const currentDate = new Date().toLocaleDateString("vi-VN", {
+    month: "numeric",
+    year: "numeric",
+    day: "numeric"
+  });
+  
+  const currentData = datarevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
     items: [],
   };
-
+  
   const selectDate = new Date(formattedSelectedDate);
   const formatDate = selectDate.toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
     day: "numeric"
   });
-  const detailedData = Datarevenue.find(
+  
+  const detailedData = datarevenue.find(
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
-
+  
   const barData = {
     labels: currentData.items.map((item) => item.productName),
     datasets: [
@@ -192,6 +191,12 @@ export const Revenue = () => {
     fetchRevenueData();
   }, []);
 
+  const revenueDatas= revenueData.filter(
+    (staffMember) =>
+      staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
+      staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
+  );
+
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleRowClick = (item) => {
@@ -210,6 +215,8 @@ export const Revenue = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+
   return (
     <div className="revenue">
       {/* {showOverlay && 
@@ -395,13 +402,15 @@ export const Revenue = () => {
 
       <div className="Row">
         <div className="Column doanh_thu">
-          <header>
+          <header className="header_staff">
             <p>DOANH THU VÒI BƠM</p>
             <div className="search-container">
               <input
                 type="text"
                 placeholder="Search..."
                 className="search-input"
+                value={searchQueryTank}
+                onChange={(e) => setSearchQueryTank(e.target.value)}
               />
             </div>
           </header>
@@ -416,15 +425,23 @@ export const Revenue = () => {
                 </tr>
               </thead>
               <tbody>
-                {revenueData.map((staffMember) => (
-                  <tr key={staffMember.pid} className="col" id="mainstate">
-                    <td className="right">{staffMember.pumpName}</td>
-                    <td className="right">{staffMember.productName}</td>
-                    <td className="right">
-                      {staffMember.fNum} - {staffMember.lNum}
+                {revenueData.length > 0 ? (
+                  revenueDatas.map((staffMember) => (
+                    <tr key={staffMember.pid} className="col" id="mainstate">
+                      <td className="right">{staffMember.pumpName}</td>
+                      <td className="right">{staffMember.productName}</td>
+                      <td className="right">
+                        {staffMember.fNum} - {staffMember.lNum}
+                      </td>
+                    </tr>
+                  ))
+                ):(
+                  <tr>
+                    <td colSpan="3" className="no-data">
+                      Chưa có dữ liệu về doanh thu vòi bơm
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

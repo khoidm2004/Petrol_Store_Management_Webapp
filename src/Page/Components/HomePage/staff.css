@@ -1,34 +1,20 @@
-body {
-  background-color: #fbfdff;
-}
-
-* {
-  padding: 0;
-  margin: 0;
-}
 
 .search-container {
   display: flex;
   align-items: center;
 }
 
-.search-icon {
-  color: #333; /* Dark gray */
-  margin-right: 10px;
-}
-
 .search-input {
   border: none;
   outline: none;
   border-bottom: 1px solid black;
-  margin: 5px;
   font-size: 14px;
   width: 140px;
   height: 40px;
   background-color: #fbfdff;
   color: black;
-  transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out,
-    background-color 0.3s ease-in-out;
+  margin-right: 5px;
+  transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
 .search-input:focus {
@@ -42,8 +28,8 @@ body {
   border: none;
   outline: none;
   border-radius: 2px;
-  background: #166BCC;
-  min-width: 80px;
+  background: #166bcc;
+  width: 100px;
   height: 40px;
   color: #ffffff;
   text-align: center;
@@ -54,27 +40,25 @@ body {
 
 .push:hover {
   box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
-  transform: scale(1.05); 
-  background-color: #135BA1;
+  transform: scale(1.05);
+  background-color: #135ba1;
 }
 
-p {
+.header_staff p {
+  width: 300px;
   margin: auto;
   margin-left: 10px;
   font-weight: bold;
 }
 
-.Staff {
-  padding: 20px 50px 20px 20px;
-}
-
-.Staff > .Staffs {
+.header_staff{
+  height: auto;
   display: flex;
-  width: 100%;
-}
-
-option{
-  background-color: white;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 5px 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .firsttable {
@@ -83,14 +67,8 @@ option{
   color: #333;
   text-transform: capitalize;
   width: 100%;
-}
-
-.firsttable_shift {
-  border-top: 1px solid #166bcc;
-  background: #fff;
-  color: #333;
-  text-transform: capitalize;
-  width: 100%;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .firsttable select {
@@ -108,19 +86,12 @@ option{
 }
 
 .chart-container {
-  width: 30%;
-  max-height: 200px;
+  width: 100%;
+  max-height: 400px;
   position: relative;
   display: flex;
   flex-direction: column;
-}
-
-.box_staff {
-  width: 100%;
-  padding: 10px 10px 0px 10px;
-  border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 thead > tr > th {
@@ -129,12 +100,14 @@ thead > tr > th {
   border-bottom: 1px solid #166bcc;
 }
 
-td,
-th {
+td, th {
   padding: 6px;
   border-bottom: 1px solid black;
 }
 
+h2{
+  text-align: center;
+}
 tr:hover {
   background-color: #f3f7fc;
   color: #0f0f0f;
@@ -142,22 +115,18 @@ tr:hover {
 }
 
 .icon_editview {
-  position: relative;
   text-align: center;
-  padding-right: 15px;
   width: 80px;
   font-size: 20px;
 }
 
-.viewStaff,
-.addStaff {
+.viewStaff, .addStaff {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
   padding: 40px;
-  padding-right: 0px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   z-index: 1000;
@@ -165,43 +134,53 @@ tr:hover {
   max-width: 400px;
 }
 
-.viewStaff input,
-.viewStaff select,
-.addStaff input,
-.addStaff select {
-  width: 90%;
-  height: 40px;
-  margin-bottom: 30px;
-  border: 0 solid white;
-  border-bottom: 1px solid black;
-  padding-left: 10px;
+.viewStaff label, .addStaff label {
+  font-weight: bold;
+  width: 100%;
 }
 
-.viewStaff button,
-.addStaff button {
+.viewShift label,
+.addShift label {
+  font-weight: bold;
+  width: 100%;
+  color: #0b6eca;
+}
+
+.viewStaff input, .viewStaff select, .addStaff input, .addStaff select {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid black;
+  padding-left: 10px;
+} 
+
+.viewStaff button, .addStaff button {
   border: none;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background: #166bcc;
   width: 88%;
   padding: 10px 10px;
-  color: #fff; 
+  color: #fff;
   text-align: center;
   font-weight: 700;
   margin: 5px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.viewStaff button:hover,
-.addStaff button:hover {
+.viewStaff button:hover, .addStaff button:hover {
   box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
-  transform: scale(1.05); 
-  background-color: #135BA1;
+  transform: scale(1.05);
+  background-color: #135ba1;
 }
 
-.tab_menu:hover {
-  transform: scale(1.1);
-  color: #145ca4;
+.firsttable_shift {
+  border-top: 1px solid #166bcc;
+  background: #fff;
+  color: #333;
+  text-transform: capitalize;
+  width: 100%;
 }
 
 .viewShift,
@@ -215,42 +194,9 @@ tr:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   z-index: 1000;
-  width: 90%;
-  max-width: 800px;
+  width: 100%;
   overflow: auto;
   max-height: 500px;
-}
-
-.viewStaff h2,
-.addStaff h2,
-.viewShift h2,
-.addShift h2 {
-  text-align: center;
-}
-
-.close_icon {
-  position: sticky;
-  top: 0;
-  left: 0;
-  cursor: pointer;
-  float: right;
-  z-index: 10;
-  font-size: 1.5em;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.close_icon:hover {
-  color: #ff0000;
-  transform: scale(1.1);
-}
-
-/* Input and Label Styles */
-.viewShift label,
-.addShift label {
-  display: block;
-  font-weight: bold;
-  margin-top: 10px;
-  color: #0b6eca;
 }
 
 .viewShift input[type="datetime-local"],
@@ -352,6 +298,27 @@ tr:hover {
 }
 
 
+.close_icon {
+  position: sticky;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  float: right;
+  z-index: 10;
+  font-size: 1.5em;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.close_icon:hover {
+  color: #ff0000;
+  transform: scale(1.1);
+}
+
+.no-data{
+  text-align: center;
+  font-weight: bold;
+  color: red;
+}
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -361,6 +328,7 @@ tr:hover {
 
 .pagination p {
   display: flex;
+  font-weight: bold;
 }
 
 .pagination-list {
@@ -395,6 +363,73 @@ tr:hover {
   color: white;
 }
 
-.boc{
+.box_shift{
+  margin-top: 10px;
   width: 100%;
+}
+
+.Staffs{
+  display: flex;
+  flex-direction: column;
+}
+/* Responsive Design */
+@media (min-width: 1400px) {
+  .chart-container {
+    width: 40%;
+  }
+
+  .box_staff {
+    width: 60%;
+  }
+
+}
+
+@media (min-width: 768px) and (max-width: 1399px) {
+  .Staffs {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .chart-container {
+    width: 30%;
+  }
+
+  .box_staff {
+    width: 70%;
+  }
+}
+
+@media (max-width: 767px) {
+  .pagination > p {
+    display: none;
+  }
+
+  .pagination-item {
+    width: 50%;
+    text-align: center;
+  }
+
+  .viewStaff input, .viewStaff select, .addStaff input, .addStaff select {
+    width: 100%;
+  }
+
+  
+  .header_staff p {
+    width: 100%;
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 480px) {
+  .firsttable select {
+    font-size: 14px;
+  }
+
+  .search-input {
+    width: 100px;
+  }
+
+  .search-input:focus {
+    width: 150px;
+  }
 }

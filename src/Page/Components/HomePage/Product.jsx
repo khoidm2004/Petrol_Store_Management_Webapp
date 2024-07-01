@@ -8,6 +8,7 @@ import 'chart.js/auto';
 import Popup from '../Popup/Popup';
 import './Staff.css';
 
+
 export const Product = () => {
   const product = useProductStore((state) => state.product);
   const fetchProduct = useProductStore((state) => state.fetchProduct);
@@ -51,7 +52,7 @@ export const Product = () => {
     }
   };
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     if (!newProduct.productCode || !newProduct.productName || !newProduct.productPrice 
       || !newProduct.productPrice) {
       setPopup({
@@ -63,8 +64,12 @@ export const Product = () => {
     }
 
     try {
-      console.log(typeof(newProduct.productCode))
-      addProduct(newProduct);
+      const result = await addProduct(newProduct);
+      setPopup({
+        show: true,
+        title: 'Thông báo',
+        message: result.Message,
+      });
       setNewProduct({
         productId: "",
         productCode: 0,
@@ -130,7 +135,7 @@ export const Product = () => {
   }, []);
 
   return (
-    <div className="Staff">
+    <div className="revenue">
       {showOverlay && 
        <div className="overlay">
         <div className="loader">
@@ -140,7 +145,7 @@ export const Product = () => {
         </div>
       </div>}
 
-      <header>
+      <header className="header_staff">
         <p>THÔNG TIN MẶT HÀNG</p>
         <div className="search-container">
           {/* <FaMagnifyingGlass className="search-icon" /> */}
@@ -192,90 +197,105 @@ export const Product = () => {
                   </td>
                 </tr>
               )}
+              <tr>
+                <td colSpan="3" >
+                {displayedStaff.length > 0 && (
+                    <div className="pagination">
+                        <p>
+                          <span>Đang hiển thị &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>đến&nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>của&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> mục
+                        </p>
+                        <ul className="pagination-list">
+                          <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                          </li>
+                          {Array.from({ length: totalPages }, (_, index) => (
+                            <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                              <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                            </li>
+                          ))}
+                          <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                          </li>
+                        </ul>
+                    </div>
+                  )}
+                </td>
+              </tr>
             </tbody>
           </table>
-          {displayedStaff.length > 0 && (
-            <div className="pagination">
-                <p>
-                  <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> entries
-                </p>
-                <ul className="pagination-list">
-                  <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                  </li>
-                  {Array.from({ length: totalPages }, (_, index) => (
-                    <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                      <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
-                    </li>
-                  ))}
-                  <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                  </li>
-                </ul>
-            </div>
-          )}
         </div>
         {selectedProduct && (
           <>  
             <div className="overlay" onClick={() => setSelectedProduct(null)}></div>
             <div className="viewStaff">
-            <AiOutlineClose
-              onClick={() => setSelectedProduct(null)}
-              className="close-icon"
-            />
-            <input
-              type="text"
-              placeholder="Product Name"
-              value={selectedProduct.productName}
-              onChange={(e) =>
-                setSelectedProduct({
-                  ...selectedProduct,
-                  productName: e.target.value,
-                })
-              }
-            />
+              <h2>MẶT HÀNG</h2>
+              <AiOutlineClose
+                onClick={() => setSelectedProduct(null)}
+                className="close-icon"
+              />
+            <label> Tên
+              <input
+                type="text"
+                placeholder="Product Name"
+                value={selectedProduct.productName}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    productName: e.target.value,
+                  })
+                }
+              />
+            </label>
             <br />
-            <input  placeholder="Product Code" type="number" value={parseInt(selectedProduct.productCode)} readOnly />
+            <label> Mã
+              <input  placeholder="Product Code" type="number" value={parseInt(selectedProduct.productCode)} readOnly />
+            </label>
             <br />
-            <input
-              type="number"
-              placeholder="Product Price"
-              value={selectedProduct.productPrice}
-              onChange={(e) =>
-                setSelectedProduct({
-                  ...selectedProduct,
-                  productPrice: parseInt(e.target.value),
-                })
-              }
+            <label> Giá
+              <input
+                type="number"
+                placeholder="Product Price"
+                value={selectedProduct.productPrice}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    productPrice: parseInt(e.target.value),
+                  })
+                }
             />
+            </label>
             <br />
-            <input
-              type="text"
-              placeholder="Product Color"
-              value={selectedProduct.productColor}
-              onChange={(e) =>
-                setSelectedProduct({
-                  ...selectedProduct,
-                  productColor: e.target.value,
-                })
-              }
-            />
+            <label> Màu
+              <input
+                type="color"
+                placeholder="Product Color"
+                value={selectedProduct.productColor}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    productColor: e.target.value,
+                  })
+                }
+              />
+            </label>
             <br />
-            <select
-              value={selectedProduct.productStatus}
-              onChange={(e) =>
-                setSelectedProduct({
-                  ...selectedProduct,
-                  productStatus: e.target.value,
-                })
-              }
-            >
-              <option value="ON SALE">Đang kinh doanh</option>
-              <option value="NOT ON SALE">Ngừng kinh doanh</option>
-            </select>
-              <button className="send" onClick={saveChanges}>
-                OK
-              </button>
+            <label> Trạng thái
+              <select
+                value={selectedProduct.productStatus}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    productStatus: e.target.value,
+                  })
+                }
+              >
+                <option value="ON SALE">Đang kinh doanh</option>
+                <option value="NOT ON SALE">Ngừng kinh doanh</option>
+              </select>
+            </label>
+            <button className="send" onClick={saveChanges}>
+              OK
+            </button>
           </div>
           </>
         )}
@@ -288,49 +308,59 @@ export const Product = () => {
               onClick={() => setAddingProduct(false)}
               className="close-icon"
             />
-            <input
-              type="text"
-              placeholder="Product Name"
-              value={newProduct.productName}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, productName: e.target.value })
-              }
-            />
+            <label> Tên
+              <input
+                type="text"
+                placeholder="Product Name"
+                value={newProduct.productName}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, productName: e.target.value })
+                }
+              />
+            </label>
             <br />
-            <input
-              type="number"
-              placeholder="Product Code"
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, productCode: parseInt(e.target.value) })
-              }
-            />
+            <label> Mã
+              <input
+                type="number"
+                placeholder="Product Code"
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, productCode: parseInt(e.target.value) })
+                }
+              />
+            </label>
             <br />
-            <input
-              type="number"
-              placeholder="Product Price"
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, productPrice: parseInt(e.target.value) })
-              }
-            />
+            <label> Gía
+              <input
+                type="number"
+                placeholder="Product Price"
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, productPrice: parseInt(e.target.value) })
+                }
+              />
+            </label>
             <br />
-            <input
-              type="text"
-              placeholder="Product Color"
-              value={newProduct.productColor}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, productColor: e.target.value })
-              }
-            />
+            <label> Màu
+              <input
+                type="color"
+                placeholder="Product Color"
+                value={newProduct.productColor}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, productColor: e.target.value })
+                }
+              />
+            </label>
             <br />
-            <select
-              value={newProduct.productStatus}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, productStatus: e.target.value })
-              }
-            >
-              <option value="ON SALE">Đang kinh doanh</option>
-              <option value="NOT ON SALE">Ngừng kinh doanh</option>
-            </select>
+            <label> Trạng thái
+              <select
+                value={newProduct.productStatus}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, productStatus: e.target.value })
+                }
+              >
+                <option value="ON SALE">Đang kinh doanh</option>
+                <option value="NOT ON SALE">Ngừng kinh doanh</option>
+              </select>
+            </label>
             <button className="send" onClick={handleAddProduct}>
               THÊM
             </button>

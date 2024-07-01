@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 
-$backgroundColor: #f8f9fa;
+$backgroundColor: #fbfdff;
 $textColor: #333;
 $borderLeftColor: #58b5fc;
 $activeColor: #007bff;
@@ -10,6 +10,7 @@ $submenuBackground: #e1edf9;
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 p {
@@ -37,19 +38,19 @@ p {
 .burger > .tab_menu {
   width: 30px;
   height: 30px;
-  background-color: #fbfdff00; 
+  background-color: #fbfdff00;
   color: #58b5fc;
   position: sticky;
   top: 0;
   cursor: pointer;
 }
 
-.burger{
+.burger {
   text-align: center;
 }
 
 .burger > .tab_close {
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
   text-align: center;
   cursor: pointer;
 }
@@ -97,23 +98,27 @@ p {
   cursor: pointer;
 }
 
-header {
+.header {
   display: flex;
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0px 20px;
+  padding: 0 20px;
   height: 50px;
+  justify-content: space-between;
 }
 
 #logo {
-  margin-left: 15px;
+  color: #007bff;
+  padding-left: 10px;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .title {
-  text-align: center;
-  margin: auto;
+  text-align: right;
   font-size: 13px;
   font-weight: bold;
+  margin-left: auto;
 }
 
 .body {
@@ -148,3 +153,73 @@ a {
   color: white;
 }
 
+/* Responsive styles */
+@media (max-width: 1400px) {
+  header {
+    padding: 0 10px;
+  }
+
+  .navbar__li {
+    font-size: 15px;
+    padding: 12px 18px;
+  }
+
+  .submenu .navbar__li {
+    padding: 8px 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-menu {
+    width: 100%;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 1000;
+    height: auto;
+    max-height: 100vh;
+    overflow-y: auto;
+    transition: max-height 0.5s ease;
+  }
+
+  .burger {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+  }
+
+  .body.menu-open {
+    margin-left: 0;
+  }
+
+  .navbar__li {
+    padding: 15px;
+  }
+
+  .submenu .navbar__li {
+    padding: 10px 15px;
+  }
+
+  .title {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar__li {
+    font-size: 14px;
+  }
+
+  .menu-text-tab2 {
+    font-size: 12px;
+  }
+
+  .title {
+    display: none;
+  }
+
+  #logo {
+    margin: 10px 0;
+  }
+}
