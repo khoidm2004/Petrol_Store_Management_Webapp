@@ -99,7 +99,7 @@ export const Pump = () => {
     }
   };
 
-  const handleAddStaff = () => {
+  const handleAddStaff = async () => {
     if (!newStaff.pumpCode || !newStaff.pumpName) {
       setPopup({
         show: true,
@@ -110,7 +110,12 @@ export const Pump = () => {
     }
 
     try {
-      const result = addPump(newStaff);
+      const result = await addPump(newStaff);
+      setPopup({
+        show: true,
+        title: 'Thông báo',
+        message: result.Message,
+      });
       setNewStaff({
         pid: "",
         pumpId: pumpId,
@@ -200,7 +205,7 @@ export const Pump = () => {
   }, []);
 
   return (
-    <div className="Staff">
+    <div className="revenue">
       {showOverlay && (
         <div className="overlay">
           <div class="loader">
@@ -218,7 +223,7 @@ export const Pump = () => {
           </div>
         </div>
       )}
-      <header>
+      <header className="header_staff">
         <p>THÔNG TIN VÒI BƠM</p>
         <div className="search-container">
           {/* <FaMagnifyingGlass className="search-icon" /> */}
@@ -282,60 +287,64 @@ export const Pump = () => {
                   </td>
                 </tr>
               )}
+              <tr>
+                <td colSpan="3">
+                {displayedStaff.length > 0 && (
+                  <div className="pagination">
+                    <p>
+                      <span>Đang hiển thị &nbsp;</span>{" "}
+                      <span>{indexOfFirstStaff + 1}&nbsp;</span>
+                      <span>đến&nbsp;</span>
+                      <span>
+                        {Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;
+                      </span>{" "}
+                      <span>của&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span>{" "}
+                      mục
+                    </p>
+                    <ul className="pagination-list">
+                      <li
+                        className={`pagination-item ${
+                          currentPage === 1 ? "disabled" : ""
+                        }`}
+                      >
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                        >
+                          Previous
+                        </button>
+                      </li>
+                      {Array.from({ length: totalPages }, (_, index) => (
+                        <li
+                          key={index}
+                          className={`pagination-item ${
+                            currentPage === index + 1 ? "active" : ""
+                          }`}
+                        >
+                          <button onClick={() => handlePageChange(index + 1)}>
+                            {index + 1}
+                          </button>
+                        </li>
+                      ))}
+                      <li
+                        className={`pagination-item ${
+                          currentPage === totalPages ? "disabled" : ""
+                        }`}
+                      >
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                        >
+                          Next
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+                </td>
+              </tr>
             </tbody>
           </table>
-          {displayedStaff.length > 0 && (
-            <div className="pagination">
-              <p>
-                <span>Showing &nbsp;</span>{" "}
-                <span>{indexOfFirstStaff + 1}&nbsp;</span>
-                <span>to&nbsp;</span>
-                <span>
-                  {Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;
-                </span>{" "}
-                <span>of&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span>{" "}
-                entries
-              </p>
-              <ul className="pagination-list">
-                <li
-                  className={`pagination-item ${
-                    currentPage === 1 ? "disabled" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </button>
-                </li>
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <li
-                    key={index}
-                    className={`pagination-item ${
-                      currentPage === index + 1 ? "active" : ""
-                    }`}
-                  >
-                    <button onClick={() => handlePageChange(index + 1)}>
-                      {index + 1}
-                    </button>
-                  </li>
-                ))}
-                <li
-                  className={`pagination-item ${
-                    currentPage === totalPages ? "disabled" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
         </div>
         {selectedStaff && (
           <>
@@ -349,88 +358,97 @@ export const Pump = () => {
                 onClick={() => setSelectedStaff(null)}
                 className="close-icon"
               />
-              <input
-                type="text"
-                placeholder="Pump Name"
-                value={selectedStaff.pumpName}
-                onChange={(e) =>
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    pumpName: e.target.value,
-                  })
-                }
-              />
+              <label> Tên
+                <input
+                  type="text"
+                  placeholder="Pump Name"
+                  value={selectedStaff.pumpName}
+                  onChange={(e) =>
+                    setSelectedStaff({
+                      ...selectedStaff,
+                      pumpName: e.target.value,
+                    })
+                  }
+                />
+              </label>
               <br />
-              <input
-                type="text"
-                placeholder="Pump Code"
-                value={parseInt(selectedStaff.pumpCode)}
-                readOnly
-              />
+              <label> Mã
+                <input
+                  type="text"
+                  placeholder="Pump Code"
+                  value={parseInt(selectedStaff.pumpCode)}
+                  readOnly
+                />
+              </label>
               <br />
-              <select
-                value={selectedStaff.pumpStatus}
-                onChange={(e) =>
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    pumpStatus: e.target.value,
-                  })
-                }
-                  ><optgroup label="Hoạt động">
-                      <option value="ON USE">Đang hoạt động</option>
-                      <option value="NOT ON USE">Ngừng hoạt động</option>
+              <label> Trạng thái
+                <select
+                  value={selectedStaff.pumpStatus}
+                  onChange={(e) =>
+                    setSelectedStaff({
+                      ...selectedStaff,
+                      pumpStatus: e.target.value,
+                    })
+                  }
+                    ><optgroup label="Hoạt động">
+                        <option value="ON USE">Đang hoạt động</option>
+                        <option value="NOT ON USE">Ngừng hoạt động</option>
+                    </optgroup>
+                  </select>
+              </label>
+              <label> Mặt hàng
+                <select
+                  value={selectedStaff.product.productCode}
+                  onChange={(e) => {
+                    const selectedProduct = product.find(
+                      (p) => p.productCode === e.target.value
+                    );
+                    setSelectedStaff({
+                      ...selectedStaff,
+                      product: {
+                        productCode: selectedProduct.productCode,
+                        productName: selectedProduct.productName,
+                      },
+                    });
+                  }}
+                >
+                  <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
+                    {product.map((product) => (
+                      <option
+                        key={product.productCode}
+                        value={product.productCode}
+                      >
+                        {product.productCode} - {product.productName}
+                      </option>
+                    ))}
                   </optgroup>
                 </select>
-              <select
-                value={selectedStaff.product.productCode}
-                onChange={(e) => {
-                  const selectedProduct = product.find(
-                    (p) => p.productCode === e.target.value
-                  );
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    product: {
-                      productCode: selectedProduct.productCode,
-                      productName: selectedProduct.productName,
-                    },
-                  });
-                }}
-              >
-                <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
-                  {product.map((product) => (
-                    <option
-                      key={product.productCode}
-                      value={product.productCode}
-                    >
-                      {product.productCode} - {product.productName}
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
-
-              <select
-                value={selectedStaff.tank.tankCode}
-                onChange={(e) => {
-                  const selectedTank = tanks.find(
-                    (t) => t.tankCode === e.target.value
-                  );
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    tank: {
-                      tankCode: selectedTank.tankCode,
-                      tankName: selectedTank.tankName,
-                    },
-                  });
-                }}
-              >
-                <optgroup label="Tên Bể - Mã Bể">
-                  {tanks.map((tank) => (
-                    <option key={tank.tankCode} value={tank.tankCode}>
-                      {tank.tankName}
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
+              </label>
+              <label> Bể
+                <select
+                  value={selectedStaff.tank.tankCode}
+                  onChange={(e) => {
+                    const selectedTank = tanks.find(
+                      (t) => t.tankCode === e.target.value
+                    );
+                    setSelectedStaff({
+                      ...selectedStaff,
+                      tank: {
+                        tankCode: selectedTank.tankCode,
+                        tankName: selectedTank.tankName,
+                      },
+                    });
+                  }}
+                >
+                  <optgroup label="Tên Bể - Mã Bể">
+                    {tanks.map((tank) => (
+                      <option key={tank.tankCode} value={tank.tankCode}>
+                        {tank.tankName}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </label>
               <button className="send" onClick={saveChanges}>
                 OK
               </button>
@@ -449,82 +467,92 @@ export const Pump = () => {
                 onClick={() => setAddingStaff(false)}
                 className="close-icon"
               />
-              <input
-                type="text"
-                placeholder="Pump Name"
-                value={newStaff.pumpName}
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, pumpName: e.target.value })
-                }
-              />
+              <label> Tên
+                <input
+                  type="text"
+                  placeholder="Pump Name"
+                  value={newStaff.pumpName}
+                  onChange={(e) =>
+                    setNewStaff({ ...newStaff, pumpName: e.target.value })
+                  }
+                />
+              </label>
               <br />
-              <input
-                type="text"
-                placeholder="Pump Code"
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, pumpCode: parseInt(e.target.value) })
-                }
-              />
+              <label> Mã
+                <input
+                  type="text"
+                  placeholder="Pump Code"
+                  onChange={(e) =>
+                    setNewStaff({ ...newStaff, pumpCode: parseInt(e.target.value) })
+                  }
+                />
+              </label>
               <br />
-              <select
-                value={newStaff.pumpStatus}
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, pumpStatus: e.target.value })
-                }
-              ><optgroup label="Hoạt động">
-                  <option value="ON USE">Đang kinh doanh</option>
-                  <option value="NOT ON USE">Ngừng kinh doanh</option>
-              </optgroup>
-              </select>
-              <select
-                value={newStaff.product.productCode}
-                onChange={(e) => {
-                  const selectedProduct = product.find(
-                    (p) => p.productCode === e.target.value
-                  );
-                  setNewStaff({
-                    ...newStaff,
-                    product: {
-                      productCode: selectedProduct.productCode,
-                      productName: selectedProduct.productName,
-                    },
-                  });
-                }}
-              >
-                <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
-                  {product.map((product) => (
-                    <option
-                      key={product.productCode}
-                      value={product.productCode}
-                    >
-                      {product.productCode} - {product.productName}
-                    </option>
-                  ))}
+              <label> Trạng thái
+                <select
+                  value={newStaff.pumpStatus}
+                  onChange={(e) =>
+                    setNewStaff({ ...newStaff, pumpStatus: e.target.value })
+                  }
+                ><optgroup label="Hoạt động">
+                    <option value="ON USE">Đang kinh doanh</option>
+                    <option value="NOT ON USE">Ngừng kinh doanh</option>
                 </optgroup>
-              </select>
-              <select
-                value={newStaff.tank.tankCode}
-                onChange={(e) => {
-                  const selectedTank = tanks.find(
-                    (t) => t.tankCode === e.target.value
-                  );
-                  setNewStaff({
-                    ...newStaff,
-                    tank: {
-                      tankCode: selectedTank.tankCode,
-                      tankName: selectedTank.tankName,
-                    },
-                  });
-                }}
-              >
-                <optgroup label="Mã Bể - Tên Bể">
-                  {tanks.map((tank) => (
-                    <option key={tank.tankCode} value={tank.tankCode}>
-                      {tank.tankCode} - {tank.tankName}
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
+                </select>
+              </label>
+              <label> Mặt hàng
+                <select
+                  value={newStaff.product.productCode}
+                  onChange={(e) => {
+                    const selectedProduct = product.find(
+                      (p) => p.productCode === e.target.value
+                    );
+                    setNewStaff({
+                      ...newStaff,
+                      product: {
+                        productCode: selectedProduct.productCode,
+                        productName: selectedProduct.productName,
+                      },
+                    });
+                  }}
+                >
+                  <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
+                    {product.map((product) => (
+                      <option
+                        key={product.productCode}
+                        value={product.productCode}
+                      >
+                        {product.productCode} - {product.productName}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </label>
+              <label> Bể
+                <select
+                  value={newStaff.tank.tankCode}
+                  onChange={(e) => {
+                    const selectedTank = tanks.find(
+                      (t) => t.tankCode === e.target.value
+                    );
+                    setNewStaff({
+                      ...newStaff,
+                      tank: {
+                        tankCode: selectedTank.tankCode,
+                        tankName: selectedTank.tankName,
+                      },
+                    });
+                  }}
+                >
+                  <optgroup label="Mã bể - Tên bể">
+                    {tanks.map((tank) => (
+                      <option key={tank.tankCode} value={tank.tankCode}>
+                        {tank.tankCode} - {tank.tankName}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </label>
               <button className="send" onClick={handleAddStaff}>
                 THÊM
               </button>
@@ -540,7 +568,7 @@ export const Pump = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: "",
+                  text: "VÒI BƠM",
                 },
               },
             }}

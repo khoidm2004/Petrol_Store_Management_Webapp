@@ -48,21 +48,51 @@ export const Staff = () => {
     }
   };
 
-  const handleAddStaff = () => {
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePhoneNumber = (phoneNum) => {
+    const re = /^\d{10}$/;
+    return re.test(String(phoneNum));
+  };
+
+  const handleAddStaff = async () => {
     if (!newStaff.fullName || !newStaff.email || !newStaff.phoneNum) {
       setPopup({
         show: true,
-        title: 'Lỗi',
+        title: 'Thông báo',
         message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+      });
+      return;
+    }
+
+    if (!validateEmail(newStaff.email)) {
+      setPopup({
+        show: true,
+        title: 'Thông báo',
+        message: 'Vui lòng nhập đúng định dạng email.',
+      });
+      return;
+    }
+
+    if (!validatePhoneNumber(newStaff.phoneNum)) {
+      setPopup({
+        show: true,
+        title: 'Thông báo',
+        message: 'Vui lòng nhập số điện thoại gồm 10 chữ số.',
       });
       return;
     }
   
     try {
-      var result = addStaff(newStaff);
-      if (result.Status === 'error') {
-        setPopup({ show: true, title: result.Title, message: result.Message });
-      }
+      var result = await addStaff(newStaff);
+      setPopup({
+        show: true,
+        title: 'Thông báo',
+        message: result.Message,
+      });
       setNewStaff({
         fullName: "",
         email: "",
@@ -127,16 +157,16 @@ export const Staff = () => {
   }, []);
 
   return (
-    <div className="Staff">
+    <div className="revenue">
       {showOverlay && 
        <div className="overlay">
-        <div class="loader">
-          <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        <div className="loader">
+          <svg className="circular" viewBox="25 25 50 50">
+            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
           </svg>
         </div>
       </div>}
-      <header>
+      <header className="header_staff">
         <p>THÔNG TIN NHÂN VIÊN</p>
         <div className="search-container">
           <input
@@ -190,28 +220,32 @@ export const Staff = () => {
                   </td>
                 </tr>
               )}
+              <tr>
+                <td colSpan="3">
+                {displayedStaff.length > 0 && (
+                  <div className="pagination">
+                    <p>
+                      <span>Đang hiển thị &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span> đến &nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>của &nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> mục
+                    </p>
+                    <ul className="pagination-list">
+                      <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                      </li>
+                      {Array.from({ length: totalPages }, (_, index) => (
+                        <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                          <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                        </li>
+                      ))}
+                      <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+                </td>
+              </tr>
             </tbody>
           </table>
-          {displayedStaff.length > 0 && (
-            <div className="pagination">
-              <p>
-                <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, filteredStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{filteredStaff.length}&nbsp;</span> entries
-              </p>
-              <ul className="pagination-list">
-                <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                  <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                </li>
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                    <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
-                  </li>
-                ))}
-                <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                  <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                </li>
-              </ul>
-            </div>
-          )}
         </div>
         <div className="chart-container">
           <Doughnut
@@ -230,14 +264,16 @@ export const Staff = () => {
         </div>
       </div>
       {selectedStaff && (
-          <>
-            <div className="overlay" onClick={() => setSelectedStaff(null)}></div>
-            <div className="viewStaff">
-              <h2>NHÂN VIÊN</h2>
-              <AiOutlineClose
-                onClick={() => setSelectedStaff(null)}
-                className="close-icon"
-              />
+        <>
+          <div className="overlay" onClick={() => setSelectedStaff(null)}></div>
+          <div className="viewStaff">
+            <h2>NHÂN VIÊN</h2>
+            <AiOutlineClose
+              onClick={() => setSelectedStaff(null)}
+              className="close-icon"
+            />
+            <label>
+              Tên
               <input
                 type="text"
                 placeholder="Full Name"
@@ -246,9 +282,15 @@ export const Staff = () => {
                   setSelectedStaff({ ...selectedStaff, fullName: e.target.value })
                 }
               />
-              <br />
+            </label>
+            <br />
+            <label>
+              Email
               <input placeholder="Email" type="text" value={selectedStaff.email} readOnly />
-              <br />
+            </label>
+            <br />
+            <label>
+              Số điện thoại
               <input
                 type="text"
                 placeholder="Phone Number"
@@ -257,34 +299,39 @@ export const Staff = () => {
                   setSelectedStaff({ ...selectedStaff, phoneNum: e.target.value })
                 }
               />
-              <br />
+            </label>
+            <br />
+            <label>
+              Trạng thái
               <select
                 value={selectedStaff.workingStatus}
                 onChange={(e) =>
-                  setSelectedStaff({
-                    ...selectedStaff,
-                    workingStatus: e.target.value,
-                  })
+                  setSelectedStaff({ ...selectedStaff, workingStatus: e.target.value })
                 }
               >
                 <option value="IS WORKING">Đang làm việc</option>
                 <option value="ISN'T WORKING">Ngừng làm việc</option>
               </select>
-              <button className="send" onClick={saveChanges}>
-                OK
-              </button>
-            </div>
-          </>
-        )}
-        {addingStaff && (
-          <>
-            <div className="overlay" onClick={() => setAddingStaff(false)}></div>
-            <div className="addStaff">
-              <h2>Thêm Nhân Viên Mới</h2>
-              <AiOutlineClose
-                onClick={() => setAddingStaff(false)}
-                className="close-icon"
-              />
+            </label>
+            <br />
+            <button type="button" onClick={saveChanges}>
+              Lưu
+            </button>
+          </div>
+        </>
+      )}
+
+      {addingStaff && (
+        <>
+          <div className="overlay" onClick={() => setAddingStaff(false)}></div>
+          <div className="addStaff">
+            <h2>Thêm nhân viên mới</h2>
+            <AiOutlineClose
+              onClick={() => setAddingStaff(false)}
+              className="close-icon"
+            />
+            <label>
+              Tên
               <input
                 type="text"
                 placeholder="Full Name"
@@ -293,7 +340,10 @@ export const Staff = () => {
                   setNewStaff({ ...newStaff, fullName: e.target.value })
                 }
               />
-              <br />
+            </label>
+            <br />
+            <label>
+              Email
               <input
                 type="text"
                 placeholder="Email"
@@ -302,7 +352,10 @@ export const Staff = () => {
                   setNewStaff({ ...newStaff, email: e.target.value })
                 }
               />
-              <br />
+            </label>
+            <br />
+            <label>
+              Số điện thoại
               <input
                 type="text"
                 placeholder="Phone Number"
@@ -311,7 +364,10 @@ export const Staff = () => {
                   setNewStaff({ ...newStaff, phoneNum: e.target.value })
                 }
               />
-              <br />
+            </label>
+            <br />
+            <label>
+              Trạng thái
               <select
                 value={newStaff.workingStatus}
                 onChange={(e) =>
@@ -321,16 +377,23 @@ export const Staff = () => {
                 <option value="IS WORKING">Đang làm việc</option>
                 <option value="ISN'T WORKING">Ngừng làm việc</option>
               </select>
-              <button className="send" onClick={handleAddStaff}>
-                THÊM
-              </button>
-            </div>
-          </>
-        )}
-        
-      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
+            </label>
+            <br />
+            <button type="button" onClick={handleAddStaff}>
+              Thêm
+            </button>
+          </div>
+        </>
+      )}
+
+    {popup.show && (
+      <Popup
+        title={popup.title}
+        message={popup.message}
+        onClose={closePopup}
+      />
+    )}
     </div>
   );
 };
-
-export default Staff;
+ export default Staff;

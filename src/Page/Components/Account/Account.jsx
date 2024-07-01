@@ -11,6 +11,9 @@ export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
   const { handleLogout } = useLogout();
   const [popup, setPopup] = useState({ show: false, title: "", message: "" });
+  const [passwordError, setPasswordError] = useState("");
+  const { editProfile, isLoading } = useEditProfile();
+  const [formPass, setFormPass] = useState({ pass: "", passNew: "" });
   const [profile, setProfile] = useState({
     uid: user.uid,
     fullName: user.fullName || "",
@@ -21,11 +24,32 @@ export const Account = () => {
     avatar: user.avatar || "",
   });
 
-  const { selectedFile, error, setSelectedFile, handleImageChange } =
-    usePreviewImage();
+  const { selectedFile, error, setSelectedFile, handleImageChange } = usePreviewImage();
 
-  const { editProfile, isLoading } = useEditProfile();
-  const [formPass, setFormPass] = useState({ pass: "", passNew: "" });
+  useEffect(() => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    const minLengthMessage = "Mật khẩu phải có ít nhất 6 ký tự.";
+    const uppercaseMessage = "Mật khẩu phải chứa ít nhất một chữ viết hoa.";
+    const numberMessage = "Mật khẩu phải chứa ít nhất một số.";
+    const specialCharMessage = "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.";
+  
+    let errorMessage = "";
+  
+    if (formPass.pass.length < 6) {
+      errorMessage = minLengthMessage;
+    } else if (!/[A-Z]/.test(formPass.pass)) {
+      errorMessage = uppercaseMessage;
+    } else if (!/\d/.test(formPass.pass)) {
+      errorMessage = numberMessage;
+    } else if (!/[@$!%*?&]/.test(formPass.pass)) {
+      errorMessage = specialCharMessage;
+    } else if (!passwordRegex.test(formPass.pass)) {
+      errorMessage = "Mật khẩu không hợp lệ.";
+    }
+  
+    setPasswordError(errorMessage);
+  }, [formPass.pass]);
+    
   useEffect(() => {
     if (selectedFile) {
       setProfile((prevProfile) => ({
@@ -47,6 +71,11 @@ export const Account = () => {
     try {
       if (selectedFile) {
         const result = await editProfile(profile, selectedFile);
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: result.Message,
+        });
         setSelectedFile(null);
       }
     } catch (error) {
@@ -88,7 +117,7 @@ export const Account = () => {
         if (result) {
           setPopup({
             show: true,
-            title: "Thành công",
+            title: "Thông báo",
             message: "Đổi thành công",
           });
           const test = await handleLogout();
@@ -203,6 +232,7 @@ export const Account = () => {
                     value={formPass.passNew}
                     onChange={handleChangePass}
                   />
+                  {passwordError && <span className="password-error">{passwordError}</span>}
                 </div>
                 <button onClick={handleChangePassword}>SUBMIT</button>
                 {resetStatus && <p className="reset-status">{resetStatus}</p>}

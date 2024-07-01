@@ -1,3 +1,4 @@
+/* Global Styles */
 .container::-webkit-scrollbar, #item1::-webkit-scrollbar {
     width: 0;
 }
@@ -30,6 +31,7 @@
     background-color: #444;
 }
 
+/* Button Styles */
 .button_account {
     width: 120px;
     text-align: center;
@@ -50,13 +52,16 @@
     background-color: #135BA1;
 }
 
+/* Text Styles */
 .text-account {
     color: #166BCC;
     font-weight: bold;
     font-size: 25px;
     padding-left: 125px;
+    text-align: center;
 }
 
+/* Page Layout */
 .page_account {
     display: flex;
     flex-direction: column; 
@@ -67,6 +72,7 @@
     max-width: 1000px;
 }
 
+/* Profile Image Section */
 .profile_image_section {
     display: flex;
     flex-direction: column;
@@ -90,6 +96,7 @@
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.2); 
 }
 
+/* Profile Info Section */
 .profile_info_section {
     display: flex;
     flex-direction: column;
@@ -130,10 +137,10 @@ select:focus, input:focus {
     outline: none;
 }
 
-
+/* Modal Styles */
 .modals {
     position: fixed;
-    top: 43%;
+    top: 32%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: #fff;
@@ -143,43 +150,43 @@ select:focus, input:focus {
     width: 100%;
     z-index: 1000;
     box-sizing: border-box;
-  }
-  
-  .modals h2 {
+}
+
+.modals h2 {
     margin-top: 40px;
     text-align: center;
     font-size: 24px;
     color: #333;
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .close-icon {
+}
+
+.close-icon {
     position: absolute;
     top: 10px;
     right: 10px;
     cursor: pointer;
     font-size: 30px;
     transition: transform 0.3s ease, color 0.3s ease;
-  }
-  
-  .close-icon:hover {
+}
+
+.close-icon:hover {
     transform: scale(1.1);
     color: #145ca4;
-  }
-  
-  .modal-content input {
+}
+
+.modal-content input {
     width: 80%;
     border: none;
     margin: 10px;
     border-bottom: 1px solid black;
-  }
+}
 
-  .modal-content + button {
+.modal-content + button {
     width: 100%;
     padding: 10px;
     margin: 30px 20px 0px 0px;
@@ -191,13 +198,15 @@ select:focus, input:focus {
     font-weight: bold;
     border-radius: 0px 0px 8px 8px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  }
-  .modal-content + button:hover{
+}
+
+.modal-content + button:hover {
     box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
     background-color: #135BA1;
-  }
+}
 
-  .overlay {
+/* Overlay Styles */
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -205,9 +214,10 @@ select:focus, input:focus {
     height: 100%;
     background: rgb(124 122 122 / 52%);
     z-index: 999;
-  }
+}
 
-.footer_account{
+/* Footer Styles */
+.footer_account {
     width: 100%;
     bottom: 0;
     color: #000;
@@ -219,11 +229,11 @@ select:focus, input:focus {
     text-align: center;
 }
 
-.profile_info .changePassWord{
+.profile_info .changePassWord {
     width: 70%;
 }
 
-.buttonChangePass{
+.buttonChangePass {
     border: none;
     padding: 0px 10px;
     border-radius: 2px;
@@ -240,6 +250,13 @@ select:focus, input:focus {
     background-color: #135BA1;
 }
 
+.password-error {
+    color: #e53e3e; 
+    font-size: 14px; 
+    margin-top: 4px; 
+  }
+
+/* Responsive Styles */
 @media (min-width: 768px) {
     .page_account {
         flex-direction: row; 
@@ -256,5 +273,33 @@ select:focus, input:focus {
 
     .profile_info {
         padding: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .text-account {
+        padding-left: 0;
+        font-size: 20px;
+    }
+
+    .profile_image {
+        max-width: 150px;
+        height: 150px;
+    }
+
+    .footer_account {
+        font-size: 16px;
+    }
+
+    .profile_info label {
+        font-size: 14px;
+    }
+
+    .profile_info input {
+        font-size: 14px;
+    }
+
+    .profile_info_section {
+        padding: 0 10px;
     }
 }

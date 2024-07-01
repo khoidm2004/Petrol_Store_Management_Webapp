@@ -9,6 +9,7 @@ import { CgAddR } from "react-icons/cg";
 import { FaRegMinusSquare } from "react-icons/fa";
 import 'chart.js/auto'; 
 import './Staff.css';
+import Popup from "../Popup/Popup";
 import { timeConverter } from '../../../utils/timeConverter.js';
 
 export const Shift = () => {
@@ -22,6 +23,7 @@ export const Shift = () => {
     const { pumps, fetchPump } = usePumpStore();
     const [selectedShift, setSelectedShift] = useState(null);
     const [addingShift, setAddingShift] = useState(false);
+    const [popup, setPopup] = useState({ show: false, title: "", message: "" });
     const [newShift, setNewShift] = useState({
         startTime: new Date(),
         endTime: new Date(),
@@ -80,9 +82,7 @@ export const Shift = () => {
     const saveChanges = async () => {
         if (selectedShift) {
             try {
-                console.log(selectedShift)
                 const status = await modifyShift(selectedShift);
-                console.log(status); 
                 setSelectedShift(null);
             } catch (error) {
                 console.error('Save error:', error);
@@ -90,11 +90,23 @@ export const Shift = () => {
         }
     };
 
-    const handleAddShift = () => {
+    const handleAddShift = async () => {
+        if (!newShift.startTime || !newShift.endTime) {
+            setPopup({
+              show: true,
+              title: "Lỗi",
+              message: "Vui lòng chọn ngày tháng của ca.",
+            });
+            return;
+          }
+
         try {
-            console.log(newShift);
-            var status = addShift(newShift);
-            console.log(status);
+            const result = await addShift(newShift);
+            setPopup({
+                show: true,
+                title: 'Thông báo',
+                message: result.Message,
+              });
             setNewShift({
                 startTime: new Date(),
                 endTime: new Date(),
@@ -110,7 +122,11 @@ export const Shift = () => {
             });
             setAddingShift(false);
         } catch (error) {
-            console.error('Add shift error:', error);
+            setPopup({
+                show: true,
+                title: 'Thông báo',
+                message: error,
+              });
         }
     };
 
@@ -261,8 +277,11 @@ export const Shift = () => {
         setCurrentPage(page);
       };
     
+      const closePopup = () => {
+        setPopup({ show: false, title: "", message: "" });
+      };
     return (
-        <div className='Staff'>
+        <div className='revenue'>
             {showOverlay && 
                 <div className="overlay">
                     <div class="loader">
@@ -271,12 +290,12 @@ export const Shift = () => {
                         </svg>
                     </div>
                 </div>}
-            <header>
+            <header className='header_staff'>
                 <p>THÔNG TIN CA BÁN HÀNG</p>
                 <button type="button" className='push' onClick={() => setAddingShift(true)}>THÊM</button>
             </header>
             <div>
-                <div className="box_staff">
+                <div className="box_shift">
                     <table className='firsttable_shift'>
                         <thead>
                             <tr className='titleOneline'>
@@ -305,31 +324,35 @@ export const Shift = () => {
                                 </tr>
                             )): (
                                 <tr>
-                                    <td colSpan={5}>Chưa tồn tại ca bán hàng</td>
+                                    <td colSpan={6} className="no-data">Chưa tồn tại ca bán hàng</td>
                                 </tr>
                             )}
+                            <tr>
+                                <td colSpan={6}>
+                                {displayedStaff.length > 0 && (
+                                    <div className="pagination">
+                                    <p>
+                                        <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, shifts.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{shifts.length}&nbsp;</span> entries
+                                    </p>
+                                    <ul className="pagination-list">
+                                        <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                                        </li>
+                                        {Array.from({ length: totalPages }, (_, index) => (
+                                            <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                            <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                                            </li>
+                                        ))}
+                                        <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                                        </li>
+                                        </ul>
+                                    </div>
+                                )}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-                    {displayedStaff.length > 0 && (
-                        <div className="pagination">
-                        <p>
-                            <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, shifts.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{shifts.length}&nbsp;</span> entries
-                        </p>
-                        <ul className="pagination-list">
-                            <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                            </li>
-                            {Array.from({ length: totalPages }, (_, index) => (
-                                <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                                <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
-                                </li>
-                            ))}
-                            <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                            </li>
-                            </ul>
-                        </div>
-                    )}
                 </div>
                 {selectedShift && (
                     <>
@@ -342,7 +365,7 @@ export const Shift = () => {
                             <label htmlFor="">Thời gian kết thúc</label>
                         <input type="datetime-local" className="time"  value={selectedShift.endTime} onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })}/><br />
                         <hr />
-                            <div className='Staffs'>
+                            <div>
                                 <h5>NHÂN VIÊN <CgAddR className='pull_icon' onClick={handleAddEmployee} /></h5>
                                 <div className='Staff'>
                                     {Object.entries(selectedShift.employeeList).map(([key, employee]) => (
@@ -377,7 +400,7 @@ export const Shift = () => {
                                 </div>
                             </div>
                             <hr />
-                            <div className='Staffs'>
+                            <div>
                                 <h5>MẶT HÀNG <CgAddR className='pull_icon' onClick={handleAddProduct} /> </h5>
                                 <div className='Staff'>
                                     {Object.entries(selectedShift.productList).map(([key, products]) => (
@@ -413,7 +436,7 @@ export const Shift = () => {
                                 </div>
                             </div>
                             <hr />
-                            <div className='Staffs'>
+                            <div>
                                 <h5>VÒI BƠM <CgAddR className='pull_icon' onClick={handleAddPump} /> </h5>
                                 <div className='Staff'>
                                     {Object.entries(selectedShift.pumpList).map(([key, pump]) => (
@@ -484,7 +507,7 @@ export const Shift = () => {
                             <label htmlFor="">Thời gian kết thúc</label>
                         <input type="datetime-local" placeholder="End Time" value={newShift.endTime} onChange={(e) => setNewShift({ ...newShift, endTime: e.target.value })} /><br />
 
-                        <div className='Staffs'>
+                        <div>
                             <h5>NHÂN VIÊN <CgAddR className='pull_icon' onClick={handleAddNewEmployee} /></h5>
                             <div className='Staff'>
                                 {Object.entries(newShift.employeeList).map(([key, staffs]) => (
@@ -519,7 +542,7 @@ export const Shift = () => {
                             </div>
                         </div>
 
-                        <div className='Staffs'>
+                        <div>
                             <h5>MẶT HÀNG <CgAddR className='pull_icon' onClick={handleAddNewProduct} /></h5>
                             <div className='Staff'>
                                 {Object.entries(newShift.productList).map(([key, products]) => (
@@ -554,7 +577,7 @@ export const Shift = () => {
                                 ))}
                             </div>
                         </div>
-                        <div className='Staffs'>
+                        <div>
                             <h5>VÒI BƠM <CgAddR className='pull_icon' onClick={handleAddNewPump} /></h5>
                             <div className='Staff'>
                                 {Object.entries(newShift.pumpList).map(([key, pump]) => (
@@ -615,6 +638,13 @@ export const Shift = () => {
                     </>
                 )}
             </div>
+            {popup.show && (
+                <Popup
+                title={popup.title}
+                message={popup.message}
+                onClose={closePopup}
+                />
+            )}
         </div>
     );
 }
