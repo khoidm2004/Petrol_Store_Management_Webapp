@@ -4,7 +4,7 @@
 
 import { jest, describe, it, expect, beforeEach } from "@jest/globals";
 import { collection, getDocs, orderBy, limit, query } from "firebase/firestore";
-import useFetchLog from "../../src/hooks/useFetchLog";
+import useFetchLog from "../../src/hooks/FetchHooks/useFetchLog";
 import { firestore } from "../../src/firebase/firebase";
 
 jest.mock("firebase/auth", () => ({
@@ -56,18 +56,16 @@ describe("hooks/useFetchLog", () => {
     expect(limit).toHaveBeenCalledWith(2);
     expect(query).toHaveBeenCalledWith(logCollection, mockOrderBy, mockLimit);
     expect(getDocs).toHaveBeenCalledWith(qLog);
-    expect(result).toEqual({
-      logList: [
-        {
-          logId: "logId1",
-          startTime: 1718698784201,
-        },
-        {
-          logId: "logId2",
-          startTime: 1718698784862,
-        },
-      ],
-    });
+    expect(result).toEqual([
+      {
+        logId: "logId1",
+        startTime: 1718698784201,
+      },
+      {
+        logId: "logId2",
+        startTime: 1718698784862,
+      },
+    ]);
   });
 
   it("2.should return error message if fetching log data fails", async () => {
