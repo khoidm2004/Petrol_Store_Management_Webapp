@@ -6,6 +6,7 @@ import {
   query,
   updateDoc,
   where,
+  writeBatch,
 } from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
@@ -50,6 +51,7 @@ const useStaffStore = create((set) => ({
       }
 
       const docRef = await addDoc(staffRef, newStaff);
+
       const staffId = docRef.id;
       await updateDoc(doc(firestore, "staff", staffId), { staffId });
 
@@ -76,6 +78,38 @@ const useStaffStore = create((set) => ({
       const { staffId, ...updatedStaff } = inputs;
       const staffDocRef = doc(firestore, "staff", staffId);
       await updateDoc(staffDocRef, updatedStaff);
+
+      const shiftRef = collection(firestore, "shift");
+      const shiftSnapshot = await getDocs(shiftRef);
+      const shifts = shiftSnapshot.docs.map((doc) => ({
+        shiftId: doc.id,
+        ...doc.data(),
+      }));
+
+      console.log(shifts);
+
+      const shiftMatch = shifts.filter((shift) => {
+        const employeeKeys = Object.keys(shift.employeeList);
+        return employeeKeys.some(
+          (key) => shift.employeeList[key].email === inputs.email
+        );
+      });
+
+      console.log(shiftMatch);
+
+      const batch = writeBatch(firestore);
+      shiftMatch.forEach((shift) => {
+        const shiftDocRef = doc(firestore, "shift", shift.shiftId);
+        const updatedEmployeeList = { ...shift.employeeList };
+        Object.keys(updatedEmployeeList).forEach((key) => {
+          if (updatedEmployeeList[key].email === inputs.email) {
+            updatedEmployeeList[key].fullName = inputs.fullName;
+          }
+        });
+        batch.update(shiftDocRef, { employeeList: updatedEmployeeList });
+      });
+
+      await batch.commit();
 
       set((state) => ({
         staff: state.staff.map((member) =>
