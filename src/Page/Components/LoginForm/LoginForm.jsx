@@ -22,8 +22,30 @@ const LoginForm = ({ setLoggedIn }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  
   const handleSubmit = async (e) => {
-    // console.log(formData)
+    if (!formData.email || !formData.password) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập đầy đủ thông tin.",
+      });
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập đúng định dạng email.",
+      });
+      return;
+    }
     e.preventDefault();
     try {
       const result = await login(formData);
@@ -54,8 +76,30 @@ const LoginForm = ({ setLoggedIn }) => {
   };
 
   const handleResetSubmit = async () => {
+    if (!resetEmail) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập đầy đủ thông tin.",
+      });
+      return;
+    }
+
+    if (!validateEmail(resetEmail)) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập đúng định dạng email.",
+      });
+      return;
+    }
     try {
-      const status = await useReclaimPassword(resetEmail);
+      const result = await useReclaimPassword(resetEmail);
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: result.Message,
+      });
       setShowResetModal(false);
       setResetEmail("");
       setResetStatus("");

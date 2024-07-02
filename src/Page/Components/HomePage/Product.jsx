@@ -198,7 +198,7 @@ export const Product = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="3" >
+                <td colSpan="3" className="noLine">
                 {displayedStaff.length > 0 && (
                     <div className="pagination">
                         <p>
@@ -236,7 +236,6 @@ export const Product = () => {
             <label> Tên
               <input
                 type="text"
-                placeholder="Product Name"
                 value={selectedProduct.productName}
                 onChange={(e) =>
                   setSelectedProduct({
@@ -248,13 +247,12 @@ export const Product = () => {
             </label>
             <br />
             <label> Mã
-              <input  placeholder="Product Code" type="number" value={parseInt(selectedProduct.productCode)} readOnly />
+              <input type="number" value={parseInt(selectedProduct.productCode)} readOnly />
             </label>
             <br />
             <label> Giá
               <input
                 type="number"
-                placeholder="Product Price"
                 value={selectedProduct.productPrice}
                 onChange={(e) =>
                   setSelectedProduct({
@@ -268,7 +266,7 @@ export const Product = () => {
             <label> Màu
               <input
                 type="text"
-                placeholder="Product Color"
+                placeholder="Tên màu"
                 value={selectedProduct.productColor}
                 onChange={(e) =>
                   setSelectedProduct({
@@ -311,7 +309,6 @@ export const Product = () => {
             <label> Tên
               <input
                 type="text"
-                placeholder="Product Name"
                 value={newProduct.productName}
                 onChange={(e) =>
                   setNewProduct({ ...newProduct, productName: e.target.value })
@@ -322,17 +319,15 @@ export const Product = () => {
             <label> Mã
               <input
                 type="number"
-                placeholder="Product Code"
                 onChange={(e) =>
                   setNewProduct({ ...newProduct, productCode: parseInt(e.target.value) })
                 }
               />
             </label>
             <br />
-            <label> Gía
+            <label> Giá
               <input
                 type="number"
-                placeholder="Product Price"
                 onChange={(e) =>
                   setNewProduct({ ...newProduct, productPrice: parseInt(e.target.value) })
                 }
@@ -342,7 +337,7 @@ export const Product = () => {
             <label> Màu
               <input
                 type="text"
-                placeholder="Product Color"
+                placeholder="Tên màu"
                 value={newProduct.productColor}
                 onChange={(e) =>
                   setNewProduct({ ...newProduct, productColor: e.target.value })

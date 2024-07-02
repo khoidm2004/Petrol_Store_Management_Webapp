@@ -1,38 +1,32 @@
 .popup-container {
   position: fixed;
-  bottom: 20px; 
-  right: 20px; 
-  max-width: 350px; 
+  bottom: 20px;
+  right: 20px;
+  max-width: 350px;
   z-index: 1000;
   animation: popupAppear 0.3s ease-in-out;
+  margin-bottom: 10px; /* Add margin to separate multiple popups */
 }
 
-.pop-row{
+.pop-row {
   display: flex;
   background-color: #5154ff;
   padding: 16px;
 }
 
-/* .bell-icon {
-  position: absolute; 
-  right: 340px; 
-  bottom: -30px;
-  font-size: 24px; 
-  color: #000000; 
-} */
-
 .close-icon {
   position: absolute;
   top: 10px;
+  right: 10px;
   cursor: pointer;
 }
 
 .popup-content {
-  background-color: orange;
+  background-color: lightpink;
   padding: 10px;
   font-weight: bold;
   border-radius: 2px;
-  margin-top: 16px; 
+  margin-top: 16px;
 }
 
 @keyframes popupAppear {

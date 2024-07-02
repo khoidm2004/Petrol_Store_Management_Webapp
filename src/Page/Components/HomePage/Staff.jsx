@@ -248,19 +248,11 @@ export const Staff = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="3">
+                <td colSpan="3" className="noLine">
                   {displayedStaff.length > 0 && (
                     <div className="pagination">
                       <p>
-                        <span>Đang hiển thị &nbsp;</span>{" "}
-                        <span>{indexOfFirstStaff + 1}&nbsp;</span>
-                        <span> đến &nbsp;</span>
-                        <span>
-                          {Math.min(indexOfLastStaff, filteredStaff.length)}
-                          &nbsp;
-                        </span>{" "}
-                        <span>của &nbsp;</span>{" "}
-                        <span>{filteredStaff.length}&nbsp;</span> mục
+                        <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, filteredStaff.length)} của {filteredStaff.length} mục </span>
                       </p>
                       <ul className="pagination-list">
                         <li
@@ -336,7 +328,6 @@ export const Staff = () => {
               Tên
               <input
                 type="text"
-                placeholder="Full Name"
                 value={selectedStaff.fullName}
                 onChange={(e) =>
                   setSelectedStaff({
@@ -350,7 +341,6 @@ export const Staff = () => {
             <label>
               Email
               <input
-                placeholder="Email"
                 type="text"
                 value={selectedStaff.email}
                 readOnly
@@ -360,8 +350,7 @@ export const Staff = () => {
             <label>
               Số điện thoại
               <input
-                type="text"
-                placeholder="Phone Number"
+                type="number"
                 value={selectedStaff.phoneNum}
                 onChange={(e) =>
                   setSelectedStaff({
@@ -408,7 +397,6 @@ export const Staff = () => {
               Tên
               <input
                 type="text"
-                placeholder="Full Name"
                 value={newStaff.fullName}
                 onChange={(e) =>
                   setNewStaff({ ...newStaff, fullName: e.target.value })
@@ -420,7 +408,6 @@ export const Staff = () => {
               Email
               <input
                 type="text"
-                placeholder="Email"
                 value={newStaff.email}
                 onChange={(e) =>
                   setNewStaff({ ...newStaff, email: e.target.value })
@@ -431,8 +418,7 @@ export const Staff = () => {
             <label>
               Số điện thoại
               <input
-                type="text"
-                placeholder="Phone Number"
+                type="number"
                 value={newStaff.phoneNum}
                 onChange={(e) =>
                   setNewStaff({ ...newStaff, phoneNum: e.target.value })
