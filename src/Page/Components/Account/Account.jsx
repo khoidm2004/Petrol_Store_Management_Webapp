@@ -6,6 +6,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import useChangePassword from "../../../hooks/useChangePassword";
 import Popup from "../Popup/Popup";
 import useLogout from "../../../hooks/useLogout";
+import Footer from "../Footer/Footer";
 
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
@@ -24,17 +25,19 @@ export const Account = () => {
     avatar: user.avatar || "",
   });
 
-  const { selectedFile, error, setSelectedFile, handleImageChange } = usePreviewImage();
+  const { selectedFile, error, setSelectedFile, handleImageChange } =
+    usePreviewImage();
 
   useEffect(() => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     const minLengthMessage = "Mật khẩu phải có ít nhất 6 ký tự.";
     const uppercaseMessage = "Mật khẩu phải chứa ít nhất một chữ viết hoa.";
     const numberMessage = "Mật khẩu phải chứa ít nhất một số.";
     const specialCharMessage = "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.";
-  
+
     let errorMessage = "";
-  
+
     if (formPass.pass.length < 6) {
       errorMessage = minLengthMessage;
     } else if (!/[A-Z]/.test(formPass.pass)) {
@@ -46,10 +49,10 @@ export const Account = () => {
     } else if (!passwordRegex.test(formPass.pass)) {
       errorMessage = "Mật khẩu không hợp lệ.";
     }
-  
+
     setPasswordError(errorMessage);
   }, [formPass.pass]);
-    
+
   useEffect(() => {
     if (selectedFile) {
       setProfile((prevProfile) => ({
@@ -91,7 +94,7 @@ export const Account = () => {
 
   const handleResetCancel = () => {
     setShowResetModal(false);
-    setResetStatus('');
+    setResetStatus("");
   };
 
   const handleChangePass = (e) => {
@@ -99,15 +102,13 @@ export const Account = () => {
     setFormPass({ ...formPass, [name]: value });
   };
 
-
-  const email_local = JSON.parse(localStorage.getItem('user-info'));
+  const email_local = JSON.parse(localStorage.getItem("user-info"));
   // console.log(email_local.email);
   // console.log(email_local.pass);
   const handleChangePassword = async () => {
-    const email_local = JSON.parse(localStorage.getItem('user-info'));
+    const email_local = JSON.parse(localStorage.getItem("user-info"));
     if (formPass.pass === formPass.passNew) {
       try {
-
         const result = await useChangePassword(
           formPass.pass,
           profile.email,
@@ -121,7 +122,7 @@ export const Account = () => {
             message: "Đổi thành công",
           });
           const test = await handleLogout();
-          window.location.href = '/';
+          window.location.href = "/";
         } else {
           setPopup({
             show: true,
@@ -129,19 +130,17 @@ export const Account = () => {
             message: result.Message,
           });
         }
-      } catch (error) {
-      }
-    }else{
-      setPopup({ show: true, title: 'Lỗi', message: 'Không trùng pass' });
-
+      } catch (error) {}
+    } else {
+      setPopup({ show: true, title: "Lỗi", message: "Không trùng pass" });
     }
   };
 
   const closePopup = () => {
-    setPopup({ show: false, title: '', message: '' });
+    setPopup({ show: false, title: "", message: "" });
   };
   return (
-      <div className="Staff">
+    <div className="Staff">
       <div className="text-account">ACCOUNT</div>
       <div className="page_account">
         <div className="profile_image_section">
@@ -205,7 +204,9 @@ export const Account = () => {
                 onChange={handleChange}
                 className="changePassWord"
               />
-              <button className="buttonChangePass " onClick={handleResetClick}>Đổi mật khẩu</button>
+              <button className="buttonChangePass " onClick={handleResetClick}>
+                Đổi mật khẩu
+              </button>
             </div>
           </div>
           {showResetModal && (
@@ -232,7 +233,9 @@ export const Account = () => {
                     value={formPass.passNew}
                     onChange={handleChangePass}
                   />
-                  {passwordError && <span className="password-error">{passwordError}</span>}
+                  {passwordError && (
+                    <span className="password-error">{passwordError}</span>
+                  )}
                 </div>
                 <button onClick={handleChangePassword}>SUBMIT</button>
                 {resetStatus && <p className="reset-status">{resetStatus}</p>}
@@ -245,13 +248,14 @@ export const Account = () => {
           </button>
         </div>
       </div>
-      <footer className="footer_account">
-        <p className="footer">
-          <span style={{ fontWeight: 700 }}>Văn phòng giao dịch:</span> Tầng 15,
-          tòa nhà Detech, 8c Tôn Thất Thuyết, quận Nam Từ Liêm, Hà Nội
-        </p>
-      </footer>
-      {popup.show && <Popup title={popup.title} message={popup.message} onClose={closePopup} />}
+      <Footer />
+      {popup.show && (
+        <Popup
+          title={popup.title}
+          message={popup.message}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };
