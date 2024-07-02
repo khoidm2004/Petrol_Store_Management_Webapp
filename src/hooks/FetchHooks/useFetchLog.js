@@ -14,7 +14,7 @@ const useFetchLog = async (limitAmount) => {
       logId: doc.id,
       ...doc.data(),
     }));
-    return { logList };
+    return logList;
   } catch (error) {
     return { Title: "Error", Message: error.message, Status: "error" };
   }
