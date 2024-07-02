@@ -151,7 +151,7 @@ export const Pump = () => {
   ).length;
 
   const data = {
-    labels: ["Red", "blue"],
+    labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
     datasets: [
       {
         label: "VOI BƠM",
@@ -288,7 +288,7 @@ export const Pump = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="3">
+                <td colSpan="3" className="noLine">
                 {displayedStaff.length > 0 && (
                   <div className="pagination">
                     <p>
@@ -354,7 +354,6 @@ export const Pump = () => {
               <label> Tên
                 <input
                   type="text"
-                  placeholder="Pump Name"
                   value={selectedStaff.pumpName}
                   onChange={(e) =>
                     setSelectedStaff({
@@ -368,7 +367,6 @@ export const Pump = () => {
               <label> Mã
                 <input
                   type="text"
-                  placeholder="Pump Code"
                   value={parseInt(selectedStaff.pumpCode)}
                   readOnly
                 />
@@ -463,7 +461,6 @@ export const Pump = () => {
               <label> Tên
                 <input
                   type="text"
-                  placeholder="Pump Name"
                   value={newStaff.pumpName}
                   onChange={(e) =>
                     setNewStaff({ ...newStaff, pumpName: e.target.value })
@@ -474,7 +471,6 @@ export const Pump = () => {
               <label> Mã
                 <input
                   type="text"
-                  placeholder="Pump Code"
                   onChange={(e) =>
                     setNewStaff({ ...newStaff, pumpCode: parseInt(e.target.value) })
                   }

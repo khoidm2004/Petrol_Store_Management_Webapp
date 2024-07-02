@@ -373,6 +373,16 @@ tr:hover {
   flex-direction: column;
 }
 
+.noLine{
+  border: none;
+}
+
+.noLine{
+  border-bottom: none;
+  background-color: white;
+  
+}
+
 /* Responsive Design */
 @media (min-width: 1400px) {
   .chart-container {

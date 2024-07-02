@@ -178,7 +178,6 @@ export const Revenue = () => {
     items: [],
   };
      
-  console.log(currentData);
   const selectDate = new Date(formattedSelectedDate);
   const formatDate = selectDate.toLocaleDateString("vi-VN", {
     month: "numeric",
@@ -267,10 +266,10 @@ export const Revenue = () => {
         <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>
       </div>
       <div className="Row">
-        <div>
+        <div className="chartRevenue">
           <div className="title_xemChitiet">DOANH THU SẢN LƯỢNG</div>
-          <div className="barChart">
-            <Bar className="bar"
+          <div className="chart">
+            <Bar
               data={barData}
               options={{
                 responsive: true,
@@ -280,8 +279,9 @@ export const Revenue = () => {
           </div>
           <div className="button_xemChitiet">
               <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
-            </div>
+          </div>
         </div>
+
         {showBarDetail && (
           <>
             <div
@@ -338,27 +338,30 @@ export const Revenue = () => {
             </div>
           </>
         )}
-        <div className="doughnutChart">
-          <div className="title_xemChitiet">TỒN KHO</div>
-          <Doughnut
-            data={doughnutData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-            }}
-          />
-          <div className="button_xemChitiet">
-            <button
-              onClick={() => {
-                setShowDoughnutDetail(true);
-                setSelectedItem(true);
-                if (leftData.length > 0) {
-                  handleRowClick(leftData[0]);
-                }
-              }}
-            >
-              Xem chi tiết
-            </button>
+
+        <div className="chartRevenue">
+            <div className="title_xemChitiet">TỒN KHO</div>
+            <div className="chart">
+              <Doughnut
+                data={doughnutData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                }}
+              />
+            </div>
+            <div className="button_xemChitiet">
+              <button
+                onClick={() => {
+                  setShowDoughnutDetail(true);
+                  setSelectedItem(true);
+                  if (leftData.length > 0) {
+                    handleRowClick(leftData[0]);
+                  }
+                }}
+              >
+                Xem chi tiết
+              </button>
           </div>
         </div>
         {showDoughnutDetail && (
@@ -375,7 +378,7 @@ export const Revenue = () => {
               <h4>TỒN KHO</h4>
               <hr />
               <div className="content">
-                <div className="table-container row_pump">
+                <div className="table-container">
                   <table className="table">
                     <thead>
                       <tr>
@@ -398,7 +401,7 @@ export const Revenue = () => {
                   </table>
                   {selectedItem && (
                     <>
-                      <div style={{ height: 300 + "px", width: 300 + "px" }}>
+                      <div className="pump_Revenue">
                         <Doughnut
                           data={{
                             labels: ["Thể tích bể", "Số lượng hàng tồn"],
@@ -431,15 +434,10 @@ export const Revenue = () => {
           </>
         )}
       </div>
-
-      <br />
-      <br />
-      <br />
-
-
+<br></br>
       <div className="Row">
         <div className="Column doanh_thu">
-          <header className="header_staff">
+          <header className="headerRevenue">
             <p>DOANH THU VÒI BƠM</p>
             <div className="search-container">
               <input
@@ -463,7 +461,7 @@ export const Revenue = () => {
               </thead>
               <tbody>
                 {revenueData.length > 0 ? (
-                  revenueDatas.map((staffMember) => (
+                  revenueData.map((staffMember) => (
                     <tr key={staffMember.pid} className="col" id="mainstate">
                       <td className="right">{staffMember.pumpName}</td>
                       <td className="right">{staffMember.productName}</td>
@@ -483,7 +481,7 @@ export const Revenue = () => {
             </table>
           </div>
                 <br />
-          <div className="Row row_image">
+          <div className="row_image">
             <div className="object_body">
               <div className="object_box"> {staffNumber} </div>
               <Link className="object_a" to="/staff">
@@ -514,8 +512,8 @@ export const Revenue = () => {
             </div>
           </div>
         </div>
-        <div className="Column ton_kho">
-          <div className="container">
+        <div className="ton_kho">
+          <div className="containerRevenue">
             <h6>LƯỢNG TỒN TRONG CA</h6>
             <hr />
             <div className="date-selector">
@@ -555,25 +553,28 @@ export const Revenue = () => {
                         {total.toLocaleString("vi-VN")}
                       </td>
                     </tr>
+                    <tr>
+                      <td className="noLine">
+                        {displayedStaff.length > 0 && (
+                        <div className="pagination_1" style={{ textAlign: 'center'}}>
+                          <ul>
+                            <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                            </li>
+                            {Array.from({ length: totalPages }, (_, index) => (
+                              <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                              </li>
+                            ))}
+                            <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                            </li>
+                          </ul>
+                        </div>
+                      )}</td>
+                    </tr>
                   </tfoot>
                 </table>
-                {displayedStaff.length > 0 && (
-                    <div className="pagination_1" style={{ textAlign: 'center'}}>
-                      <ul>
-                        <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                        </li>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                          <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
-                          </li>
-                        ))}
-                        <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
               </div>
             </div>
           </div>

@@ -43,7 +43,7 @@ const Include = ({ setLoggedIn }) => {
         <a href="http://localhost:5173/revenue">
           <span id="logo">PIACOM</span>
         </a>
-        <p className="title">
+        <p id="title">
           CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
           PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
         </p>
@@ -128,7 +128,7 @@ const Include = ({ setLoggedIn }) => {
           </div>
           
         </div>
-        <div className="burger" onClick={toggleMenu}>
+        <div className="burger burgerCenter" onClick={toggleMenu}>
           {isMenuOpen ? (
             <></>
           ) : (

@@ -329,7 +329,7 @@ export const Shift = () => {
                                 </tr>
                             )}
                             <tr>
-                                <td colSpan={6}>
+                                <td colSpan={6} className="noLine">
                                 {displayedStaff.length > 0 && (
                                     <div className="pagination">
                                     <p>

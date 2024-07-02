@@ -231,7 +231,7 @@ export const Tank = () => {
               </tr>
             )}
             <tr>
-              <td colSpan="3">
+              <td colSpan="3" className="noLine">
               {displayedStaff.length > 0 && (
                 <div className="pagination">
                   <p>
@@ -269,7 +269,6 @@ export const Tank = () => {
             <label> Tên
               <input
                 type="text"
-                placeholder="Tank Name"
                 value={selectedTank.tankName}
                 onChange={(e) =>
                   setSelectedTank({ ...selectedTank, tankName: e.target.value })
@@ -278,13 +277,12 @@ export const Tank = () => {
             </label>
             <br />                                                                  
             <label> Mã
-              <input type="text" placeholder="Tank Code" value={parseInt(selectedTank.tankCode)} readOnly />
+              <input type="text" value={parseInt(selectedTank.tankCode)} readOnly />
             </label>
             <br />
             <label> Thể tích
               <input
                 type="text"
-                placeholder="Tank Volume"
                 value={parseInt(selectedTank.tankVolume)}
                 onChange={(e) =>
                   setSelectedTank({ ...selectedTank, tankVolume: parseInt(e.target.value) })
@@ -348,7 +346,6 @@ export const Tank = () => {
             <label> Tên
               <input
                 type="text"
-                placeholder="Tank Name"
                 value={newTank.tankName}
                 onChange={(e) =>
                   setNewTank({ ...newTank, tankName: e.target.value })
@@ -358,8 +355,7 @@ export const Tank = () => {
             <br />
             <label> Mã
               <input
-                type="text"
-                placeholder="Tank Code"
+                type="number"
                 onChange={(e) =>
                   setNewTank({ ...newTank, tankCode: parseInt(e.target.value) })
                 }
@@ -368,8 +364,7 @@ export const Tank = () => {
             <br />
             <label> Thể tích
               <input
-                type="text"
-                placeholder="Tank Volume"
+                type="number"
                 onChange={(e) =>
                   setNewTank({ ...newTank, tankVolume: parseInt(e.target.value) })
                 }
