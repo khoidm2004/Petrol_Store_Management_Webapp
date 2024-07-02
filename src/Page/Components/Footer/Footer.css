@@ -1,0 +1,164 @@
+.footer_container {
+  display: flex;
+  background: #0950a1;
+  color: white;
+}
+
+.footer_info {
+  margin-top: 55px;
+  margin-left: 180px;
+  margin-bottom: 67px;
+  width: 35%;
+}
+
+.footer_info_content {
+  margin-top: 30px;
+}
+
+.footer_info h1 {
+  font-weight: 700;
+  font: bold;
+  line-height: 55px;
+  width: fit-content;
+}
+
+.footer_info h4 {
+  font-size: 20px;
+  width: 80%;
+}
+
+.footer_info_content p {
+  width: 80%;
+  margin-bottom: 2%;
+}
+
+.footer_info_content p span {
+  font-weight: 700;
+}
+
+.footer_info_icons_container {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+}
+
+.footer_info_icons_container a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.footer_info_icons_container a:hover {
+  background-color: #007bff;
+}
+
+.footer_info_icons_container a svg {
+  width: 70%;
+  height: 70%;
+}
+
+.footer_solution {
+  display: flex;
+  flex-direction: column;
+  margin-top: 115px;
+  padding-right: 60px;
+  width: 25%;
+  margin-right: -50px;
+}
+
+.footer_solution h3 {
+  font-weight: 700;
+  font: bold;
+  font-size: 20;
+}
+
+.footer_solution_content {
+  margin-top: 20px;
+}
+
+.footer_solution_content a p {
+  font-size: 15px;
+  width: 80%;
+  margin-bottom: 2%;
+}
+
+.footer_about {
+  display: flex;
+  flex-direction: column;
+  margin-top: 115px;
+}
+
+.footer_about h3 {
+  font-weight: 700;
+  font: bold;
+  font-size: 20;
+}
+
+.footer_about_content {
+  margin-top: 20px;
+  width: fit-content;
+}
+
+.footer_about_content a p {
+  font-size: 15px;
+  margin-bottom: 2%;
+}
+
+@media screen and (max-width: 768px) {
+  .footer_info {
+    margin-left: 30px;
+  }
+
+  .footer_solution {
+    margin-right: -10px;
+    width: 30%;
+  }
+
+  .footer_solution_content a p {
+    margin-bottom: 8%;
+  }
+
+  .footer_info_icons_container {
+    margin-top: 5%;
+    width: 40%;
+  }
+
+  .footer_info_icons_container a svg {
+    width: 75%;
+    height: 75%;
+    margin-right: 5%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer_container {
+    flex-direction: column;
+    justify-content: left;
+  }
+
+  .footer_info {
+    margin-bottom: 0;
+    padding-left: 10%;
+    width: 100%;
+  }
+
+  .footer_solution {
+    margin-top: 20px;
+    padding-right: 0;
+    width: 100%;
+    padding-left: 10%;
+  }
+
+  .footer_about {
+    margin-top: 20px;
+    padding-right: 0;
+    width: 100%;
+    padding-left: 10%;
+  }
+}
