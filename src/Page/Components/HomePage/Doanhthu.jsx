@@ -158,9 +158,13 @@ export const Revenue = () => {
     day: "numeric"
   });
   
-  const detailedData = datarevenue.find(
+  const filterDetailedData = datarevenue.filter(
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
+
+  const detailedData = {
+    items: filterDetailedData.length > 0 ? filterDetailedData : [],
+};
 
   const barData = {
     labels: currentData.items.map((item) => item.productName),
