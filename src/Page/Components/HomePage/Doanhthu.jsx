@@ -40,7 +40,6 @@ const Revenue = () => {
     const newDate = new Date(e.target.value);
     setSelectedDate(newDate);
   };
-
   const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
@@ -105,10 +104,8 @@ const Revenue = () => {
       setTotalQuantity(totalQuantity);
     };
     fetchData();
-  }, []);
+  }, [tanks]);
 
-  console.log(totalQuantity);
-  console.log(totalIncome);
   const doughnutData = {
     labels: ["Thể tích bể", "Số lượng hàng tồn"],
     datasets: [
