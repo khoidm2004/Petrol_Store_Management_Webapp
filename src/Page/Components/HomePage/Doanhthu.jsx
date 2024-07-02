@@ -57,7 +57,7 @@ export const Revenue = () => {
       fetchTank();
       fetchPump();
       fetchStaff();
-  }, [fetchProduct, fetchTank, fetchPump, fetchStaff]);
+  }, []);
 
   const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
   const productNumber = product.filter((staffMember) => staffMember.productStatus === "ON SALE").length;
@@ -77,7 +77,7 @@ export const Revenue = () => {
       }
     };
     fetchLogs();
-  }, [formattedSelectedDate]);
+  }, []);
 
   // Tồn kho
   useEffect(() => {
@@ -95,7 +95,7 @@ export const Revenue = () => {
       setTotalQuantity(totalQuantity);
     };
     fetchData();
-  }, [tanks]);
+  }, []);
 
   const doughnutData = {
     labels: ["Thể tích bể", "Số lượng hàng tồn"],
@@ -133,24 +133,52 @@ export const Revenue = () => {
     };
   
     fetchRevenueData();
-  }, [datarevenue]);
+  }, []);
   
   const currentDate = new Date().toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
     day: "numeric"
   });
-  
-  const filteredData = datarevenue.filter(entry => {
-    return timeConverter(Date.parse(entry.date)).date === currentDate;
-  });
 
-  console.log(filteredData);
+  const data = [
+    {
+      date: '2024-07-02',
+      items: [
+        { productName: 'MH1', productRevenue: 100, productQuantity: 50 },
+        { productName: 'MH2', productRevenue: 150, productQuantity: 60 },
+        { productName: 'MH3', productRevenue: 200, productQuantity: 70 },
+        { productName: 'MH1', productRevenue: 100, productQuantity: 50 },
+        { productName: 'MH2', productRevenue: 150, productQuantity: 60 }
+      ],
+    },
+    {
+      date: '2024-07-03',
+      items: [
+        { product: 'MH1', revenue: 120, quantity: 55 },
+        { product: 'MH2', revenue: 130, quantity: 65 },
+        { product: 'MH3', revenue: 220, quantity: 75 },
+        { product: 'MH2', revenue: 130, quantity: 65 },
+        { product: 'MH3', revenue: 220, quantity: 75 }
+      ],
+    },
+    {
+      date: '2024-07-01',
+      items: [
+        { product: 'MH1', revenue: 110, quantity: 52 },
+        { product: 'MH2', revenue: 140, quantity: 62 },
+        { product: 'MH3', revenue: 210, quantity: 72 },
+        { product: 'MH2', revenue: 140, quantity: 62 },
+        { product: 'MH3', revenue: 210, quantity: 72 }
+      ],
+    },
+  ];
 
-  const currentData = {
-      items: filteredData.length > 0 ? filteredData : [],
+  const currentData = data.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
+    items: [],
   };
-  
+     
+  console.log(currentData);
   const selectDate = new Date(formattedSelectedDate);
   const formatDate = selectDate.toLocaleDateString("vi-VN", {
     month: "numeric",
@@ -158,13 +186,10 @@ export const Revenue = () => {
     day: "numeric"
   });
   
-  const filterDetailedData = datarevenue.filter(
+  const detailedData = data.find(
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
 
-  const detailedData = {
-    items: filterDetailedData.length > 0 ? filterDetailedData : [],
-};
 
   const barData = {
     labels: currentData.items.map((item) => item.productName),
@@ -201,11 +226,11 @@ export const Revenue = () => {
     fetchRevenueData();
   }, []);
 
-  const revenueDatas= revenueData.filter(
-    (staffMember) =>
-      staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
-      staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
-  );
+  // const revenueDatas= revenueData.filter(
+  //   (staffMember) =>
+  //     staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
+  //     staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
+  // );
 
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -242,18 +267,20 @@ export const Revenue = () => {
         <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>
       </div>
       <div className="Row">
-        <div className="barChart">
+        <div>
           <div className="title_xemChitiet">DOANH THU SẢN LƯỢNG</div>
-          <Bar
-            data={barData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-            }}
-          />
-          <div className="button_xemChitiet">
-            <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
+          <div className="barChart">
+            <Bar className="bar"
+              data={barData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+              }}
+            />
           </div>
+          <div className="button_xemChitiet">
+              <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
+            </div>
         </div>
         {showBarDetail && (
           <>
