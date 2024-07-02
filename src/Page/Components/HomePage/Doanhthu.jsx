@@ -13,11 +13,11 @@ import { Link } from "react-router-dom";
 import useFetchRevenue from "../../../hooks/FetchHooks/useFetchRevenue.js";
 import useFetchPumpRevenue from "../../../hooks/FetchHooks/useFetchPumpRevenue.js";
 
-import useTankStore from '../../../store/tankStore.js';
+import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
-export const Revenue = () => {
+const Revenue = () => {
   const { product, fetchProduct } = useProductStore();
   const { staff, fetchStaff } = useStaffStore();
   const { pumps, fetchPump } = usePumpStore();
@@ -44,36 +44,46 @@ export const Revenue = () => {
   const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
-    day: "numeric"
+    day: "numeric",
   });
 
   const formatDatestring = (dateString) => {
-    const [day, month, year] = dateString.split('/');
+    const [day, month, year] = dateString.split("/");
     return `Ngày ${day} tháng ${month} năm ${year}`;
   };
-  
+
   useEffect(() => {
-      fetchProduct();
-      fetchTank();
-      fetchPump();
-      fetchStaff();
+    fetchProduct();
+    fetchTank();
+    fetchPump();
+    fetchStaff();
   }, []);
 
-  const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
-  const productNumber = product.filter((staffMember) => staffMember.productStatus === "ON SALE").length;
-  const pumpNumber = pumps.filter((staffMember) => staffMember.pumpStatus === "ON USE").length;
-  const tankNumber = tanks.filter((staffMember) => staffMember.tankStatus === "ON USE").length;
+  const staffNumber = staff.filter(
+    (staffMember) => staffMember.workingStatus === "IS WORKING"
+  ).length;
+  const productNumber = product.filter(
+    (staffMember) => staffMember.productStatus === "ON SALE"
+  ).length;
+  const pumpNumber = pumps.filter(
+    (staffMember) => staffMember.pumpStatus === "ON USE"
+  ).length;
+  const tankNumber = tanks.filter(
+    (staffMember) => staffMember.tankStatus === "ON USE"
+  ).length;
 
   useEffect(() => {
     const fetchLogs = async () => {
       const result = await useFetchLog();
       if (result.Status !== "error") {
-        const logs = result.filter(log => {
-          const logDate =new Date(log.startTime).toISOString().slice(0, 10);  
+        const logs = result.filter((log) => {
+          const logDate = new Date(log.startTime).toISOString().slice(0, 10);
           return logDate === formattedSelectedDate;
         });
         setDailyData(logs);
-        setTotal(logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0));
+        setTotal(
+          logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0)
+        );
       }
     };
     fetchLogs();
@@ -97,6 +107,8 @@ export const Revenue = () => {
     fetchData();
   }, []);
 
+  console.log(totalQuantity);
+  console.log(totalIncome);
   const doughnutData = {
     labels: ["Thể tích bể", "Số lượng hàng tồn"],
     datasets: [
@@ -128,67 +140,68 @@ export const Revenue = () => {
         const revenueList = await useFetchRevenue();
         setDataRevenue(revenueList);
       } catch (error) {
-        console.error('Error fetching revenue data:', error);
+        console.error("Error fetching revenue data:", error);
       }
     };
-  
+
     fetchRevenueData();
   }, []);
-  
+
   const currentDate = new Date().toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
-    day: "numeric"
+    day: "numeric",
   });
 
   const data = [
     {
-      date: '2024-07-02',
+      date: "2024-07-02",
       items: [
-        { productName: 'MH1', productRevenue: 100, productQuantity: 50 },
-        { productName: 'MH2', productRevenue: 150, productQuantity: 60 },
-        { productName: 'MH3', productRevenue: 200, productQuantity: 70 },
-        { productName: 'MH1', productRevenue: 100, productQuantity: 50 },
-        { productName: 'MH2', productRevenue: 150, productQuantity: 60 }
+        { productName: "MH1", productRevenue: 100, productQuantity: 50 },
+        { productName: "MH2", productRevenue: 150, productQuantity: 60 },
+        { productName: "MH3", productRevenue: 200, productQuantity: 70 },
+        { productName: "MH1", productRevenue: 100, productQuantity: 50 },
+        { productName: "MH2", productRevenue: 150, productQuantity: 60 },
       ],
     },
     {
-      date: '2024-07-03',
+      date: "2024-07-03",
       items: [
-        { product: 'MH1', revenue: 120, quantity: 55 },
-        { product: 'MH2', revenue: 130, quantity: 65 },
-        { product: 'MH3', revenue: 220, quantity: 75 },
-        { product: 'MH2', revenue: 130, quantity: 65 },
-        { product: 'MH3', revenue: 220, quantity: 75 }
+        { product: "MH1", revenue: 120, quantity: 55 },
+        { product: "MH2", revenue: 130, quantity: 65 },
+        { product: "MH3", revenue: 220, quantity: 75 },
+        { product: "MH2", revenue: 130, quantity: 65 },
+        { product: "MH3", revenue: 220, quantity: 75 },
       ],
     },
     {
-      date: '2024-07-01',
+      date: "2024-07-01",
       items: [
-        { product: 'MH1', revenue: 110, quantity: 52 },
-        { product: 'MH2', revenue: 140, quantity: 62 },
-        { product: 'MH3', revenue: 210, quantity: 72 },
-        { product: 'MH2', revenue: 140, quantity: 62 },
-        { product: 'MH3', revenue: 210, quantity: 72 }
+        { product: "MH1", revenue: 110, quantity: 52 },
+        { product: "MH2", revenue: 140, quantity: 62 },
+        { product: "MH3", revenue: 210, quantity: 72 },
+        { product: "MH2", revenue: 140, quantity: 62 },
+        { product: "MH3", revenue: 210, quantity: 72 },
       ],
     },
   ];
 
-  const currentData = data.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
+  const currentData = data.find(
+    (entry) => timeConverter(Date.parse(entry.date)).date === currentDate
+  ) || {
     items: [],
   };
-     
+
   const selectDate = new Date(formattedSelectedDate);
   const formatDate = selectDate.toLocaleDateString("vi-VN", {
     month: "numeric",
     year: "numeric",
-    day: "numeric"
+    day: "numeric",
   });
-  
+
   const detailedData = data.find(
     (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
   ) || { items: [] };
-
 
   const barData = {
     labels: currentData.items.map((item) => item.productName),
@@ -218,7 +231,7 @@ export const Revenue = () => {
         const revenueList = await useFetchPumpRevenue();
         setRevenueData(revenueList);
       } catch (error) {
-        console.error('Error fetching revenue data:', error);
+        console.error("Error fetching revenue data:", error);
       }
     };
 
@@ -250,7 +263,6 @@ export const Revenue = () => {
     setCurrentPage(page);
   };
 
-
   return (
     <div className="revenue">
       {/* {showOverlay && 
@@ -278,7 +290,7 @@ export const Revenue = () => {
             />
           </div>
           <div className="button_xemChitiet">
-              <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
+            <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
           </div>
         </div>
 
@@ -340,36 +352,36 @@ export const Revenue = () => {
         )}
 
         <div className="chartRevenue">
-            <div className="title_xemChitiet">TỒN KHO</div>
-            <div className="chart">
-              <Doughnut
-                data={doughnutData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
-              />
-            </div>
-            <div className="button_xemChitiet">
-              <button
-                onClick={() => {
-                  setShowDoughnutDetail(true);
-                  setSelectedItem(true);
-                  if (leftData.length > 0) {
-                    handleRowClick(leftData[0]);
-                  }
-                }}
-              >
-                Xem chi tiết
-              </button>
+          <div className="title_xemChitiet">TỒN KHO</div>
+          <div className="chart">
+            <Doughnut
+              data={doughnutData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+              }}
+            />
+          </div>
+          <div className="button_xemChitiet">
+            <button
+              onClick={() => {
+                setShowDoughnutDetail(true);
+                setSelectedItem(true);
+                if (leftData.length > 0) {
+                  handleRowClick(leftData[0]);
+                }
+              }}
+            >
+              Xem chi tiết
+            </button>
           </div>
         </div>
         {showDoughnutDetail && (
-          <>  
+          <>
             <div
-                className="overlay"
-                onClick={() => setShowDoughnutDetail(false)}
-              ></div>
+              className="overlay"
+              onClick={() => setShowDoughnutDetail(false)}
+            ></div>
             <div className="viewShift">
               <AiOutlineClose
                 onClick={() => setShowDoughnutDetail(false)}
@@ -434,7 +446,7 @@ export const Revenue = () => {
           </>
         )}
       </div>
-<br></br>
+      <br></br>
       <div className="Row">
         <div className="Column doanh_thu">
           <header className="headerRevenue">
@@ -470,7 +482,7 @@ export const Revenue = () => {
                       </td>
                     </tr>
                   ))
-                ):(
+                ) : (
                   <tr>
                     <td colSpan="3" className="no-data">
                       Chưa có dữ liệu về doanh thu vòi bơm
@@ -480,7 +492,7 @@ export const Revenue = () => {
               </tbody>
             </table>
           </div>
-                <br />
+          <br />
           <div className="row_image">
             <div className="object_body">
               <div className="object_box"> {staffNumber} </div>
@@ -556,22 +568,62 @@ export const Revenue = () => {
                     <tr>
                       <td className="noLine">
                         {displayedStaff.length > 0 && (
-                        <div className="pagination_1" style={{ textAlign: 'center'}}>
-                          <ul>
-                            <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                            </li>
-                            {Array.from({ length: totalPages }, (_, index) => (
-                              <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                                <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+                          <div
+                            className="pagination_1"
+                            style={{ textAlign: "center" }}
+                          >
+                            <ul>
+                              <li
+                                className={`pagination-item ${
+                                  currentPage === 1 ? "disabled" : ""
+                                }`}
+                              >
+                                <button
+                                  onClick={() =>
+                                    handlePageChange(currentPage - 1)
+                                  }
+                                  disabled={currentPage === 1}
+                                >
+                                  Previous
+                                </button>
                               </li>
-                            ))}
-                            <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                            </li>
-                          </ul>
-                        </div>
-                      )}</td>
+                              {Array.from(
+                                { length: totalPages },
+                                (_, index) => (
+                                  <li
+                                    key={index}
+                                    className={`pagination-item ${
+                                      currentPage === index + 1 ? "active" : ""
+                                    }`}
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        handlePageChange(index + 1)
+                                      }
+                                    >
+                                      {index + 1}
+                                    </button>
+                                  </li>
+                                )
+                              )}
+                              <li
+                                className={`pagination-item ${
+                                  currentPage === totalPages ? "disabled" : ""
+                                }`}
+                              >
+                                <button
+                                  onClick={() =>
+                                    handlePageChange(currentPage + 1)
+                                  }
+                                  disabled={currentPage === totalPages}
+                                >
+                                  Next
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        )}
+                      </td>
                     </tr>
                   </tfoot>
                 </table>
@@ -627,7 +679,8 @@ export const Revenue = () => {
                               <tr key={index}>
                                 <td>
                                   {
-                                    timeConverter(Date.parse(item.startTime)).time
+                                    timeConverter(Date.parse(item.startTime))
+                                      .time
                                   }
                                 </td>
                                 <td>{item.productName}</td>
@@ -649,25 +702,60 @@ export const Revenue = () => {
                       </table>
                     </div>
                     {displayedStaff.length > 0 && (
-                        <div className="pagination">
-                          <p>
-                            <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, displayedStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{displayedStaff.length}&nbsp;</span> entries
-                          </p>
-                          <ul className="pagination-list">
-                            <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                      <div className="pagination">
+                        <p>
+                          <span>Showing &nbsp;</span>{" "}
+                          <span>{indexOfFirstStaff + 1}&nbsp;</span>
+                          <span>to&nbsp;</span>
+                          <span>
+                            {Math.min(indexOfLastStaff, displayedStaff.length)}
+                            &nbsp;
+                          </span>{" "}
+                          <span>of&nbsp;</span>{" "}
+                          <span>{displayedStaff.length}&nbsp;</span> entries
+                        </p>
+                        <ul className="pagination-list">
+                          <li
+                            className={`pagination-item ${
+                              currentPage === 1 ? "disabled" : ""
+                            }`}
+                          >
+                            <button
+                              onClick={() => handlePageChange(currentPage - 1)}
+                              disabled={currentPage === 1}
+                            >
+                              Previous
+                            </button>
+                          </li>
+                          {Array.from({ length: totalPages }, (_, index) => (
+                            <li
+                              key={index}
+                              className={`pagination-item ${
+                                currentPage === index + 1 ? "active" : ""
+                              }`}
+                            >
+                              <button
+                                onClick={() => handlePageChange(index + 1)}
+                              >
+                                {index + 1}
+                              </button>
                             </li>
-                            {Array.from({ length: totalPages }, (_, index) => (
-                              <li key={index} className={`pagination-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                                <button onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
-                              </li>
-                            ))}
-                            <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                            </li>
-                          </ul>
-                        </div>
-                      )}
+                          ))}
+                          <li
+                            className={`pagination-item ${
+                              currentPage === totalPages ? "disabled" : ""
+                            }`}
+                          >
+                            <button
+                              onClick={() => handlePageChange(currentPage + 1)}
+                              disabled={currentPage === totalPages}
+                            >
+                              Next
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
