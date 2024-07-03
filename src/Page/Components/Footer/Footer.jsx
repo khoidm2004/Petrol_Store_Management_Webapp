@@ -12,19 +12,19 @@ const Footer = () => {
         <div className="footer_info">
           <h1>PIACOM</h1>
           <h4>Công ty Cổ phần Tin học Viễn thông Petrolimex</h4>
-          <div className="footer_info_content">
+          <div className="footer_info_email">
             <p>
               <span>Email:</span> info.piacom@petrolimex.com.vn
             </p>
+          </div>
+          <div className="footer_info_content">
             <p>
               <span>Văn phòng giao dịch:</span> Tầng 15, tòa nhà Detech, 8c Tôn
-              Thất Thuyết,
-               quận Nam Từ Liêm, Hà Nội
+              Thất Thuyết, quận Nam Từ Liêm, Hà Nội
             </p>
             <p>
               <span>CN Miền Nam: </span> Tầng 6, tòa nhà WIN HOME, 209 Hoàng Văn
-              Thụ,
-               quận Phú Nhuận, TP. Hồ Chí Minh
+              Thụ, quận Phú Nhuận, TP. Hồ Chí Minh
             </p>
           </div>
           <div className="footer_info_icons_container">
@@ -54,25 +54,16 @@ const Footer = () => {
           <h3>Giải pháp</h3>
           <div className="footer_solution_content">
             <a href="https://piacom.vn/egas/">
-              <p>
-                Giải pháp quản lý cửa hàng xăng dầu –
-                EGAS
-              </p>
+              <p>Giải pháp quản lý cửa hàng xăng dầu – EGAS</p>
             </a>
             <a href="https://piacom.vn/erp/">
-              <p>
-                Giải pháp quản trị nguồn lực doanh
-                 nghiệp xăng dầu – ERP
-              </p>
+              <p>Giải pháp quản trị nguồn lực doanh nghiệp xăng dầu – ERP</p>
             </a>
             <a href="https://piacom.vn/kho/">
               <p>Giải pháp quản lý kho xăng dầu – TAS</p>
             </a>
             <a href="https://piacom.vn/dich-vu-cntt/">
-              <p>
-                Dịch vụ hạ tầng mạng và trung tâm dữ
-                 liệu
-              </p>
+              <p>Dịch vụ hạ tầng mạng và trung tâm dữ liệu</p>
             </a>
           </div>
         </div>
