@@ -26,7 +26,7 @@ export const Pump = () => {
   const [addingStaff, setAddingStaff] = useState(false);
   const pumpId = Math.floor(100000 + Math.random() * 900000);
 
-  const [viewMode, setViewMode] = useState("use");
+  const [viewMode, setViewMode] = useState("fullUse");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -211,13 +211,18 @@ export const Pump = () => {
     (staffMember) => staffMember.pumpStatus === "NOT ON USE"
   );
 
-  const filteredStaff = (
-    viewMode === "use" ? workingStaff : notWorkingStaff
+  const filteredStaff = (viewMode === "fullUse"
+    ? pumps
+    : viewMode === "use"
+    ? workingStaff
+    : notWorkingStaff
   ).filter(
     (staffMember) =>
       staffMember.pumpCode.toString().includes(searchQuery) ||
       staffMember.pumpName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ).sort((a, b) => {
+    return a.pumpCode - b.pumpCode;
+  });
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
@@ -296,8 +301,9 @@ export const Pump = () => {
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
                   ><optgroup label="Hoạt động">
-                      <option value="use">Đang kinh doanh</option>
-                      <option value="noUse">Ngừng kinh doanh</option>
+                      <option value="fullUse">Tất cả vòi bơm</option>
+                      <option value="use">Đang sử dụng</option>
+                      <option value="noUse">Ngừng sử dụng</option>
                   </optgroup>
                   </select>
                 </th>
@@ -310,7 +316,7 @@ export const Pump = () => {
                   <tr key={staffMember.pumpCode} className="col" id="mainstate">
                     <td>{indexOfFirstStaff + index + 1}</td>
                     <td>
-                      {staffMember.pumpName} - {staffMember.pumpCode}
+                      {staffMember.pumpCode} - {staffMember.pumpName}
                     </td>
                     <td className="icon_editview">
                       <TbEyeEdit
@@ -449,7 +455,7 @@ export const Pump = () => {
                         key={product.productCode}
                         value={product.productCode}
                       >
-                      {product.productName} - {product.productCode}
+                       {product.productCode} - {product.productName}
                       </option>
                     ))}
                 </select>
@@ -472,7 +478,7 @@ export const Pump = () => {
                 >
                     {tanks.map((tank) => (
                       <option key={tank.tankCode} value={tank.tankCode}>
-                        {tank.tankName} - {tank.tankCode}
+                         {tank.tankCode} - {tank.tankName}
                       </option>
                     ))}
                 </select>
@@ -546,7 +552,7 @@ export const Pump = () => {
                         key={product.productCode}
                         value={product.productCode}
                       >
-                        {product.productName} - {product.productCode}
+                          {product.productCode} - {product.productName}
                       </option>
                     ))}
                 </select>
@@ -569,7 +575,7 @@ export const Pump = () => {
                 >
                     {tanks.map((tank) => (
                       <option key={tank.tankCode} value={tank.tankCode}>
-                        {tank.tankName} - {tank.tankCode}
+                          {tank.tankCode} - {tank.tankName}
                       </option>
                     ))}
                 </select>

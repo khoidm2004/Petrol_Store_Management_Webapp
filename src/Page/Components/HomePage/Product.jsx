@@ -27,7 +27,7 @@ export const Product = () => {
     productColor: "",
     productStatus: "ON SALE",
   });
-  const [viewMode, setViewMode] = useState("sale");
+  const [viewMode, setViewMode] = useState("fullSale");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -106,11 +106,18 @@ export const Product = () => {
     (ProductMember) => ProductMember.productStatus === "NOT ON SALE"
   );
 
-  const filteredStaff = (viewMode === "sale" ? workingProduct : notWorkingProduct).filter(
+  const filteredStaff = (viewMode === "fullSale"
+    ? product
+    : viewMode === "sale"
+    ? workingProduct
+    : notWorkingProduct
+  ).filter(
     (ProductMember) =>
       ProductMember.productCode.toString().includes(searchQuery) ||
       ProductMember.productName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ).sort((a, b) => {
+    return a.productCode - b.productCode;
+  });
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
@@ -170,6 +177,7 @@ export const Product = () => {
                 <th>STT</th>
                 <th>
                     <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
+                      <option value="fullSale">Tất cả mặt hàng</option>
                       <option value="sale">Đang kinh doanh</option>
                       <option value="notSale">Ngừng kinh doanh</option>
                     </select>
@@ -182,7 +190,7 @@ export const Product = () => {
                 displayedStaff.map((ProductMember, index) => (
                   <tr key={ProductMember.productId} className="col" id="mainstate">
                     <td>{indexOfFirstStaff + index + 1}</td>
-                    <td>{ProductMember.productName} - {ProductMember.productCode}</td>
+                    <td>{ProductMember.productCode} - {ProductMember.productName}</td>
                     <td className="icon_editview">
                       <TbEyeEdit className="icon_menu"
                         onClick={() => handleEdit(ProductMember)}

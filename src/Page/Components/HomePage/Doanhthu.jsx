@@ -62,9 +62,9 @@ import { format } from 'date-fns';
     }, [fetchProduct, fetchTank, fetchPump, fetchStaff]);
 
     const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
-    const productNumber = product.filter((product) => product.productStatus === "ON SALE").length;
-    const pumpNumber = pumps.filter((pump) => pump.pumpStatus === "ON USE").length;
-    const tankNumber = tanks.filter((tank) => tank.tankStatus === "ON USE").length;
+    const productNumber = product.length;
+    const pumpNumber = pumps.length;
+    const tankNumber = tanks.length;
 
     useEffect(() => {
       const fetchLogs = async () => {

@@ -23,7 +23,7 @@ export const Tank = () => {
   const tankId = Math.floor(100000 + Math.random() * 900000);
   const quantity_left = Math.floor(100 + Math.random() * 9);
 
-  const [viewMode, setViewMode] = useState("use");
+  const [viewMode, setViewMode] = useState("fullUse");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,7 +67,6 @@ export const Tank = () => {
   const saveChanges = async () => {
     if (selectedTank) {
       try {
-        console.log(selectedTank);
         await modifyTank(selectedTank);
         setSelectedTank(null);
       } catch (error) {
@@ -80,13 +79,21 @@ export const Tank = () => {
     if (!newTank.tankName || !newTank.tankCode || !newTank.tankVolume) {
       setPopup({
         show: true,
-        title: 'Lỗi',
+        title: 'Thông báo',
         message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
       });
       return;
     }
 
-    console.log(newTank)
+    if( 10000 >= newTank.tankVolume && newTank.tankVolume <= 25000){
+      setPopup({
+        show: true,
+        title: 'Thông báo',
+        message: 'Thể tích bể từ 10000 đến 25000.',
+      });
+      return;
+    }
+
     try {
       const result = await addTank(newTank);
       setPopup({
@@ -141,11 +148,19 @@ export const Tank = () => {
   const workingTank = tanks.filter(TankMember => TankMember.tankStatus === "ON USE");
   const notWorkingTank = tanks.filter(TankMember => TankMember.tankStatus === "NOT ON USE");
 
-  const filteredStaff = (viewMode === "use" ? workingTank : notWorkingTank).filter(
+  const filteredStaff = (viewMode === "fullUse"
+    ? tanks
+    : viewMode === "use"
+    ? workingTank
+    : notWorkingTank
+  ).filter(
     (TankMember) =>
       TankMember.tankCode.toString().includes(searchQuery) ||
       TankMember.tankName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ).sort((a, b) => {
+    return a.tankCode - b.tankCode;
+  });
+  
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
@@ -205,8 +220,9 @@ export const Tank = () => {
                 <th>STT</th>
                 <th>
                   <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
-                    <option value="use">Đang kinh doanh</option>
-                    <option value="notUse">Ngừng kinh doanh</option>
+                    <option value="use">Tất cả bể</option>
+                    <option value="use">Đang sử dụng</option>
+                    <option value="notUse">Ngừng sử dụng</option>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -217,7 +233,7 @@ export const Tank = () => {
               displayedStaff.map((TankMember, index) => (
                 <tr key={TankMember.tankCode} className="col" id="mainstate">
                   <td>{indexOfFirstStaff + index + 1}</td>
-                  <td>{TankMember.tankName} - {TankMember.tankCode}</td>
+                  <td>{TankMember.tankCode} - {TankMember.tankName}</td>
                   <td className="icon_editview">
                     <TbEyeEdit className="icon_menu"
                       onClick={() => handleEdit(TankMember)}
