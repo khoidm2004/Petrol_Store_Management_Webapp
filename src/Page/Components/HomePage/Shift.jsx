@@ -28,11 +28,11 @@ export const Shift = () => {
         startTime: '',
         endTime: '',
         pumpList:{
-            "Pump1": { pumpName: "", pumpCode: parseInt(""), firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN }},
+            "Pump1": { pumpName: "", pumpCode: 0, firstMeterReadingByMoney: 0, firstMeterReadingByLitre: 0 }},
         employeeList:  {
             "Staff1": { fullName: "", email: ""}},
         productList: {
-            "Product1": { productName: "", productCode: "", productPrice: "" }}
+            "Product1": { productName: "", productCode: 0, productPrice: 0 }}
     });
 
     useEffect(() => {
@@ -47,7 +47,7 @@ export const Shift = () => {
             setNewShift((prevShift) => ({
                 ...prevShift,
                 pumpList: {
-                    "Pump1": { pumpName: pumps[0].pumpName, pumpCode: pumps[0].pumpCode, firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN }
+                    "Pump1": { pumpName: pumps[0].pumpName, pumpCode: parseInt(pumps[0].pumpCode), firstMeterReadingByMoney: 0, firstMeterReadingByLitre: 0 }
                 }
             }));
         }
@@ -58,7 +58,7 @@ export const Shift = () => {
             setNewShift((prevShift) => ({
                 ...prevShift,
                 productList: {
-                    "Product1": { productName: product[0].productName, productCode: product[0].productCode, productPrice: product[0].productPrice }
+                    "Product1": { productName: product[0].productName, productCode: parseInt(product[0].productCode), productPrice: parseInt(product[0].productPrice) }
                 }
             }));
         }
@@ -111,14 +111,14 @@ export const Shift = () => {
                 startTime: '',
                 endTime: '',
                 pumpList: pumps.length > 0 ? {
-                    "Pump1": { pumpName: pumps[0].pumpName, pumpCode:  pumps[0].pumpCode, firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN}
-                } : {"Pump1": { pumpName: "", pumpCode: "", firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN }},
+                    "Pump1": { pumpName: pumps[0].pumpName, pumpCode:  parseInt(pumps[0].pumpCode), firstMeterReadingByMoney: 0, firstMeterReadingByLitre: 0}
+                } : {"Pump1": { pumpName: "", pumpCode: 0, firstMeterReadingByMoney: 0, firstMeterReadingByLitre: 0}},
                 employeeList: staff.length > 0 ? {
                     "Staff1": { fullName: staff[0].fullName, email: staff[0].email }
                 } : {"Staff1": { fullName: "", email: ""}},
                 productList: product.length > 0 ? {
-                    "Product1": { productName: product[0].productName, productCode: product[0].productCode, productPrice: product[0].productPrice}
-                } : {"Product1": { productName: "", productCode: "", productPrice: "" }}
+                    "Product1": { productName: product[0].productName, productCode: parseInt(product[0].productCode), productPrice: parseInt(product[0].productPrice)}
+                } : {"Product1": { productName: "", productCode: 0, productPrice: 0 }}
             });
             setAddingShift(false);
         } catch (error) {

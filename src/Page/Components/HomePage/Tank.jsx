@@ -36,7 +36,7 @@ export const Tank = () => {
     tankStatus: "ON USE",
     product: {
       productName: "",
-      productCode: "",
+      productCode: 0,
       quantity_left: (quantity_left),
     },
   });
@@ -52,7 +52,7 @@ export const Tank = () => {
         ...newTank,
         product: {
           productName: product[0].productName,
-          productCode: product[0].productCode,
+          productCode: parseInt(product[0].productCode),
           quantity_left: (quantity_left),
         },
       });
@@ -85,6 +85,8 @@ export const Tank = () => {
       });
       return;
     }
+
+    console.log(newTank)
     try {
       const result = await addTank(newTank);
       setPopup({
@@ -102,10 +104,10 @@ export const Tank = () => {
           product.length > 0
             ? {
                 productName: product[0].productName,
-                productCode: product[0].productCode,
+                productCode: parseInt(product[0].productCode),
                 quantity_left: (quantity_left),
               }
-            : { productName: "", productCode: "" , quantity_left: (quantity_left)},
+            : { productName: "", productCode: 0 , quantity_left: (quantity_left)},
       });
       setAddingTank(false);
     } catch (error) {
@@ -296,10 +298,9 @@ export const Tank = () => {
                 onChange={(e) =>
                   setSelectedTank({ ...selectedTank, tankStatus: e.target.value })
                 }
-              ><optgroup label="Hoạt động">
+              >
                 <option value="ON USE">Đang kinh doanh</option>
                 <option value="NOT ON USE">Ngừng kinh doanh</option>
-              </optgroup>
               </select>
             </label>
 
@@ -308,25 +309,25 @@ export const Tank = () => {
                 value={selectedTank.product.productCode}
                 onChange={(e) => {
                   const selectedProduct = product.find(
-                    (p) => p.productCode === e.target.value
+                    (p) => parseInt(p.productCode) === parseInt(e.target.value)
                   );
+                  console.log(selectedProduct);
                   setSelectedTank({
                     ...selectedTank,
                     product: {
                       productCode: selectedProduct.productCode,
                       productName: selectedProduct.productName,
+                      quantity_left: selectedTank.product.quantity_left,
                     },
                   });
                 }}
               >
-                <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
                   {product.map((product) => (
                     <option key={product.productCode} value={product.productCode}>
                       {product.productCode} - {product.productName}
                     </option>
                   ))}
-                </optgroup>
-              </select>  
+                </select>  
               </label>       
               <button className="send" onClick={saveChanges}>
                 OK
@@ -377,10 +378,9 @@ export const Tank = () => {
                 onChange={(e) =>
                   setNewTank({ ...newTank, tankStatus: e.target.value })
                 }
-              ><optgroup label="Hoạt động">
+              >
                   <option value="ON USE">Đang kinh doanh</option>
                   <option value="NOT ON USE">Ngừng kinh doanh</option>
-              </optgroup>
               </select>
             </label>
 
@@ -388,7 +388,7 @@ export const Tank = () => {
               <select
                 onChange={(e) => {
                   const selectedProduct = product.find(
-                    (p) => p.productCode === e.target.value
+                    (p) => parseInt(p.productCode) === parseInt(e.target.value)
                   );
                   setNewTank({
                     ...newTank,
@@ -399,13 +399,11 @@ export const Tank = () => {
                   });
                 }}
               >
-                <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
                   {product.map((product) => (
                     <option key={product.productCode} value={product.productCode}>
                       {product.productCode} - {product.productName}
                     </option>
                   ))}
-                  </optgroup>
               </select>
             </label>
             <button className="send" onClick={handleAddTank}>

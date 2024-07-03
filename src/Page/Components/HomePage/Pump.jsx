@@ -22,7 +22,7 @@ export const Pump = () => {
   const tanks = useTankStore((state) => state.tanks);
   const fetchTank = useTankStore((state) => state.fetchTank);
 
-  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [selectedPump, setSelectedPump] = useState(null);
   const [addingStaff, setAddingStaff] = useState(false);
   const pumpId = Math.floor(100000 + Math.random() * 900000);
 
@@ -40,11 +40,11 @@ export const Pump = () => {
     pumpStatus: "ON USE",
     product: {
       productName: "",
-      productCode: "",
+      productCode: 0,
     },
     tank: {
       tankName: "",
-      tankCode: "",
+      tankCode: 0,
     },
   });
 
@@ -66,7 +66,7 @@ export const Pump = () => {
         ...prevState,
         product: {
           productName: product[0].productName,
-          productCode: product[0].productCode,
+          productCode: parseInt(product[0].productCode),
         },
       }));
     }
@@ -78,44 +78,67 @@ export const Pump = () => {
         ...prevState,
         tank: {
           tankName: tanks[0].tankName,
-          tankCode: tanks[0].tankCode,
+          tankCode: parseInt(tanks[0].tankCode),
         },
       }));
     }
   }, [tanks]);
 
   const handleEdit = (staffMember) => {
-    setSelectedStaff(staffMember);
+    setSelectedPump(staffMember);
   };
 
+  
+  const dataPump_product = tanks.map(tank => ({
+    tankCode: tank.tankCode,
+    productCode: parseInt(tank.product.productCode)
+  }));
+
   const saveChanges = async () => {
-    if (selectedStaff) {
+    if (selectedPump) {
       try {
-        await modifyPump(selectedStaff);
-        setSelectedStaff(null);
+        if (!selectedPump.pumpCode || !selectedPump.pumpName) {
+          setPopup({
+            show: true,
+            title: "Lỗi",
+            message: "Vui lòng nhập đầy đủ và đúng thông tin nhân viên.",
+          });
+          return;
+        }
+
+        const isMatched = dataPump_product.some(tank => 
+          parseInt(tank.tankCode) === parseInt(selectedPump.tank.tankCode) && parseInt(tank.productCode) === parseInt(selectedPump.product.productCode)
+        );
+      
+        if (!isMatched) {
+          setPopup({
+            show: true,
+            title: "Lỗi",
+            message: "Không tìm thấy cặp Bể và Mặt Hàng tương ứng.",
+          });
+          return;
+        }
+        
+        await modifyPump(selectedPump);
+        setSelectedPump(null);
       } catch (error) {
         console.error("Save error:", error);
       }
     }
   };
 
-  const dataPump_product = tanks.map(tank => ({
-    tankCode: tank.tankCode,
-    productCode: tank.product.productCode
-  }));
-
   const handleAddStaff = async () => {
     if (!newStaff.pumpCode || !newStaff.pumpName) {
       setPopup({
         show: true,
         title: "Lỗi",
-        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        message: "Vui lòng nhập đầy đủ và đúng thông tin nhân viên.",
       });
       return;
     }
 
     const isMatched = dataPump_product.some(tank => 
-      tank.tankCode === newStaff.pumpCode && tank.productCode === newStaff.product.productCode
+      parseInt(tank.tankCode) === parseInt(newStaff.tank.tankCode) && parseInt(tank.productCode) === parseInt(newStaff.product.productCode)
     );
   
     if (!isMatched) {
@@ -145,16 +168,16 @@ export const Pump = () => {
           product.length > 0
             ? {
                 productName: product[0].productName,
-                productCode: product[0].productCode,
+                productCode: parseInt(product[0].productCode),
               }
-            : { productName: "", productCode: "" },
+            : { productName: "", productCode: 0 },
         tank:
           tanks.length > 0
             ? {
                 tankName: tanks[0].tankName,
-                tankCode: tanks[0].tankCode,
+                tankCode: parseInt(tanks[0].tankCode),
               }
-            : { tankName: "", tankCode: "" },
+            : { tankName: "", tankCode: 0 },
       });
       setAddingStaff(false);
     } catch (error) {
@@ -358,25 +381,25 @@ export const Pump = () => {
             </tbody>
           </table>
         </div>
-        {selectedStaff && (
+        {selectedPump && (
           <>
             <div
               className="overlay"
-              onClick={() => setSelectedStaff(null)}
+              onClick={() => setSelectedPump(null)}
             ></div>
             <div className="viewStaff">
               <h2>VÒI BƠM</h2>
               <AiOutlineClose
-                onClick={() => setSelectedStaff(null)}
+                onClick={() => setSelectedPump(null)}
                 className="close-icon"
               />
               <label> Tên
                 <input
                   type="text"
-                  value={selectedStaff.pumpName}
+                  value={selectedPump.pumpName}
                   onChange={(e) =>
-                    setSelectedStaff({
-                      ...selectedStaff,
+                    setSelectedPump({
+                      ...selectedPump,
                       pumpName: e.target.value,
                     })
                   }
@@ -386,77 +409,72 @@ export const Pump = () => {
               <label> Mã
                 <input
                   type="text"
-                  value={parseInt(selectedStaff.pumpCode)}
+                  value={parseInt(selectedPump.pumpCode)}
                   readOnly
                 />
               </label>
               <br />
               <label> Trạng thái
                 <select
-                  value={selectedStaff.pumpStatus}
+                  value={selectedPump.pumpStatus}
                   onChange={(e) =>
-                    setSelectedStaff({
-                      ...selectedStaff,
+                    setSelectedPump({
+                      ...selectedPump,
                       pumpStatus: e.target.value,
                     })
                   }
-                    ><optgroup label="Hoạt động">
+                    >
                         <option value="ON USE">Đang hoạt động</option>
                         <option value="NOT ON USE">Ngừng hoạt động</option>
-                    </optgroup>
                   </select>
               </label>
               <label> Mặt hàng
                 <select
-                  value={selectedStaff.product.productCode}
+                  value={selectedPump.product.productCode}
                   onChange={(e) => {
                     const selectedProduct = product.find(
-                      (p) => p.productCode === e.target.value
+                      (p) => parseInt(p.productCode) === parseInt(e.target.value)
                     );
-                    setSelectedStaff({
-                      ...selectedStaff,
+                    setSelectedPump({
+                      ...selectedPump,
                       product: {
-                        productCode: selectedProduct.productCode,
+                        productCode: parseInt(selectedProduct.productCode),
                         productName: selectedProduct.productName,
                       },
                     });
                   }}
                 >
-                  <optgroup label="Mã Mặt Hàng Tên Mặt Hàng">
                     {product.map((product) => (
                       <option
                         key={product.productCode}
                         value={product.productCode}
                       >
-                        {product.productCode} - {product.productName}
+                      {product.productName} - {product.productCode}
                       </option>
                     ))}
-                  </optgroup>
                 </select>
               </label>
               <label> Bể
                 <select
-                  value={selectedStaff.tank.tankCode}
+                  value={selectedPump.tank.tankCode}
                   onChange={(e) => {
                     const selectedTank = tanks.find(
-                      (t) => t.tankCode === e.target.value
+                      (t) => parseInt(t.tankCode) === parseInt(e.target.value)
                     );
-                    setSelectedStaff({
-                      ...selectedStaff,
+                    setSelectedPump({
+                      ...selectedPump,
                       tank: {
-                        tankCode: selectedTank.tankCode,
+                        tankCode: parseInt(selectedTank.tankCode),
                         tankName: selectedTank.tankName,
                       },
                     });
                   }}
                 >
-                  <optgroup label="Tên Bể - Mã Bể">
                     {tanks.map((tank) => (
                       <option key={tank.tankCode} value={tank.tankCode}>
-                        {tank.tankName}
+                        {tank.tankName} - {tank.tankCode}
                       </option>
                     ))}
-                  </optgroup>
                 </select>
               </label>
               <button className="send" onClick={saveChanges}>
@@ -502,10 +520,9 @@ export const Pump = () => {
                   onChange={(e) =>
                     setNewStaff({ ...newStaff, pumpStatus: e.target.value })
                   }
-                ><optgroup label="Hoạt động">
+                >
                     <option value="ON USE">Đang kinh doanh</option>
                     <option value="NOT ON USE">Ngừng kinh doanh</option>
-                </optgroup>
                 </select>
               </label>
               <label> Mặt hàng
@@ -513,27 +530,25 @@ export const Pump = () => {
                   value={newStaff.product.productCode}
                   onChange={(e) => {
                     const selectedProduct = product.find(
-                      (p) => p.productCode === e.target.value
+                      (p) => parseInt(p.productCode) === parseInt(e.target.value)
                     );
                     setNewStaff({
                       ...newStaff,
                       product: {
-                        productCode: selectedProduct.productCode,
+                        productCode: parseInt(selectedProduct.productCode),
                         productName: selectedProduct.productName,
                       },
                     });
                   }}
                 >
-                  <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
                     {product.map((product) => (
                       <option
                         key={product.productCode}
                         value={product.productCode}
                       >
-                        {product.productCode} - {product.productName}
+                        {product.productName} - {product.productCode}
                       </option>
                     ))}
-                  </optgroup>
                 </select>
               </label>
               <label> Bể
@@ -541,24 +556,22 @@ export const Pump = () => {
                   value={newStaff.tank.tankCode}
                   onChange={(e) => {
                     const selectedTank = tanks.find(
-                      (t) => t.tankCode === e.target.value
+                      (t) => parseInt(t.tankCode) === parseInt(e.target.value)
                     );
                     setNewStaff({
                       ...newStaff,
                       tank: {
-                        tankCode: selectedTank.tankCode,
-                        tankName: selectedTank.tankName,
+                        tankCode: parseInt(selectedTank.tankCode),
+                        tankName: parseInt(selectedTank.tankName),
                       },
                     });
                   }}
                 >
-                  <optgroup label="Mã bể - Tên bể">
                     {tanks.map((tank) => (
                       <option key={tank.tankCode} value={tank.tankCode}>
-                        {tank.tankCode} - {tank.tankName}
+                        {tank.tankName} - {tank.tankCode}
                       </option>
                     ))}
-                  </optgroup>
                 </select>
               </label>
               <button className="send" onClick={handleAddStaff}>
