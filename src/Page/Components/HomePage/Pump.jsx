@@ -99,6 +99,11 @@ export const Pump = () => {
     }
   };
 
+  const dataPump_product = tanks.map(tank => ({
+    tankCode: tank.tankCode,
+    productCode: tank.product.productCode
+  }));
+
   const handleAddStaff = async () => {
     if (!newStaff.pumpCode || !newStaff.pumpName) {
       setPopup({
@@ -108,6 +113,20 @@ export const Pump = () => {
       });
       return;
     }
+
+    const isMatched = dataPump_product.some(tank => 
+      tank.tankCode === newStaff.pumpCode && tank.productCode === newStaff.product.productCode
+    );
+  
+    if (!isMatched) {
+      setPopup({
+        show: true,
+        title: "Lỗi",
+        message: "Không tìm thấy cặp Bể và Mặt Hàng tương ứng.",
+      });
+      return;
+    }
+
 
     try {
       const result = await addPump(newStaff);
@@ -403,7 +422,7 @@ export const Pump = () => {
                     });
                   }}
                 >
-                  <optgroup label="Mã Mặt Hàng - Tên Mặt Hàng">
+                  <optgroup label="Mã Mặt Hàng Tên Mặt Hàng">
                     {product.map((product) => (
                       <option
                         key={product.productCode}

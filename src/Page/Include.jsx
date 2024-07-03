@@ -43,7 +43,7 @@ const Include = ({ setLoggedIn }) => {
         <a href="http://localhost:5173/revenue">
           <span id="logo">PIACOM</span>
         </a>
-        <p id="title">
+        <p id="title_header">
           CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
           PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
         </p>

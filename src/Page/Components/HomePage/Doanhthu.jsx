@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import "./Revenue.css";
@@ -17,239 +17,195 @@ import useTankStore from '../../../store/tankStore.js';
 import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
-export const Revenue = () => {
-  const { product, fetchProduct } = useProductStore();
-  const { staff, fetchStaff } = useStaffStore();
-  const { pumps, fetchPump } = usePumpStore();
-  const { tanks, fetchTank } = useTankStore();
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const formattedSelectedDate = selectedDate.toISOString().slice(0, 10);
-  const [dailyData, setDailyData] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [totalQuantity, setTotalQuantity] = useState(0);
-  const [logExists, setLogExists] = useState(false);
-  const [showBarDetail, setShowBarDetail] = useState(false);
-  const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
+import { format } from 'date-fns';
+  export const Revenue = () => {
+    const { product, fetchProduct } = useProductStore();
+    const { staff, fetchStaff } = useStaffStore();
+    const { pumps, fetchPump } = usePumpStore();
+    const { tanks, fetchTank } = useTankStore();
 
-  const [leftData, setLeftData] = useState([]);
-  const [searchQueryTank, setSearchQueryTank] = useState("");
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const formattedSelectedDate = selectedDate.toISOString().slice(0, 10);
+    const [dailyData, setDailyData] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [totalIncome, setTotalIncome] = useState(0);
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const [logExists, setLogExists] = useState(false);
+    const [showBarDetail, setShowBarDetail] = useState(false);
+    const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
 
-  const handleDateChange = (e) => {
-    const newDate = new Date(e.target.value);
-    setSelectedDate(newDate);
-  };
+    const [leftData, setLeftData] = useState([]);
+    const [searchQueryTank, setSearchQueryTank] = useState("");
 
-  const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
-    month: "numeric",
-    year: "numeric",
-    day: "numeric"
-  });
+    const handleDateChange = (e) => {
+      const newDate = new Date(e.target.value);
+      setSelectedDate(newDate);
+    };
 
-  const formatDatestring = (dateString) => {
-    const [day, month, year] = dateString.split('/');
-    return `Ngày ${day} tháng ${month} năm ${year}`;
-  };
-  
-  useEffect(() => {
+    const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
+      month: "numeric",
+      year: "numeric",
+      day: "numeric"
+    });
+
+    const formatDatestring = (dateString) => {
+      const [day, month, year] = dateString.split('/');
+      return `Ngày ${day} tháng ${month} năm ${year}`;
+    };
+
+    useEffect(() => {
       fetchProduct();
       fetchTank();
       fetchPump();
       fetchStaff();
-  }, []);
+    }, [fetchProduct, fetchTank, fetchPump, fetchStaff]);
 
-  const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
-  const productNumber = product.filter((staffMember) => staffMember.productStatus === "ON SALE").length;
-  const pumpNumber = pumps.filter((staffMember) => staffMember.pumpStatus === "ON USE").length;
-  const tankNumber = tanks.filter((staffMember) => staffMember.tankStatus === "ON USE").length;
+    const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
+    const productNumber = product.filter((product) => product.productStatus === "ON SALE").length;
+    const pumpNumber = pumps.filter((pump) => pump.pumpStatus === "ON USE").length;
+    const tankNumber = tanks.filter((tank) => tank.tankStatus === "ON USE").length;
 
-  useEffect(() => {
-    const fetchLogs = async () => {
-      const result = await useFetchLog();
-      if (result.Status !== "error") {
-        const logs = result.filter(log => {
-          const logDate =new Date(log.startTime).toISOString().slice(0, 10);  
-          return logDate === formattedSelectedDate;
-        });
-        setDailyData(logs);
-        setTotal(logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0));
-      }
-    };
-    fetchLogs();
-  }, []);
+    useEffect(() => {
+      const fetchLogs = async () => {
+        const result = await useFetchLog();
+        if (result.Status !== "error") {
+          const logs = result.filter(log => {
+            const logDate = new Date(log.startTime).toISOString().slice(0, 10);  
+            return logDate === formattedSelectedDate;
+          });
+          setDailyData(logs);
+          setTotal(logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0));
+        }
+      };
+      fetchLogs();
+    }, [formattedSelectedDate]);
 
-  // Tồn kho
-  useEffect(() => {
-    const fetchData = async () => {
-      setLeftData(tanks);
-      const totalQuantity = tanks.reduce(
-        (sum, item) => sum + parseInt(item.product.quantity_left),
-        0
-      );
-      const totalIncome = tanks.reduce(
-        (sum, item) => sum + parseInt(item.tankVolume),
-        0
-      );
-      setTotalIncome(totalIncome);
-      setTotalQuantity(totalQuantity);
-    };
-    fetchData();
-  }, []);
+    useEffect(() => {
+      const fetchData = async () => {
+        setLeftData(tanks);
+        const totalQuantity = tanks.reduce(
+          (sum, item) => sum + parseInt(item.product.quantity_left),
+          0
+        );
+        const totalIncome = tanks.reduce(
+          (sum, item) => sum + parseInt(item.tankVolume),
+          0
+        );
+        setTotalIncome(totalIncome);
+        setTotalQuantity(totalQuantity);
+      };
+      fetchData();
+    }, [tanks]);
 
-  const doughnutData = {
-    labels: ["Thể tích bể", "Số lượng hàng tồn"],
-    datasets: [
-      {
-        label: "Tồn kho",
-        data: [totalQuantity, totalIncome],
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
-        hoverOffset: 10,
-      },
-    ],
-  };
-
-  const [showOverlay, setShowOverlay] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Doanh thu va san luong
-  const [datarevenue, setDataRevenue] = useState([]);
-
-  useEffect(() => {
-    const fetchRevenueData = async () => {
-      try {
-        const revenueList = await useFetchRevenue();
-        setDataRevenue(revenueList);
-      } catch (error) {
-        console.error('Error fetching revenue data:', error);
-      }
-    };
-  
-    fetchRevenueData();
-  }, []);
-  
-  const currentDate = new Date().toLocaleDateString("vi-VN", {
-    month: "numeric",
-    year: "numeric",
-    day: "numeric"
-  });
-
-  const data = [
-    {
-      date: '2024-07-02',
-      items: [
-        { productName: 'MH1', productRevenue: 100, productQuantity: 50 },
-        { productName: 'MH2', productRevenue: 150, productQuantity: 60 },
-        { productName: 'MH3', productRevenue: 200, productQuantity: 70 },
-        { productName: 'MH1', productRevenue: 100, productQuantity: 50 },
-        { productName: 'MH2', productRevenue: 150, productQuantity: 60 }
+    const doughnutData = {
+      labels: ["Thể tích bể", "Số lượng hàng tồn"],
+      datasets: [
+        {
+          label: "Tồn kho",
+          data: [totalQuantity, totalIncome],
+          backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+          hoverOffset: 10,
+        },
       ],
-    },
-    {
-      date: '2024-07-03',
-      items: [
-        { product: 'MH1', revenue: 120, quantity: 55 },
-        { product: 'MH2', revenue: 130, quantity: 65 },
-        { product: 'MH3', revenue: 220, quantity: 75 },
-        { product: 'MH2', revenue: 130, quantity: 65 },
-        { product: 'MH3', revenue: 220, quantity: 75 }
-      ],
-    },
-    {
-      date: '2024-07-01',
-      items: [
-        { product: 'MH1', revenue: 110, quantity: 52 },
-        { product: 'MH2', revenue: 140, quantity: 62 },
-        { product: 'MH3', revenue: 210, quantity: 72 },
-        { product: 'MH2', revenue: 140, quantity: 62 },
-        { product: 'MH3', revenue: 210, quantity: 72 }
-      ],
-    },
-  ];
-
-  const currentData = data.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
-    items: [],
-  };
-     
-  const selectDate = new Date(formattedSelectedDate);
-  const formatDate = selectDate.toLocaleDateString("vi-VN", {
-    month: "numeric",
-    year: "numeric",
-    day: "numeric"
-  });
-  
-  const detailedData = data.find(
-    (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
-  ) || { items: [] };
-
-
-  const barData = {
-    labels: currentData.items.map((item) => item.productName),
-    datasets: [
-      {
-        label: "DOANH THU",
-        data: currentData.items.map((item) => item.productRevenue),
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "SẢN LƯỢNG",
-        data: currentData.items.map((item) => item.productQuantity),
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const [revenueData, setRevenueData] = useState([]);
-
-  useEffect(() => {
-    const fetchRevenueData = async () => {
-      try {
-        const revenueList = await useFetchPumpRevenue();
-        setRevenueData(revenueList);
-      } catch (error) {
-        console.error('Error fetching revenue data:', error);
-      }
     };
 
-    fetchRevenueData();
-  }, []);
+    const [showOverlay, setShowOverlay] = useState(true);
 
-  // const revenueDatas= revenueData.filter(
-  //   (staffMember) =>
-  //     staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
-  //     staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
-  // );
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowOverlay(false);
+      }, 2000);
 
-  const [selectedItem, setSelectedItem] = useState(null);
+      return () => clearTimeout(timer);
+    }, []);
 
-  const handleRowClick = (item) => {
-    setSelectedItem(item);
-  };
+    const [dataRevenue, setDataRevenue] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage] = useState(10);
-  const indexOfLastStaff = currentPage * perPage;
-  const indexOfFirstStaff = indexOfLastStaff - perPage;
-  const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+    useEffect(() => {
+      const fetchRevenueData = async () => {
+        try {
+          const revenueList = await useFetchRevenue();
+          setDataRevenue(revenueList);
+        } catch (error) {
+          console.error('Error fetching revenue data:', error);
+        }
+      };
+    
+      fetchRevenueData();
+    }, []);
+  
 
-  // console.log(dailyData)
-  const totalPages = Math.ceil(dailyData.length / perPage);
+    const currentDate = new Date().toLocaleDateString();
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+    const currentData = dataRevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
+      items: [],
+    };
 
+    const selectDate = new Date(formattedSelectedDate);
+    const formatDate =  selectDate.toLocaleDateString()
+    const detailedData = dataRevenue.find(
+      (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
+    ) || { items: [] };
+
+    const barData = {
+      labels: currentData.items.map((item) => item.productName),
+      datasets: [
+        {
+          label: "DOANH THU",
+          data: currentData.items.map((item) => item.productRevenue),
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+        {
+          label: "SẢN LƯỢNG",
+          data: currentData.items.map((item) => item.productQuantity),
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+      ],
+    };
+
+    const [revenueData, setRevenueData] = useState([]);
+
+    useEffect(() => {
+      const fetchRevenueData = async () => {
+        try {
+          const revenueList = await useFetchPumpRevenue();
+          setRevenueData(revenueList);
+        } catch (error) {
+          console.error('Error fetching revenue data:', error);
+        }
+      };
+
+      fetchRevenueData();
+    }, []);
+
+    const revenueDatas = revenueData.filter(
+      (staffMember) =>
+        staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
+        staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
+    );
+
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const handleRowClick = useCallback((item) => {
+      setSelectedItem(item);
+    }, []);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage] = useState(10);
+    const indexOfLastStaff = currentPage * perPage;
+    const indexOfFirstStaff = indexOfLastStaff - perPage;
+    const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+
+    const totalPages = Math.ceil(dailyData.length / perPage);
+
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
 
   return (
     <div className="revenue">
@@ -651,7 +607,7 @@ export const Revenue = () => {
                     {displayedStaff.length > 0 && (
                         <div className="pagination">
                           <p>
-                            <span>Showing &nbsp;</span> <span>{indexOfFirstStaff + 1}&nbsp;</span><span>to&nbsp;</span><span>{Math.min(indexOfLastStaff, displayedStaff.length)}&nbsp;</span> <span>of&nbsp;</span> <span>{displayedStaff.length}&nbsp;</span> entries
+                            <span>Đang trình bày {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, displayedStaff.length)} của {displayedStaff.length} mục </span>
                           </p>
                           <ul className="pagination-list">
                             <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>

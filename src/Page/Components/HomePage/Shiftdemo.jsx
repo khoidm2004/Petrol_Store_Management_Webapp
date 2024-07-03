@@ -214,6 +214,47 @@ export const Shift = () => {
         }));
     };
 
+    const handleAddPump = () => {
+        const newKey = `Pump${Object.keys(selectedShift.pumpList).length + 1}`;
+        setSelectedShift(prevShift => ({
+            ...prevShift,
+            pumpList: {
+                ...prevShift.pumpList,
+                [newKey]: pumps.length > 0 ? 
+                    { pumpName: pumps[0].pumpName, pumpCode:  pumps[0].pumpCode, firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN}
+                 :  { pumpName: "", pumpCode: "", firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN},
+            }
+        }));
+    };
+
+    const handleRemovePump = (key) => {
+        const { [key]: _, ...newPumpList } = selectedShift.pumpList;
+        setSelectedShift(prevShift => ({
+            ...prevShift,
+            pumpList: newPumpList
+        }));
+    };
+
+    const handleAddNewPump = () => {
+        const newKey = `Pump${Object.keys(newShift.pumpList).length + 1}`;
+        setNewShift(prevShift => ({
+            ...prevShift,
+            pumpList: {
+                ...prevShift.pumpList,
+                [newKey]:pumps.length > 0 ? 
+                 { pumpName: pumps[0].pumpName, pumpCode:  pumps[0].pumpCode, firstMeterReadingByMoney:NaN, firstMeterReadingByLitre:NaN }
+                 : { pumpName: "", pumpCode: "", firstMeterReadingByMoney: NaN, firstMeterReadingByLitre: NaN },
+        }}));
+    };
+
+    const handleRemoveNewPump = (key) => {
+        const { [key]: _, ...newPumpList } = newShift.pumpList;
+        setNewShift(prevShift => ({
+            ...prevShift,
+            pumpList: newPumpList
+        }));
+    };
+
     const [showOverlay, setShowOverlay] = useState(true);
 
     useEffect(() => {
@@ -261,6 +302,8 @@ export const Shift = () => {
                                 <th>STT</th>
                                 <th>Ca bán hàng</th>
                                 <th>Nhân viên phụ trách</th>
+                                <th>Mặt hàng</th>
+                                <th>Thời gian làm</th>
                                 <th className='view_chitiet'>Chi tiết</th>
                             </tr>
                         </thead>
@@ -268,10 +311,13 @@ export const Shift = () => {
                             {shifts.length > 0 ? shifts.map((shift, index) => (
                                 <tr className='col' id='mainstate' key={shift.id}>
                                    <td>{indexOfFirstStaff + index + 1}</td>
-                                   <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time}
-                                    <br></br> {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
-                                    </td>
                                     <td>{Object.values(shift.employeeList).map(pump => pump.fullName).join(' - ')}</td>
+                                    <td>{Object.values(shift.pumpList).map(pump => pump.pumpName).join(' - ')}</td>
+                                    <td>{Object.values(shift.productList).map(product => product.productName).join(' - ')}</td>
+                                    <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time}
+                                    <br></br> {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
+
+                                    </td>
                                     <td className="icon_editview">
                                         <TbEyeEdit className="icon_menu" onClick={() => handleEdit(shift)} />
                                     </td>
@@ -354,97 +400,96 @@ export const Shift = () => {
                                 </div>
                             </div>
                             <hr />
-                            <div className='Row'>
-                                <div>
-                                    <h5>MẶT HÀNG <CgAddR className='pull_icon' onClick={handleAddProduct} /> </h5>
-                                    <div className='Staff'>
-                                        {Object.entries(selectedShift.productList).map(([key, products]) => (
-                                            <div key={key} className='product-item'>
-                                                <select
-                                                    value={products.productCode}
-                                                    onChange={(e) => {
-                                                        const selectedProduct = product.find(p => p.productCode === e.target.value);
-                                                        setSelectedShift({
-                                                            ...selectedShift,
-                                                            productList: {
-                                                                ...selectedShift.productList,
-                                                                [key]: {
-                                                                    ...selectedShift.productList[key],
-                                                                    productCode: selectedProduct.productCode,
-                                                                    productName: selectedProduct.productName,
-                                                                    productPrice: selectedProduct.productPrice
-                                                                }
+                            <div>
+                                <h5>MẶT HÀNG <CgAddR className='pull_icon' onClick={handleAddProduct} /> </h5>
+                                <div className='Staff'>
+                                    {Object.entries(selectedShift.productList).map(([key, products]) => (
+                                        <div key={key} className='product-item'>
+                                            <select
+                                                value={products.productCode}
+                                                onChange={(e) => {
+                                                    const selectedProduct = product.find(p => p.productCode === e.target.value);
+                                                    setSelectedShift({
+                                                        ...selectedShift,
+                                                        productList: {
+                                                            ...selectedShift.productList,
+                                                            [key]: {
+                                                                ...selectedShift.productList[key],
+                                                                productCode: selectedProduct.productCode,
+                                                                productName: selectedProduct.productName,
+                                                                productPrice: selectedProduct.productPrice
                                                             }
-                                                        });
-                                                    }}>
-                                                    <optgroup label='Mã Mặt Hàng - Tên Mặt Hàng - Gía Mặt Hàng'>
-                                                    {product.map((newproduct) => (
-                                                        <option key={newproduct.productCode} value={newproduct.productCode}>
-                                                            {newproduct.productCode} - {newproduct.productName} - {newproduct.productPrice}
+                                                        }
+                                                    });
+                                                }}>
+                                                <optgroup label='Mã Mặt Hàng - Tên Mặt Hàng - Gía Mặt Hàng'>
+                                                {product.map((newproduct) => (
+                                                    <option key={newproduct.productCode} value={newproduct.productCode}>
+                                                        {newproduct.productCode} - {newproduct.productName} - {newproduct.productPrice}
+                                                    </option>
+                                                ))}
+                                                </optgroup>
+                                            </select>
+                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveProduct(key)}/>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <hr />
+                            <div>
+                                <h5>VÒI BƠM <CgAddR className='pull_icon' onClick={handleAddPump} /> </h5>
+                                <div className='Staff'>
+                                    {Object.entries(selectedShift.pumpList).map(([key, pump]) => (
+                                        <div key={key} className='pump-item'>
+                                            <select
+                                                value={pump.pumpCode}
+                                                onChange={(e) => {
+                                                    const selectedPump = pumps.find(p => p.pumpCode === e.target.value);
+                                                    setSelectedShift({
+                                                        ...selectedShift,
+                                                        pumpList: {
+                                                            ...selectedShift.pumpList,
+                                                            [key]: {
+                                                                ...selectedShift.pumpList[key],
+                                                                pumpCode: selectedPump.pumpCode,
+                                                                pumpName: selectedPump.pumpName,
+                                                                firstMeterReadingByMoney: selectedPump.firstMeterReadingByMoney,
+                                                                firstMeterReadingByLitre: selectedPump.firstMeterReadingByLitre,
+                                                            }
+                                                        }
+                                                    });
+                                                }}>
+                                                <optgroup label='Mã Vòi Bơm - Tên Vòi Bơm'>
+                                                    {pumps.map((newpump) => (
+                                                        <option key={newpump.pumpCode} value={newpump.pumpCode}>
+                                                            {newpump.pumpName} - {newpump.pumpCode}
                                                         </option>
                                                     ))}
-                                                    </optgroup>
-                                                </select>
-                                                <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveProduct(key)}/>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                <hr />
-                                <div>
-                                    <h5>VÒI BƠM </h5>
-                                    <div className='Staff'>
-                                        {Object.entries(selectedShift.pumpList).map(([key, pump]) => (
-                                            <div key={key} className='pump-item'>
-                                                <select
-                                                    value={pump.pumpCode}
-                                                    onChange={(e) => {
-                                                        const selectedPump = pumps.find(p => p.pumpCode === e.target.value);
-                                                        setSelectedShift({
-                                                            ...selectedShift,
-                                                            pumpList: {
-                                                                ...selectedShift.pumpList,
-                                                                [key]: {
-                                                                    ...selectedShift.pumpList[key],
-                                                                    pumpCode: selectedPump.pumpCode,
-                                                                    pumpName: selectedPump.pumpName,
-                                                                    firstMeterReadingByMoney: selectedPump.firstMeterReadingByMoney,
-                                                                    firstMeterReadingByLitre: selectedPump.firstMeterReadingByLitre,
-                                                                }
-                                                            }
-                                                        });
-                                                    }}>
-                                                    <optgroup label='Mã Vòi Bơm - Tên Vòi Bơm'>
-                                                        {pumps.map((newpump) => (
-                                                            <option key={newpump.pumpCode} value={newpump.pumpCode}>
-                                                                {newpump.pumpName} - {newpump.pumpCode}
-                                                            </option>
-                                                        ))}
-                                                    </optgroup>
-                                                </select>
-                                                <input type="number" placeholder='Số công tơ (L)' value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
-                                                    ...selectedShift,
-                                                    pumpList: {
-                                                        ...selectedShift.pumpList,
-                                                        [key]: {
-                                                            ...selectedShift.pumpList[key],
-                                                            firstMeterReadingByLitre: e.target.value
-                                                        }
+                                                </optgroup>
+                                            </select>
+                                            <input type="number" placeholder='firstMeterReadingByLitre' value={pump.firstMeterReadingByLitre} onChange={(e) => setSelectedShift({
+                                                ...selectedShift,
+                                                pumpList: {
+                                                    ...selectedShift.pumpList,
+                                                    [key]: {
+                                                        ...selectedShift.pumpList[key],
+                                                        firstMeterReadingByLitre: e.target.value
                                                     }
-                                                })} />
-                                                <input type="number" placeholder='Số công tơ (M)' value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
-                                                    ...selectedShift,
-                                                    pumpList: {
-                                                        ...selectedShift.pumpList,
-                                                        [key]: {
-                                                            ...selectedShift.pumpList[key],
-                                                            firstMeterReadingByMoney: e.target.value
-                                                        }
+                                                }
+                                            })} />
+                                            <input type="number" placeholder="firstMeterReadingByMoney"value={pump.firstMeterReadingByMoney} onChange={(e) => setSelectedShift({
+                                                ...selectedShift,
+                                                pumpList: {
+                                                    ...selectedShift.pumpList,
+                                                    [key]: {
+                                                        ...selectedShift.pumpList[key],
+                                                        firstMeterReadingByMoney: e.target.value
                                                     }
-                                                })} />
-                                            </div>
-                                        ))}
-                                    </div>
+                                                }
+                                            })} />
+                                            <FaRegMinusSquare className="push_icon" onClick={() => handleRemovePump(key)} />
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                             <button className="send" onClick={saveChanges}>LƯU</button>
@@ -533,7 +578,7 @@ export const Shift = () => {
                             </div>
                         </div>
                         <div>
-                            <h5>VÒI BƠM </h5>
+                            <h5>VÒI BƠM <CgAddR className='pull_icon' onClick={handleAddNewPump} /></h5>
                             <div className='Staff'>
                                 {Object.entries(newShift.pumpList).map(([key, pump]) => (
                                     <div key={key} className='pump-item'>
@@ -563,7 +608,7 @@ export const Shift = () => {
                                                 ))}
                                             </optgroup>
                                         </select>
-                                        <input type="number" value={pump.firstMeterReadingByLitre} placeholder='Số công tơ (L)'  onChange={(e) => setNewShift({
+                                        <input type="number" value={pump.firstMeterReadingByLitre} placeholder='firstMeterReadingByLitre ' onChange={(e) => setNewShift({
                                             ...newShift,
                                             pumpList: {
                                                 ...newShift.pumpList,
@@ -573,7 +618,7 @@ export const Shift = () => {
                                                 }
                                             }
                                         })} />
-                                        <input type="number" value={pump.firstMeterReadingByMoney} placeholder='Số công tơ (M)'  onChange={(e) => setNewShift({
+                                        <input type="number" value={pump.firstMeterReadingByMoney} placeholder="firstMeterReadingByMoney" onChange={(e) => setNewShift({
                                             ...newShift,
                                             pumpList: {
                                                 ...newShift.pumpList,
@@ -583,6 +628,7 @@ export const Shift = () => {
                                                 }
                                             }
                                         })} />
+                                        <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveNewPump(key)} />
                                     </div>
                                 ))}
                             </div>
