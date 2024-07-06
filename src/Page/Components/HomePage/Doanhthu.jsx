@@ -25,8 +25,6 @@ import { format } from 'date-fns';
     const { pumps, fetchPump } = usePumpStore();
     const { tanks, fetchTank } = useTankStore();
 
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const formattedSelectedDate = selectedDate.toISOString().slice(0, 10);
     const [dailyData, setDailyData] = useState([]);
     const [total, setTotal] = useState(0);
     const [totalIncome, setTotalIncome] = useState(0);
@@ -37,17 +35,6 @@ import { format } from 'date-fns';
 
     const [leftData, setLeftData] = useState([]);
     const [searchQueryTank, setSearchQueryTank] = useState("");
-
-    const handleDateChange = (e) => {
-      const newDate = new Date(e.target.value);
-      setSelectedDate(newDate);
-    };
-
-    const formattedDate = selectedDate.toLocaleDateString("vi-VN", {
-      month: "numeric",
-      year: "numeric",
-      day: "numeric"
-    });
 
     const formatDatestring = (dateString) => {
       const [day, month, year] = dateString.split('/');
@@ -66,6 +53,16 @@ import { format } from 'date-fns';
     const pumpNumber = pumps.length;
     const tankNumber = tanks.length;
 
+    const currentDate = new Date().toLocaleDateString();
+    //Log phát sinh
+
+    const [selectedDateLog, setSelectedDateLog] = useState(new Date());
+    
+    const handleDateChangeLog = (e) => {
+      const newDate = new Date(e.target.value);
+      setSelectedDateLog(newDate);
+    };
+
     useEffect(() => {
       const fetchLogs = async () => {
         const result = await useFetchLog();
@@ -79,7 +76,21 @@ import { format } from 'date-fns';
         }
       };
       fetchLogs();
-    }, [formattedSelectedDate]);
+    }, []);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage] = useState(10);
+    const indexOfLastStaff = currentPage * perPage;
+    const indexOfFirstStaff = indexOfLastStaff - perPage;
+    const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+
+    const totalPages = Math.ceil(dailyData.length / perPage);
+
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
+
+    // Tồn kho
 
     useEffect(() => {
       const fetchData = async () => {
@@ -110,15 +121,19 @@ import { format } from 'date-fns';
       ],
     };
 
-    const [showOverlay, setShowOverlay] = useState(true);
+    const [selectedItem, setSelectedItem] = useState(null);
 
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setShowOverlay(false);
-      }, 2000);
-
-      return () => clearTimeout(timer);
+    const handleRowClick = useCallback((item) => {
+      setSelectedItem(item);
     }, []);
+
+    //Doanh thu
+    const [selectedDateRevenue, setSelectedDateRevenue] = useState(new Date());
+    
+    const handleDateChangeRevenue = (e) => {
+      const newDate = new Date(e.target.value);
+      setSelectedDateRevenue(newDate);
+    };
 
     const [dataRevenue, setDataRevenue] = useState([]);
 
@@ -135,12 +150,9 @@ import { format } from 'date-fns';
       fetchRevenueData();
     }, []);
 
-    const currentDate = new Date().toLocaleDateString();
-
     const currentData = dataRevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === currentDate) || {
       items: [],
     };
-
     const selectDate = new Date(formattedSelectedDate);
     const formatDate =  selectDate.toLocaleDateString()
     const detailedData = dataRevenue.find(
@@ -169,6 +181,14 @@ import { format } from 'date-fns';
 
     const [revenueData, setRevenueData] = useState([]);
 
+    //Báo cáo vòi bơm
+    const [selectedDatePumpRevenue, setSelectedDatePumpRevenue] = useState(new Date());
+    
+    const handleDateChangePumpRevenue = (e) => {
+      const newDate = new Date(e.target.value);
+      setSelectedDateRevenue(newDate);
+    };
+
     useEffect(() => {
       const fetchRevenueData = async () => {
         try {
@@ -178,44 +198,22 @@ import { format } from 'date-fns';
           console.error('Error fetching revenue data:', error);
         }
       };
-
       fetchRevenueData();
     }, []);
 
-    const revenueDatas = revenueData.filter(
-      (staffMember) =>
-        staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
-        staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
-    );
+    const [showOverlay, setShowOverlay] = useState(true);
 
-    const [selectedItem, setSelectedItem] = useState(null);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowOverlay(false);
+      }, 2000);
 
-    const handleRowClick = useCallback((item) => {
-      setSelectedItem(item);
+      return () => clearTimeout(timer);
     }, []);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [perPage] = useState(10);
-    const indexOfLastStaff = currentPage * perPage;
-    const indexOfFirstStaff = indexOfLastStaff - perPage;
-    const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
-
-    const totalPages = Math.ceil(dailyData.length / perPage);
-
-    const handlePageChange = (page) => {
-      setCurrentPage(page);
-    };
 
   return (
     <div className="revenue">
-      {/* {showOverlay && 
-        <div className="overlay">
-          <div className="loader">
-            <svg className="circular" viewBox="25 25 50 50">
-              <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
-            </svg>
-          </div>
-        </div>} */}
       <div className="tilte_revenue">
         <h1>Chuyên gia Xăng dầu số hàng đầu Việt Nam</h1>
         <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>
@@ -255,11 +253,11 @@ import { format } from 'date-fns';
                   <input
                     type="date"
                     value={formattedSelectedDate}
-                    onChange={handleDateChange}
+                    onChange={handleDateChangeRevenue}
                   />
                 </div>
                 <div className="content">
-                  <h4>{formatDatestring(formattedDate)}</h4>
+                  <h4>{formatDatestring(formattedDateRevenue)}</h4>
                   <div className="table-container">
                     <table className="table firsttable">
                       <thead>
@@ -394,6 +392,12 @@ import { format } from 'date-fns';
         <div className="Column doanh_thu">
           <header className="headerRevenue">
             <p>DOANH THU VÒI BƠM</p>
+            <input
+                      type="date"
+                      id="date"
+                      value={formattedSelectedDate}
+                      onChange={handleDateChangePumpRevenue}
+                    />
             <div className="search-container">
               <input
                 type="text"
@@ -476,12 +480,12 @@ import { format } from 'date-fns';
                 type="date"
                 id="date"
                 value={formattedSelectedDate}
-                onChange={handleDateChange}
+                onChange={handleDateChangeLog}
               />
             </div>
 
             <div className="content">
-              <h4>{formatDatestring(formattedDate)}</h4>
+              <h4>{formatDatestring(formattedDateLog)}</h4>
               <div className="table-container">
                 <table className="table">
                   <thead>
@@ -598,7 +602,7 @@ import { format } from 'date-fns';
                       type="date"
                       id="date"
                       value={formattedSelectedDate}
-                      onChange={handleDateChange}
+                      onChange={handleDateChangeLog}
                     />
                   </div>
 

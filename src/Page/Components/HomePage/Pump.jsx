@@ -300,11 +300,10 @@ export const Pump = () => {
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
-                  ><optgroup label="Hoạt động">
+                  >
                       <option value="fullUse">Tất cả vòi bơm</option>
                       <option value="use">Đang sử dụng</option>
                       <option value="noUse">Ngừng sử dụng</option>
-                  </optgroup>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -547,14 +546,18 @@ export const Pump = () => {
                     });
                   }}
                 >
-                    {product.map((product) => (
-                      <option
-                        key={product.productCode}
-                        value={product.productCode}
-                      >
-                          {product.productCode} - {product.productName}
-                      </option>
-                    ))}
+                  {product.length > 0 ? (
+                      product.map((product) => (
+                        <option
+                          key={product.productCode}
+                          value={product.productCode}
+                        >
+                            {product.productCode} - {product.productName}
+                        </option>
+                      ))
+                  ) : (
+                    <option>Chưa có thông tin mặt hàng</option>
+                  )}
                 </select>
               </label>
               <label> Bể
@@ -573,11 +576,15 @@ export const Pump = () => {
                     });
                   }}
                 >
-                    {tanks.map((tank) => (
-                      <option key={tank.tankCode} value={tank.tankCode}>
-                          {tank.tankCode} - {tank.tankName}
-                      </option>
-                    ))}
+                  {tanks.length > 0 ? (
+                      tanks.map((tank) => (
+                        <option key={tank.tankCode} value={tank.tankCode}>
+                            {tank.tankCode} - {tank.tankName}
+                        </option>
+                      ))
+                  ) : (
+                    <option>Chưa có thông tin bể</option>
+                  )}
                 </select>
               </label>
               <button className="send" onClick={handleAddStaff}>

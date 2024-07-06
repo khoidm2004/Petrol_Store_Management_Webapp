@@ -34,6 +34,7 @@ export const Tank = () => {
     tankCode: 0,
     tankName: "",
     tankStatus: "ON USE",
+    tankVolume:0,
     product: {
       productName: "",
       productCode: 0,
@@ -67,6 +68,24 @@ export const Tank = () => {
   const saveChanges = async () => {
     if (selectedTank) {
       try {
+        if (!selectedTank.tankName || !selectedTank.tankCode || !selectedTank.tankVolume) {
+          setPopup({
+            show: true,
+            title: 'Thông báo',
+            message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+          });
+          return;
+        }
+    
+        if( 10000 >= selectedTank.tankVolume || selectedTank.tankVolume >= 25000){
+          setPopup({
+            show: true,
+            title: 'Thông báo',
+            message: 'Thể tích bể từ 10000 đến 25000.',
+          });
+          return;
+        }
+
         await modifyTank(selectedTank);
         setSelectedTank(null);
       } catch (error) {
@@ -106,6 +125,7 @@ export const Tank = () => {
         tankId:(tankId),
         tankCode: 0,
         tankName: "",
+        tankVolume: 0,
         tankStatus: "ON USE",
         product:
           product.length > 0
@@ -160,7 +180,6 @@ export const Tank = () => {
   ).sort((a, b) => {
     return a.tankCode - b.tankCode;
   });
-  
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
@@ -338,11 +357,15 @@ export const Tank = () => {
                   });
                 }}
               >
-                  {product.map((product) => (
+                {product.length > 0 ? (
+                   product.map((product) => (
                     <option key={product.productCode} value={product.productCode}>
                       {product.productCode} - {product.productName}
                     </option>
-                  ))}
+                  ))):(
+                    <option> Chưa có thông tin mặt hàng</option>
+                  )
+              }
                 </select>  
               </label>       
               <button className="send" onClick={saveChanges}>
@@ -415,11 +438,17 @@ export const Tank = () => {
                   });
                 }}
               >
-                  {product.map((product) => (
+                {product.length > 0 ? 
+                (
+                  product.map((product) => (
                     <option key={product.productCode} value={product.productCode}>
                       {product.productCode} - {product.productName}
                     </option>
-                  ))}
+                  ))
+                ):(
+                  <option> Chưa có thông tin mặt hàng</option>
+                )
+              }
               </select>
             </label>
             <button className="send" onClick={handleAddTank}>
