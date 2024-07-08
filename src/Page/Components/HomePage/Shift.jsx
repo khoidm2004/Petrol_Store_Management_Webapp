@@ -682,3 +682,5 @@ export const Shift = () => {
         </div>
     );
 }
+
+export default Shift;
