@@ -25,7 +25,7 @@ export const Shift = () => {
         navigate("/404");
       }
     }, [navigate]);
-    
+
   const { product, fetchProduct } = useProductStore();
   const { staff, fetchStaff } = useStaffStore();
   const { pumps, fetchPump } = usePumpStore();
@@ -408,10 +408,10 @@ export const Shift = () => {
               onClick={() => setSelectedShift(null)}
             ></div>
             <div className="viewShift" value="">
-              <AiOutlineClose
+              {/* <AiOutlineClose
                 onClick={() => setSelectedShift(null)}
                 className="close_icon"
-              />
+              /> */}
               <h2>Ca Bán Hàng</h2>
               <div className="Row">
                 <label htmlFor="">
@@ -688,10 +688,10 @@ export const Shift = () => {
               onClick={() => setAddingShift(false)}
             ></div>
             <div className="addShift">
-              <AiOutlineClose
+              {/* <AiOutlineClose
                 onClick={() => setAddingShift(false)}
                 className="close_icon"
-              />
+              /> */}
               <h2>Thêm Ca Mới</h2>
               <div className="Row">
                 <label htmlFor="startTime">

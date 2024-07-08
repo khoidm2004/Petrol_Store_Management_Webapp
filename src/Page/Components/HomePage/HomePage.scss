@@ -39,19 +39,12 @@ p {
   width: 30px;
   height: 30px;
   color: #58b5fc;
-  position: sticky;
-  top: 0;
   cursor: pointer;
 }
 
 .burger {
   text-align: center;
   z-index: 1001;
-}
-
-.burgerCenter{
-  position: fixed;
-  top: 50%;
 }
 
 .navbar__list {

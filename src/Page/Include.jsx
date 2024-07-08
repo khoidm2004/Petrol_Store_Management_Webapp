@@ -80,6 +80,13 @@ const Include = ({ setLoggedIn }) => {
         showMenu && 
         <>
           <header className="header">
+          <div className="burger burgerCenter" onClick={toggleMenu}>
+          {isMenuOpen ? (
+             <FaArrowCircleLeft className="tab_menu"/>
+          ) : (
+            <FaArrowCircleRight className="tab_menu"/>
+          )}
+        </div>
             <a href="http://localhost:5173/revenue">
               <span id="logo">PIACOM</span>
             </a>
@@ -143,14 +150,14 @@ const Include = ({ setLoggedIn }) => {
               )}
             </div>
           </ul>
-
+{/* 
           <div className="burger" onClick={toggleMenu}>
               {isMenuOpen ? (
                  <FaArrowCircleLeft className="tab_menu tab_close"/>
               ) : (
                <></>
               )}
-            </div>
+            </div> */}
           
           <div className="bottom-menu">
             <ul className="navbar__list">
@@ -171,13 +178,6 @@ const Include = ({ setLoggedIn }) => {
             </ul>
           </div>
         </div>
-        <div className="burger burgerCenter" onClick={toggleMenu}>
-          {isMenuOpen ? (
-            <></>
-          ) : (
-            <FaArrowCircleRight className="tab_menu"/>
-          )}
-        </div>
         </>}
         <Routes>
           <Route path="/revenue" element={<Revenue />} />
@@ -187,8 +187,7 @@ const Include = ({ setLoggedIn }) => {
           <Route path="/tank" element={<Tank />} />
           <Route path="/pump" element={<Pump />} />
           <Route path="/account" element={<Account />} />
-          <Route path="/404" element={<NotFoundPage />} />
-           <Route path="*" element={<Navigate to="/404" replace />} /> 
+          <Route path="*" element={<NotFoundPage />} />
           <Route path="/logout" element={<Logout setLoggedIn={setLoggedIn} />} />
         </Routes>
       </div>

@@ -9,7 +9,7 @@ const NotFoundPage = () => {
       <div className="not-found-container">
         <div className="titleError">404</div>
         <hr />
-        <p>Trang bạn đang tìm kiếm có thể đã bị xóa, đã thay đổi tên hoặc tạm thời không khả dụng.</p>
+        <p>Trang Không Tồn Tại</p>
         <a href="/">Quay về trang chủ</a>
       </div>
     </div>
