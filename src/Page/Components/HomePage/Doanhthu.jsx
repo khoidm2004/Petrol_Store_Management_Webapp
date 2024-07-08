@@ -182,11 +182,11 @@ import { format } from 'date-fns';
       fetchRevenueData();
     }, []);
 
-    const revenueDatas = revenueData.filter(
-      (staffMember) =>
-        staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
-        staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
-    );
+    // const revenueDatas = revenueData.filter(
+    //   (staffMember) =>
+    //     staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
+    //     staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
+    // );
 
     const [selectedItem, setSelectedItem] = useState(null);
 

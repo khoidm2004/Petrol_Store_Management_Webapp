@@ -1,23 +1,21 @@
-import React, { useEffect } from 'react';
-import { AiOutlineClose, AiOutlineBell } from 'react-icons/ai';
-import './Popup.css';
-import notificationAudio from './../../../assets/audio/notificationAudio.mp3';
+import React, { useEffect } from "react";
+import "./Popup.css";
 
-const Popup = ({ title, message, onClose }) => {
+const Popup = ({ title, message, status, onClose }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
-      onClose(); 
+      onClose();
     }, 3000);
 
-    return () => clearTimeout(timeout); 
+    return () => clearTimeout(timeout);
   }, [onClose]);
 
   return (
     <div className="popup-row">
-      <div className='popup-container'>
+      <div className="popup-container">
         {/* <AiOutlineClose onClick={onClose} className="close-icon" /> */}
         <br></br>
-        <div className="popup-content">
+        <div className={`popup-content ${status}`}>
           <p>{title}</p>
           <p>{message}</p>
         </div>

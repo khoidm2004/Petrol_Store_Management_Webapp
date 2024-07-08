@@ -8,10 +8,28 @@
   margin-bottom: 10px; /* Add margin to separate multiple popups */
 }
 
-.pop-row {
+.popup-row {
   display: flex;
-  background-color: #5154ff;
   padding: 16px;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.popup-content.success {
+  background-color: #4caf50;
+}
+
+.popup-content.error {
+  background-color: #f44336;
+}
+
+.popup-content.info {
+  background-color: #2196f3;
+}
+
+.popup-content.warning {
+  background-color: #ff9800;
 }
 
 .close-icon {
@@ -22,11 +40,16 @@
 }
 
 .popup-content {
-  background-color: lightpink;
   padding: 10px;
   font-weight: bold;
-  border-radius: 2px;
+  border-radius: 4px;
   margin-top: 16px;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.1
+  ); /* Add a slight background color for content */
 }
 
 @keyframes popupAppear {

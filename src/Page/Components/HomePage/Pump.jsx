@@ -30,7 +30,12 @@ export const Pump = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  const [popup, setPopup] = useState({ show: false, title: "", message: "" });
+  const [popup, setPopup] = useState({
+    show: false,
+    title: "",
+    message: "",
+    status: "",
+  });
 
   const [newStaff, setNewStaff] = useState({
     pid: "",
@@ -88,10 +93,9 @@ export const Pump = () => {
     setSelectedPump(staffMember);
   };
 
-  
-  const dataPump_product = tanks.map(tank => ({
+  const dataPump_product = tanks.map((tank) => ({
     tankCode: tank.tankCode,
-    productCode: parseInt(tank.product.productCode)
+    productCode: parseInt(tank.product.productCode),
   }));
 
   const saveChanges = async () => {
@@ -101,24 +105,29 @@ export const Pump = () => {
           setPopup({
             show: true,
             title: "Lỗi",
-            message: "Vui lòng nhập đầy đủ và đúng thông tin nhân viên.",
+            message: "Vui lòng nhập đầy đủ và đúng thông tin vòi.",
+            status: "warning",
           });
           return;
         }
 
-        const isMatched = dataPump_product.some(tank => 
-          parseInt(tank.tankCode) === parseInt(selectedPump.tank.tankCode) && parseInt(tank.productCode) === parseInt(selectedPump.product.productCode)
+        const isMatched = dataPump_product.some(
+          (tank) =>
+            parseInt(tank.tankCode) === parseInt(selectedPump.tank.tankCode) &&
+            parseInt(tank.productCode) ===
+              parseInt(selectedPump.product.productCode)
         );
-      
+
         if (!isMatched) {
           setPopup({
             show: true,
             title: "Lỗi",
             message: "Không tìm thấy cặp Bể và Mặt Hàng tương ứng.",
+            status: "error",
           });
           return;
         }
-        
+
         await modifyPump(selectedPump);
         setSelectedPump(null);
       } catch (error) {
@@ -132,31 +141,35 @@ export const Pump = () => {
       setPopup({
         show: true,
         title: "Lỗi",
-        message: "Vui lòng nhập đầy đủ và đúng thông tin nhân viên.",
+        message: "Vui lòng nhập đầy đủ và đúng thông tin vòi.",
+        status: "warning",
       });
       return;
     }
 
-    const isMatched = dataPump_product.some(tank => 
-      parseInt(tank.tankCode) === parseInt(newStaff.tank.tankCode) && parseInt(tank.productCode) === parseInt(newStaff.product.productCode)
+    const isMatched = dataPump_product.some(
+      (tank) =>
+        parseInt(tank.tankCode) === parseInt(newStaff.tank.tankCode) &&
+        parseInt(tank.productCode) === parseInt(newStaff.product.productCode)
     );
-  
+
     if (!isMatched) {
       setPopup({
         show: true,
         title: "Lỗi",
         message: "Không tìm thấy cặp Bể và Mặt Hàng tương ứng.",
+        status: "error",
       });
       return;
     }
-
 
     try {
       const result = await addPump(newStaff);
       setPopup({
         show: true,
-        title: 'Thông báo',
+        title: result.Title,
         message: result.Message,
+        status: result.Status,
       });
       setNewStaff({
         pid: "",
@@ -211,18 +224,21 @@ export const Pump = () => {
     (staffMember) => staffMember.pumpStatus === "NOT ON USE"
   );
 
-  const filteredStaff = (viewMode === "fullUse"
-    ? pumps
-    : viewMode === "use"
-    ? workingStaff
-    : notWorkingStaff
-  ).filter(
-    (staffMember) =>
-      staffMember.pumpCode.toString().includes(searchQuery) ||
-      staffMember.pumpName.toLowerCase().includes(searchQuery.toLowerCase())
-  ).sort((a, b) => {
-    return a.pumpCode - b.pumpCode;
-  });
+  const filteredStaff = (
+    viewMode === "fullUse"
+      ? pumps
+      : viewMode === "use"
+      ? workingStaff
+      : notWorkingStaff
+  )
+    .filter(
+      (staffMember) =>
+        staffMember.pumpCode.toString().includes(searchQuery) ||
+        staffMember.pumpName.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      return a.pumpCode - b.pumpCode;
+    });
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
@@ -236,7 +252,7 @@ export const Pump = () => {
   const [showOverlay, setShowOverlay] = useState(true);
 
   const closePopup = () => {
-    setPopup({ show: false, title: "", message: "" });
+    setPopup({ show: false, title: "", message: "", status: "" });
   };
 
   const handlePageChange = (page) => {
@@ -300,11 +316,12 @@ export const Pump = () => {
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
-                  ><optgroup label="Hoạt động">
+                  >
+                    <optgroup label="Hoạt động">
                       <option value="fullUse">Tất cả vòi bơm</option>
                       <option value="use">Đang sử dụng</option>
                       <option value="noUse">Ngừng sử dụng</option>
-                  </optgroup>
+                    </optgroup>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -337,51 +354,55 @@ export const Pump = () => {
               )}
               <tr>
                 <td colSpan="3" className="noLine">
-                {displayedStaff.length > 0 && (
-                  <div className="pagination">
-                    <p>
-                      <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, filteredStaff.length)} của {filteredStaff.length} mục </span>
-                    </p>
-                    <ul className="pagination-list">
-                      <li
-                        className={`pagination-item ${
-                          currentPage === 1 ? "disabled" : ""
-                        }`}
-                      >
-                        <button
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                        >
-                          Previous
-                        </button>
-                      </li>
-                      {Array.from({ length: totalPages }, (_, index) => (
+                  {displayedStaff.length > 0 && (
+                    <div className="pagination">
+                      <p>
+                        <span>
+                          Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
+                          {Math.min(indexOfLastStaff, filteredStaff.length)} của{" "}
+                          {filteredStaff.length} mục{" "}
+                        </span>
+                      </p>
+                      <ul className="pagination-list">
                         <li
-                          key={index}
                           className={`pagination-item ${
-                            currentPage === index + 1 ? "active" : ""
+                            currentPage === 1 ? "disabled" : ""
                           }`}
                         >
-                          <button onClick={() => handlePageChange(index + 1)}>
-                            {index + 1}
+                          <button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                          >
+                            Previous
                           </button>
                         </li>
-                      ))}
-                      <li
-                        className={`pagination-item ${
-                          currentPage === totalPages ? "disabled" : ""
-                        }`}
-                      >
-                        <button
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
+                        {Array.from({ length: totalPages }, (_, index) => (
+                          <li
+                            key={index}
+                            className={`pagination-item ${
+                              currentPage === index + 1 ? "active" : ""
+                            }`}
+                          >
+                            <button onClick={() => handlePageChange(index + 1)}>
+                              {index + 1}
+                            </button>
+                          </li>
+                        ))}
+                        <li
+                          className={`pagination-item ${
+                            currentPage === totalPages ? "disabled" : ""
+                          }`}
                         >
-                          Next
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
+                          <button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                          >
+                            Next
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </td>
               </tr>
             </tbody>
@@ -399,7 +420,9 @@ export const Pump = () => {
                 onClick={() => setSelectedPump(null)}
                 className="close-icon"
               />
-              <label> Tên
+              <label>
+                {" "}
+                Tên
                 <input
                   type="text"
                   value={selectedPump.pumpName}
@@ -412,7 +435,9 @@ export const Pump = () => {
                 />
               </label>
               <br />
-              <label> Mã
+              <label>
+                {" "}
+                Mã
                 <input
                   type="text"
                   value={parseInt(selectedPump.pumpCode)}
@@ -420,7 +445,9 @@ export const Pump = () => {
                 />
               </label>
               <br />
-              <label> Trạng thái
+              <label>
+                {" "}
+                Trạng thái
                 <select
                   value={selectedPump.pumpStatus}
                   onChange={(e) =>
@@ -429,17 +456,20 @@ export const Pump = () => {
                       pumpStatus: e.target.value,
                     })
                   }
-                    >
-                        <option value="ON USE">Đang hoạt động</option>
-                        <option value="NOT ON USE">Ngừng hoạt động</option>
-                  </select>
+                >
+                  <option value="ON USE">Đang hoạt động</option>
+                  <option value="NOT ON USE">Ngừng hoạt động</option>
+                </select>
               </label>
-              <label> Mặt hàng
+              <label>
+                {" "}
+                Mặt hàng
                 <select
                   value={selectedPump.product.productCode}
                   onChange={(e) => {
                     const selectedProduct = product.find(
-                      (p) => parseInt(p.productCode) === parseInt(e.target.value)
+                      (p) =>
+                        parseInt(p.productCode) === parseInt(e.target.value)
                     );
                     setSelectedPump({
                       ...selectedPump,
@@ -450,17 +480,19 @@ export const Pump = () => {
                     });
                   }}
                 >
-                    {product.map((product) => (
-                      <option
-                        key={product.productCode}
-                        value={product.productCode}
-                      >
-                       {product.productCode} - {product.productName}
-                      </option>
-                    ))}
+                  {product.map((product) => (
+                    <option
+                      key={product.productCode}
+                      value={product.productCode}
+                    >
+                      {product.productCode} - {product.productName}
+                    </option>
+                  ))}
                 </select>
               </label>
-              <label> Bể
+              <label>
+                {" "}
+                Bể
                 <select
                   value={selectedPump.tank.tankCode}
                   onChange={(e) => {
@@ -476,11 +508,11 @@ export const Pump = () => {
                     });
                   }}
                 >
-                    {tanks.map((tank) => (
-                      <option key={tank.tankCode} value={tank.tankCode}>
-                         {tank.tankCode} - {tank.tankName}
-                      </option>
-                    ))}
+                  {tanks.map((tank) => (
+                    <option key={tank.tankCode} value={tank.tankCode}>
+                      {tank.tankCode} - {tank.tankName}
+                    </option>
+                  ))}
                 </select>
               </label>
               <button className="send" onClick={saveChanges}>
@@ -501,7 +533,9 @@ export const Pump = () => {
                 onClick={() => setAddingStaff(false)}
                 className="close-icon"
               />
-              <label> Tên
+              <label>
+                {" "}
+                Tên
                 <input
                   type="text"
                   value={newStaff.pumpName}
@@ -511,32 +545,42 @@ export const Pump = () => {
                 />
               </label>
               <br />
-              <label> Mã
+              <label>
+                {" "}
+                Mã
                 <input
                   type="text"
                   onChange={(e) =>
-                    setNewStaff({ ...newStaff, pumpCode: parseInt(e.target.value) })
+                    setNewStaff({
+                      ...newStaff,
+                      pumpCode: parseInt(e.target.value),
+                    })
                   }
                 />
               </label>
               <br />
-              <label> Trạng thái
+              <label>
+                {" "}
+                Trạng thái
                 <select
                   value={newStaff.pumpStatus}
                   onChange={(e) =>
                     setNewStaff({ ...newStaff, pumpStatus: e.target.value })
                   }
                 >
-                    <option value="ON USE">Đang kinh doanh</option>
-                    <option value="NOT ON USE">Ngừng kinh doanh</option>
+                  <option value="ON USE">Đang kinh doanh</option>
+                  <option value="NOT ON USE">Ngừng kinh doanh</option>
                 </select>
               </label>
-              <label> Mặt hàng
+              <label>
+                {" "}
+                Mặt hàng
                 <select
                   value={newStaff.product.productCode}
                   onChange={(e) => {
                     const selectedProduct = product.find(
-                      (p) => parseInt(p.productCode) === parseInt(e.target.value)
+                      (p) =>
+                        parseInt(p.productCode) === parseInt(e.target.value)
                     );
                     setNewStaff({
                       ...newStaff,
@@ -547,17 +591,19 @@ export const Pump = () => {
                     });
                   }}
                 >
-                    {product.map((product) => (
-                      <option
-                        key={product.productCode}
-                        value={product.productCode}
-                      >
-                          {product.productCode} - {product.productName}
-                      </option>
-                    ))}
+                  {product.map((product) => (
+                    <option
+                      key={product.productCode}
+                      value={product.productCode}
+                    >
+                      {product.productCode} - {product.productName}
+                    </option>
+                  ))}
                 </select>
               </label>
-              <label> Bể
+              <label>
+                {" "}
+                Bể
                 <select
                   value={newStaff.tank.tankCode}
                   onChange={(e) => {
@@ -573,11 +619,11 @@ export const Pump = () => {
                     });
                   }}
                 >
-                    {tanks.map((tank) => (
-                      <option key={tank.tankCode} value={tank.tankCode}>
-                          {tank.tankCode} - {tank.tankName}
-                      </option>
-                    ))}
+                  {tanks.map((tank) => (
+                    <option key={tank.tankCode} value={tank.tankCode}>
+                      {tank.tankCode} - {tank.tankName}
+                    </option>
+                  ))}
                 </select>
               </label>
               <button className="send" onClick={handleAddStaff}>
@@ -606,6 +652,7 @@ export const Pump = () => {
         <Popup
           title={popup.title}
           message={popup.message}
+          status={popup.status}
           onClose={closePopup}
         />
       )}
