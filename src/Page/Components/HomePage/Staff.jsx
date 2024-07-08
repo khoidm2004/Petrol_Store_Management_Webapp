@@ -13,7 +13,12 @@ export const Staff = () => {
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
   const addStaff = useStaffStore((state) => state.addStaff);
   const modifyStaff = useStaffStore((state) => state.modifyStaff);
-  const [popup, setPopup] = useState({ show: false, title: "", message: "" });
+  const [popup, setPopup] = useState({
+    show: false,
+    title: "",
+    message: "",
+    status: "",
+  });
 
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [addingStaff, setAddingStaff] = useState(false);
@@ -74,6 +79,7 @@ export const Staff = () => {
         show: true,
         title: "Thông báo",
         message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        status: "warning",
       });
       return;
     }
@@ -83,6 +89,7 @@ export const Staff = () => {
         show: true,
         title: "Thông báo",
         message: "Vui lòng nhập đúng định dạng email.",
+        status: "warning",
       });
       return;
     }
@@ -92,6 +99,7 @@ export const Staff = () => {
         show: true,
         title: "Thông báo",
         message: "Vui lòng nhập số điện thoại gồm 10 chữ số.",
+        status: "warning",
       });
       return;
     }
@@ -100,8 +108,9 @@ export const Staff = () => {
       var result = await addStaff(newStaff);
       setPopup({
         show: true,
-        title: "Thông báo",
+        title: result.Title,
         message: result.Message,
+        status: result.Status,
       });
       setNewStaff({
         fullName: "",
@@ -159,7 +168,7 @@ export const Staff = () => {
   const totalPages = Math.ceil(filteredStaff.length / perPage);
 
   const closePopup = () => {
-    setPopup({ show: false, title: "", message: "" });
+    setPopup({ show: false, title: "", message: "", status: "" });
   };
 
   const handlePageChange = (page) => {
@@ -261,7 +270,11 @@ export const Staff = () => {
                   {displayedStaff.length > 0 && (
                     <div className="pagination">
                       <p>
-                        <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, filteredStaff.length)} của {filteredStaff.length} mục </span>
+                        <span>
+                          Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
+                          {Math.min(indexOfLastStaff, filteredStaff.length)} của{" "}
+                          {filteredStaff.length} mục{" "}
+                        </span>
                       </p>
                       <ul className="pagination-list">
                         <li
@@ -349,11 +362,7 @@ export const Staff = () => {
             <br />
             <label>
               Email
-              <input
-                type="text"
-                value={selectedStaff.email}
-                readOnly
-              />
+              <input type="text" value={selectedStaff.email} readOnly />
             </label>
             <br />
             <label>
@@ -459,6 +468,7 @@ export const Staff = () => {
         <Popup
           title={popup.title}
           message={popup.message}
+          status={popup.status}
           onClose={closePopup}
         />
       )}

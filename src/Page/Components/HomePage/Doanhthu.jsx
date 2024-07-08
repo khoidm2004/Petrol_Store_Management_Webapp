@@ -80,10 +80,10 @@ import { format } from 'date-fns';
       day: "numeric"
     });
 
-    const formatDatestring = (dateString) => {
-      const [day, month, year] = dateString.split('/');
-      return `Ngày ${day} tháng ${month} năm ${year}`;
-    };
+  const formatDatestring = (dateString) => {
+    const [day, month, year] = dateString.split("/");
+    return `Ngày ${day} tháng ${month} năm ${year}`;
+  };
 
     useEffect(() => {
       fetchProduct();
@@ -92,10 +92,12 @@ import { format } from 'date-fns';
       fetchStaff();
     }, [fetchTank]);
 
-    const staffNumber = staff.filter((staffMember) => staffMember.workingStatus === "IS WORKING").length;
-    const productNumber = product.length;
-    const pumpNumber = pumps.length;
-    const tankNumber = tanks.length;
+  const staffNumber = staff.filter(
+    (staffMember) => staffMember.workingStatus === "IS WORKING"
+  ).length;
+  const productNumber = product.length;
+  const pumpNumber = pumps.length;
+  const tankNumber = tanks.length;
 
     useEffect(() => {
       const fetchLogs = async () => {
