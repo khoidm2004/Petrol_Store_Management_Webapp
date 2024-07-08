@@ -224,6 +224,7 @@ select:focus, input:focus {
     border: none;
     padding: 0px 10px;
     border-radius: 2px;
+    max-width: 150px;
     background-color: #166BCC;
     font-weight: bold;
     cursor: pointer;
@@ -243,6 +244,11 @@ select:focus, input:focus {
     margin-top: 4px; 
   }
 
+.rowPasswordForget{
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+}
 /* Responsive Styles */
 @media (min-width: 768px) {
     .page_account {

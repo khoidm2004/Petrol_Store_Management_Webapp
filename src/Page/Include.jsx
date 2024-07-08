@@ -67,9 +67,9 @@ const Include = ({ setLoggedIn }) => {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isMenuOpen]);
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [isMenuOpen]);
 
   return (
     <>

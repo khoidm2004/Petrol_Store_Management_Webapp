@@ -157,7 +157,7 @@ export const Product = () => {
        <div className="overlay">
         <div className="loader">
           <svg className="circular" viewBox="25 25 50 50">
-            <circle className="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
           </svg>
         </div>
       </div>}
@@ -184,7 +184,7 @@ export const Product = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>STT</th>
+                <th>#</th>
                 <th>
                     <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
                       <option value="fullSale">Tất cả mặt hàng</option>

@@ -232,13 +232,15 @@ export const Shift = () => {
     setPopup({ show: false, title: "", message: "" });
     };
 
+    console.log(shifts)
+    
     return (
         <div className='revenue'>
             {showOverlay && 
                 <div className="overlay">
                     <div className="loader">
                         <svg className="circular" viewBox="25 25 50 50">
-                            <circle className="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
                         </svg>
                     </div>
                 </div>}
@@ -257,7 +259,7 @@ export const Shift = () => {
                     <table className='firsttable_shift'>
                         <thead>
                             <tr className='titleOneline'>
-                                <th>STT</th>
+                                <th>#</th>
                                 <th>Ca bán hàng</th>
                                 <th>Nhân viên phụ trách</th>
                                 <th className='view_chitiet'>Chi tiết</th>
@@ -287,7 +289,7 @@ export const Shift = () => {
                                     <td colSpan={6} className="noLine">
                                         <div className="pagination">
                                         <p>
-                                            <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, shifts.length)} của {shifts.length} Ca Bán Hảng </span>
+                                            <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, shifts.length)} của {shifts.length} Ca Bán Hàng </span>
                                         </p>
                                         <ul className="pagination-list">
                                             <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -379,6 +381,7 @@ export const Shift = () => {
                                                         <div key={index} className='pump-item'>
                                                             <p className="title_shift">{pumpEntry.pumpCode} - {pumpEntry.pumpName}</p>
                                                             <input 
+                                                                className='inputNumberFirstMeter'
                                                                 type="number" 
                                                                 value={pumpEntry.firstMeterReadingByLitre || ''} 
                                                                 placeholder='Số công tơ (L)' 
@@ -404,6 +407,7 @@ export const Shift = () => {
                                                             />
                                                             <input 
                                                                 type="number" 
+                                                                className='inputNumberFirstMeter'
                                                                 value={pumpEntry.firstMeterReadingByMoney || ''} 
                                                                 placeholder='Số công tơ (M)' 
                                                                 onChange={(e) => {
@@ -545,7 +549,7 @@ export const Shift = () => {
             <hr />
             <div className='Row'>
                 <div className='Row'>
-                    <h5>MẶT HÀNG</h5>
+                    <h5>MẶT HÀNG - </h5>
                     <h5>VÒI BƠM</h5>
                 </div>
                 <div className='Staff'>

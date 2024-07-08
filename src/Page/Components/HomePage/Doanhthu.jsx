@@ -212,12 +212,6 @@ import { format } from 'date-fns';
       items: [],
     };
 
-    // const revenueDatas = revenueData.filter(
-    //   (staffMember) =>
-    //     staffMember.pumpName.toLowerCase().includes(searchQueryTank.toLowerCase()) ||
-    //     staffMember.productName.toLowerCase().includes(searchQueryTank.toLowerCase())
-    // );
-
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage] = useState(5);
     const indexOfLastStaff = currentPage * perPage;

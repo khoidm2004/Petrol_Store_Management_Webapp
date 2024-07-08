@@ -153,7 +153,9 @@ export const Account = () => {
       <div className="text-account">ACCOUNT</div>
       <div className="page_account">
         <div className="profile_image_section">
-          <img src={profile.avatar} alt="Profile" className="profile_image" />
+          <div onClick={() => document.getElementById("fileInput").click()} style={{ cursor: 'pointer' }}>
+            <img src={profile.avatar} alt="Profile" className="profile_image" />
+          </div>
           <input
             type="file"
             id="fileInput"
@@ -204,7 +206,7 @@ export const Account = () => {
             />
 
             <label htmlFor="pass">PASSWORD</label>
-            <div className="row_image">
+            <div className="rowPasswordForget">
               <input
                 readOnly
                 type="password"

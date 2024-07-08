@@ -217,9 +217,9 @@ export const Tank = () => {
     <div className="revenue">
       {showOverlay && 
        <div className="overlay">
-        <div class="loader">
-          <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        <div className="loader">
+          <svg className="circular" viewBox="25 25 50 50">
+            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
           </svg>
         </div>
       </div>}
@@ -245,7 +245,7 @@ export const Tank = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>STT</th>
+                <th>#</th>
                 <th>
                   <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
                     <option value="use">Tất cả bể</option>

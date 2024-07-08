@@ -237,7 +237,7 @@ tr:hover {
 
 .product-it em input[type="number"],
 .pump-item input[type="number"] {
-  width: 210px;
+  max-width: 300px;
 }
 
 .push_icon:hover,
