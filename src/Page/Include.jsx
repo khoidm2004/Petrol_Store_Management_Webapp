@@ -5,7 +5,7 @@ import { FaBoxes } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { AiOutlineShopping } from "react-icons/ai";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate, Link } from 'react-router-dom';
 import Product from "./Components/HomePage/Product.jsx";
 import Tank from "./Components/HomePage/Tank.jsx";
 import Pump from "./Components/HomePage/Pump.jsx";
@@ -14,13 +14,9 @@ import Staff from "./Components/HomePage/Staff.jsx";
 import Account from "./Components/Account/Account.jsx";
 import Revenue from "./Components/HomePage/Doanhthu.jsx";
 import Logout from "./Components/HomePage/Logout.jsx";
-import { FaArrowCircleRight } from "react-icons/fa";
-import { FaArrowCircleLeft } from "react-icons/fa";
-import { GiFuelTank } from "react-icons/gi";
-import { PiGasPumpBold } from "react-icons/pi";
-import { AiOutlineProduct } from "react-icons/ai";
-import logo from "../assets/images/logo.png";
+import { FaArrowCircleRight,  FaArrowCircleLeft} from "react-icons/fa";
 import "./Components/HomePage/HomePage.scss";
+import NotFoundPage from "./Components/NotFound/notFound.jsx";
 
 const Include = ({ setLoggedIn }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +24,13 @@ const Include = ({ setLoggedIn }) => {
   const location = useLocation();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  const [showMenu, setShowMenu] = useState(true); 
+  const locationNone = useLocation();
+
+  useEffect(() => {
+    setShowMenu(locationNone.pathname !== '/404');
+  }, [locationNone.pathname]);
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -73,16 +76,23 @@ const Include = ({ setLoggedIn }) => {
 
   return (
     <>
-      <header className="header">
-        <a href="http://localhost:5173/revenue">
-          <span id="logo">PIACOM</span>
-        </a>
-        <p id="title_header">
-          CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
-          PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
-        </p>
-      </header>
+      {
+        showMenu && 
+        <>
+          <header className="header">
+            <a href="http://localhost:5173/revenue">
+              <span id="logo">PIACOM</span>
+            </a>
+            <p id="title_header">
+              CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
+              PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
+            </p>
+          </header>
+        </>
+      }
       <div className={`body ${isMenuOpen ? "menu-open" : ""}`}>
+        {showMenu &&
+        <>
         <div className="navbar-menu tab" style={{ width: isMenuOpen ? 200 : 0 }}>
           <ul className="navbar__list">
             <div className="navbar__li-box">
@@ -134,13 +144,13 @@ const Include = ({ setLoggedIn }) => {
             </div>
           </ul>
 
-          {/* <div className="burger" onClick={toggleMenu}>
+          <div className="burger" onClick={toggleMenu}>
               {isMenuOpen ? (
                  <FaArrowCircleLeft className="tab_menu tab_close"/>
               ) : (
                <></>
               )}
-            </div> */}
+            </div>
           
           <div className="bottom-menu">
             <ul className="navbar__list">
@@ -160,7 +170,6 @@ const Include = ({ setLoggedIn }) => {
               </div>
             </ul>
           </div>
-          
         </div>
         <div className="burger burgerCenter" onClick={toggleMenu}>
           {isMenuOpen ? (
@@ -169,6 +178,7 @@ const Include = ({ setLoggedIn }) => {
             <FaArrowCircleRight className="tab_menu"/>
           )}
         </div>
+        </>}
         <Routes>
           <Route path="/revenue" element={<Revenue />} />
           <Route path="/shift" element={<Shift />} />
@@ -177,6 +187,8 @@ const Include = ({ setLoggedIn }) => {
           <Route path="/tank" element={<Tank />} />
           <Route path="/pump" element={<Pump />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/404" element={<NotFoundPage />} />
+           <Route path="*" element={<Navigate to="/404" replace />} /> 
           <Route path="/logout" element={<Logout setLoggedIn={setLoggedIn} />} />
         </Routes>
       </div>
