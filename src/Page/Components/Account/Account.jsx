@@ -111,11 +111,7 @@ export const Account = () => {
     setFormPass({ ...formPass, [name]: value });
   };
 
-  const email_local = JSON.parse(localStorage.getItem("user-info"));
-  // console.log(email_local.email);
-  // console.log(email_local.pass);
   const handleChangePassword = async () => {
-    const email_local = JSON.parse(localStorage.getItem("user-info"));
     if (formPass.pass === formPass.passNew) {
       try {
         const result = await useChangePassword(
@@ -139,7 +135,9 @@ export const Account = () => {
             message: result.Message,
           });
         }
-      } catch (error) {}
+      } catch (error) {
+
+      }
     } else {
       setPopup({ show: true, title: "Lỗi", message: "Không trùng pass" });
     }

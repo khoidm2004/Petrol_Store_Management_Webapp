@@ -184,7 +184,7 @@ export const Product = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>#</th>
+                <th>STT</th>
                 <th>
                     <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
                       <option value="fullSale">Tất cả mặt hàng</option>

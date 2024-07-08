@@ -134,13 +134,13 @@ const Include = ({ setLoggedIn }) => {
             </div>
           </ul>
 
-          <div className="burger" onClick={toggleMenu}>
+          {/* <div className="burger" onClick={toggleMenu}>
               {isMenuOpen ? (
                  <FaArrowCircleLeft className="tab_menu tab_close"/>
               ) : (
                <></>
               )}
-            </div>
+            </div> */}
           
           <div className="bottom-menu">
             <ul className="navbar__list">

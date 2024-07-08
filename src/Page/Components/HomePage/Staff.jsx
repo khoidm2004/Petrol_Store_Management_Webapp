@@ -227,7 +227,7 @@ export const Staff = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>#</th>
+                <th>STT</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}

@@ -222,6 +222,7 @@ tr:hover {
 .product-item,
 .pump-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
@@ -387,7 +388,8 @@ tr:hover {
 }
 
 .rightShift{
-  max-width: 100px;
+  width: 50%;
+  text-align: right;
 }
 /* Responsive Design */
 @media (min-width: 1400px) {
@@ -415,6 +417,19 @@ tr:hover {
   }
 }
 
+@media (max-width: 900px) {
+  .product-item,
+  .pump-item {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width:850px) {
+  .viewShift label, .addShift label{
+    width: 100%;
+  }
+}
 @media (max-width: 767px) {
   .pagination > p {
     display: none;
