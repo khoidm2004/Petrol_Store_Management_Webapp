@@ -12,7 +12,12 @@ import { useNavigate } from "react-router-dom";
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
   const { handleLogout } = useLogout();
-  const [popup, setPopup] = useState({ show: false, title: "", message: "" });
+  const [popup, setPopup] = useState({
+    show: false,
+    title: "",
+    message: "",
+    status: "",
+  });
   const [passwordError, setPasswordError] = useState("");
   const { editProfile, isLoading } = useEditProfile();
   const [formPass, setFormPass] = useState({ pass: "", passNew: "" });
@@ -28,12 +33,12 @@ export const Account = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    const userInfo = localStorage.getItem('user-info');
+    const userInfo = localStorage.getItem("user-info");
     if (!userInfo) {
       navigate("/");
     }
   }, [navigate]);
-  
+
   const { selectedFile, error, setSelectedFile, handleImageChange } =
     usePreviewImage();
 
@@ -85,8 +90,9 @@ export const Account = () => {
         const result = await editProfile(profile, selectedFile);
         setPopup({
           show: true,
-          title: "Thông báo",
+          title: result.Title,
           message: result.Message,
+          status: result.Status,
         });
         setSelectedFile(null);
       }
@@ -129,6 +135,7 @@ export const Account = () => {
             show: true,
             title: "Thông báo",
             message: "Đổi thành công",
+            status: "success",
           });
           const test = await handleLogout();
           window.location.href = "/";
@@ -137,23 +144,32 @@ export const Account = () => {
             show: true,
             title: result.Title,
             message: result.Message,
+            status: result.Status,
           });
         }
       } catch (error) {}
     } else {
-      setPopup({ show: true, title: "Lỗi", message: "Không trùng pass" });
+      setPopup({
+        show: true,
+        title: "Lỗi",
+        message: "Không trùng pass",
+        status: "error",
+      });
     }
   };
 
   const closePopup = () => {
-    setPopup({ show: false, title: "", message: "" });
+    setPopup({ show: false, title: "", message: "", status: "error" });
   };
   return (
     <div className="Staff">
       <div className="text-account">ACCOUNT</div>
       <div className="page_account">
         <div className="profile_image_section">
-          <div onClick={() => document.getElementById("fileInput").click()} style={{ cursor: 'pointer' }}>
+          <div
+            onClick={() => document.getElementById("fileInput").click()}
+            style={{ cursor: "pointer" }}
+          >
             <img src={profile.avatar} alt="Profile" className="profile_image" />
           </div>
           <input
@@ -264,6 +280,7 @@ export const Account = () => {
         <Popup
           title={popup.title}
           message={popup.message}
+          status={popup.status}
           onClose={closePopup}
         />
       )}
