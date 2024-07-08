@@ -58,7 +58,7 @@ export const Pump = () => {
     useEffect(() => {
       const userInfo = localStorage.getItem('user-info');
       if (!userInfo) {
-        navigate("/");
+        navigate("/404");
       }
     }, [navigate]);
 
@@ -320,7 +320,7 @@ export const Pump = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>#</th>
+                <th>STT</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}

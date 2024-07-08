@@ -1,0 +1,73 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #166bcc 25%, #f88126 100%); /* Gradient background */
+}
+
+.not-found-container {
+  padding: 2rem;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  max-width: 600px; 
+  width: 90%; 
+  text-align: center; 
+  animation: fadeIn 1s ease-in-out; 
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.titleError {
+  font-size: 4rem;
+  color: #ff0000; /* Bright red for error code */
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-shadow: 2px 2px #ffcccc; /* Shadow for 3D effect */
+}
+
+.not-found hr {
+  width: 80%;
+  border: 0;
+  height: 1px;
+  background: #ccc; 
+  margin: 1rem auto;
+}
+
+.not-found p {
+  font-size: 1.5rem;
+  color: #333333; 
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.not-found a {
+  display: inline-block;
+  font-size: 15px;
+  color: #ffffff; 
+  background-color: #005cbf; 
+  padding: 0.5rem 0.5rem;
+  border-radius: 30px;
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease; 
+}
+
+.not-found a:hover {
+  background-color: #805100; /* Darker blue on hover */
+}
+

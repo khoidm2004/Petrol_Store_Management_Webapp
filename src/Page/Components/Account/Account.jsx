@@ -35,7 +35,7 @@ export const Account = () => {
   useEffect(() => {
     const userInfo = localStorage.getItem("user-info");
     if (!userInfo) {
-      navigate("/");
+      navigate("/404");
     }
   }, [navigate]);
 
@@ -117,11 +117,7 @@ export const Account = () => {
     setFormPass({ ...formPass, [name]: value });
   };
 
-  const email_local = JSON.parse(localStorage.getItem("user-info"));
-  // console.log(email_local.email);
-  // console.log(email_local.pass);
   const handleChangePassword = async () => {
-    const email_local = JSON.parse(localStorage.getItem("user-info"));
     if (formPass.pass === formPass.passNew) {
       try {
         const result = await useChangePassword(
@@ -147,7 +143,9 @@ export const Account = () => {
             status: result.Status,
           });
         }
-      } catch (error) {}
+      } catch (error) {
+
+      }
     } else {
       setPopup({
         show: true,

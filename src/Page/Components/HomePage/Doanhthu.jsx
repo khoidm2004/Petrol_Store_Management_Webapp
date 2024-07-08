@@ -42,7 +42,7 @@ import { format } from 'date-fns';
     useEffect(() => {
       const userInfo = localStorage.getItem('user-info');
       if (!userInfo) {
-        navigate("/");
+        navigate("/404");
       }
     }, [navigate]);
     

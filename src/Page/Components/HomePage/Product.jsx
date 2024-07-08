@@ -39,14 +39,15 @@ export const Product = () => {
   const [showOverlay, setShowOverlay] = useState(true);
 
   const navigate = useNavigate();
-  useEffect(() => {
-    const userInfo = localStorage.getItem("user-info");
-    if (!userInfo) {
-      navigate("/");
-    }
-  }, [navigate]);
-
-  useEffect(() => {
+    useEffect(() => {
+      const userInfo = localStorage.getItem('user-info');
+      if (!userInfo) {
+        navigate("/404");
+      }
+    }, [navigate]);
+    
+    
+  useEffect(() => { 
     fetchProduct();
   }, [fetchProduct]);
 
@@ -217,7 +218,7 @@ export const Product = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>#</th>
+                <th>STT</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}

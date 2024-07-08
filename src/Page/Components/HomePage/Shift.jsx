@@ -10,7 +10,7 @@ import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup";
 import { timeConverter } from "../../../utils/timeConverter.js";
-import { interactivity } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export const Shift = () => {
   const shifts = useShiftStore((state) => state.shifts);
@@ -18,6 +18,14 @@ export const Shift = () => {
   const addShift = useShiftStore((state) => state.addShift);
   const modifyShift = useShiftStore((state) => state.modifyShift);
 
+  const navigate = useNavigate();
+    useEffect(() => {
+      const userInfo = localStorage.getItem('user-info');
+      if (!userInfo) {
+        navigate("/404");
+      }
+    }, [navigate]);
+    
   const { product, fetchProduct } = useProductStore();
   const { staff, fetchStaff } = useStaffStore();
   const { pumps, fetchPump } = usePumpStore();
@@ -502,7 +510,7 @@ export const Shift = () => {
                 </div>
               </div>
               <hr />
-              <div className="Row">
+              <div>
                 <h5>MẶT HÀNG</h5>
                 <div className="Staff">
                   {Object.entries(selectedShift.productList).map(
