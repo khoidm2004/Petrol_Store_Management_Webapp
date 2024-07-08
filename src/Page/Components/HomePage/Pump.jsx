@@ -10,6 +10,7 @@ import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup";
+import { useNavigate } from "react-router-dom";
 
 export const Pump = () => {
   const pumps = usePumpStore((state) => state.pumps);
@@ -47,6 +48,14 @@ export const Pump = () => {
       tankCode: 0,
     },
   });
+
+  const navigate = useNavigate();
+    useEffect(() => {
+      const userInfo = localStorage.getItem('user-info');
+      if (!userInfo) {
+        navigate("/");
+      }
+    }, [navigate]);
 
   useEffect(() => {
     fetchPump();

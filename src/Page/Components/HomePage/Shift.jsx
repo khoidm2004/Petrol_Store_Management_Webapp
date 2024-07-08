@@ -32,14 +32,12 @@ export const Shift = () => {
         productList: {}
     });
 
-    useEffect(() => {
+    useEffect(() => {   
         fetchProduct();
         fetchShift();
         fetchPump();
         fetchStaff();
     }, [fetchShift]);
-
-
 
     const handleEdit = (shift) => {
         setSelectedShift(shift);
@@ -47,7 +45,32 @@ export const Shift = () => {
 
     const saveChanges = async () => {
         if (selectedShift) {
-            console.log(selectedShift);
+            if (!selectedShift.startTime || !selectedShift.endTime ||
+            Object.keys(selectedShift.employeeList).length === 0 ||
+            Object.keys(selectedShift.productList).length === 0
+            ) {
+                setPopup({
+                  show: true,
+                  title: "Thông báo",
+                  message: "Vui lòng điền đẩy đủ thông tin của ca.",
+                });
+                return;
+              }
+            
+            const start = new Date(selectedShift.startTime);
+            const end = new Date(selectedShift.endTime);
+
+            const differenceInHours = (end - start) / (1000 * 60 * 60);
+
+            if (differenceInHours < 2) {
+                setPopup({
+                    show: true,
+                    title: "Thông báo",
+                    message: "Thời gian tối thiểu kết thúc sau 2 tiếng sau khi bắt đầu.",
+                });
+                return;
+            }
+
             try {
                 const status = await modifyShift(selectedShift);
                 setSelectedShift(null);
@@ -57,18 +80,33 @@ export const Shift = () => {
         }
     };
 
-    console.log(selectedShift);
+
     const handleAddShift = async () => {
-        // if (!newShift.startTime || !newShift.endTime) {
-        //     setPopup({
-        //       show: true,
-        //       title: "Thông báo",
-        //       message: "Vui lòng chọn ngày tháng của ca.",
-        //     });
-        //     return;
-        //   }
+        if (!newShift.startTime || !newShift.endTime || 
+        Object.keys(newShift.employeeList).length === 0 ||
+        Object.keys(newShift.productList).length === 0) {
+            setPopup({
+              show: true,
+              title: "Thông báo",
+              message: "Vui lòng điền đầy đủ thông tin của ca.",
+            });
+            return;
+          }
         
-          console.log(newShift)
+        const start = new Date(newShift.startTime);
+        const end = new Date(newShift.endTime);
+
+        const differenceInHours = (end - start) / (1000 * 60 * 60);
+
+        if (differenceInHours < 2) {
+            setPopup({
+                show: true,
+                title: "Thông báo",
+                message: "Thời gian tối thiểu kết thúc sau 2 tiếng sau khi bắt đầu.",
+            });
+            return;
+        }   
+
         try {
             const result = await addShift(newShift);
             setPopup({
@@ -169,14 +207,22 @@ export const Shift = () => {
       return () => clearTimeout(timer);
     }, []);
     
+    const [searchQuery, setSearchQuery] = useState("");
+    const filteredShifts = shifts.filter((shift) => {
+        const filteredEmployees = Object.values(shift.employeeList).some((employee) => {
+            return employee.fullName.toLowerCase().includes(searchQuery.toLowerCase());
+        });
+        return filteredEmployees;
+    });
+    
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage] = useState(10);
 
     const indexOfLastStaff = currentPage * perPage;
     const indexOfFirstStaff = indexOfLastStaff - perPage;
-    const displayedStaff =  shifts.slice(indexOfFirstStaff, indexOfLastStaff);
+    const displayedStaff =  filteredShifts.slice(indexOfFirstStaff, indexOfLastStaff);
 
-    const totalPages = Math.ceil(shifts.length / perPage);
+    const totalPages = Math.ceil(filteredShifts.length / perPage);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -185,18 +231,25 @@ export const Shift = () => {
     const closePopup = () => {
     setPopup({ show: false, title: "", message: "" });
     };
+
     return (
         <div className='revenue'>
             {showOverlay && 
                 <div className="overlay">
-                    <div class="loader">
-                        <svg class="circular" viewBox="25 25 50 50">
-                            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                    <div className="loader">
+                        <svg className="circular" viewBox="25 25 50 50">
+                            <circle className="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
                         </svg>
                     </div>
                 </div>}
             <header className='header_staff'>
                 <p>THÔNG TIN CA BÁN HÀNG</p>
+                <div className="search-container">
+                    <input type="text" placeholder="Search..." className="search-input" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
                 <button type="button" className='push' onClick={() => setAddingShift(true)}>THÊM</button>
             </header>
             <div>
@@ -212,7 +265,7 @@ export const Shift = () => {
                         </thead>
                         <tbody>
                             {displayedStaff.length > 0 ? displayedStaff.map((shift, index) => (
-                                <tr className='col' id='mainstate' key={shift.id}>
+                                <tr className='col' id='mainstate' key={shift.ShiftId}>
                                    <td>{indexOfFirstStaff + index + 1}</td>
                                    <td>{timeConverter(Date.parse(shift.startTime)).date} : {timeConverter(Date.parse(shift.startTime)).time}
                                     <br></br> {timeConverter(Date.parse(shift.endTime)).date} : {timeConverter(Date.parse(shift.endTime)).time}
@@ -229,9 +282,9 @@ export const Shift = () => {
                             )}
                             </tbody>
                             <tfoot>
+                            {displayedStaff.length > 0 && (
                                 <tr>
                                     <td colSpan={6} className="noLine">
-                                    {displayedStaff.length > 0 && (
                                         <div className="pagination">
                                         <p>
                                             <span>Đang hiển thị {indexOfFirstStaff + 1} đến {Math.min(indexOfLastStaff, shifts.length)} của {shifts.length} Ca Bán Hảng </span>
@@ -250,9 +303,9 @@ export const Shift = () => {
                                             </li>
                                             </ul>
                                         </div>
-                                    )}
                                     </td>
                                 </tr>
+                                )}
                             </tfoot>
                     </table>
                 </div>

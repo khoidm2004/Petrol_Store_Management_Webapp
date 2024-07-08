@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TbReportSearch } from "react-icons/tb";
 import { IoMdPeople } from "react-icons/io";
 import { FaBoxes } from "react-icons/fa";
@@ -14,18 +14,19 @@ import Staff from "./Components/HomePage/Staff.jsx";
 import Account from "./Components/Account/Account.jsx";
 import Revenue from "./Components/HomePage/Doanhthu.jsx";
 import Logout from "./Components/HomePage/Logout.jsx";
-import logo from "../assets/images/logo.png";
-import "./Components/HomePage/HomePage.scss";
 import { FaArrowCircleRight } from "react-icons/fa";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { GiFuelTank } from "react-icons/gi";
 import { PiGasPumpBold } from "react-icons/pi";
 import { AiOutlineProduct } from "react-icons/ai";
+import logo from "../assets/images/logo.png";
+import "./Components/HomePage/HomePage.scss";
 
 const Include = ({ setLoggedIn }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductSubMenuOpen, setIsProductSubMenuOpen] = useState(false);
   const location = useLocation();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -36,6 +37,39 @@ const Include = ({ setLoggedIn }) => {
   };
 
   const isActive = (path) => location.pathname === path;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      if (window.innerWidth <= 768) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isMenuOpen &&
+        event.target.closest(".navbar-menu") === null &&
+        event.target.closest(".burger") === null
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   return (
     <>
@@ -136,14 +170,14 @@ const Include = ({ setLoggedIn }) => {
           )}
         </div>
         <Routes>
-          <Route path="revenue" element={<Revenue />} />
-          <Route path="shift" element={<Shift />} />
-          <Route path="staff" element={<Staff />} />
-          <Route path="product" element={<Product />} />
-          <Route path="tank" element={<Tank />} />
-          <Route path="pump" element={<Pump />} />
-          <Route path="account" element={<Account />} />
-          <Route path="logout" element={<Logout setLoggedIn={setLoggedIn} />} />
+          <Route path="/revenue" element={<Revenue />} />
+          <Route path="/shift" element={<Shift />} />
+          <Route path="/staff" element={<Staff />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/tank" element={<Tank />} />
+          <Route path="/pump" element={<Pump />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/logout" element={<Logout setLoggedIn={setLoggedIn} />} />
         </Routes>
       </div>
     </>
