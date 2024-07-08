@@ -6,7 +6,8 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
-import Popup from "../Popup/Popup";
+import { useNavigate } from "react-router-dom";
+import Popup from '../Popup/Popup';
 
 export const Tank = () => {
   const tanks = useTankStore((state) => state.tanks);
@@ -39,6 +40,7 @@ export const Tank = () => {
     tankCode: 0,
     tankName: "",
     tankStatus: "ON USE",
+    tankVolume:0,
     product: {
       productName: "",
       productCode: 0,
@@ -46,6 +48,14 @@ export const Tank = () => {
     },
   });
 
+  const navigate = useNavigate();
+    useEffect(() => {
+      const userInfo = localStorage.getItem('user-info');
+      if (!userInfo) {
+        navigate("/");
+      }
+    }, [navigate]);
+    
   useEffect(() => {
     fetchTank();
     fetchProduct();
@@ -71,6 +81,24 @@ export const Tank = () => {
   const saveChanges = async () => {
     if (selectedTank) {
       try {
+        if (!selectedTank.tankName || !selectedTank.tankCode || !selectedTank.tankVolume) {
+          setPopup({
+            show: true,
+            title: 'Thông báo',
+            message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+          });
+          return;
+        }
+    
+        if( 10000 >= selectedTank.tankVolume || selectedTank.tankVolume >= 25000){
+          setPopup({
+            show: true,
+            title: 'Thông báo',
+            message: 'Thể tích bể từ 10000 đến 25000.',
+          });
+          return;
+        }
+
         await modifyTank(selectedTank);
         setSelectedTank(null);
       } catch (error) {
@@ -113,6 +141,7 @@ export const Tank = () => {
         tankId: tankId,
         tankCode: 0,
         tankName: "",
+        tankVolume: 0,
         tankStatus: "ON USE",
         product:
           product.length > 0
@@ -160,21 +189,18 @@ export const Tank = () => {
     (TankMember) => TankMember.tankStatus === "NOT ON USE"
   );
 
-  const filteredStaff = (
-    viewMode === "fullUse"
-      ? tanks
-      : viewMode === "use"
-      ? workingTank
-      : notWorkingTank
-  )
-    .filter(
-      (TankMember) =>
-        TankMember.tankCode.toString().includes(searchQuery) ||
-        TankMember.tankName.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => {
-      return a.tankCode - b.tankCode;
-    });
+  const filteredStaff = (viewMode === "fullUse"
+    ? tanks
+    : viewMode === "use"
+    ? workingTank
+    : notWorkingTank
+  ).filter(
+    (TankMember) =>
+      TankMember.tankCode.toString().includes(searchQuery) ||
+      TankMember.tankName.toLowerCase().includes(searchQuery.toLowerCase())
+  ).sort((a, b) => {
+    return a.tankCode - b.tankCode;
+  });
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
@@ -410,37 +436,35 @@ export const Tank = () => {
                 </select>
               </label>
 
-              <label>
-                {" "}
-                Mặt hàng
-                <select
-                  value={selectedTank.product.productCode}
-                  onChange={(e) => {
-                    const selectedProduct = product.find(
-                      (p) =>
-                        parseInt(p.productCode) === parseInt(e.target.value)
-                    );
-                    console.log(selectedProduct);
-                    setSelectedTank({
-                      ...selectedTank,
-                      product: {
-                        productCode: selectedProduct.productCode,
-                        productName: selectedProduct.productName,
-                        quantity_left: selectedTank.product.quantity_left,
-                      },
-                    });
-                  }}
-                >
-                  {product.map((product) => (
-                    <option
-                      key={product.productCode}
-                      value={product.productCode}
-                    >
+            <label> Mặt hàng
+              <select
+                value={selectedTank.product.productCode}
+                onChange={(e) => {
+                  const selectedProduct = product.find(
+                    (p) => parseInt(p.productCode) === parseInt(e.target.value)
+                  );
+                  console.log(selectedProduct);
+                  setSelectedTank({
+                    ...selectedTank,
+                    product: {
+                      productCode: selectedProduct.productCode,
+                      productName: selectedProduct.productName,
+                      quantity_left: selectedTank.product.quantity_left,
+                    },
+                  });
+                }}
+              >
+                {product.length > 0 ? (
+                   product.map((product) => (
+                    <option key={product.productCode} value={product.productCode}>
                       {product.productCode} - {product.productName}
                     </option>
-                  ))}
-                </select>
-              </label>
+                  ))):(
+                    <option> Chưa có thông tin mặt hàng</option>
+                  )
+              }
+                </select>  
+              </label>       
               <button className="send" onClick={saveChanges}>
                 OK
               </button>
@@ -510,38 +534,38 @@ export const Tank = () => {
                 </select>
               </label>
 
-              <label>
-                {" "}
-                Mặt hàng
-                <select
-                  onChange={(e) => {
-                    const selectedProduct = product.find(
-                      (p) =>
-                        parseInt(p.productCode) === parseInt(e.target.value)
-                    );
-                    setNewTank({
-                      ...newTank,
-                      product: {
-                        productCode: selectedProduct.productCode,
-                        productName: selectedProduct.productName,
-                      },
-                    });
-                  }}
-                >
-                  {product.map((product) => (
-                    <option
-                      key={product.productCode}
-                      value={product.productCode}
-                    >
+            <label> Mặt hàng
+              <select
+                onChange={(e) => {
+                  const selectedProduct = product.find(
+                    (p) => parseInt(p.productCode) === parseInt(e.target.value)
+                  );
+                  setNewTank({
+                    ...newTank,
+                    product: {
+                      productCode: selectedProduct.productCode,
+                      productName: selectedProduct.productName,
+                    },
+                  });
+                }}
+              >
+                {product.length > 0 ? 
+                (
+                  product.map((product) => (
+                    <option key={product.productCode} value={product.productCode}>
                       {product.productCode} - {product.productName}
                     </option>
-                  ))}
-                </select>
-              </label>
-              <button className="send" onClick={handleAddTank}>
-                THÊM
-              </button>
-            </div>
+                  ))
+                ):(
+                  <option> Chưa có thông tin mặt hàng</option>
+                )
+              }
+              </select>
+            </label>
+            <button className="send" onClick={handleAddTank}>
+              THÊM
+            </button>
+          </div>
           </>
         )}
 

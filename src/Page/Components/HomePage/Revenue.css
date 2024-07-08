@@ -224,8 +224,15 @@
 
   .right_sum{
     text-align: right;
-    padding-right: 20px;
     font-weight: bold;
+  }
+
+  .center_sum{
+    text-align: center;
+  }
+
+  .inputRevenue{
+    font-size: 10px;
   }
 
   .loader {

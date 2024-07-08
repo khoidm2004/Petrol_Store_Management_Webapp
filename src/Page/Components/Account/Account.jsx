@@ -7,6 +7,7 @@ import useChangePassword from "../../../hooks/useChangePassword";
 import Popup from "../Popup/Popup";
 import useLogout from "../../../hooks/useLogout";
 import Footer from "../Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 export const Account = () => {
   const user = JSON.parse(localStorage.getItem("user-info")) || {};
@@ -25,6 +26,14 @@ export const Account = () => {
     avatar: user.avatar || "",
   });
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    const userInfo = localStorage.getItem('user-info');
+    if (!userInfo) {
+      navigate("/");
+    }
+  }, [navigate]);
+  
   const { selectedFile, error, setSelectedFile, handleImageChange } =
     usePreviewImage();
 

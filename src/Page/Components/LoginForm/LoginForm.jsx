@@ -50,7 +50,6 @@ const LoginForm = ({ setLoggedIn }) => {
     try {
       const result = await login(formData);
       setLoggedIn(true);
-      console.log(result);
       if (result.Title === "Success") {
         window.location.href = "/revenue";
       } else {

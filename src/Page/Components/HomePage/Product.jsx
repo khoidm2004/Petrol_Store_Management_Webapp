@@ -6,6 +6,7 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import 'chart.js/auto';
 import Popup from '../Popup/Popup';
+import { useNavigate } from "react-router-dom";
 import './staff.css';
 
 
@@ -33,6 +34,15 @@ export const Product = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showOverlay, setShowOverlay] = useState(true);
 
+  const navigate = useNavigate();
+    useEffect(() => {
+      const userInfo = localStorage.getItem('user-info');
+      if (!userInfo) {
+        navigate("/");
+      }
+    }, [navigate]);
+    
+    
   useEffect(() => { 
     fetchProduct();
   }, [fetchProduct]);
