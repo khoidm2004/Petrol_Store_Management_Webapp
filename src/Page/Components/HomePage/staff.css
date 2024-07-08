@@ -383,8 +383,12 @@ tr:hover {
 
 .title_shift{
   margin: 0;
+  max-width: 450px;
 }
 
+.rightShift{
+  max-width: 100px;
+}
 /* Responsive Design */
 @media (min-width: 1400px) {
   .chart-container {

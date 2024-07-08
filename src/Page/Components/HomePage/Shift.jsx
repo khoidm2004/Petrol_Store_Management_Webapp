@@ -238,7 +238,7 @@ export const Shift = () => {
                 <div className="overlay">
                     <div className="loader">
                         <svg className="circular" viewBox="25 25 50 50">
-                            <circle className="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
                         </svg>
                     </div>
                 </div>}
@@ -331,12 +331,15 @@ export const Shift = () => {
                                         {Object.entries(selectedShift.employeeList).map(([key, staffs]) => (
                                             <div key={key} className='product-item'>
                                                 <p className="title_shift"> {staffs.fullName} - {staffs.email} </p>
+                                                <div className='rightShift'>
                                                 <FaRegMinusSquare className="push_icon" onClick={() => handleRemoveEmployee(key)} />
+                                                </div>
                                             </div>
                                         ))}
                                         {staff.length > 0 && Object.values(selectedShift.employeeList).length < staff.length && (
                                             <div className='product-item'>
-                                                <select
+                                                <select 
+                                                    
                                                     value=""
                                                     onChange={(e) => {
                                                         const selectedStaff = staff.find(p => p.email === e.target.value);
