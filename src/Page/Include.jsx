@@ -5,14 +5,7 @@ import { FaBoxes } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { AiOutlineShopping } from "react-icons/ai";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-  Link,
-  Navigate,
-} from "react-router-dom";
+import { Route, Routes, useLocation, Link } from "react-router-dom";
 import Product from "./Components/HomePage/Product.jsx";
 import Tank from "./Components/HomePage/Tank.jsx";
 import Pump from "./Components/HomePage/Pump.jsx";

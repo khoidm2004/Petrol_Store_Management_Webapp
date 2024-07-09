@@ -3,7 +3,6 @@ import useShiftStore from "../../../store/shiftStore.js";
 import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
-import { AiOutlineClose } from "react-icons/ai";
 import { TbEyeEdit } from "react-icons/tb";
 import { FaRegMinusSquare } from "react-icons/fa";
 import "chart.js/auto";
