@@ -6,9 +6,9 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
-import Popup from '../Popup/Popup';
+import Popup from "../Popup/Popup";
 
-export const Tank = () => {
+const Tank = () => {
   const tanks = useTankStore((state) => state.tanks);
   const fetchTank = useTankStore((state) => state.fetchTank);
   const addTank = useTankStore((state) => state.addTank);
@@ -39,14 +39,14 @@ export const Tank = () => {
     tankCode: 0,
     tankName: "",
     tankStatus: "ON USE",
-    tankVolume:0,
+    tankVolume: 0,
     product: {
       productName: "",
       productCode: 0,
       quantity_left: quantity_left,
     },
   });
-    
+
   useEffect(() => {
     fetchTank();
     fetchProduct();
@@ -72,20 +72,27 @@ export const Tank = () => {
   const saveChanges = async () => {
     if (selectedTank) {
       try {
-        if (!selectedTank.tankName || !selectedTank.tankCode || !selectedTank.tankVolume) {
+        if (
+          !selectedTank.tankName ||
+          !selectedTank.tankCode ||
+          !selectedTank.tankVolume
+        ) {
           setPopup({
             show: true,
-            title: 'Thông báo',
-            message: 'Vui lòng nhập đầy đủ thông tin nhân viên.',
+            title: "Thông báo",
+            message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
           });
           return;
         }
-    
-        if( 10000 >= selectedTank.tankVolume || selectedTank.tankVolume >= 25000){
+
+        if (
+          10000 >= selectedTank.tankVolume ||
+          selectedTank.tankVolume >= 25000
+        ) {
           setPopup({
             show: true,
-            title: 'Thông báo',
-            message: 'Thể tích bể từ 10000 đến 25000.',
+            title: "Thông báo",
+            message: "Thể tích bể từ 10000 đến 25000.",
           });
           return;
         }
@@ -180,18 +187,21 @@ export const Tank = () => {
     (TankMember) => TankMember.tankStatus === "NOT ON USE"
   );
 
-  const filteredStaff = (viewMode === "fullUse"
-    ? tanks
-    : viewMode === "use"
-    ? workingTank
-    : notWorkingTank
-  ).filter(
-    (TankMember) =>
-      TankMember.tankCode.toString().includes(searchQuery) ||
-      TankMember.tankName.toLowerCase().includes(searchQuery.toLowerCase())
-  ).sort((a, b) => {
-    return a.tankCode - b.tankCode;
-  });
+  const filteredStaff = (
+    viewMode === "fullUse"
+      ? tanks
+      : viewMode === "use"
+      ? workingTank
+      : notWorkingTank
+  )
+    .filter(
+      (TankMember) =>
+        TankMember.tankCode.toString().includes(searchQuery) ||
+        TankMember.tankName.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      return a.tankCode - b.tankCode;
+    });
 
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
@@ -221,15 +231,23 @@ export const Tank = () => {
 
   return (
     <div className="revenue">
-      {showOverlay && 
-       <div className="overlay">
-        <div className="loader">
-          <svg className="circular" viewBox="25 25 50 50">
-            <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
-          </svg>
+      {showOverlay && (
+        <div className="overlay">
+          <div className="loader">
+            <svg className="circular" viewBox="25 25 50 50">
+              <circle
+                className="path"
+                cx="50"
+                cy="50"
+                r="20"
+                fill="none"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+              />
+            </svg>
+          </div>
         </div>
-        </div>
-      }
+      )}
       <header className="header_staff">
         <p>THÔNG TIN BỂ</p>
         <div className="search-container">
@@ -419,35 +437,41 @@ export const Tank = () => {
                 </select>
               </label>
 
-            <label> Mặt hàng
-              <select
-                value={selectedTank.product.productCode}
-                onChange={(e) => {
-                  const selectedProduct = product.find(
-                    (p) => parseInt(p.productCode) === parseInt(e.target.value)
-                  );
-                  console.log(selectedProduct);
-                  setSelectedTank({
-                    ...selectedTank,
-                    product: {
-                      productCode: selectedProduct.productCode,
-                      productName: selectedProduct.productName,
-                      quantity_left: selectedTank.product.quantity_left,
-                    },
-                  });
-                }}
-              >
-                {product.length > 0 ? (
-                   product.map((product) => (
-                    <option key={product.productCode} value={product.productCode}>
-                      {product.productCode} - {product.productName}
-                    </option>
-                  ))):(
+              <label>
+                {" "}
+                Mặt hàng
+                <select
+                  value={selectedTank.product.productCode}
+                  onChange={(e) => {
+                    const selectedProduct = product.find(
+                      (p) =>
+                        parseInt(p.productCode) === parseInt(e.target.value)
+                    );
+                    console.log(selectedProduct);
+                    setSelectedTank({
+                      ...selectedTank,
+                      product: {
+                        productCode: selectedProduct.productCode,
+                        productName: selectedProduct.productName,
+                        quantity_left: selectedTank.product.quantity_left,
+                      },
+                    });
+                  }}
+                >
+                  {product.length > 0 ? (
+                    product.map((product) => (
+                      <option
+                        key={product.productCode}
+                        value={product.productCode}
+                      >
+                        {product.productCode} - {product.productName}
+                      </option>
+                    ))
+                  ) : (
                     <option> Chưa có thông tin mặt hàng</option>
-                  )
-              }
-                </select>  
-              </label>       
+                  )}
+                </select>
+              </label>
               <button className="send" onClick={saveChanges}>
                 OK
               </button>
@@ -517,38 +541,42 @@ export const Tank = () => {
                 </select>
               </label>
 
-            <label> Mặt hàng
-              <select
-                onChange={(e) => {
-                  const selectedProduct = product.find(
-                    (p) => parseInt(p.productCode) === parseInt(e.target.value)
-                  );
-                  setNewTank({
-                    ...newTank,
-                    product: {
-                      productCode: selectedProduct.productCode,
-                      productName: selectedProduct.productName,
-                    },
-                  });
-                }}
-              >
-                {product.length > 0 ? 
-                (
-                  product.map((product) => (
-                    <option key={product.productCode} value={product.productCode}>
-                      {product.productCode} - {product.productName}
-                    </option>
-                  ))
-                ):(
-                  <option> Chưa có thông tin mặt hàng</option>
-                )
-              }
-              </select>
-            </label>
-            <button className="send" onClick={handleAddTank}>
-              THÊM
-            </button>
-          </div>
+              <label>
+                {" "}
+                Mặt hàng
+                <select
+                  onChange={(e) => {
+                    const selectedProduct = product.find(
+                      (p) =>
+                        parseInt(p.productCode) === parseInt(e.target.value)
+                    );
+                    setNewTank({
+                      ...newTank,
+                      product: {
+                        productCode: selectedProduct.productCode,
+                        productName: selectedProduct.productName,
+                      },
+                    });
+                  }}
+                >
+                  {product.length > 0 ? (
+                    product.map((product) => (
+                      <option
+                        key={product.productCode}
+                        value={product.productCode}
+                      >
+                        {product.productCode} - {product.productName}
+                      </option>
+                    ))
+                  ) : (
+                    <option> Chưa có thông tin mặt hàng</option>
+                  )}
+                </select>
+              </label>
+              <button className="send" onClick={handleAddTank}>
+                THÊM
+              </button>
+            </div>
           </>
         )}
 

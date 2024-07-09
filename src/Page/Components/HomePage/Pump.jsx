@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import usePumpStore from "../../../store/pumpStore.js";
 import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
-import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { AiOutlineClose } from "react-icons/ai";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup";
 
-export const Pump = () => {
+const Pump = () => {
   const pumps = usePumpStore((state) => state.pumps);
   const fetchPump = usePumpStore((state) => state.fetchPump);
   const addPump = usePumpStore((state) => state.addPump);
@@ -317,9 +315,9 @@ export const Pump = () => {
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
                   >
-                      <option value="fullUse">Tất cả vòi bơm</option>
-                      <option value="use">Đang sử dụng</option>
-                      <option value="noUse">Ngừng sử dụng</option>
+                    <option value="fullUse">Tất cả vòi bơm</option>
+                    <option value="use">Đang sử dụng</option>
+                    <option value="noUse">Ngừng sử dụng</option>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -590,14 +588,14 @@ export const Pump = () => {
                   }}
                 >
                   {product.length > 0 ? (
-                      product.map((product) => (
-                        <option
-                          key={product.productCode}
-                          value={product.productCode}
-                        >
-                            {product.productCode} - {product.productName}
-                        </option>
-                      ))
+                    product.map((product) => (
+                      <option
+                        key={product.productCode}
+                        value={product.productCode}
+                      >
+                        {product.productCode} - {product.productName}
+                      </option>
+                    ))
                   ) : (
                     <option>Chưa có thông tin mặt hàng</option>
                   )}
@@ -622,11 +620,11 @@ export const Pump = () => {
                   }}
                 >
                   {tanks.length > 0 ? (
-                      tanks.map((tank) => (
-                        <option key={tank.tankCode} value={tank.tankCode}>
-                            {tank.tankCode} - {tank.tankName}
-                        </option>
-                      ))
+                    tanks.map((tank) => (
+                      <option key={tank.tankCode} value={tank.tankCode}>
+                        {tank.tankCode} - {tank.tankName}
+                      </option>
+                    ))
                   ) : (
                     <option>Chưa có thông tin bể</option>
                   )}

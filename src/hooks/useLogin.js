@@ -14,13 +14,13 @@ const useLogin = () => {
         inputs.email,
         inputs.password
       );
-      
+
       if (userCred) {
         const docRef = doc(firestore, "user", userCred.user.uid);
         const docSnap = await getDoc(docRef);
         localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
         loginUser(docSnap.data());
-        return {Title: "Success"}
+        return { Title: "Success" };
       } else {
         return {
           Title: "Error",

@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import useProductStore from "../../../store/productStore.js";
 import { AiOutlineClose } from "react-icons/ai";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import Popup from "../Popup/Popup";
 import "./staff.css";
 
-export const Product = () => {
+const Product = () => {
   const product = useProductStore((state) => state.product);
   const fetchProduct = useProductStore((state) => state.fetchProduct);
   const modifyProduct = useProductStore((state) => state.modifyProduct);
@@ -36,8 +35,8 @@ export const Product = () => {
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [showOverlay, setShowOverlay] = useState(true);
-    
-  useEffect(() => { 
+
+  useEffect(() => {
     fetchProduct();
   }, [fetchProduct]);
 

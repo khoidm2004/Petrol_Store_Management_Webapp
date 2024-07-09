@@ -1,14 +1,14 @@
-                                                                                                          import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useLogout from "../../../hooks/useLogout";
 
 const Logout = ({ setLoggedIn }) => {
   const navigate = useNavigate();
   const { handleLogout } = useLogout();
-  
+
   useEffect(() => {
     setLoggedIn(false);
-    const test = handleLogout();
+    handleLogout();
     navigate("/auth");
   }, [navigate, setLoggedIn]);
 

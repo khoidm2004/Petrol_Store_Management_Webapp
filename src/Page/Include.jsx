@@ -5,7 +5,7 @@ import { FaBoxes } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { AiOutlineShopping } from "react-icons/ai";
-import { BrowserRouter as Router, Route, Routes, useLocation, Link, Navigate } from 'react-router-dom';
+import { Route, Routes, useLocation, Link } from "react-router-dom";
 import Product from "./Components/HomePage/Product.jsx";
 import Tank from "./Components/HomePage/Tank.jsx";
 import Pump from "./Components/HomePage/Pump.jsx";
@@ -27,14 +27,22 @@ const Include = () => {
   const [validPath, setValidPath] = useState(false); // Default to false
   const [currentPath, setCurrentPath] = useState(null); // Default to null
 
-  const routes = ["/", "/shift", "/staff", "/product", "/tank", "/pump", "/account"];
+  const routes = [
+    "/",
+    "/shift",
+    "/staff",
+    "/product",
+    "/tank",
+    "/pump",
+    "/account",
+  ];
 
   useEffect(() => {
     setValidPath(routes.includes(location.pathname));
     setCurrentPath(location.pathname);
   }, []);
 
-  useEffect(() => {                            
+  useEffect(() => {
     setValidPath(routes.includes(location.pathname));
     setCurrentPath(location.pathname);
   }, [location.pathname]);
@@ -85,7 +93,7 @@ const Include = () => {
   const navigate = useNavigate();
   const { handleLogout } = useLogout();
   const handleLogouts = () => {
-    const test = handleLogout();
+    handleLogout();
     navigate("/auth");
   };
 
@@ -111,24 +119,31 @@ const Include = () => {
       )}
       <div className={`body ${isMenuOpen ? "menu-open" : ""}`}>
         {!validPath ? null : (
-          <div className={`navbar-menu tab`} style={{ width: isMenuOpen ? 200 : 0 }}>
+          <div
+            className={`navbar-menu tab`}
+            style={{ width: isMenuOpen ? 200 : 0 }}
+          >
             <ul className="navbar__list">
               <div className="navbar__li-box">
-                <li className={`navbar__li ${isActive('/') ? 'active' : ''}`}>
+                <li className={`navbar__li ${isActive("/") ? "active" : ""}`}>
                   <Link className="menu-text" to="/">
                     <TbReportSearch className="icon_menu" /> DOANH THU
                   </Link>
                 </li>
               </div>
               <div className="navbar__li-box">
-                <li className={`navbar__li ${isActive('/shift') ? 'active' : ''}`}>
+                <li
+                  className={`navbar__li ${isActive("/shift") ? "active" : ""}`}
+                >
                   <Link className="menu-text" to="/shift">
                     <AiOutlineShopping className="icon_menu" /> CA BÁN
                   </Link>
                 </li>
               </div>
               <div className="navbar__li-box">
-                <li className={`navbar__li ${isActive('/staff') ? 'active' : ''}`}>
+                <li
+                  className={`navbar__li ${isActive("/staff") ? "active" : ""}`}
+                >
                   <Link className="menu-text" to="/staff">
                     <IoMdPeople className="icon_menu" /> NHÂN VIÊN
                   </Link>
@@ -136,23 +151,35 @@ const Include = () => {
               </div>
               <div className="navbar__li-box">
                 <li className="navbar__li" onClick={toggleProductSubMenu}>
-                  <span className="menu-text" style={{ fontWeight: 'bold' }}>
+                  <span className="menu-text" style={{ fontWeight: "bold" }}>
                     <FaBoxes className="icon_menu" /> QUẢN LÝ
                   </span>
                 </li>
                 {isProductSubMenuOpen && (
                   <ul className="submenu">
-                    <li className={`navbar__li ${isActive('/product') ? 'active' : ''}`}>
+                    <li
+                      className={`navbar__li ${
+                        isActive("/product") ? "active" : ""
+                      }`}
+                    >
                       <Link className="menu-text menu-text-tab2" to="/product">
                         MẶT HÀNG
                       </Link>
                     </li>
-                    <li className={`navbar__li ${isActive('/tank') ? 'active' : ''}`}>
+                    <li
+                      className={`navbar__li ${
+                        isActive("/tank") ? "active" : ""
+                      }`}
+                    >
                       <Link className="menu-text menu-text-tab2" to="/tank">
                         BỂ
                       </Link>
                     </li>
-                    <li className={`navbar__li ${isActive('/pump') ? 'active' : ''}`}>
+                    <li
+                      className={`navbar__li ${
+                        isActive("/pump") ? "active" : ""
+                      }`}
+                    >
                       <Link className="menu-text menu-text-tab2" to="/pump">
                         VÒI BƠM
                       </Link>
@@ -164,14 +191,22 @@ const Include = () => {
             <div className="bottom-menu">
               <ul className="navbar__list">
                 <div className="navbar__li-box">
-                  <li className={`navbar__li ${isActive('/account') ? 'active' : ''}`}>
+                  <li
+                    className={`navbar__li ${
+                      isActive("/account") ? "active" : ""
+                    }`}
+                  >
                     <Link className="menu-text" to="/account">
                       <MdAccountCircle className="icon_menu" /> TÀI KHOẢN
                     </Link>
                   </li>
                 </div>
                 <div className="navbar__li-box">
-                  <li className={`navbar__li ${isActive('/logout') ? 'active' : ''}`}>
+                  <li
+                    className={`navbar__li ${
+                      isActive("/logout") ? "active" : ""
+                    }`}
+                  >
                     <a className="menu-text" onClick={handleLogouts}>
                       <IoLogOut className="icon_menu" /> ĐĂNG XUẤT
                     </a>

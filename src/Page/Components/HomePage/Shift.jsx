@@ -3,7 +3,6 @@ import useShiftStore from "../../../store/shiftStore.js";
 import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
-import { AiOutlineClose } from "react-icons/ai";
 import { TbEyeEdit } from "react-icons/tb";
 import { FaRegMinusSquare } from "react-icons/fa";
 import "chart.js/auto";
@@ -11,7 +10,7 @@ import "./staff.css";
 import Popup from "../Popup/Popup";
 import { timeConverter } from "../../../utils/timeConverter.js";
 
-export const Shift = () => {
+const Shift = () => {
   const shifts = useShiftStore((state) => state.shifts);
   const fetchShift = useShiftStore((state) => state.fetchShift);
   const addShift = useShiftStore((state) => state.addShift);
@@ -311,31 +310,35 @@ export const Shift = () => {
                   const duration = endTime - startTime;
 
                   const hours = Math.floor(duration / (1000 * 60 * 60));
-                  const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+                  const minutes = Math.floor(
+                    (duration % (1000 * 60 * 60)) / (1000 * 60)
+                  );
 
                   return (
-                  <tr className="col" id="mainstate" key={shift.ShiftId}>
-                    <td>{indexOfFirstStaff + index + 1}</td>
-                    <td>
-                      {timeConverter(Date.parse(shift.startTime)).date} :{" "}
-                      {timeConverter(Date.parse(shift.startTime)).time}
-                      <br></br> {timeConverter(Date.parse(shift.endTime)).date}{" "}
-                      : {timeConverter(Date.parse(shift.endTime)).time}
-                    </td>
-                    <td>{`${hours} giờ ${minutes} phút`}</td>
-                    <td>
-                      {Object.values(shift.employeeList)
-                        .map((pump) => pump.fullName)
-                        .join(" - ")}
-                    </td>
-                    <td className="icon_editview">
-                      <TbEyeEdit
-                        className="icon_menu"
-                        onClick={() => handleEdit(shift)}
-                      />
-                    </td>
-                  </tr>
-                )})
+                    <tr className="col" id="mainstate" key={shift.ShiftId}>
+                      <td>{indexOfFirstStaff + index + 1}</td>
+                      <td>
+                        {timeConverter(Date.parse(shift.startTime)).date} :{" "}
+                        {timeConverter(Date.parse(shift.startTime)).time}
+                        <br></br>{" "}
+                        {timeConverter(Date.parse(shift.endTime)).date} :{" "}
+                        {timeConverter(Date.parse(shift.endTime)).time}
+                      </td>
+                      <td>{`${hours} giờ ${minutes} phút`}</td>
+                      <td>
+                        {Object.values(shift.employeeList)
+                          .map((pump) => pump.fullName)
+                          .join(" - ")}
+                      </td>
+                      <td className="icon_editview">
+                        <TbEyeEdit
+                          className="icon_menu"
+                          onClick={() => handleEdit(shift)}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan={6} className="no-data">

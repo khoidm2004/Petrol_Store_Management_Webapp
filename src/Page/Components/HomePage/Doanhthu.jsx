@@ -15,11 +15,11 @@ import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
-import { useNavigate } from "react-router-dom";
+
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-  export const Revenue = () => {
+const Revenue = () => {
     const { product, fetchProduct } = useProductStore();
     const { staff, fetchStaff } = useStaffStore();
     const { pumps, fetchPump } = usePumpStore();

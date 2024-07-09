@@ -7,7 +7,7 @@ import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup";
 
-export const Staff = () => {
+const Staff = () => {
   const staff = useStaffStore((state) => state.staff);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
   const addStaff = useStaffStore((state) => state.addStaff);
@@ -33,7 +33,7 @@ export const Staff = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   useEffect(() => {
     fetchStaff();
   }, [fetchStaff]);
