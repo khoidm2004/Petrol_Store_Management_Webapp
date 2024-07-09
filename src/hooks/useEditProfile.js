@@ -43,7 +43,7 @@ const useEditProfile = () => {
       return {
         Title: "Success",
         Message: "Profile updated successfully",
-        Status: "Success",
+        Status: "success",
       };
     } catch (error) {
       return {
