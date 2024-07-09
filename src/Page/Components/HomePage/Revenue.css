@@ -1,329 +1,331 @@
-
 .revenue {
-    padding: 20px 20px 20px 20px;
-    width: 100%;
+  padding: 20px 20px 20px 20px;
+  width: 100%;
+}
+
+.tilte_revenue {
+  margin-bottom: 20px;
+}
+
+.tilte_revenue h1,
+.tilte_revenue p {
+  text-align: center;
+}
+
+.Row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.Column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Định dạng cho biểu đồ cột */
+.chartRevenue {
+  width: 48%;
+  height: auto;
+  padding: 0px 0px 0px 0px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid #166bcc;
+  border-top: 0px;
+  border-bottom: 0px;
+}
+
+.chart {
+  height: 320px;
+}
+.title_xemChitiet {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-top: 1px solid #166bcc;
+  border-bottom: 0px;
+  background-color: #f3f7fc;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px 8px 0px 0px;
+}
+
+.button_xemChitiet button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #166bcc;
+  background-color: #f3f7fc;
+  color: #000000;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 0px 0px 6px 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.button_xemChitiet button:hover {
+  color: #004bb5;
+  font-weight: 500;
+}
+/* ------------------ */
+
+.row_image {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các phần tử chuyển xuống dòng khi không đủ không gian */
+  justify-content: space-around;
+  gap: 5px;
+}
+
+.object_body {
+  position: relative;
+  padding: 20px;
+  flex: 1 1 170px;
+  background-color: #a7caff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 2px;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 10px; /* Khoảng cách giữa các object_body */
+}
+
+.object_a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #6c757d !important;
+  min-height: 80px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.object_body:hover {
+  transform: translateY(-5px) scale(1.05);
+  border-color: #004bb5;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.object_box {
+  position: absolute;
+  top: 15px;
+  left: 0px;
+  height: 32px;
+  min-width: 30px;
+  padding: 0 5px;
+  text-align: center;
+  font-weight: bold;
+  line-height: 32px;
+  background-color: orange;
+  color: #fff;
+}
+
+.object_box::before {
+  position: absolute;
+  display: block;
+  content: "";
+  top: 0;
+  right: -16px;
+  width: 0;
+  height: 0;
+  border-top: 16px solid transparent;
+  border-bottom: 16px solid transparent;
+  border-left: 16px solid orange;
+}
+
+@media (max-width: 768px) {
+  .object_body {
+    flex: 1 1 40%; /* Đảm bảo các phần tử sẽ chuyển xuống dòng khi màn hình thu nhỏ hơn */
   }
-  
-  .tilte_revenue {
+}
+/* ---------------- */
+.doanh_thuTable {
+  margin-top: 20px;
+}
+
+.doanh_thu {
+  width: 60%;
+}
+
+.ton_kho {
+  width: 37%;
+}
+
+.borders {
+  border: 2px solid #166bcc;
+  border-radius: 0px 0px 9px 9px;
+  border-top: 0px;
+}
+
+.containerRevenue {
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #166bcc;
+  border-bottom: 0px;
+  border-radius: 9px 9px 0px 0px;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.date-selector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-container {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.pump_Revenue {
+  width: 300px;
+  height: auto;
+}
+
+.table thead th {
+  text-align: center;
+  border: 0px solid #ddd;
+  background-color: #f3f7fc;
+  font-weight: 700;
+  border-bottom: 1px solid #166bcc;
+  cursor: pointer;
+}
+
+.table tbody td {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+}
+
+.table tbody tr:hover {
+  background-color: #1f62b4;
+  color: #0f0f0f;
+  border-bottom: 1px solid #166bcc;
+}
+
+.left_sum {
+  text-align: left;
+  font-weight: bold;
+}
+
+.right_sum {
+  text-align: right;
+  font-weight: bold;
+}
+
+.center_sum {
+  text-align: center;
+}
+
+.inputRevenue {
+  font-size: 10px;
+}
+
+.loader {
+  position: fixed;
+  z-index: 9999;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #1882c8;
+  animation: spin 1s infinite linear;
+}
+
+.right {
+  text-align: right;
+}
+
+.headerRevenue {
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 20px;
+  font-weight: 700;
+  height: 50px;
+  justify-content: space-between;
+}
+
+.headerRevenue p {
+  margin: 0;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.circular {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 950px) {
+  .table-container {
+    display: flex;
+    flex-direction: column-reverse;
+    text-align: center;
+    align-items: center;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .Row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chartRevenue {
+    width: 100%;
     margin-bottom: 20px;
   }
-  
-  .tilte_revenue h1,
-  .tilte_revenue p {
-    text-align: center;
-  }
-  
-  .Row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .Column {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Định dạng cho biểu đồ cột */
-  .chartRevenue {
-    width: 48%; 
-    height: auto;
-    padding: 0px 0px 0px 0px;
-    background-color: #FFFFFF;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    border: 1px solid #166BCC;
-    border-top: 0px;
-    border-bottom: 0px;
-  }
 
-  .chart{
-    height: 320px;
-  }
-  .title_xemChitiet{
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-top: 1px solid #166BCC;
-    border-bottom: 0px;
-    background-color: #F3F7FC;
-    font-weight: bold;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 8px 8px 0px 0px;
-  }
-
-  .button_xemChitiet button{
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-bottom: 1px solid #166BCC;
-    background-color: #F3F7FC;
-    color: #000000;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 0px 0px 6px 6px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .button_xemChitiet button:hover{
-    color: #004bb5;
-    font-weight: 500;
-  }
-  /* ------------------ */
-
-  .row_image {
-    display: flex;
-    flex-wrap: wrap; /* Cho phép các phần tử chuyển xuống dòng khi không đủ không gian */
-    justify-content: space-around;
-    gap: 5px;
-  }
-  
   .object_body {
-    position: relative;
-    padding: 20px;
-    flex: 1 1 170px;
-    background-color: #a7caff;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 2px;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    margin-bottom: 10px; /* Khoảng cách giữa các object_body */
+    width: 90%;
   }
-  
-  .object_a {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: #6c757d !important;
-    min-height: 80px;
-    cursor: pointer;
+
+  .title_revenue h1 {
     font-size: 20px;
   }
-  
-  .object_body:hover {
-    transform: translateY(-5px) scale(1.05);
-    border-color: #004bb5;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
+
+  .title_revenue p {
+    font-size: 14px;
   }
-  
-  .object_box {
-    position: absolute;
-    top: 15px;
-    left: 0px;
-    height: 32px;
-    min-width: 30px;
-    padding: 0 5px;
-    text-align: center;
-    font-weight: bold;
-    line-height: 32px;
-    background-color: orange;
-    color: #fff;
-  }
-  
-  .object_box::before {
-    position: absolute;
-    display: block;
-    content: '';
-    top: 0;
-    right: -16px;
-    width: 0;
-    height: 0;
-    border-top: 16px solid transparent;
-    border-bottom: 16px solid transparent;
-    border-left: 16px solid orange;
-  }
-  
-  @media (max-width: 768px) {
-    .object_body {
-      flex: 1 1 40%; /* Đảm bảo các phần tử sẽ chuyển xuống dòng khi màn hình thu nhỏ hơn */
-    }
-  }
-  /* ---------------- */
-  .doanh_thuTable {
-      margin-top: 20px;
+
+  .table {
+    font-size: 14px;
   }
 
   .doanh_thu {
-      width: 60%;
-  }
-
-
-  .ton_kho{
-    width: 37%;
-  }
-
-  .borders{
-    border: 2px solid #166BCC;
-    border-radius: 0px 0px 9px 9px;
-    border-top:  0px;
-  }
-  
-  .containerRevenue {
-    margin: 0 auto;
-    padding: 20px;
-    border: 2px solid #166BCC;
-    border-bottom: 0px;
-    border-radius: 9px 9px 0px 0px;
     width: 100%;
-    background-color: #ffffff;
   }
-  
-  .date-selector {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .table-container {
-    display: flex;
+
+  .ton_kho {
     width: 100%;
-    overflow-x: auto;
   }
-
-  .pump_Revenue{
-    width: 300px;
-    height: auto;   
-  }
-  
-  .table thead th{
-    text-align: center;
-    border: 0px solid #ddd;
-    background-color: #f3f7fc;
-    font-weight: 700;
-    border-bottom: 1px solid #166bcc;
-    cursor: pointer;
-  }
-
-  .table tbody td {
-    text-align: center;
-    padding: 10px;
-    border-bottom: 1px solid black;
-    cursor: pointer;
-  }
-
-  .table tbody tr:hover{
-    background-color: #1f62b4; 
-    color: #0f0f0f;
-    border-bottom: 1px solid #166bcc;
-  }
-    
-  .left_sum{
-    text-align: left;
-    font-weight: bold;
-  }
-
-  .right_sum{
-    text-align: right;
-    font-weight: bold;
-  }
-
-  .center_sum{
-    text-align: center;
-  }
-
-  .inputRevenue{
-    font-size: 10px;
-  }
-
-  .loader {
-    position: fixed;
-    z-index: 9999; 
-    top: 40%; 
-    left: 50%; 
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    margin: auto;
-    border-radius: 50%;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #1882c8; 
-    animation: spin 1s infinite linear; 
-  }
-
-  .right{
-    text-align: right;
-  }
-
-  .headerRevenue{
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 0 20px;
-    font-weight: 700;
-    height: 50px;
-    justify-content: space-between
-  }
-
-  .headerRevenue p{
-    margin: 0;
-  }
-  @keyframes spin {
-    0% { transform: rotate(0deg); } 
-    100% { transform: rotate(360deg); } 
-  }
-
-  .circular {
-    animation: rotate 2s linear infinite;
-  }
-
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (max-width: 950px){
-    .table-container {
-      display: flex;
-      flex-direction: column-reverse;
-      text-align: center;
-      align-items: center;
-      overflow-x: auto;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .Row {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .chartRevenue {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .object_body {
-      width: 90%;
-    }
-
-    .title_revenue h1 {
-      font-size: 20px;
-    }
-
-    .title_revenue p {
-      font-size: 14px;
-    }
-
-    .table {
-      font-size: 14px;
-    }
-
-    .doanh_thu{
-      width: 100%;
-    }
-
-    .ton_kho{
-      width: 100%;
-    }
-  }
+}

@@ -33,7 +33,7 @@ export const Staff = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   useEffect(() => {
     fetchStaff();
   }, [fetchStaff]);

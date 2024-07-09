@@ -7,7 +7,6 @@ import useChangePassword from "../../../hooks/useChangePassword";
 import Popup from "../Popup/Popup";
 import useLogout from "../../../hooks/useLogout";
 import Footer from "../Footer/Footer";
-import user from "../../../assets/images/user.png";
 import { useNavigate } from "react-router-dom";
 
 export const Account = () => {
@@ -138,8 +137,8 @@ export const Account = () => {
       });
       return;
     }
-    
-    if(passwordError !== ""){
+
+    if (passwordError !== "") {
       setPopup({
         show: true,
         title: "Thông báo",
@@ -148,7 +147,7 @@ export const Account = () => {
       });
       return;
     }
-    
+
     const result = await useChangePassword(
       formPass.pass,
       profile.email,

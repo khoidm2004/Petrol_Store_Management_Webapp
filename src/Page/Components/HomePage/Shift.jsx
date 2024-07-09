@@ -311,31 +311,35 @@ export const Shift = () => {
                   const duration = endTime - startTime;
 
                   const hours = Math.floor(duration / (1000 * 60 * 60));
-                  const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+                  const minutes = Math.floor(
+                    (duration % (1000 * 60 * 60)) / (1000 * 60)
+                  );
 
                   return (
-                  <tr className="col" id="mainstate" key={shift.ShiftId}>
-                    <td>{indexOfFirstStaff + index + 1}</td>
-                    <td>
-                      {timeConverter(Date.parse(shift.startTime)).date} :{" "}
-                      {timeConverter(Date.parse(shift.startTime)).time}
-                      <br></br> {timeConverter(Date.parse(shift.endTime)).date}{" "}
-                      : {timeConverter(Date.parse(shift.endTime)).time}
-                    </td>
-                    <td>{`${hours} giờ ${minutes} phút`}</td>
-                    <td>
-                      {Object.values(shift.employeeList)
-                        .map((pump) => pump.fullName)
-                        .join(" - ")}
-                    </td>
-                    <td className="icon_editview">
-                      <TbEyeEdit
-                        className="icon_menu"
-                        onClick={() => handleEdit(shift)}
-                      />
-                    </td>
-                  </tr>
-                )})
+                    <tr className="col" id="mainstate" key={shift.ShiftId}>
+                      <td>{indexOfFirstStaff + index + 1}</td>
+                      <td>
+                        {timeConverter(Date.parse(shift.startTime)).date} :{" "}
+                        {timeConverter(Date.parse(shift.startTime)).time}
+                        <br></br>{" "}
+                        {timeConverter(Date.parse(shift.endTime)).date} :{" "}
+                        {timeConverter(Date.parse(shift.endTime)).time}
+                      </td>
+                      <td>{`${hours} giờ ${minutes} phút`}</td>
+                      <td>
+                        {Object.values(shift.employeeList)
+                          .map((pump) => pump.fullName)
+                          .join(" - ")}
+                      </td>
+                      <td className="icon_editview">
+                        <TbEyeEdit
+                          className="icon_menu"
+                          onClick={() => handleEdit(shift)}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan={6} className="no-data">

@@ -36,8 +36,8 @@ export const Product = () => {
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [showOverlay, setShowOverlay] = useState(true);
-    
-  useEffect(() => { 
+
+  useEffect(() => {
     fetchProduct();
   }, [fetchProduct]);
 

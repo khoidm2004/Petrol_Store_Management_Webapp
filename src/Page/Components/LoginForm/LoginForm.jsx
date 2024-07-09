@@ -26,7 +26,7 @@ const LoginForm = () => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -1,11 +1,4 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, getDocs, limit, query } from "firebase/firestore";
 import { firestore } from "../../firebase/firebase";
 
 const useFetchRevenue = async (limitAmount) => {

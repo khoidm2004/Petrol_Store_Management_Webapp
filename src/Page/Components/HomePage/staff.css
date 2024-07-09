@@ -1,4 +1,3 @@
-
 .search-container {
   display: flex;
   align-items: center;
@@ -14,7 +13,8 @@
   background-color: #fbfdff;
   color: black;
   margin-right: 5px;
-  transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
 }
 
 .search-input:focus {
@@ -35,7 +35,8 @@
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .push:hover {
@@ -51,7 +52,7 @@
   font-weight: bold;
 }
 
-.header_staff{
+.header_staff {
   height: auto;
   display: flex;
   align-items: center;
@@ -99,12 +100,13 @@ thead > tr > th {
   border-bottom: 1px solid #166bcc;
 }
 
-td, th {
+td,
+th {
   padding: 6px;
   border-bottom: 1px solid black;
 }
 
-h2{
+h2 {
   text-align: center;
 }
 tr:hover {
@@ -119,7 +121,8 @@ tr:hover {
   font-size: 20px;
 }
 
-.viewStaff, .addStaff {
+.viewStaff,
+.addStaff {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -133,7 +136,8 @@ tr:hover {
   max-width: 400px;
 }
 
-.viewStaff label, .addStaff label {
+.viewStaff label,
+.addStaff label {
   font-weight: bold;
   width: 100%;
 }
@@ -144,16 +148,20 @@ tr:hover {
   color: #0b6eca;
 }
 
-.viewStaff input, .viewStaff select, .addStaff input, .addStaff select {
+.viewStaff input,
+.viewStaff select,
+.addStaff input,
+.addStaff select {
   width: 100%;
   height: 40px;
   margin-bottom: 10px;
   border: none;
   border-bottom: 1px solid black;
   padding-left: 10px;
-} 
+}
 
-.viewStaff button, .addStaff button {
+.viewStaff button,
+.addStaff button {
   border: none;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -164,10 +172,12 @@ tr:hover {
   text-align: center;
   font-weight: 700;
   margin: 5px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
-.viewStaff button:hover, .addStaff button:hover {
+.viewStaff button:hover,
+.addStaff button:hover {
   box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
   transform: scale(1.05);
   background-color: #135ba1;
@@ -285,17 +295,17 @@ tr:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background: #166bcc;
   padding: 8px 8px;
-  color: #fff; 
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  color: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .viewShift .send:hover,
 .addShift .send:hover {
   box-shadow: 0 10px 20px rgba(76, 76, 90, 0.282);
-  transform: scale(1.05); 
-  background-color: #135BA1;
+  transform: scale(1.05);
+  background-color: #135ba1;
 }
-
 
 .close_icon {
   position: sticky;
@@ -313,7 +323,7 @@ tr:hover {
   transform: scale(1.1);
 }
 
-.no-data{
+.no-data {
   text-align: center;
   font-weight: bold;
   color: red;
@@ -362,32 +372,31 @@ tr:hover {
   color: white;
 }
 
-.box_shift{
+.box_shift {
   margin-top: 10px;
   width: 100%;
 }
 
-.Staffs{
+.Staffs {
   display: flex;
   flex-direction: column;
 }
 
-.noLine{
+.noLine {
   border: none;
 }
 
-.noLine{
+.noLine {
   border-bottom: none;
   background-color: white;
-  
 }
 
-.title_shift{
+.title_shift {
   margin: 0;
   max-width: 450px;
 }
 
-.rightShift{
+.rightShift {
   width: 50%;
   text-align: right;
 }
@@ -425,8 +434,9 @@ tr:hover {
   }
 }
 
-@media (max-width:850px) {
-  .viewShift label, .addShift label{
+@media (max-width: 850px) {
+  .viewShift label,
+  .addShift label {
     width: 100%;
   }
 }
@@ -440,11 +450,13 @@ tr:hover {
     text-align: center;
   }
 
-  .viewStaff input, .viewStaff select, .addStaff input, .addStaff select {
+  .viewStaff input,
+  .viewStaff select,
+  .addStaff input,
+  .addStaff select {
     width: 100%;
   }
 
-  
   .header_staff p {
     width: 100%;
     margin-left: 0px;
