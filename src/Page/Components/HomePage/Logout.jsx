@@ -9,7 +9,7 @@ const Logout = ({ setLoggedIn }) => {
   useEffect(() => {
     setLoggedIn(false);
     const test = handleLogout();
-    navigate("/");
+    navigate("/auth");
   }, [navigate, setLoggedIn]);
 
   return null;

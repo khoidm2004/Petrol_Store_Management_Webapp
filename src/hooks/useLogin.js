@@ -14,7 +14,7 @@ const useLogin = () => {
         inputs.email,
         inputs.password
       );
-
+      
       if (userCred) {
         const docRef = doc(firestore, "user", userCred.user.uid);
         const docSnap = await getDoc(docRef);

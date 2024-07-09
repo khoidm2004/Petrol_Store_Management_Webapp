@@ -10,21 +10,12 @@ import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup";
 import { timeConverter } from "../../../utils/timeConverter.js";
-import { useNavigate } from "react-router-dom";
 
 export const Shift = () => {
   const shifts = useShiftStore((state) => state.shifts);
   const fetchShift = useShiftStore((state) => state.fetchShift);
   const addShift = useShiftStore((state) => state.addShift);
   const modifyShift = useShiftStore((state) => state.modifyShift);
-
-  const navigate = useNavigate();
-    useEffect(() => {
-      const userInfo = localStorage.getItem('user-info');
-      if (!userInfo) {
-        navigate("/404");
-      }
-    }, [navigate]);
 
   const { product, fetchProduct } = useProductStore();
   const { staff, fetchStaff } = useStaffStore();
@@ -307,13 +298,22 @@ export const Shift = () => {
               <tr className="titleOneline">
                 <th>STT</th>
                 <th>Ca bán hàng</th>
+                <th>Thời lượng</th>
                 <th>Nhân viên phụ trách</th>
                 <th className="view_chitiet">Chi tiết</th>
               </tr>
             </thead>
             <tbody>
               {displayedStaff.length > 0 ? (
-                displayedStaff.map((shift, index) => (
+                displayedStaff.map((shift, index) => {
+                  const startTime = Date.parse(shift.startTime);
+                  const endTime = Date.parse(shift.endTime);
+                  const duration = endTime - startTime;
+
+                  const hours = Math.floor(duration / (1000 * 60 * 60));
+                  const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+
+                  return (
                   <tr className="col" id="mainstate" key={shift.ShiftId}>
                     <td>{indexOfFirstStaff + index + 1}</td>
                     <td>
@@ -322,6 +322,7 @@ export const Shift = () => {
                       <br></br> {timeConverter(Date.parse(shift.endTime)).date}{" "}
                       : {timeConverter(Date.parse(shift.endTime)).time}
                     </td>
+                    <td>{`${hours} giờ ${minutes} phút`}</td>
                     <td>
                       {Object.values(shift.employeeList)
                         .map((pump) => pump.fullName)
@@ -334,7 +335,7 @@ export const Shift = () => {
                       />
                     </td>
                   </tr>
-                ))
+                )})
               ) : (
                 <tr>
                   <td colSpan={6} className="no-data">

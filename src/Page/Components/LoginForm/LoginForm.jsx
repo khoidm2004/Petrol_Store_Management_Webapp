@@ -9,7 +9,7 @@ import useReclaimPassword from "../../../hooks/useReclaimPassword";
 import Popup from "../Popup/Popup";
 import Footer from "../Footer/Footer.jsx";
 
-const LoginForm = ({ setLoggedIn }) => {
+const LoginForm = () => {
   const { login, loading } = useLogin();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showResetModal, setShowResetModal] = useState(false);
@@ -26,9 +26,10 @@ const LoginForm = ({ setLoggedIn }) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
-
   
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (!formData.email || !formData.password) {
       setPopup({
         show: true,
@@ -46,12 +47,10 @@ const LoginForm = ({ setLoggedIn }) => {
       });
       return;
     }
-    e.preventDefault();
     try {
       const result = await login(formData);
-      setLoggedIn(true);
       if (result.Title === "Success") {
-        window.location.href = "/revenue";
+        window.location.href = "/";
       } else {
         setPopup({ show: true, title: result.Title, message: result.Message });
       }

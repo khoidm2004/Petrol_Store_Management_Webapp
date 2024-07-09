@@ -88,7 +88,7 @@
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
-    background-color: #b2a9f8;
+    background-image: url("../../../assets/images/user.png");;
     transition: box-shadow 0.3s; 
 }
 

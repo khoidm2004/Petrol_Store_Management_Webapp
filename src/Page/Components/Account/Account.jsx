@@ -7,6 +7,7 @@ import useChangePassword from "../../../hooks/useChangePassword";
 import Popup from "../Popup/Popup";
 import useLogout from "../../../hooks/useLogout";
 import Footer from "../Footer/Footer";
+import user from "../../../assets/images/user.png";
 import { useNavigate } from "react-router-dom";
 
 export const Account = () => {
@@ -118,40 +119,57 @@ export const Account = () => {
   };
 
   const handleChangePassword = async () => {
-    if (formPass.pass === formPass.passNew) {
-      try {
-        const result = await useChangePassword(
-          formPass.pass,
-          profile.email,
-          profile.pass,
-          profile.uid
-        );
-        if (result) {
-          setPopup({
-            show: true,
-            title: "Thông báo",
-            message: "Đổi thành công",
-            status: "success",
-          });
-          const test = await handleLogout();
-          window.location.href = "/";
-        } else {
-          setPopup({
-            show: true,
-            title: result.Title,
-            message: result.Message,
-            status: result.Status,
-          });
-        }
-      } catch (error) {
+    if (!formPass.pass || !formPass.pass) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập đầy đủ thông tin để đổi mậu khẩu.",
+        status: "warning",
+      });
+      return;
+    }
 
-      }
+    if (formPass.pass !== formPass.passNew) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập trùng pass nhập lại.",
+        status: "warning",
+      });
+      return;
+    }
+    
+    if(passwordError !== ""){
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng lập đủ điều kiện.",
+        status: "warning",
+      });
+      return;
+    }
+    
+    const result = await useChangePassword(
+      formPass.pass,
+      profile.email,
+      profile.pass,
+      profile.uid
+    );
+    if (result) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Đổi thành công",
+        status: "success",
+      });
+      const test = await handleLogout();
+      window.location.href = "/";
     } else {
       setPopup({
         show: true,
-        title: "Lỗi",
-        message: "Không trùng pass",
-        status: "error",
+        title: result.Title,
+        message: result.Message,
+        status: result.Status,
       });
     }
   };

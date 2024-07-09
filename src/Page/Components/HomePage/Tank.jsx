@@ -6,7 +6,6 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
-import { useNavigate } from "react-router-dom";
 import Popup from '../Popup/Popup';
 
 export const Tank = () => {
@@ -47,14 +46,6 @@ export const Tank = () => {
       quantity_left: quantity_left,
     },
   });
-
-  const navigate = useNavigate();
-    useEffect(() => {
-      const userInfo = localStorage.getItem('user-info');
-      if (!userInfo) {
-        navigate("/404");
-      }
-    }, [navigate]);
     
   useEffect(() => {
     fetchTank();
@@ -264,7 +255,7 @@ export const Tank = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>#</th>
+                <th>STT</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}

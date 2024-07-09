@@ -5,7 +5,6 @@ import { TbEyeEdit } from "react-icons/tb";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import "./staff.css";
-import { useNavigate } from "react-router-dom";
 import Popup from "../Popup/Popup";
 
 export const Staff = () => {
@@ -34,14 +33,6 @@ export const Staff = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const navigate = useNavigate();
-    useEffect(() => {
-      const userInfo = localStorage.getItem('user-info');
-      if (!userInfo) {
-        navigate("/404");
-      }
-    }, [navigate]);
   
   useEffect(() => {
     fetchStaff();

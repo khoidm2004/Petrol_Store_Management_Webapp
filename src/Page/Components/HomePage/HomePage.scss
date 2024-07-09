@@ -146,6 +146,16 @@ a {
   color: white;
 }
 
+/* Components/HomePage/HomePage.scss */
+
+.header-hidden {
+  display: none;
+}
+
+.navbar-menu-hidden {
+  display: none;
+}
+
 /* Responsive styles */
 @media (max-width: 1400px) {
 

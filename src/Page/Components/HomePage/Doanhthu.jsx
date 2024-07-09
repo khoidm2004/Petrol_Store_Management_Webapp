@@ -320,7 +320,7 @@ import { format } from 'date-fns';
                     <table className="table firsttable">
                       <thead>
                         <tr>
-                          <th>#</th>
+                          <th>STT</th>
                           <th>Mặt hàng</th>
                           <th>Doanh thu</th>
                           <th>Sản lượng</th>
@@ -417,7 +417,7 @@ import { format } from 'date-fns';
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>STT</th>
                         <th>Bể</th>
                         <th>Thể tích bể</th>
                         <th>Mặt hàng tồn</th>
@@ -534,7 +534,7 @@ import { format } from 'date-fns';
             <table className="firsttable_shift">
               <thead>
                 <tr className="titleOneline">
-                  <th>#</th>
+                  <th>STT</th>
                   <th>Vòi bơm</th>
                   <th>Mặt hàng</th>
                   <th>Số đầu - số cuối</th>
@@ -640,8 +640,8 @@ import { format } from 'date-fns';
                     </tr>
                   </thead>
                   <tbody>
-                    {dailyData.length > 0 ? (
-                      dailyData.map((item, index) => (
+                    {displayedStaff.length > 0 ? (
+                      displayedStaff.map((item, index) => (
                         <tr key={index}>
                           <td>
                             {timeConverter(Date.parse(item.startTime)).time}
@@ -656,16 +656,21 @@ import { format } from 'date-fns';
                         </tr>
                       )}
                   </tbody>
-                  {dailyData.length > 0 ? (
-                          <tfoot>
+                  <tfoot>
+                  {displayedStaff.length > 4 ? (
+                        <tr>
+                          <td className="center_sum" colSpan={2}>....</td>
+                        </tr>
+                    ) : null}
+                  {displayedStaff.length > 0 ? (
                             <tr>
                               <th className="left_sum">Tổng:</th>
                               <th className="right_sum" colSpan={5}>
                                 {total.toLocaleString("vi-VN")}
                               </th>
                             </tr>
-                          </tfoot>
                         ) : null}
+                    </tfoot>
                 </table>
               </div>
             </div>
@@ -737,19 +742,21 @@ import { format } from 'date-fns';
                             )
                           }
                         </tbody>
+                        <tfoot>
+                        {displayedStaff.length > 4 ? (
+                          <tr>
+                            <td colSpan={6} className="center_sum"> .....</td>
+                          </tr>
+                        ) : null}
                         {displayedStaff.length > 0 ? (
-                          <tfoot>
-                            <tr>
-                              <td colSpan={6} className="center_sum"> .....</td>
-                            </tr>
                             <tr>
                               <td className="left_sum">Tổng:</td>
                               <td className="right_sum" colSpan={5}>
                                 {total.toLocaleString("vi-VN")}
                               </td>
                             </tr>
-                          </tfoot>
                         ) : null}
+                        </tfoot>
                       </table>
                     </div>
                     {displayedStaff.length > 0 && (
