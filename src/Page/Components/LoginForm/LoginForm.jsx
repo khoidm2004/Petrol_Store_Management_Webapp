@@ -15,7 +15,12 @@ const LoginForm = () => {
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetStatus, setResetStatus] = useState("");
-  const [popup, setPopup] = useState({ show: false, title: "", message: "" });
+  const [popup, setPopup] = useState({
+    show: false,
+    title: "",
+    message: "",
+    status: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +40,7 @@ const LoginForm = () => {
         show: true,
         title: "Thông báo",
         message: "Vui lòng nhập đầy đủ thông tin.",
+        status: "warning",
       });
       return;
     }
@@ -44,6 +50,7 @@ const LoginForm = () => {
         show: true,
         title: "Thông báo",
         message: "Vui lòng nhập đúng định dạng email.",
+        status: "error",
       });
       return;
     }
@@ -52,13 +59,19 @@ const LoginForm = () => {
       if (result.Title === "Success") {
         window.location.href = "/";
       } else {
-        setPopup({ show: true, title: result.Title, message: result.Message });
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
       }
     } catch (error) {
       setPopup({
         show: true,
         title: "Login Error",
         message: "Invalid email or password",
+        status: "error",
       });
     }
   };
@@ -79,6 +92,7 @@ const LoginForm = () => {
         show: true,
         title: "Thông báo",
         message: "Vui lòng nhập đầy đủ thông tin.",
+        status: "warning",
       });
       return;
     }
@@ -88,6 +102,7 @@ const LoginForm = () => {
         show: true,
         title: "Thông báo",
         message: "Vui lòng nhập đúng định dạng email.",
+        status: "error",
       });
       return;
     }
@@ -97,6 +112,7 @@ const LoginForm = () => {
         show: true,
         title: "Thông báo",
         message: result.Message,
+        status: result.Status,
       });
       setShowResetModal(false);
       setResetEmail("");
@@ -106,12 +122,13 @@ const LoginForm = () => {
         show: true,
         title: "Reset Password Error",
         message: "Unable to reset password",
+        status: "error",
       });
     }
   };
 
   const closePopup = () => {
-    setPopup({ show: false, title: "", message: "" });
+    setPopup({ show: false, title: "", message: "", status: "" });
   };
 
   return (
@@ -183,6 +200,7 @@ const LoginForm = () => {
         <Popup
           title={popup.title}
           message={popup.message}
+          status={popup.status}
           onClose={closePopup}
         />
       )}
