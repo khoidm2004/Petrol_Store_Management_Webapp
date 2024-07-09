@@ -17,7 +17,7 @@ import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
 import { useNavigate } from "react-router-dom";
-export const Revenue = () => {
+const Revenue = () => {
   const { product, fetchProduct } = useProductStore();
   const { staff, fetchStaff } = useStaffStore();
   const { pumps, fetchPump } = usePumpStore();
@@ -77,15 +77,6 @@ export const Revenue = () => {
     year: "numeric",
     day: "numeric",
   });
-
-  const formattedDatePumpRevenue = selectedDatePumpRevenue.toLocaleDateString(
-    "vi-VN",
-    {
-      month: "numeric",
-      year: "numeric",
-      day: "numeric",
-    }
-  );
 
   const formatDatestring = (dateString) => {
     const [day, month, year] = dateString.split("/");

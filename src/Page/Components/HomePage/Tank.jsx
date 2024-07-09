@@ -8,7 +8,7 @@ import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup";
 
-export const Tank = () => {
+const Tank = () => {
   const tanks = useTankStore((state) => state.tanks);
   const fetchTank = useTankStore((state) => state.fetchTank);
   const addTank = useTankStore((state) => state.addTank);

@@ -93,7 +93,7 @@ const Include = () => {
   const navigate = useNavigate();
   const { handleLogout } = useLogout();
   const handleLogouts = () => {
-    const test = handleLogout();
+    handleLogout();
     navigate("/auth");
   };
 

@@ -7,7 +7,7 @@ import "chart.js/auto";
 import Popup from "../Popup/Popup";
 import "./staff.css";
 
-export const Product = () => {
+const Product = () => {
   const product = useProductStore((state) => state.product);
   const fetchProduct = useProductStore((state) => state.fetchProduct);
   const modifyProduct = useProductStore((state) => state.modifyProduct);

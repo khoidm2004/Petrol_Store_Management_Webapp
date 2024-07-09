@@ -10,7 +10,7 @@ import "./staff.css";
 import Popup from "../Popup/Popup";
 import { timeConverter } from "../../../utils/timeConverter.js";
 
-export const Shift = () => {
+const Shift = () => {
   const shifts = useShiftStore((state) => state.shifts);
   const fetchShift = useShiftStore((state) => state.fetchShift);
   const addShift = useShiftStore((state) => state.addShift);

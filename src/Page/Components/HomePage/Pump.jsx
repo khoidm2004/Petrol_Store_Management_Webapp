@@ -9,7 +9,7 @@ import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup";
 
-export const Pump = () => {
+const Pump = () => {
   const pumps = usePumpStore((state) => state.pumps);
   const fetchPump = usePumpStore((state) => state.fetchPump);
   const addPump = usePumpStore((state) => state.addPump);
