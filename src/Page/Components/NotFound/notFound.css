@@ -69,6 +69,38 @@
 }
 
 .not-found a:hover {
-  background-color: #3761e1; /* Darker blue on hover */
+  background-color: #3761e1; 
+}
+      
+@media (max-width: 768px) {
+  .titleError {
+    font-size: 3rem;
+  }
+
+  .not-found p {
+    font-size: 1.2rem;
+  }
+
+  .not-found-container {
+    padding: 1.5rem;
+  }
 }
 
+@media (max-width: 480px) {
+  .titleError {
+    font-size: 2.5rem;
+  }
+
+  .not-found p {
+    font-size: 1rem;
+  }
+
+  .not-found-container {
+    padding: 1rem;
+  }
+
+  .not-found a {
+    font-size: 14px;
+    padding: 0.4rem 0.4rem;
+  }
+}

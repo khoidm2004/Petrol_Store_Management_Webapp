@@ -353,7 +353,7 @@ export const Shift = () => {
                         <span>
                           Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
                           {Math.min(indexOfLastStaff, shifts.length)} của{" "}
-                          {shifts.length} Ca Bán Hảng{" "}
+                          {shifts.length} Ca Bán Hàng{" "}
                         </span>
                       </p>
                       <ul className="pagination-list">
@@ -409,10 +409,6 @@ export const Shift = () => {
               onClick={() => setSelectedShift(null)}
             ></div>
             <div className="viewShift" value="">
-              {/* <AiOutlineClose
-                onClick={() => setSelectedShift(null)}
-                className="close_icon"
-              /> */}
               <h2>Ca Bán Hàng</h2>
               <div className="Row">
                 <label htmlFor="">
@@ -617,14 +613,12 @@ export const Shift = () => {
                               selectedShift.productList
                             ).length;
 
-                            // Lấy danh sách vòi bơm tương ứng với sản phẩm
                             const selectedPumps = pumps.filter(
                               (pump) =>
                                 parseInt(pump.product.productCode) ===
                                 parseInt(selectedProduct.productCode)
                             );
 
-                            // Tạo một đối tượng pumpList với pumpCode và pumpName
                             const initialPumpList = selectedPumps.reduce(
                               (acc, pump, index) => {
                                 acc[`pump${index + 1}`] = {
@@ -647,7 +641,7 @@ export const Shift = () => {
                                   productCode: selectedProduct.productCode,
                                   productName: selectedProduct.productName,
                                   productPrice: selectedProduct.productPrice,
-                                  pumpList: initialPumpList, // Initialize empty pumpList
+                                  pumpList: initialPumpList, 
                                 },
                               },
                             }));
@@ -689,10 +683,6 @@ export const Shift = () => {
               onClick={() => setAddingShift(false)}
             ></div>
             <div className="addShift">
-              {/* <AiOutlineClose
-                onClick={() => setAddingShift(false)}
-                className="close_icon"
-              /> */}
               <h2>Thêm Ca Mới</h2>
               <div className="Row">
                 <label htmlFor="startTime">
@@ -911,14 +901,12 @@ export const Shift = () => {
                             ).length;
                             const newKey = `Product${employeeCount + 1}`;
 
-                            // Lấy danh sách vòi bơm tương ứng với sản phẩm
                             const selectedPumps = pumps.filter(
                               (pump) =>
                                 parseInt(pump.product.productCode) ===
                                 parseInt(selectedProduct.productCode)
                             );
 
-                            // Tạo một đối tượng pumpList với pumpCode và pumpName
                             const initialPumpList = selectedPumps.reduce(
                               (acc, pump, index) => {
                                 acc[`pump${index + 1}`] = {
@@ -932,7 +920,6 @@ export const Shift = () => {
                               {}
                             );
 
-                            // Cập nhật newShift với sản phẩm và danh sách vòi bơm tương ứng
                             setNewShift((prevShift) => ({
                               ...prevShift,
                               productList: {
@@ -941,7 +928,7 @@ export const Shift = () => {
                                   productCode: selectedProduct.productCode,
                                   productName: selectedProduct.productName,
                                   productPrice: selectedProduct.productPrice,
-                                  pumpList: initialPumpList, // Thêm danh sách vòi bơm vào sản phẩm
+                                  pumpList: initialPumpList, 
                                 },
                               },
                             }));

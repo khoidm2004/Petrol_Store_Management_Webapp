@@ -139,7 +139,7 @@
   
   @media (max-width: 768px) {
     .object_body {
-      flex: 1 1 40%; /* Đảm bảo các phần tử sẽ chuyển xuống dòng khi màn hình thu nhỏ hơn */
+      flex: 1 1 40%;
     }
   }
   /* ---------------- */
@@ -258,12 +258,13 @@
     display: flex;
     align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 0 20px;
+    padding: 10px 20px;
     font-weight: 700;
-    height: 50px;
+    height: auto;
     justify-content: space-between
   }
 
+  
   .headerRevenue p{
     margin: 0;
   }
@@ -282,6 +283,13 @@
     }
   }
 
+  @media (max-width: 390px) {
+    .headerRevenue{
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+  }
   @media (max-width: 950px){
     .table-container {
       display: flex;
@@ -292,6 +300,16 @@
     }
   }
   
+  @media (min-width:770px) and (max-width:900px) {
+      .timeLog{
+        font-size: 18px;
+      }
+
+      .noLog{
+        font-size: 15px;
+      }
+  }
+
   @media (max-width: 768px) {
     .Row {
       flex-direction: column;

@@ -4,10 +4,9 @@ import "chart.js/auto";
 import "./Revenue.css";
 import useFetchLog from "../../../hooks/FetchHooks/useFetchLog.js";
 import { timeConverter } from "../../../utils/timeConverter.js";
-import { AiOutlineClose } from "react-icons/ai";
-import { GiFuelTank } from "react-icons/gi";
+import { AiOutlineClose,AiOutlineProduct } from "react-icons/ai";
+import { GiFuelTank} from "react-icons/gi";
 import { PiGasPumpBold } from "react-icons/pi";
-import { AiOutlineProduct } from "react-icons/ai";
 import { IoMdPeople } from "react-icons/io";
 import { Link } from "react-router-dom";
 import useFetchRevenue from "../../../hooks/FetchHooks/useFetchRevenue.js";
@@ -17,7 +16,9 @@ import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
 import { useNavigate } from "react-router-dom";
-import { format } from 'date-fns';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+
   export const Revenue = () => {
     const { product, fetchProduct } = useProductStore();
     const { staff, fetchStaff } = useStaffStore();
@@ -26,9 +27,10 @@ import { format } from 'date-fns';
     const [selectedDateLog, setSelectedDateLog] = useState(new Date());
     const [selectedDateRevenue, setSelectedDateRevenue] = useState(new Date());
     const [selectedDatePumpRevenue, setSelectedDatePumpRevenue] = useState(new Date());
-    const formattedSelectedDateLog = selectedDateLog.toISOString().slice(0, 10);
-    const formattedSelectedDateRevenue = selectedDateRevenue.toISOString().slice(0, 10);
-    const formattedSelectedDatePumpRevenue = selectedDatePumpRevenue.toISOString().slice(0, 10);
+    const formattedSelectedDateLog = selectedDateLog.toISOString().slice(0, 10) ;
+    const formattedSelectedDateRevenue = selectedDateRevenue.toISOString().slice(0, 10) ;
+    const formattedSelectedDatePumpRevenue = selectedDatePumpRevenue.toISOString().slice(0, 10) ;
+    const [logData, setLogData] = useState([]);
     const [dailyData, setDailyData] = useState([]);
     const [total, setTotal] = useState(0);
     const [totalIncome, setTotalIncome] = useState(0);
@@ -37,29 +39,18 @@ import { format } from 'date-fns';
     const [showBarDetail, setShowBarDetail] = useState(false);
     const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
     const [leftData, setLeftData] = useState([]);
-    const [searchQueryTank, setSearchQueryTank] = useState("");
-    const navigate = useNavigate();
-    useEffect(() => {
-      const userInfo = localStorage.getItem('user-info');
-      if (!userInfo) {
-        navigate("/404");
-      }
-    }, [navigate]);
-    
+
     const handleDateChangeLog = (e) => {
-      const newDate = new Date(e.target.value);
-      setSelectedDateLog(newDate);
+      setSelectedDateLog(e);
     };
 
 
     const handleDateChangeRevenue = (e) => {
-      const newDate = new Date(e.target.value);
-      setSelectedDateRevenue(newDate);
+      setSelectedDateRevenue(e);
     };
 
     const handleDateChangePumpRevenue = (e) => {
-      const newDate = new Date(e.target.value);
-      setSelectedDatePumpRevenue(newDate);
+      setSelectedDatePumpRevenue(e);
     };
 
     const formattedDateLog = selectedDateLog.toLocaleDateString("vi-VN", {
@@ -69,12 +60,6 @@ import { format } from 'date-fns';
     });
 
     const formattedDateRevenue = selectedDateRevenue.toLocaleDateString("vi-VN", {
-      month: "numeric",
-      year: "numeric",
-      day: "numeric"
-    });
-
-    const formattedDatePumpRevenue = selectedDatePumpRevenue.toLocaleDateString("vi-VN", {
       month: "numeric",
       year: "numeric",
       day: "numeric"
@@ -102,6 +87,7 @@ import { format } from 'date-fns';
     useEffect(() => {
       const fetchLogs = async () => {
         const result = await useFetchLog();
+        setLogData(result);
         if (result.Status !== "error") {
           const logs = result.filter(log => {
             const logDate = new Date(log.startTime).toISOString().slice(0, 10);  
@@ -252,20 +238,22 @@ import { format } from 'date-fns';
     const totalPagesPumpRevenue = Math.ceil(pumpRevenueData.items.length / perPagePumpRevenue);
     const handlePageChangePumpRevenue = (page) => {
       setCurrentPagePumpRevenue(page);
-    };
+    };  
 
-
+    const highlightDatesRevenue = dataRevenue.map(date => new Date(date.date));
+    const highlightDatesPumpRevenue = revenueData.map(date => new Date(date.date));
+    const highlightDatesLog = logData.map(date => new Date(date.startTime));
     const [showOverlay, setShowOverlay] = useState(true);
   return (
     <div className="revenue">
-      {/* {showOverlay && 
+      {showOverlay && 
         <div className="overlay">
           <div className="loader">
             <svg className="circular" viewBox="25 25 50 50">
               <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
             </svg>
           </div>
-        </div>} */}
+        </div>}
       <div className="tilte_revenue">
         <h1>Chuyên gia Xăng dầu số hàng đầu Việt Nam</h1>
         <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>
@@ -273,12 +261,15 @@ import { format } from 'date-fns';
       <div className="Row">
         <div className="chartRevenue">
           <div className="title_xemChitiet Row">DOANH THU SẢN LƯỢNG
-                  <input
-                  className="inputRevenue"
-                    type="date"
-                    value={formattedSelectedDateRevenue}
-                    onChange={handleDateChangeRevenue}
-                  />
+              <DatePicker
+                selected={selectedDateRevenue}
+                onChange={handleDateChangeRevenue}
+                value={selectedDateRevenue}
+                dateFormat="yyyy-MM-dd"
+                className="inputRevenue"
+                highlightDates={highlightDatesRevenue}
+                shouldHighlightWeekends
+              />
           </div>
           <div className="chart">
             <Bar
@@ -308,10 +299,14 @@ import { format } from 'date-fns';
               <hr></hr>
               <div>
                 <div className="date-selector">
-                  <input
-                    type="date"
-                    value={formattedSelectedDateRevenue}
+                <DatePicker
+                    selected={selectedDateRevenue}
                     onChange={handleDateChangeRevenue}
+                    value={selectedDateRevenue}
+                    dateFormat="yyyy-MM-dd"
+                    className="inputRevenue"
+                    highlightDates={highlightDatesRevenue}
+                    shouldHighlightWeekends
                   />
                 </div>
                 <div className="content">
@@ -348,7 +343,7 @@ import { format } from 'date-fns';
                             <td colSpan="4" className="noLine">
                               <div className="pagination">
                                   <p>
-                                    <span>Đang hiển thị {indexOfFirstRevenue+ 1} đến {Math.min(indexOfLastRevenue, currentData.items.length)} của {currentData.items.length} mục</span>
+                                    <span>Đang Hiển Thị {indexOfFirstRevenue+ 1} Đến {Math.min(indexOfLastRevenue, currentData.items.length)} Của {currentData.items.length} doanh thu/Sản lượng</span>
                                   </p>
                                   <ul className="pagination-list">
                                     <li className={`pagination-item ${currentPageRevenue === 1 ? 'disabled' : ''}`}>
@@ -447,7 +442,7 @@ import { format } from 'date-fns';
                             <td colSpan="5" className="noLine">
                               <div className="pagination">
                                   <p>
-                                    <span>Đang hiển thị {indexOfFirstLeft+ 1} đến {Math.min(indexOfLastLeft, leftData.length)} của {leftData.length} mục</span>
+                                    <span>Đang Hiển Thị {indexOfFirstLeft+ 1} Đến {Math.min(indexOfLastLeft, leftData.length)} Của {leftData.length} Bể</span>
                                   </p>
                                   <ul className="pagination-list">
                                     <li className={`pagination-item ${currentPageLeft === 1 ? 'disabled' : ''}`}>
@@ -513,24 +508,19 @@ import { format } from 'date-fns';
         <div className="Column doanh_thu">
           <header className="headerRevenue">
             <p>DOANH THU VÒI BƠM</p>
-            {/* <div className="search-container">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="search-input"
-                value={searchQueryTank}
-                onChange={(e) => setSearchQueryTank(e.target.value)}
-               />
-            </div> */}
             <div>
-                  <input
-                    type="date"
-                    value={formattedSelectedDatePumpRevenue}
-                    onChange={handleDateChangePumpRevenue}
-                  />
+            <DatePicker
+                selected={selectedDatePumpRevenue}
+                onChange={handleDateChangePumpRevenue}
+                value={selectedDatePumpRevenue}
+                dateFormat="yyyy-MM-dd"
+                className="inputRevenue"
+                highlightDates={highlightDatesPumpRevenue}
+                shouldHighlightWeekends
+              />
                 </div>
           </header>
-          <div className="doanh_thuTable">
+          <div className="doanh_thuTable ">
             <table className="firsttable_shift">
               <thead>
                 <tr className="titleOneline">
@@ -564,7 +554,7 @@ import { format } from 'date-fns';
                             <td colSpan="5" className="noLine">
                               <div className="pagination">
                                   <p>
-                                    <span>Đang hiển thị {indexOfFirstPumpRevenue+ 1} đến {Math.min(indexOfLastPumpRevenue, pumpRevenueData.items.length)} của {pumpRevenueData.items.length} mục</span>
+                                    <span>Đang Hiển Thị {indexOfFirstPumpRevenue+ 1} Đến {Math.min(indexOfLastPumpRevenue, pumpRevenueData.items.length)} Của {pumpRevenueData.items.length} Vòi Bơm</span>
                                   </p>
                                   <ul className="pagination-list">
                                     <li className={`pagination-item ${currentPagePumpRevenue === 1 ? 'disabled' : ''}`}>
@@ -622,15 +612,19 @@ import { format } from 'date-fns';
             <h6>LƯỢNG TỒN TRONG CA</h6>
             <hr />
             <div className="date-selector">
-              <input
-                type="date"
-                id="date"
-                value={formattedSelectedDateLog}
+
+             <DatePicker
+                selected={selectedDateLog}
                 onChange={handleDateChangeLog}
+                value={selectedDateLog}
+                dateFormat="yyyy-MM-dd"
+                className="inputRevenue"
+                highlightDates={highlightDatesLog}
+                shouldHighlightWeekends
               />
             </div>
             <div className="content">
-              <h4>{formatDatestring(formattedDateLog)}</h4>
+              <h4 className="timeLog">{formatDatestring(formattedDateLog)}</h4>
               <div className="table-container">
                 <table className="table">
                   <thead>
@@ -650,7 +644,7 @@ import { format } from 'date-fns';
                         </tr>
                       ))) : (
                         <tr>
-                          <td colSpan="2" className="no-data">
+                          <td colSpan="2" className="no-data noLog">
                             Không có dữ liệu về log phát sinh
                           </td>
                         </tr>
@@ -696,11 +690,14 @@ import { format } from 'date-fns';
                 <hr />
                 <div>
                   <div className="date-selector">
-                    <input
-                      type="date"
-                      id="date"
-                      value={formattedSelectedDateLog}
+                  <DatePicker
+                      selected={selectedDateLog}
                       onChange={handleDateChangeLog}
+                      value={selectedDateLog}
+                      dateFormat="yyyy-MM-dd"
+                      className="inputRevenue"
+                      highlightDates={highlightDatesLog}
+                      shouldHighlightWeekends
                     />
                   </div>
                   <div className="content">
@@ -762,7 +759,7 @@ import { format } from 'date-fns';
                     {displayedStaff.length > 0 && (
                       <div className="pagination">
                          <p>
-                            <span>Đang hiển thị {indexOfFirstStaff+ 1} đến {Math.min(indexOfLastStaff, dailyData.length)} của {dailyData.length} mục</span>
+                            <span>Đang Hiển Thị {indexOfFirstStaff+ 1} Đến {Math.min(indexOfLastStaff, dailyData.length)} Của {dailyData.length} Log </span>
                           </p>
                         <ul className="pagination-list">
                           <li

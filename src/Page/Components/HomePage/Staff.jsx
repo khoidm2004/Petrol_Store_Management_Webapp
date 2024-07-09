@@ -46,10 +46,20 @@ export const Staff = () => {
     if (selectedStaff) {
       try {
         var status = await modifyStaff(selectedStaff);
-        console.log(status);
         setSelectedStaff(null);
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: status.Message,
+          status: status.Status,
+        });
       } catch (error) {
-        console.error("Save error:", error);
+        setPopup({
+          show: true,
+          title: "Lỗi",
+          message: error.Message,
+          status: error,
+        });
       }
     }
   };
@@ -111,7 +121,12 @@ export const Staff = () => {
       });
       setAddingStaff(false);
     } catch (error) {
-      console.error("Add staff error:", error);
+      setPopup({
+        show: true,
+        title: "Lỗi",
+        message: error.Message,
+        status: error,
+      });
     }
   };
 

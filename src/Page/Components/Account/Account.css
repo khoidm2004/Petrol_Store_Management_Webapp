@@ -217,7 +217,7 @@ select:focus, input:focus {
 }
 
 .profile_info .changePassWord {
-    width: 70%;
+    width: 100%;
 }
 
 .buttonChangePass {
@@ -229,6 +229,7 @@ select:focus, input:focus {
     font-weight: bold;
     cursor: pointer;
     color: white;
+    margin-top: 10px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -244,18 +245,13 @@ select:focus, input:focus {
     margin-top: 4px; 
   }
 
-.rowPasswordForget{
-    display: flex;
-    justify-content: space-around;
-    gap: 5px;
-}
 /* Responsive Styles */
 @media (min-width: 768px) {
     .page_account {
         flex-direction: row; 
         justify-content: space-between;
     }
-
+    
     .profile_image_section, .profile_info_section {
         width: 50%; 
     }
@@ -286,6 +282,7 @@ select:focus, input:focus {
 
     .profile_info input {
         font-size: 14px;
+        width: 100%;
     }
 
     .profile_info_section {
