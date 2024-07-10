@@ -12,8 +12,8 @@ const usePreviewImage = () => {
       if (file.size > maxFileSizeInBytes) {
         setSelectedFile(null);
         setError({
-          Title: "Error",
-          Message: "File size must be less than 2MB",
+          Title: "Lỗi",
+          Message: "Kích thước file phải nhỏ hơn 2MB",
           Status: "error",
         });
         return;

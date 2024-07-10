@@ -40,13 +40,13 @@ const useShiftStore = create((set) => ({
         shifts: [...state.shifts, { id: docRef, ...newShift, shiftId }],
       }));
       return {
-        Title: "Success",
-        Message: "Adding Successfully",
+        Title: "Thông báo",
+        Message: "Thêm thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -66,13 +66,13 @@ const useShiftStore = create((set) => ({
       }));
 
       return {
-        Title: "Success",
-        Description: "Modifying Successfully",
+        Title: "Thông báo",
+        Description: "Chỉnh sửa thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };

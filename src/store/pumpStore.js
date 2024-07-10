@@ -46,8 +46,8 @@ const usePumpStore = create((set) => ({
       const pumpCodeQuerySnapshot = await getDocs(qCode);
       if (!pumpCodeQuerySnapshot.empty) {
         return {
-          Title: "Error",
-          Message: "Pump Code has been used",
+          Title: "Lỗi",
+          Message: "Mã vòi đã được sử dụng",
           Status: "error",
         };
       }
@@ -57,8 +57,8 @@ const usePumpStore = create((set) => ({
       const pumpIdQuerySnapshot = await getDocs(qId);
       if (!pumpIdQuerySnapshot.empty) {
         return {
-          Title: "Error",
-          Message: "Pump Id has been used",
+          Title: "Lỗi",
+          Message: "Id vòi đã được sử dụng",
           Status: "Error",
         };
       }
@@ -72,13 +72,13 @@ const usePumpStore = create((set) => ({
         pumps: [...state.pumps, { id: pid, ...newPump, pid }],
       }));
       return {
-        Title: "Success",
-        Message: "Adding Successfully",
+        Title: "Thông báo",
+        Message: "Thêm thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -98,13 +98,13 @@ const usePumpStore = create((set) => ({
         ),
       }));
       return {
-        Title: "Success",
-        Message: "Modifying Successfully",
+        Title: "Thông báo",
+        Message: "Chỉnh sửa thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -129,7 +129,7 @@ const usePumpStore = create((set) => ({
         pumpCodeQuerySnapshot.empty &&
         pumpNameQuerySnapshot.empty
       ) {
-        return { Title: "Error", Message: "Pump Not Found", Status: "error" };
+        return { Title: "Lỗi", Message: "Pump Not Found", Status: "error" };
       }
 
       if (!pumpIdQuerySnapshot.empty) {
@@ -159,7 +159,7 @@ const usePumpStore = create((set) => ({
         set({ pumps: pumpList3 });
       }
     } catch (error) {
-      return { Title: "Error", Message: error.message, Status: "error" };
+      return { Title: "Lỗi", Message: error.message, Status: "error" };
     }
   },
 }));

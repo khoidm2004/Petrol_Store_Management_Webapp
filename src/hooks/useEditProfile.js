@@ -41,13 +41,13 @@ const useEditProfile = () => {
       setUserProfile(updatedUser);
       setAuthUser(updatedUser);
       return {
-        Title: "Success",
-        Message: "Profile updated successfully",
+        Title: "Thông báo",
+        Message: "Cập nhật thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };

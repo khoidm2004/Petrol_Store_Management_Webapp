@@ -12,7 +12,7 @@ const useLogout = () => {
       localStorage.removeItem("user-info");
       logoutUser();
     } catch (error) {
-      return { Title: "Error", Message: error.message, Status: "error" };
+      return { Title: "Lỗi", Message: error.message, Status: "error" };
     }
   };
   return { handleLogout, isLoggingOut, error };
