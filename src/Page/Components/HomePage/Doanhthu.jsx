@@ -214,6 +214,9 @@ const Revenue = () => {
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
   let displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+  // const test = {
+
+  // }
   // displayedStaff = displayedStaff.sort((a, b) => {
   //   return (
   //     a.startTime -
@@ -282,12 +285,10 @@ const Revenue = () => {
   };
 
   const [loading, setLoading] = useState(true);
-  const [noData, setNoData] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-      setNoData(true);
     }, 4000);
 
     return () => clearTimeout(timer);
@@ -313,35 +314,33 @@ const Revenue = () => {
             />
           </div>
           <div className="chart">
-            {currentData.items.length > 0 ? (
-              <Bar
-                data={barData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
-              />
-            ) : (
-              <div className="over">
-                {loading ? (
-                  <div className="loader">
-                    <svg className="circular" viewBox="25 25 50 50">
-                      <circle
-                        className="path"
-                        cx="50"
-                        cy="50"
-                        r="20"
-                        fill="none"
-                        strokeWidth="2"
-                        strokeMiterlimit="10"
-                      />
-                    </svg>
-                  </div>
-                ) : noData ? (
-                  <div className="no-data">Không có dữ liệu</div>
-                ) : null}
-              </div>
-            )}
+            <div className="over">
+              {loading ? (
+                <div className="loader">
+                  <svg className="circular" viewBox="25 25 50 50">
+                    <circle
+                      className="path"
+                      cx="50"
+                      cy="50"
+                      r="20"
+                      fill="none"
+                      strokeWidth="2"
+                      strokeMiterlimit="10"
+                    />
+                  </svg>
+                </div>
+              ) : currentData.items.length > 0 ? (
+                <Bar
+                  data={barData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                  }}
+                />
+              ) : (
+                <div className="no-data">Không có dữ liệu</div>
+              )}
+            </div>
           </div>
           <div className="button_xemChitiet">
             <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
@@ -496,35 +495,33 @@ const Revenue = () => {
         <div className="chartRevenue">
           <div className="title_xemChitiet">TỒN KHO</div>
           <div className="chart">
-            {tanks.length > 0 ? (
-              <Doughnut
-                data={doughnutData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
-              />
-            ) : (
               <div className="over">
                 {loading ? (
-                  <div className="loader">
-                    <svg className="circular" viewBox="25 25 50 50">
-                      <circle
-                        className="path"
-                        cx="50"
-                        cy="50"
-                        r="20"
-                        fill="none"
-                        strokeWidth="2"
-                        strokeMiterlimit="10"
-                      />
-                    </svg>
-                  </div>
-                ) : noData ? (
-                  <div className="no-data">Không có dữ liệu</div>
-                ) : null}
-              </div>
-            )}
+                <div className="loader">
+                  <svg className="circular" viewBox="25 25 50 50">
+                    <circle
+                      className="path"
+                      cx="50"
+                      cy="50"
+                      r="20"
+                      fill="none"
+                      strokeWidth="2"
+                      strokeMiterlimit="10"
+                    />
+                  </svg>
+                </div>
+              ) : tanks.length > 0 ? (
+                <Doughnut
+                  data={doughnutData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                  }}
+                />
+              ) : (
+                <div className="no-data">Không có dữ liệu</div>
+              )}
+          </div>
           </div>
           <div className="button_xemChitiet">
             <button
