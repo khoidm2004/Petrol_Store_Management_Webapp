@@ -334,7 +334,7 @@ const Tank = () => {
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                           >
-                            Previous
+                            Trước
                           </button>
                         </li>
                         {Array.from({ length: totalPages }, (_, index) => (
@@ -358,7 +358,7 @@ const Tank = () => {
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                           >
-                            Next
+                            Sau
                           </button>
                         </li>
                       </ul>

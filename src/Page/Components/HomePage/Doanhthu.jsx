@@ -99,7 +99,11 @@ const Revenue = () => {
         });
         setDailyData(logs);
         setTotal(
-          logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0)
+          logs.reduce(
+            (sum, item) =>
+              sum + parseInt(item.totalAmount ? item.totalAmount : 0),
+            0
+          )
         );
       }
     };
@@ -140,12 +144,6 @@ const Revenue = () => {
     ],
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
   const [dataRevenue, setDataRevenue] = useState([]);
 
   useEffect(() => {
@@ -215,7 +213,13 @@ const Revenue = () => {
   const [perPage] = useState(5);
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
-  const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+  let displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+  // displayedStaff = displayedStaff.sort((a, b) => {
+  //   return (
+  //     a.startTime -
+  //     b.startTime
+  //   );
+  // });
   const totalPages = Math.ceil(dailyData.length / perPage);
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -229,6 +233,7 @@ const Revenue = () => {
     indexOfFirstRevenue,
     indexOfLastRevenue
   );
+
   const totalPagesRevenue = Math.ceil(
     currentData.items.length / perPageRevenue
   );
@@ -266,11 +271,27 @@ const Revenue = () => {
     (date) => new Date(date.date)
   );
   const highlightDatesLog = logData.map((date) => new Date(date.startTime));
-  const [showOverlay, setShowOverlay] = useState(true);
 
   const formatNumberWithCommas = (number) => {
+    number = number ? number : 0;
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
+
+  const formatNumberWithSixNumber = (num) => {
+    return num.toString().padStart(6, "0");
+  };
+
+  const [loading, setLoading] = useState(true);
+  const [noData, setNoData] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+      setNoData(true);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className="revenue">
       <div className="tilte_revenue">
@@ -292,31 +313,35 @@ const Revenue = () => {
             />
           </div>
           <div className="chart">
-            {currentData.items.length > 0 ? 
-             (<Bar
-             data={barData}
-             options={{
-               responsive: true,
-               maintainAspectRatio: false,
-             }}
-           />):(
+            {currentData.items.length > 0 ? (
+              <Bar
+                data={barData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                }}
+              />
+            ) : (
               <div className="over">
-                <div className="loader">
-                  <svg className="circular" viewBox="25 25 50 50">
-                    <circle
-                      className="path"
-                      cx="50"
-                      cy="50"
-                      r="20"
-                      fill="none"
-                      strokeWidth="2"
-                      strokeMiterlimit="10"
-                    />
-                  </svg>
-                </div>
+                {loading ? (
+                  <div className="loader">
+                    <svg className="circular" viewBox="25 25 50 50">
+                      <circle
+                        className="path"
+                        cx="50"
+                        cy="50"
+                        r="20"
+                        fill="none"
+                        strokeWidth="2"
+                        strokeMiterlimit="10"
+                      />
+                    </svg>
+                  </div>
+                ) : noData ? (
+                  <div className="no-data">Không có dữ liệu</div>
+                ) : null}
               </div>
-           )
-            }
+            )}
           </div>
           <div className="button_xemChitiet">
             <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
@@ -411,7 +436,7 @@ const Revenue = () => {
                                       }
                                       disabled={currentPageRevenue === 1}
                                     >
-                                      Previous
+                                      Trước
                                     </button>
                                   </li>
                                   {Array.from(
@@ -452,7 +477,7 @@ const Revenue = () => {
                                         currentPageRevenue === totalPagesRevenue
                                       }
                                     >
-                                      Next
+                                      Sau
                                     </button>
                                   </li>
                                 </ul>
@@ -471,15 +496,17 @@ const Revenue = () => {
         <div className="chartRevenue">
           <div className="title_xemChitiet">TỒN KHO</div>
           <div className="chart">
-              {tanks.length > 0 ? 
-                ( <Doughnut
-                  data={doughnutData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                  }}
-                />):(
-                  <div className="over">
+            {tanks.length > 0 ? (
+              <Doughnut
+                data={doughnutData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                }}
+              />
+            ) : (
+              <div className="over">
+                {loading ? (
                   <div className="loader">
                     <svg className="circular" viewBox="25 25 50 50">
                       <circle
@@ -493,8 +520,11 @@ const Revenue = () => {
                       />
                     </svg>
                   </div>
-                </div>
-              )}
+                ) : noData ? (
+                  <div className="no-data">Không có dữ liệu</div>
+                ) : null}
+              </div>
+            )}
           </div>
           <div className="button_xemChitiet">
             <button
@@ -584,7 +614,7 @@ const Revenue = () => {
                                     }
                                     disabled={currentPageLeft === 1}
                                   >
-                                    Previous
+                                    Trước
                                   </button>
                                 </li>
                                 {Array.from(
@@ -623,7 +653,7 @@ const Revenue = () => {
                                       currentPageLeft === totalPagesLeft
                                     }
                                   >
-                                    Next
+                                    Sau
                                   </button>
                                 </li>
                               </ul>
@@ -706,12 +736,17 @@ const Revenue = () => {
                 {displayedPumpRevenue.length > 0 ? (
                   displayedPumpRevenue.map((staffMember, index) => (
                     <tr key={staffMember.id} className="col" id="mainstate">
-                      <td className="center_sum">{indexOfFirstPumpRevenue + index + 1}</td>
+                      <td className="center_sum">
+                        {indexOfFirstPumpRevenue + index + 1}
+                      </td>
                       <td>{staffMember.pumpName}</td>
                       <td>{staffMember.productName}</td>
-                      <td className="right_sum"> {formatNumberWithCommas(staffMember.fNum)}</td>
                       <td className="right_sum">
-                        {formatNumberWithCommas(staffMember.lNum)}
+                        {" "}
+                        {formatNumberWithSixNumber(staffMember.fNum)}
+                      </td>
+                      <td className="right_sum">
+                        {formatNumberWithSixNumber(staffMember.lNum)}
                       </td>
                     </tr>
                   ))
@@ -750,7 +785,7 @@ const Revenue = () => {
                               }
                               disabled={currentPagePumpRevenue === 1}
                             >
-                              Previous
+                              Trước
                             </button>
                           </li>
                           {Array.from(
@@ -791,7 +826,7 @@ const Revenue = () => {
                                 currentPagePumpRevenue === totalPagesPumpRevenue
                               }
                             >
-                              Next
+                              Sau
                             </button>
                           </li>
                         </ul>
@@ -871,10 +906,7 @@ const Revenue = () => {
                       ))
                     ) : (
                       <tr>
-                        <td
-                          colSpan="2"
-                          className="center_sum"
-                        >
+                        <td colSpan="2" className="center_sum">
                           Không có dữ liệu về log phát sinh
                         </td>
                       </tr>
@@ -892,7 +924,9 @@ const Revenue = () => {
                       <tr>
                         <th className="left_sum">Tổng:</th>
                         <th className="center_sum" colSpan={5}>
-                        {formatNumberWithCommas(total.toLocaleString("vi-VN"))}
+                          {formatNumberWithCommas(
+                            total.toLocaleString("vi-VN")
+                          )}
                         </th>
                       </tr>
                     ) : null}
@@ -958,9 +992,13 @@ const Revenue = () => {
                                 </td>
                                 <td>{item.productName}</td>
                                 <td>{item.pumpName}</td>
-                                <td className="right_sum">{formatNumberWithCommas(item.productPrice)}</td>
+                                <td className="right_sum">
+                                  {formatNumberWithCommas(item.productPrice)}
+                                </td>
                                 <td className="right_sum">{item.quantity}</td>
-                                <td className="right_sum">{formatNumberWithCommas(item.totalAmount)}</td>
+                                <td className="right_sum">
+                                  {formatNumberWithCommas(item.totalAmount)}
+                                </td>
                               </tr>
                             ))
                           ) : (
@@ -1016,7 +1054,7 @@ const Revenue = () => {
                               onClick={() => handlePageChange(currentPage - 1)}
                               disabled={currentPage === 1}
                             >
-                              Previous
+                              Trước
                             </button>
                           </li>
                           {Array.from({ length: totalPages }, (_, index) => (
@@ -1042,7 +1080,7 @@ const Revenue = () => {
                               onClick={() => handlePageChange(currentPage + 1)}
                               disabled={currentPage === totalPages}
                             >
-                              Next
+                              Sau
                             </button>
                           </li>
                         </ul>
