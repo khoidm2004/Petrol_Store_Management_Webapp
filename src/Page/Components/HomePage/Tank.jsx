@@ -231,7 +231,7 @@ const Tank = () => {
 
   return (
     <div className="revenue">
-      {showOverlay && (
+      {/* {showOverlay && (
         <div className="overlay">
           <div className="loader">
             <svg className="circular" viewBox="25 25 50 50">
@@ -247,11 +247,10 @@ const Tank = () => {
             </svg>
           </div>
         </div>
-      )}
+      )} */}
       <header className="header_staff">
         <p>THÔNG TIN BỂ</p>
         <div className="search-container">
-          {/* <FaMagnifyingGlass className="search-icon" /> */}
           <input
             type="text"
             placeholder="Search..."
@@ -273,13 +272,14 @@ const Tank = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>STT</th>
+                <th className="center_sum">STT</th>
+                <th> Mã bể</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
                   >
-                    <option value="use">Tất cả bể</option>
+                    <option value="fullUse">Tất cả bể</option>
                     <option value="use">Đang sử dụng</option>
                     <option value="notUse">Ngừng sử dụng</option>
                   </select>
@@ -290,11 +290,12 @@ const Tank = () => {
             <tbody>
               {displayedStaff.length > 0 ? (
                 displayedStaff.map((TankMember, index) => (
-                  <tr key={TankMember.tankCode} className="col" id="mainstate">
-                    <td>{indexOfFirstStaff + index + 1}</td>
-                    <td>
-                      {TankMember.tankCode} - {TankMember.tankName}
+                  <tr key={TankMember.tankCode}>
+                    <td className="center_sum">
+                      {indexOfFirstStaff + index + 1}
                     </td>
+                    <td> {TankMember.tankCode} </td>
+                    <td>{TankMember.tankName}</td>
                     <td className="icon_editview">
                       <TbEyeEdit
                         className="icon_menu"
@@ -305,7 +306,7 @@ const Tank = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="no-data">
+                  <td colSpan="4" className="center_sum">
                     {searchQuery
                       ? "Không tìm thấy thông tin bể."
                       : "Chưa có thông tin bể."}
@@ -313,7 +314,7 @@ const Tank = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="3" className="noLine">
+                <td colSpan="4">
                   {displayedStaff.length > 0 && (
                     <div className="pagination">
                       <p>

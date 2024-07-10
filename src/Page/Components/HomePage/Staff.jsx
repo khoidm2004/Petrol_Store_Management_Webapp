@@ -42,28 +42,6 @@ const Staff = () => {
     setSelectedStaff(staffMember);
   };
 
-  const saveChanges = async () => {
-    if (selectedStaff) {
-      try {
-        var status = await modifyStaff(selectedStaff);
-        setSelectedStaff(null);
-        setPopup({
-          show: true,
-          title: "Thông báo",
-          message: status.Message,
-          status: status.Status,
-        });
-      } catch (error) {
-        setPopup({
-          show: true,
-          title: "Lỗi",
-          message: error.Message,
-          status: error,
-        });
-      }
-    }
-  };
-
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
@@ -72,6 +50,50 @@ const Staff = () => {
   const validatePhoneNumber = (phoneNum) => {
     const re = /^\d{10}$/;
     return re.test(String(phoneNum));
+  };
+
+  const saveChanges = async () => {
+    if (
+      !selectedStaff.fullName ||
+      !selectedStaff.email ||
+      !selectedStaff.phoneNum
+    ) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        status: "warning",
+      });
+      return;
+    }
+
+    if (!validatePhoneNumber(selectedStaff.phoneNum)) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập số điện thoại gồm 10 chữ số.",
+        status: "warning",
+      });
+      return;
+    }
+
+    try {
+      var status = await modifyStaff(selectedStaff);
+      setSelectedStaff(null);
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: status.Message,
+        status: status.Status,
+      });
+    } catch (error) {
+      setPopup({
+        show: true,
+        title: "Lỗi",
+        message: error.Message,
+        status: error,
+      });
+    }
   };
 
   const handleAddStaff = async () => {
@@ -192,7 +214,7 @@ const Staff = () => {
 
   return (
     <div className="revenue">
-      {showOverlay && (
+      {/* {showOverlay && (
         <div className="overlay">
           <div className="loader">
             <svg className="circular" viewBox="25 25 50 50">
@@ -208,7 +230,7 @@ const Staff = () => {
             </svg>
           </div>
         </div>
-      )}
+      )} */}
       <header className="header_staff">
         <p>THÔNG TIN NHÂN VIÊN</p>
         <div className="search-container">
@@ -233,7 +255,7 @@ const Staff = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>STT</th>
+                <th className="center_sum">STT</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
@@ -250,7 +272,7 @@ const Staff = () => {
               {displayedStaff.length > 0 ? (
                 displayedStaff.map((staffMember, index) => (
                   <tr key={staffMember.staffId} className="col" id="mainstate">
-                    <td>{indexOfFirstStaff + index + 1}</td>
+                    <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
                     <td>
                       {staffMember.fullName} - {staffMember.email}
                     </td>
@@ -264,7 +286,7 @@ const Staff = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="no-data">
+                  <td colSpan="3" className="center_sum">
                     {searchQuery
                       ? "Không tìm thấy thông tin nhân viên."
                       : "Chưa có thông tin nhân viên."}
@@ -272,14 +294,14 @@ const Staff = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="3" className="noLine">
+                <td colSpan="3">
                   {displayedStaff.length > 0 && (
                     <div className="pagination">
                       <p>
                         <span>
                           Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
-                          {Math.min(indexOfLastStaff, filteredStaff.length)} của{" "}
-                          {filteredStaff.length} mục{" "}
+                          {Math.min(indexOfLastStaff, filteredStaff.length)}{" "}
+                          trên {filteredStaff.length} nhân viên{" "}
                         </span>
                       </p>
                       <ul className="pagination-list">
@@ -469,7 +491,6 @@ const Staff = () => {
           </div>
         </>
       )}
-
       {popup.show && (
         <Popup
           title={popup.title}

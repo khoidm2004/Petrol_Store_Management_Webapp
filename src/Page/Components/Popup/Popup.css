@@ -1,11 +1,11 @@
 .popup-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  max-width: 350px;
+  left: 50%;
+  top: 6%;
+  transform: translate(-50%, -50%);
+  max-width: 400px;
   z-index: 1000;
   animation: popupAppear 0.3s ease-in-out;
-  margin-bottom: 10px; /* Add margin to separate multiple popups */
 }
 
 .popup-row {
@@ -44,21 +44,16 @@
   font-weight: bold;
   border-radius: 4px;
   margin-top: 16px;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.1
-  ); /* Add a slight background color for content */
+  background-color: rgba(0, 0, 0, 0.1); /* Add a slight background color for content */
 }
 
 @keyframes popupAppear {
   0% {
-    transform: translateY(20px); /* Dịch chuyển từ dưới lên */
+    transform: translateY(-50%) translateX(-50%) translateY(-20px); /* Move from above */
     opacity: 0;
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(-50%) translateX(-50%) translateY(0);
     opacity: 1;
   }
 }

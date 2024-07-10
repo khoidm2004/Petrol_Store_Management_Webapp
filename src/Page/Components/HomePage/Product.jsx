@@ -164,7 +164,7 @@ const Product = () => {
 
   return (
     <div className="revenue">
-      {showOverlay && (
+      {/* {showOverlay && (
         <div className="overlay">
           <div className="loader">
             <svg className="circular" viewBox="25 25 50 50">
@@ -180,12 +180,11 @@ const Product = () => {
             </svg>
           </div>
         </div>
-      )}
+      )} */}
 
       <header className="header_staff">
         <p>THÔNG TIN MẶT HÀNG</p>
         <div className="search-container">
-          {/* <FaMagnifyingGlass className="search-icon" /> */}
           <input
             type="text"
             placeholder="Search..."
@@ -207,7 +206,9 @@ const Product = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>STT</th>
+                <th className="center_sum">STT</th>
+                <th>Mã mặt hàng</th>
+
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
@@ -224,14 +225,13 @@ const Product = () => {
             <tbody>
               {displayedStaff.length > 0 ? (
                 displayedStaff.map((ProductMember, index) => (
-                  <tr
+                  <tr 
                     key={ProductMember.productId}
-                    className="col"
-                    id="mainstate"
                   >
-                    <td>{indexOfFirstStaff + index + 1}</td>
+                    <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
+                    <td>{ProductMember.productCode}</td>
                     <td>
-                      {ProductMember.productCode} - {ProductMember.productName}
+                       {ProductMember.productName}
                     </td>
                     <td className="icon_editview">
                       <TbEyeEdit
@@ -243,7 +243,7 @@ const Product = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="no-data">
+                  <td colSpan="4" className="center_sum">
                     {searchQuery
                       ? "Không tìm thấy thông tin mặt hàng."
                       : "Chưa có thông tin mặt hàng."}
@@ -251,14 +251,14 @@ const Product = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="3" className="noLine">
+                <td colSpan="4" className="noLine">
                   {displayedStaff.length > 0 && (
                     <div className="pagination">
                       <p>
                         <span>
                           Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
-                          {Math.min(indexOfLastStaff, filteredStaff.length)} của{" "}
-                          {filteredStaff.length} mục
+                          {Math.min(indexOfLastStaff, filteredStaff.length)} trên{" "}
+                          {filteredStaff.length} mặt hàng
                         </span>
                       </p>
                       <ul className="pagination-list">

@@ -4,8 +4,8 @@ import "chart.js/auto";
 import "./Revenue.css";
 import useFetchLog from "../../../hooks/FetchHooks/useFetchLog.js";
 import { timeConverter } from "../../../utils/timeConverter.js";
-import { AiOutlineClose,AiOutlineProduct } from "react-icons/ai";
-import { GiFuelTank} from "react-icons/gi";
+import { AiOutlineClose, AiOutlineProduct } from "react-icons/ai";
+import { GiFuelTank } from "react-icons/gi";
 import { PiGasPumpBold } from "react-icons/pi";
 import { IoMdPeople } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -15,67 +15,71 @@ import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
 import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
-
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Revenue = () => {
-    const { product, fetchProduct } = useProductStore();
-    const { staff, fetchStaff } = useStaffStore();
-    const { pumps, fetchPump } = usePumpStore();
-    const { tanks, fetchTank } = useTankStore();
-    const [selectedDateLog, setSelectedDateLog] = useState(new Date());
-    const [selectedDateRevenue, setSelectedDateRevenue] = useState(new Date());
-    const [selectedDatePumpRevenue, setSelectedDatePumpRevenue] = useState(new Date());
-    const formattedSelectedDateLog = selectedDateLog.toISOString().slice(0, 10) ;
-    const formattedSelectedDateRevenue = selectedDateRevenue.toISOString().slice(0, 10) ;
-    const formattedSelectedDatePumpRevenue = selectedDatePumpRevenue.toISOString().slice(0, 10) ;
-    const [logData, setLogData] = useState([]);
-    const [dailyData, setDailyData] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [totalIncome, setTotalIncome] = useState(0);
-    const [totalQuantity, setTotalQuantity] = useState(0);
-    const [logExists, setLogExists] = useState(false);
-    const [showBarDetail, setShowBarDetail] = useState(false);
-    const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
-    const [leftData, setLeftData] = useState([]);
+  const { product, fetchProduct } = useProductStore();
+  const { staff, fetchStaff } = useStaffStore();
+  const { pumps, fetchPump } = usePumpStore();
+  const { tanks, fetchTank } = useTankStore();
+  const [selectedDateLog, setSelectedDateLog] = useState(new Date());
+  const [selectedDateRevenue, setSelectedDateRevenue] = useState(new Date());
+  const [selectedDatePumpRevenue, setSelectedDatePumpRevenue] = useState(
+    new Date()
+  );
+  const formattedSelectedDateLog = selectedDateLog.toISOString().slice(0, 10);
+  const formattedSelectedDateRevenue = selectedDateRevenue
+    .toISOString()
+    .slice(0, 10);
+  const formattedSelectedDatePumpRevenue = selectedDatePumpRevenue
+    .toISOString()
+    .slice(0, 10);
+  const [logData, setLogData] = useState([]);
+  const [dailyData, setDailyData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [logExists, setLogExists] = useState(false);
+  const [showBarDetail, setShowBarDetail] = useState(false);
+  const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
+  const [leftData, setLeftData] = useState([]);
 
-    const handleDateChangeLog = (e) => {
-      setSelectedDateLog(e);
-    };
+  const handleDateChangeLog = (e) => {
+    setSelectedDateLog(e);
+  };
 
+  const handleDateChangeRevenue = (e) => {
+    setSelectedDateRevenue(e);
+  };
 
-    const handleDateChangeRevenue = (e) => {
-      setSelectedDateRevenue(e);
-    };
+  const handleDateChangePumpRevenue = (e) => {
+    setSelectedDatePumpRevenue(e);
+  };
 
-    const handleDateChangePumpRevenue = (e) => {
-      setSelectedDatePumpRevenue(e);
-    };
+  const formattedDateLog = selectedDateLog.toLocaleDateString("vi-VN", {
+    month: "numeric",
+    year: "numeric",
+    day: "numeric",
+  });
 
-    const formattedDateLog = selectedDateLog.toLocaleDateString("vi-VN", {
-      month: "numeric",
-      year: "numeric",
-      day: "numeric"
-    });
-
-    const formattedDateRevenue = selectedDateRevenue.toLocaleDateString("vi-VN", {
-      month: "numeric",
-      year: "numeric",
-      day: "numeric"
-    });
+  const formattedDateRevenue = selectedDateRevenue.toLocaleDateString("vi-VN", {
+    month: "numeric",
+    year: "numeric",
+    day: "numeric",
+  });
 
   const formatDatestring = (dateString) => {
     const [day, month, year] = dateString.split("/");
     return `Ngày ${day} tháng ${month} năm ${year}`;
   };
 
-    useEffect(() => {
-      fetchProduct();
-      fetchTank();
-      fetchPump();
-      fetchStaff();
-    }, [fetchTank]);
+  useEffect(() => {
+    fetchProduct();
+    fetchTank();
+    fetchPump();
+    fetchStaff();
+  }, [fetchTank]);
 
   const staffNumber = staff.filter(
     (staffMember) => staffMember.workingStatus === "IS WORKING"
@@ -84,201 +88,235 @@ const Revenue = () => {
   const pumpNumber = pumps.length;
   const tankNumber = tanks.length;
 
-    useEffect(() => {
-      const fetchLogs = async () => {
-        const result = await useFetchLog();
-        setLogData(result);
-        if (result.Status !== "error") {
-          const logs = result.filter(log => {
-            const logDate = new Date(log.startTime).toISOString().slice(0, 10);  
-            return logDate === formattedSelectedDateLog;
-          });
-          setDailyData(logs);
-          setTotal(logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0));
-        }
-      };
-      fetchLogs();
-    }, [formattedSelectedDateLog]);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        setLeftData(tanks);
-        const totalQuantity = tanks.reduce(
-          (sum, item) => sum + parseInt(item.product.quantity_left),
-          0
+  useEffect(() => {
+    const fetchLogs = async () => {
+      const result = await useFetchLog();
+      setLogData(result);
+      if (result.Status !== "error") {
+        const logs = result.filter((log) => {
+          const logDate = new Date(log.startTime).toISOString().slice(0, 10);
+          return logDate === formattedSelectedDateLog;
+        });
+        setDailyData(logs);
+        setTotal(
+          logs.reduce((sum, item) => sum + parseInt(item.totalAmount), 0)
         );
-        const totalIncome = tanks.reduce(
-          (sum, item) => sum + parseInt(item.tankVolume),
-          0
-        );
-        setTotalIncome(totalIncome);
-        setTotalQuantity(totalQuantity);
-      };
-      fetchData();
-    }, [tanks]);
-
-    const [selectedItem, setSelectedItem] = useState(null);
-    const handleRowClick = useCallback((item) => {
-      setSelectedItem(item);
-    }, []);
-
-    const doughnutData = {
-      labels: ["Thể tích bể", "Mặt hàng tồn"],
-      datasets: [
-        {
-          label: "Tồn kho",
-          data: [totalQuantity, totalIncome],
-          backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
-          hoverOffset: 10,
-        },
-      ],
-    };
-
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setShowOverlay(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }, []);
-    const [dataRevenue, setDataRevenue] = useState([]);
-
-    useEffect(() => {
-      const fetchRevenueData = async () => {
-        try {
-          const revenueList = await useFetchRevenue();
-          setDataRevenue(revenueList);
-        } catch (error) {
-          console.error('Error fetching revenue data:', error);
-        }
-      };
-    
-      fetchRevenueData();
-    }, []);
-    
-    const selectDate = new Date(formattedSelectedDateRevenue);
-    const formatDate =  selectDate.toLocaleDateString()
-    const currentData = dataRevenue.find((entry) => timeConverter(Date.parse(entry.date)).date === formatDate) || {
-      items: [],
-    };
-
-    const barData = {
-      labels: currentData.items.map((item) => item.productName),
-      datasets: [
-        {
-          label: "DOANH THU",
-          data: currentData.items.map((item) => item.productRevenue),
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
-        },
-        {
-          label: "SẢN LƯỢNG",
-          data: currentData.items.map((item) => item.productQuantity),
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-          borderColor: "rgba(54, 162, 235, 1)",
-          borderWidth: 1,
-        },
-      ],
-    };
-    const [revenueData, setRevenueData] = useState([]);
-
-    useEffect(() => {
-      const fetchRevenueData = async () => {
-        try{
-          const result = await useFetchPumpRevenue();
-          setRevenueData(result);
-        } catch (error) {
-          console.error('Error fetching pump revenue:', error);
-      };
       }
-      fetchRevenueData();
-    }, []);
+    };
+    fetchLogs();
+  }, [formattedSelectedDateLog]);
 
-    const selectDatePumpRevenue = new Date(formattedSelectedDatePumpRevenue);
-    const formatDatePumpRevenue =  selectDatePumpRevenue.toLocaleDateString()
-    const pumpRevenueData = revenueData.find((entry) => timeConverter(Date.parse(entry.date)).date === formatDatePumpRevenue) || {
-      items: [],
+  useEffect(() => {
+    const fetchData = async () => {
+      setLeftData(tanks);
+      const totalQuantity = tanks.reduce(
+        (sum, item) => sum + parseInt(item.product.quantity_left),
+        0
+      );
+      const totalIncome = tanks.reduce(
+        (sum, item) => sum + parseInt(item.tankVolume),
+        0
+      );
+      setTotalIncome(totalIncome);
+      setTotalQuantity(totalQuantity);
+    };
+    fetchData();
+  }, [tanks]);
+
+  const [selectedItem, setSelectedItem] = useState(null);
+  const handleRowClick = useCallback((item) => {
+    setSelectedItem(item);
+  }, []);
+
+  const doughnutData = {
+    labels: ["Thể tích bể", "Mặt hàng tồn"],
+    datasets: [
+      {
+        label: "Tồn kho",
+        data: [totalQuantity, totalIncome],
+        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        hoverOffset: 10,
+      },
+    ],
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+  const [dataRevenue, setDataRevenue] = useState([]);
+
+  useEffect(() => {
+    const fetchRevenueData = async () => {
+      try {
+        const revenueList = await useFetchRevenue();
+        setDataRevenue(revenueList);
+      } catch (error) {
+        console.error("Error fetching revenue data:", error);
+      }
     };
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [perPage] = useState(5);
-    const indexOfLastStaff = currentPage * perPage;
-    const indexOfFirstStaff = indexOfLastStaff - perPage;
-    const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
-    const totalPages = Math.ceil(dailyData.length / perPage);
-    const handlePageChange = (page) => {
-      setCurrentPage(page);
+    fetchRevenueData();
+  }, []);
+
+  const selectDate = new Date(formattedSelectedDateRevenue);
+  const formatDate = selectDate.toLocaleDateString();
+  const currentData = dataRevenue.find(
+    (entry) => timeConverter(Date.parse(entry.date)).date === formatDate
+  ) || {
+    items: [],
+  };
+
+  const barData = {
+    labels: currentData.items.map((item) => item.productName),
+    datasets: [
+      {
+        label: "DOANH THU",
+        data: currentData.items.map((item) => item.productRevenue),
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "SẢN LƯỢNG",
+        data: currentData.items.map((item) => item.productQuantity),
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+  const [revenueData, setRevenueData] = useState([]);
+
+  useEffect(() => {
+    const fetchRevenueData = async () => {
+      try {
+        const result = await useFetchPumpRevenue();
+        setRevenueData(result);
+      } catch (error) {
+        console.error("Error fetching pump revenue:", error);
+      }
     };
+    fetchRevenueData();
+  }, []);
 
-    const [currentPageRevenue, setCurrentPageRevenue] = useState(1);
-    const [perPageRevenue] = useState(5);
-    const indexOfLastRevenue = currentPageRevenue * perPageRevenue;
-    const indexOfFirstRevenue = indexOfLastRevenue - perPageRevenue;
-    const displayedRevenue = currentData.items.slice(indexOfFirstRevenue, indexOfLastRevenue);
-    const totalPagesRevenue = Math.ceil(currentData.items.length / perPageRevenue);
-    const handlePageChangeRevenue = (page) => {
-      setCurrentPageRevenue(page);
-    };
+  const selectDatePumpRevenue = new Date(formattedSelectedDatePumpRevenue);
+  const formatDatePumpRevenue = selectDatePumpRevenue.toLocaleDateString();
+  const pumpRevenueData = revenueData.find(
+    (entry) =>
+      timeConverter(Date.parse(entry.date)).date === formatDatePumpRevenue
+  ) || {
+    items: [],
+  };
 
-    const [currentPageLeft, setCurrentPageLeft] = useState(1);
-    const [perPageLeft] = useState(4);
-    const indexOfLastLeft = currentPageLeft * perPageLeft;
-    const indexOfFirstLeft = indexOfLastLeft - perPageLeft;
-    const displayedLeft = leftData.slice(indexOfFirstLeft, indexOfLastLeft);
-    const totalPagesLeft = Math.ceil(leftData.length / perPageLeft);
-    const handlePageChangeLeft = (page) => {
-      setCurrentPageLeft(page);
-    };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(5);
+  const indexOfLastStaff = currentPage * perPage;
+  const indexOfFirstStaff = indexOfLastStaff - perPage;
+  const displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
+  const totalPages = Math.ceil(dailyData.length / perPage);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-    const [currentPagePumpRevenue, setCurrentPagePumpRevenue] = useState(1);
-    const [perPagePumpRevenue] = useState(4);
-    const indexOfLastPumpRevenue = currentPagePumpRevenue * perPagePumpRevenue;
-    const indexOfFirstPumpRevenue = indexOfLastPumpRevenue - perPagePumpRevenue;
-    const displayedPumpRevenue = pumpRevenueData.items.slice(indexOfFirstPumpRevenue, indexOfLastPumpRevenue);
-    const totalPagesPumpRevenue = Math.ceil(pumpRevenueData.items.length / perPagePumpRevenue);
-    const handlePageChangePumpRevenue = (page) => {
-      setCurrentPagePumpRevenue(page);
-    };  
+  const [currentPageRevenue, setCurrentPageRevenue] = useState(1);
+  const [perPageRevenue] = useState(5);
+  const indexOfLastRevenue = currentPageRevenue * perPageRevenue;
+  const indexOfFirstRevenue = indexOfLastRevenue - perPageRevenue;
+  const displayedRevenue = currentData.items.slice(
+    indexOfFirstRevenue,
+    indexOfLastRevenue
+  );
+  const totalPagesRevenue = Math.ceil(
+    currentData.items.length / perPageRevenue
+  );
+  const handlePageChangeRevenue = (page) => {
+    setCurrentPageRevenue(page);
+  };
 
-    const highlightDatesRevenue = dataRevenue.map(date => new Date(date.date));
-    const highlightDatesPumpRevenue = revenueData.map(date => new Date(date.date));
-    const highlightDatesLog = logData.map(date => new Date(date.startTime));
-    const [showOverlay, setShowOverlay] = useState(true);
+  const [currentPageLeft, setCurrentPageLeft] = useState(1);
+  const [perPageLeft] = useState(4);
+  const indexOfLastLeft = currentPageLeft * perPageLeft;
+  const indexOfFirstLeft = indexOfLastLeft - perPageLeft;
+  const displayedLeft = leftData.slice(indexOfFirstLeft, indexOfLastLeft);
+  const totalPagesLeft = Math.ceil(leftData.length / perPageLeft);
+  const handlePageChangeLeft = (page) => {
+    setCurrentPageLeft(page);
+  };
+
+  const [currentPagePumpRevenue, setCurrentPagePumpRevenue] = useState(1);
+  const [perPagePumpRevenue] = useState(4);
+  const indexOfLastPumpRevenue = currentPagePumpRevenue * perPagePumpRevenue;
+  const indexOfFirstPumpRevenue = indexOfLastPumpRevenue - perPagePumpRevenue;
+  const displayedPumpRevenue = pumpRevenueData.items.slice(
+    indexOfFirstPumpRevenue,
+    indexOfLastPumpRevenue
+  );
+  const totalPagesPumpRevenue = Math.ceil(
+    pumpRevenueData.items.length / perPagePumpRevenue
+  );
+  const handlePageChangePumpRevenue = (page) => {
+    setCurrentPagePumpRevenue(page);
+  };
+
+  const highlightDatesRevenue = dataRevenue.map((date) => new Date(date.date));
+  const highlightDatesPumpRevenue = revenueData.map(
+    (date) => new Date(date.date)
+  );
+  const highlightDatesLog = logData.map((date) => new Date(date.startTime));
+  const [showOverlay, setShowOverlay] = useState(true);
+
+  const formatNumberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
   return (
     <div className="revenue">
-      {showOverlay && 
-        <div className="overlay">
-          <div className="loader">
-            <svg className="circular" viewBox="25 25 50 50">
-              <circle className="path" cx="50" cy="50" r="20" fill="none" strokeWidth="2" strokeMiterlimit="10"/>
-            </svg>
-          </div>
-        </div>}
       <div className="tilte_revenue">
         <h1>Chuyên gia Xăng dầu số hàng đầu Việt Nam</h1>
         <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>
       </div>
       <div className="Row">
         <div className="chartRevenue">
-          <div className="title_xemChitiet Row">DOANH THU SẢN LƯỢNG
-              <DatePicker
-                selected={selectedDateRevenue}
-                onChange={handleDateChangeRevenue}
-                value={selectedDateRevenue}
-                dateFormat="yyyy-MM-dd"
-                className="inputRevenue"
-                highlightDates={highlightDatesRevenue}
-                shouldHighlightWeekends
-              />
+          <div className="title_xemChitiet Row">
+            DOANH THU SẢN LƯỢNG
+            <DatePicker
+              selected={selectedDateRevenue}
+              onChange={handleDateChangeRevenue}
+              value={selectedDateRevenue}
+              dateFormat="yyyy-MM-dd"
+              className="inputRevenue customDatePicker"
+              highlightDates={highlightDatesRevenue}
+              shouldHighlightWeekends
+            />
           </div>
           <div className="chart">
-            <Bar
-              data={barData}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-              }}
-            />
+            {currentData.items.length > 0 ? 
+             (<Bar
+             data={barData}
+             options={{
+               responsive: true,
+               maintainAspectRatio: false,
+             }}
+           />):(
+              <div className="over">
+                <div className="loader">
+                  <svg className="circular" viewBox="25 25 50 50">
+                    <circle
+                      className="path"
+                      cx="50"
+                      cy="50"
+                      r="20"
+                      fill="none"
+                      strokeWidth="2"
+                      strokeMiterlimit="10"
+                    />
+                  </svg>
+                </div>
+              </div>
+           )
+            }
           </div>
           <div className="button_xemChitiet">
             <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
@@ -290,7 +328,7 @@ const Revenue = () => {
               className="overlay"
               onClick={() => setShowBarDetail(false)}
             ></div>
-            <div className="viewShift">
+            <div className="viewShift viewRevenue">
               <AiOutlineClose
                 className="close_icon"
                 onClick={() => setShowBarDetail(false)}
@@ -299,12 +337,12 @@ const Revenue = () => {
               <hr></hr>
               <div>
                 <div className="date-selector">
-                <DatePicker
+                  <DatePicker
                     selected={selectedDateRevenue}
                     onChange={handleDateChangeRevenue}
                     value={selectedDateRevenue}
                     dateFormat="yyyy-MM-dd"
-                    className="inputRevenue"
+                    className="inputRevenue customDatePicker"
                     highlightDates={highlightDatesRevenue}
                     shouldHighlightWeekends
                   />
@@ -315,52 +353,113 @@ const Revenue = () => {
                     <table className="table firsttable">
                       <thead>
                         <tr>
-                          <th>STT</th>
+                          <th className="center_sum">STT</th>
                           <th>Mặt hàng</th>
-                          <th>Doanh thu</th>
-                          <th>Sản lượng</th>
+                          <th className="right_sum">Doanh thu</th>
+                          <th className="right_sum">Sản lượng</th>
                         </tr>
                       </thead>
                       <tbody>
                         {displayedRevenue.length > 0 ? (
                           displayedRevenue.map((item, index) => (
                             <tr key={index}>
-                              <td>{indexOfFirstRevenue + index + 1}</td>
+                              <td className="center_sum">
+                                {indexOfFirstRevenue + index + 1}
+                              </td>
                               <td>{item.productName}</td>
-                              <td>{item.productRevenue}</td>
-                              <td>{item.productQuantity}</td>
+                              <td className="right_sum">
+                                {formatNumberWithCommas(item.productRevenue)}
+                              </td>
+                              <td className="right_sum">
+                                {formatNumberWithCommas(item.productQuantity)}
+                              </td>
                             </tr>
                           ))
                         ) : (
                           <tr>
-                            <td colSpan="4" className="no-data">
+                            <td colSpan="4" className="center_sum">
                               Không có dữ liệu
                             </td>
                           </tr>
                         )}
-                          {displayedRevenue.length > 0 && (
+                        {displayedRevenue.length > 0 && (
                           <tr>
                             <td colSpan="4" className="noLine">
                               <div className="pagination">
-                                  <p>
-                                    <span>Đang Hiển Thị {indexOfFirstRevenue+ 1} Đến {Math.min(indexOfLastRevenue, currentData.items.length)} Của {currentData.items.length} doanh thu/Sản lượng</span>
-                                  </p>
-                                  <ul className="pagination-list">
-                                    <li className={`pagination-item ${currentPageRevenue === 1 ? 'disabled' : ''}`}>
-                                      <button onClick={() => handlePageChangeRevenue(currentPageRevenue - 1)} disabled={currentPageRevenue === 1}>Previous</button>
-                                    </li>
-                                    {Array.from({ length: totalPagesRevenue }, (_, index) => (
-                                      <li key={index} className={`pagination-item ${currentPageRevenue === index + 1 ? 'active' : ''}`}>
-                                        <button onClick={() => handlePageChangeRevenue(index + 1)}>{index + 1}</button>
+                                <p>
+                                  <span>
+                                    Đang hiển thị {indexOfFirstRevenue + 1} đến{" "}
+                                    {Math.min(
+                                      indexOfLastRevenue,
+                                      currentData.items.length
+                                    )}{" "}
+                                    / {currentData.items.length} của doanh thu
+                                    và sản lượng
+                                  </span>
+                                </p>
+                                <ul className="pagination-list">
+                                  <li
+                                    className={`pagination-item ${
+                                      currentPageRevenue === 1 ? "disabled" : ""
+                                    }`}
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        handlePageChangeRevenue(
+                                          currentPageRevenue - 1
+                                        )
+                                      }
+                                      disabled={currentPageRevenue === 1}
+                                    >
+                                      Previous
+                                    </button>
+                                  </li>
+                                  {Array.from(
+                                    { length: totalPagesRevenue },
+                                    (_, index) => (
+                                      <li
+                                        key={index}
+                                        className={`pagination-item ${
+                                          currentPageRevenue === index + 1
+                                            ? "active"
+                                            : ""
+                                        }`}
+                                      >
+                                        <button
+                                          onClick={() =>
+                                            handlePageChangeRevenue(index + 1)
+                                          }
+                                        >
+                                          {index + 1}
+                                        </button>
                                       </li>
-                                    ))}
-                                    <li className={`pagination-item ${currentPageRevenue === totalPagesRevenue ? 'disabled' : ''}`}>
-                                      <button onClick={() => handlePageChangeRevenue(currentPageRevenue + 1)} disabled={currentPageRevenue === totalPagesRevenue}>Next</button>
-                                    </li>
-                                  </ul>
+                                    )
+                                  )}
+                                  <li
+                                    className={`pagination-item ${
+                                      currentPageRevenue === totalPagesRevenue
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        handlePageChangeRevenue(
+                                          currentPageRevenue + 1
+                                        )
+                                      }
+                                      disabled={
+                                        currentPageRevenue === totalPagesRevenue
+                                      }
+                                    >
+                                      Next
+                                    </button>
+                                  </li>
+                                </ul>
                               </div>
                             </td>
-                        </tr>)}
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -372,13 +471,30 @@ const Revenue = () => {
         <div className="chartRevenue">
           <div className="title_xemChitiet">TỒN KHO</div>
           <div className="chart">
-            <Doughnut
-              data={doughnutData}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-              }}
-            />
+              {tanks.length > 0 ? 
+                ( <Doughnut
+                  data={doughnutData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                  }}
+                />):(
+                  <div className="over">
+                  <div className="loader">
+                    <svg className="circular" viewBox="25 25 50 50">
+                      <circle
+                        className="path"
+                        cx="50"
+                        cy="50"
+                        r="20"
+                        fill="none"
+                        strokeWidth="2"
+                        strokeMiterlimit="10"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              )}
           </div>
           <div className="button_xemChitiet">
             <button
@@ -412,54 +528,109 @@ const Revenue = () => {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>STT</th>
+                        <th className="center_sum">STT</th>
                         <th>Bể</th>
-                        <th>Thể tích bể</th>
+                        <th className="right_sum">Thể tích bể</th>
                         <th>Mặt hàng tồn</th>
-                        <th>Số lượng </th>
+                        <th className="right_sum">Số lượng </th>
                       </tr>
                     </thead>
                     <tbody>
                       {displayedLeft.length > 0 ? (
-                      displayedLeft.map((item, index) => (
-                        <tr key={index} onClick={() => handleRowClick(item)}>
-                          <td>{indexOfFirstLeft + index + 1}</td>
-                          <td>{item.tankName}</td>
-                          <td>{item.tankVolume}</td>
-                          <td>{item.product.productName}</td>
-                          <td>{item.product.quantity_left}</td>
-                        </tr>
-                      ))) : (
+                        displayedLeft.map((item, index) => (
+                          <tr key={index} onClick={() => handleRowClick(item)}>
+                            <td className="center_sum">
+                              {indexOfFirstLeft + index + 1}
+                            </td>
+                            <td>{item.tankName}</td>
+                            <td className="right_sum">
+                              {formatNumberWithCommas(item.tankVolume)}
+                            </td>
+                            <td>{item.product.productName}</td>
+                            <td className="right_sum">
+                              {formatNumberWithCommas(
+                                item.product.quantity_left
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
                         <tr>
-                          <td colSpan="5" className="no-data">
+                          <td colSpan="5" className="center_sum">
                             Chưa có dữ liệu về tồn kho của bể
                           </td>
                         </tr>
-                      )
-                    }
-                    {displayedLeft.length > 0 && (
-                          <tr>
-                            <td colSpan="5" className="noLine">
-                              <div className="pagination">
-                                  <p>
-                                    <span>Đang Hiển Thị {indexOfFirstLeft+ 1} Đến {Math.min(indexOfLastLeft, leftData.length)} Của {leftData.length} Bể</span>
-                                  </p>
-                                  <ul className="pagination-list">
-                                    <li className={`pagination-item ${currentPageLeft === 1 ? 'disabled' : ''}`}>
-                                      <button onClick={() => handlePageChangeLeft(currentPageLeft - 1)} disabled={currentPageLeft === 1}>Previous</button>
+                      )}
+                      {displayedLeft.length > 0 && (
+                        <tr>
+                          <td colSpan="5" className="noLine">
+                            <div className="pagination">
+                              <p>
+                                <span>
+                                  Đang Hiển Thị {indexOfFirstLeft + 1} Đến{" "}
+                                  {Math.min(indexOfLastLeft, leftData.length)}{" "}
+                                  Của {leftData.length} Bể
+                                </span>
+                              </p>
+                              <ul className="pagination-list">
+                                <li
+                                  className={`pagination-item ${
+                                    currentPageLeft === 1 ? "disabled" : ""
+                                  }`}
+                                >
+                                  <button
+                                    onClick={() =>
+                                      handlePageChangeLeft(currentPageLeft - 1)
+                                    }
+                                    disabled={currentPageLeft === 1}
+                                  >
+                                    Previous
+                                  </button>
+                                </li>
+                                {Array.from(
+                                  { length: totalPagesLeft },
+                                  (_, index) => (
+                                    <li
+                                      key={index}
+                                      className={`pagination-item ${
+                                        currentPageLeft === index + 1
+                                          ? "active"
+                                          : ""
+                                      }`}
+                                    >
+                                      <button
+                                        onClick={() =>
+                                          handlePageChangeLeft(index + 1)
+                                        }
+                                      >
+                                        {index + 1}
+                                      </button>
                                     </li>
-                                    {Array.from({ length: totalPagesLeft }, (_, index) => (
-                                      <li key={index} className={`pagination-item ${currentPageLeft === index + 1 ? 'active' : ''}`}>
-                                        <button onClick={() => handlePageChangeLeft(index + 1)}>{index + 1}</button>
-                                      </li>
-                                    ))}
-                                    <li className={`pagination-item ${currentPageLeft === totalPagesLeft ? 'disabled' : ''}`}>
-                                      <button onClick={() => handlePageChangeLeft(currentPageLeft + 1)} disabled={currentPageLeft === totalPagesLeft}>Next</button>
-                                    </li>
-                                  </ul>
-                              </div>
-                            </td>
-                        </tr>)}
+                                  )
+                                )}
+                                <li
+                                  className={`pagination-item ${
+                                    currentPageLeft === totalPagesLeft
+                                      ? "disabled"
+                                      : ""
+                                  }`}
+                                >
+                                  <button
+                                    onClick={() =>
+                                      handlePageChangeLeft(currentPageLeft + 1)
+                                    }
+                                    disabled={
+                                      currentPageLeft === totalPagesLeft
+                                    }
+                                  >
+                                    Next
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                   {selectedItem && (
@@ -509,69 +680,125 @@ const Revenue = () => {
           <header className="headerRevenue">
             <p>DOANH THU VÒI BƠM</p>
             <div>
-            <DatePicker
+              <DatePicker
                 selected={selectedDatePumpRevenue}
                 onChange={handleDateChangePumpRevenue}
                 value={selectedDatePumpRevenue}
                 dateFormat="yyyy-MM-dd"
-                className="inputRevenue"
+                className="inputRevenue customDatePicker"
                 highlightDates={highlightDatesPumpRevenue}
                 shouldHighlightWeekends
               />
-                </div>
+            </div>
           </header>
           <div className="doanh_thuTable ">
             <table className="firsttable_shift">
               <thead>
-                <tr className="titleOneline">
-                  <th>STT</th>
+                <tr>
+                  <th className="center_sum">STT</th>
                   <th>Vòi bơm</th>
                   <th>Mặt hàng</th>
-                  <th>Số đầu - số cuối</th>
+                  <th className="right_sum">Số đầu</th>
+                  <th className="right_sum">Số cuối</th>
                 </tr>
               </thead>
               <tbody>
                 {displayedPumpRevenue.length > 0 ? (
                   displayedPumpRevenue.map((staffMember, index) => (
-                    <tr key={staffMember.id } className="col" id="mainstate">
-                      <td>{indexOfFirstPumpRevenue + index + 1}</td>
+                    <tr key={staffMember.id} className="col" id="mainstate">
+                      <td className="center_sum">{indexOfFirstPumpRevenue + index + 1}</td>
                       <td>{staffMember.pumpName}</td>
                       <td>{staffMember.productName}</td>
-                      <td>
-                        {staffMember.fNum} - {staffMember.lNum}
+                      <td className="right_sum"> {formatNumberWithCommas(staffMember.fNum)}</td>
+                      <td className="right_sum">
+                        {formatNumberWithCommas(staffMember.lNum)}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="no-data">
+                    <td colSpan="5" className="center_sum">
                       Chưa có dữ liệu về doanh thu vòi bơm
                     </td>
                   </tr>
                 )}
                 {displayedPumpRevenue.length > 0 && (
-                          <tr>
-                            <td colSpan="5" className="noLine">
-                              <div className="pagination">
-                                  <p>
-                                    <span>Đang Hiển Thị {indexOfFirstPumpRevenue+ 1} Đến {Math.min(indexOfLastPumpRevenue, pumpRevenueData.items.length)} Của {pumpRevenueData.items.length} Vòi Bơm</span>
-                                  </p>
-                                  <ul className="pagination-list">
-                                    <li className={`pagination-item ${currentPagePumpRevenue === 1 ? 'disabled' : ''}`}>
-                                      <button onClick={() => handlePageChangePumpRevenue(currentPagePumpRevenue - 1)} disabled={currentPagePumpRevenue === 1}>Previous</button>
-                                    </li>
-                                    {Array.from({ length: totalPagesPumpRevenue }, (_, index) => (
-                                      <li key={index} className={`pagination-item ${currentPagePumpRevenue === index + 1 ? 'active' : ''}`}>
-                                        <button onClick={() => handlePageChangePumpRevenue(index + 1)}>{index + 1}</button>
-                                      </li>
-                                    ))}
-                                    <li className={`pagination-item ${currentPagePumpRevenue === totalPagesPumpRevenue ? 'disabled' : ''}`}>
-                                      <button onClick={() => handlePageChangePumpRevenue(currentPagePumpRevenue + 1)} disabled={currentPagePumpRevenue === totalPagesPumpRevenue}>Next</button>
-                                    </li>
-                                  </ul>
-                              </div>
-                            </td>
-                        </tr>)}
+                  <tr>
+                    <td colSpan="5" className="noLine">
+                      <div className="pagination">
+                        <p>
+                          <span>
+                            Đang Hiển Thị {indexOfFirstPumpRevenue + 1} Đến{" "}
+                            {Math.min(
+                              indexOfLastPumpRevenue,
+                              pumpRevenueData.items.length
+                            )}{" "}
+                            Của {pumpRevenueData.items.length} Vòi Bơm
+                          </span>
+                        </p>
+                        <ul className="pagination-list">
+                          <li
+                            className={`pagination-item ${
+                              currentPagePumpRevenue === 1 ? "disabled" : ""
+                            }`}
+                          >
+                            <button
+                              onClick={() =>
+                                handlePageChangePumpRevenue(
+                                  currentPagePumpRevenue - 1
+                                )
+                              }
+                              disabled={currentPagePumpRevenue === 1}
+                            >
+                              Previous
+                            </button>
+                          </li>
+                          {Array.from(
+                            { length: totalPagesPumpRevenue },
+                            (_, index) => (
+                              <li
+                                key={index}
+                                className={`pagination-item ${
+                                  currentPagePumpRevenue === index + 1
+                                    ? "active"
+                                    : ""
+                                }`}
+                              >
+                                <button
+                                  onClick={() =>
+                                    handlePageChangePumpRevenue(index + 1)
+                                  }
+                                >
+                                  {index + 1}
+                                </button>
+                              </li>
+                            )
+                          )}
+                          <li
+                            className={`pagination-item ${
+                              currentPagePumpRevenue === totalPagesPumpRevenue
+                                ? "disabled"
+                                : ""
+                            }`}
+                          >
+                            <button
+                              onClick={() =>
+                                handlePageChangePumpRevenue(
+                                  currentPagePumpRevenue + 1
+                                )
+                              }
+                              disabled={
+                                currentPagePumpRevenue === totalPagesPumpRevenue
+                              }
+                            >
+                              Next
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -612,13 +839,12 @@ const Revenue = () => {
             <h6>LƯỢNG TỒN TRONG CA</h6>
             <hr />
             <div className="date-selector">
-
-             <DatePicker
+              <DatePicker
                 selected={selectedDateLog}
                 onChange={handleDateChangeLog}
                 value={selectedDateLog}
                 dateFormat="yyyy-MM-dd"
-                className="inputRevenue"
+                className="inputRevenue customDatePicker"
                 highlightDates={highlightDatesLog}
                 shouldHighlightWeekends
               />
@@ -628,7 +854,7 @@ const Revenue = () => {
               <div className="table-container">
                 <table className="table">
                   <thead>
-                    <tr>
+                    <tr className="center_sum">
                       <th>Giờ phát sinh</th>
                       <th>Thành tiền</th>
                     </tr>
@@ -636,35 +862,41 @@ const Revenue = () => {
                   <tbody>
                     {displayedStaff.length > 0 ? (
                       displayedStaff.map((item, index) => (
-                        <tr key={index}>
+                        <tr key={index} className="center_sum">
                           <td>
                             {timeConverter(Date.parse(item.startTime)).time}
                           </td>
-                          <td>{item.totalAmount}</td>
+                          <td> {formatNumberWithCommas(item.totalAmount)}</td>
                         </tr>
-                      ))) : (
-                        <tr>
-                          <td colSpan="2" className="no-data noLog">
-                            Không có dữ liệu về log phát sinh
-                          </td>
-                        </tr>
-                      )}
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="2"
+                          className="center_sum"
+                        >
+                          Không có dữ liệu về log phát sinh
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                   <tfoot>
-                  {displayedStaff.length > 4 ? (
-                        <tr>
-                          <td className="center_sum" colSpan={2}>....</td>
-                        </tr>
+                    {displayedStaff.length > 4 ? (
+                      <tr>
+                        <td className="center_sum" colSpan={2}>
+                          ....
+                        </td>
+                      </tr>
                     ) : null}
-                  {displayedStaff.length > 0 ? (
-                            <tr>
-                              <th className="left_sum">Tổng:</th>
-                              <th className="right_sum" colSpan={5}>
-                                {total.toLocaleString("vi-VN")}
-                              </th>
-                            </tr>
-                        ) : null}
-                    </tfoot>
+                    {displayedStaff.length > 0 ? (
+                      <tr>
+                        <th className="left_sum">Tổng:</th>
+                        <th className="center_sum" colSpan={5}>
+                        {formatNumberWithCommas(total.toLocaleString("vi-VN"))}
+                        </th>
+                      </tr>
+                    ) : null}
+                  </tfoot>
                 </table>
               </div>
             </div>
@@ -690,12 +922,12 @@ const Revenue = () => {
                 <hr />
                 <div>
                   <div className="date-selector">
-                  <DatePicker
+                    <DatePicker
                       selected={selectedDateLog}
                       onChange={handleDateChangeLog}
                       value={selectedDateLog}
                       dateFormat="yyyy-MM-dd"
-                      className="inputRevenue"
+                      className="inputRevenue customDatePicker"
                       highlightDates={highlightDatesLog}
                       shouldHighlightWeekends
                     />
@@ -706,19 +938,19 @@ const Revenue = () => {
                       <table className="table">
                         <thead>
                           <tr>
-                            <th>Giờ phát sinh</th>
+                            <th className="center_sum">Giờ phát sinh</th>
                             <th>Mặt hàng</th>
                             <th>Vòi bơm</th>
-                            <th>Đơn giá</th>
-                            <th>Số lượng</th>
-                            <th>Thành tiền</th>
+                            <th className="right_sum">Đơn giá</th>
+                            <th className="right_sum">Số lượng</th>
+                            <th className="right_sum">Thành tiền</th>
                           </tr>
                         </thead>
                         <tbody>
                           {displayedStaff.length > 0 ? (
                             displayedStaff.map((item, index) => (
                               <tr key={index}>
-                                <td>
+                                <td className="center_sum">
                                   {
                                     timeConverter(Date.parse(item.startTime))
                                       .time
@@ -726,41 +958,54 @@ const Revenue = () => {
                                 </td>
                                 <td>{item.productName}</td>
                                 <td>{item.pumpName}</td>
-                                <td>{item.productPrice}</td>
-                                <td>{item.quantity}</td>
-                                <td>{item.totalAmount}</td>
+                                <td className="right_sum">{formatNumberWithCommas(item.productPrice)}</td>
+                                <td className="right_sum">{item.quantity}</td>
+                                <td className="right_sum">{formatNumberWithCommas(item.totalAmount)}</td>
                               </tr>
-                            ))) : (
-                              <tr>
-                                <td colSpan="6" className="no-data">
-                                  Không có dữ liệu về log phát sinh
-                                </td>
-                              </tr>
-                            )
-                          }
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                colSpan="6"
+                                className="center_sum
+        "
+                              >
+                                Không có dữ liệu về log phát sinh
+                              </td>
+                            </tr>
+                          )}
                         </tbody>
                         <tfoot>
-                        {displayedStaff.length > 4 ? (
-                          <tr>
-                            <td colSpan={6} className="center_sum"> .....</td>
-                          </tr>
-                        ) : null}
-                        {displayedStaff.length > 0 ? (
+                          {displayedStaff.length > 4 ? (
                             <tr>
-                              <td className="left_sum">Tổng:</td>
-                              <td className="right_sum" colSpan={5}>
+                              <td colSpan={6} className="center_sum">
+                                {" "}
+                                .....
+                              </td>
+                            </tr>
+                          ) : null}
+                          {displayedStaff.length > 0 ? (
+                            <tr>
+                              <td className="left_sum" colSpan={5}>
+                                Tổng:
+                              </td>
+                              <td className="right_sum">
                                 {total.toLocaleString("vi-VN")}
                               </td>
                             </tr>
-                        ) : null}
+                          ) : null}
                         </tfoot>
                       </table>
                     </div>
                     {displayedStaff.length > 0 && (
                       <div className="pagination">
-                         <p>
-                            <span>Đang Hiển Thị {indexOfFirstStaff+ 1} Đến {Math.min(indexOfLastStaff, dailyData.length)} Của {dailyData.length} Log </span>
-                          </p>
+                        <p>
+                          <span>
+                            Đang Hiển Thị {indexOfFirstStaff + 1} Đến{" "}
+                            {Math.min(indexOfLastStaff, dailyData.length)} Của{" "}
+                            {dailyData.length} Log{" "}
+                          </span>
+                        </p>
                         <ul className="pagination-list">
                           <li
                             className={`pagination-item ${

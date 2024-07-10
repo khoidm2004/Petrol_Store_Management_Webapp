@@ -109,6 +109,7 @@ th {
 h2 {
   text-align: center;
 }
+
 tr:hover {
   background-color: #f3f7fc;
   color: #0f0f0f;
@@ -323,11 +324,6 @@ tr:hover {
   transform: scale(1.1);
 }
 
-.no-data {
-  text-align: center;
-  font-weight: bold;
-  color: red;
-}
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -337,7 +333,8 @@ tr:hover {
 
 .pagination p {
   display: flex;
-  font-weight: bold;
+  font-size: 17px;
+  font-weight: 500;
 }
 
 .pagination-list {
@@ -400,6 +397,7 @@ tr:hover {
   width: 50%;
   text-align: right;
 }
+
 /* Responsive Design */
 @media (min-width: 1400px) {
   .chart-container {

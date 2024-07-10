@@ -175,6 +175,9 @@
   align-items: center;
   margin-bottom: 20px;
 }
+.viewRevenue{
+  width: 70%;
+}
 
 .content {
   display: flex;
@@ -194,7 +197,6 @@
 }
 
 .table thead th {
-  text-align: center;
   border: 0px solid #ddd;
   background-color: #f3f7fc;
   font-weight: 700;
@@ -203,7 +205,6 @@
 }
 
 .table tbody td {
-  text-align: center;
   padding: 10px;
   border-bottom: 1px solid black;
   cursor: pointer;
@@ -217,12 +218,14 @@
 
 .left_sum {
   text-align: left;
-  font-weight: bold;
 }
 
 .right_sum {
   text-align: right;
-  font-weight: bold;
+}
+
+.number_STT{
+  width: 100px;
 }
 
 .center_sum {
@@ -232,26 +235,6 @@
 .inputRevenue {
   font-size: 10px;
 }
-
-.loader {
-  position: fixed;
-  z-index: 9999;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  margin: auto;
-  border-radius: 50%;
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #1882c8;
-  animation: spin 1s infinite linear;
-}
-
-.right {
-  text-align: right;
-}
-
 .headerRevenue {
   display: flex;
   align-items: center;
@@ -288,7 +271,6 @@
   .table-container {
     display: flex;
     flex-direction: column-reverse;
-    text-align: center;
     align-items: center;
     overflow-x: auto;
   }
@@ -369,7 +351,6 @@
   }
   
   .table thead th{
-    text-align: center;
     border: 0px solid #ddd;
     background-color: #f3f7fc;
     font-weight: 700;
@@ -378,7 +359,6 @@
   }
 
   .table tbody td {
-    text-align: center;
     padding: 10px;
     border-bottom: 1px solid black;
     cursor: pointer;
@@ -392,16 +372,10 @@
     
   .left_sum{
     text-align: left;
-    font-weight: bold;
   }
 
   .right_sum{
     text-align: right;
-    font-weight: bold;
-  }
-
-  .center_sum{
-    text-align: center;
   }
 
   .inputRevenue{
@@ -441,6 +415,7 @@
   .headerRevenue p{
     margin: 0;
   }
+
   @keyframes spin {
     0% { transform: rotate(0deg); } 
     100% { transform: rotate(360deg); } 
@@ -467,21 +442,11 @@
     .table-container {
       display: flex;
       flex-direction: column-reverse;
-      text-align: center;
       align-items: center;
       overflow-x: auto;
     }
   }
   
-  @media (min-width:770px) and (max-width:900px) {
-      .timeLog{
-        font-size: 18px;
-      }
-
-      .noLog{
-        font-size: 15px;
-      }
-  }
 
   @media (max-width: 768px) {
     .Row {
@@ -518,4 +483,32 @@
       width: 100%;
     }
   }
+}
+
+
+.customDatePicker {
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.loader {
+  position: absolute; 
+  top: 45%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #1882c8;
+  animation: spin 1s infinite linear;
+}
+
+.over {
+  position: relative; 
+  width: 100%;
+  height: 100%;
 }

@@ -53,15 +53,9 @@ const Pump = () => {
 
   useEffect(() => {
     fetchPump();
-  }, [fetchPump]);
-
-  useEffect(() => {
     fetchTank();
-  }, [fetchTank]);
-
-  useEffect(() => {
     fetchProduct();
-  }, [fetchProduct]);
+  }, [fetchPump]);
 
   useEffect(() => {
     if (product.length > 0) {
@@ -267,7 +261,7 @@ const Pump = () => {
 
   return (
     <div className="revenue">
-      {showOverlay && (
+      {/* {showOverlay && (
         <div className="overlay">
           <div class="loader">
             <svg class="circular" viewBox="25 25 50 50">
@@ -283,11 +277,10 @@ const Pump = () => {
             </svg>
           </div>
         </div>
-      )}
+      )} */}
       <header className="header_staff">
         <p>THÔNG TIN VÒI BƠM</p>
         <div className="search-container">
-          {/* <FaMagnifyingGlass className="search-icon" /> */}
           <input
             type="text"
             placeholder="Search..."
@@ -309,7 +302,8 @@ const Pump = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th>STT</th>
+                <th className="center_sum">STT</th>
+                <th>Mã vòi bơm</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
@@ -327,9 +321,10 @@ const Pump = () => {
               {displayedStaff.length > 0 ? (
                 displayedStaff.map((staffMember, index) => (
                   <tr key={staffMember.pumpCode} className="col" id="mainstate">
-                    <td>{indexOfFirstStaff + index + 1}</td>
+                    <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
+                    <td> {staffMember.pumpCode} </td>
                     <td>
-                      {staffMember.pumpCode} - {staffMember.pumpName}
+                      {staffMember.pumpName}
                     </td>
                     <td className="icon_editview">
                       <TbEyeEdit
@@ -341,7 +336,7 @@ const Pump = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="no-data">
+                  <td colSpan="4" className="center_sum">
                     {searchQuery
                       ? "Không tìm thấy thông tin Vòi bơm."
                       : "Chưa có thông tin vòi bơm."}
@@ -349,7 +344,7 @@ const Pump = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="3" className="noLine">
+                <td colSpan="4" className="noLine">
                   {displayedStaff.length > 0 && (
                     <div className="pagination">
                       <p>

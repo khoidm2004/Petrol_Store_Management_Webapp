@@ -23,10 +23,10 @@
   animation: fadeIn 1s ease-in-out;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInFromTop {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-100%);
   }
   to {
     opacity: 1;

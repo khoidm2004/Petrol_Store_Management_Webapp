@@ -254,7 +254,7 @@ const Shift = () => {
 
   return (
     <div className="revenue">
-      {showOverlay && (
+      {/* {showOverlay && (
         <div className="overlay">
           <div className="loader">
             <svg className="circular" viewBox="25 25 50 50">
@@ -264,13 +264,13 @@ const Shift = () => {
                 cy="50"
                 r="20"
                 fill="none"
-                stroke-width="2"
-                stroke-miterlimit="10"
+                strokeWidth="2"
+                strokeMiterlimit="10"
               />
             </svg>
           </div>
         </div>
-      )}
+      )} */}
       <header className="header_staff">
         <p>THÔNG TIN CA BÁN HÀNG</p>
         <div className="search-container">
@@ -295,7 +295,7 @@ const Shift = () => {
           <table className="firsttable_shift">
             <thead>
               <tr className="titleOneline">
-                <th>STT</th>
+                <th className="center_sum">STT</th>
                 <th>Ca bán hàng</th>
                 <th>Thời lượng</th>
                 <th>Nhân viên phụ trách</th>
@@ -316,7 +316,7 @@ const Shift = () => {
 
                   return (
                     <tr className="col" id="mainstate" key={shift.ShiftId}>
-                      <td>{indexOfFirstStaff + index + 1}</td>
+                      <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
                       <td>
                         {timeConverter(Date.parse(shift.startTime)).date} :{" "}
                         {timeConverter(Date.parse(shift.startTime)).time}
@@ -341,7 +341,7 @@ const Shift = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan={6} className="no-data">
+                  <td colSpan={6} className="center_sum">
                     Chưa tồn tại ca bán hàng
                   </td>
                 </tr>
@@ -644,7 +644,7 @@ const Shift = () => {
                                   productCode: selectedProduct.productCode,
                                   productName: selectedProduct.productName,
                                   productPrice: selectedProduct.productPrice,
-                                  pumpList: initialPumpList, 
+                                  pumpList: initialPumpList,
                                 },
                               },
                             }));
@@ -931,7 +931,7 @@ const Shift = () => {
                                   productCode: selectedProduct.productCode,
                                   productName: selectedProduct.productName,
                                   productPrice: selectedProduct.productPrice,
-                                  pumpList: initialPumpList, 
+                                  pumpList: initialPumpList,
                                 },
                               },
                             }));

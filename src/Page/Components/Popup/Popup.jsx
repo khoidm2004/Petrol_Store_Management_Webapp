@@ -13,7 +13,6 @@ const Popup = ({ title, message, status, onClose }) => {
   return (
     <div className="popup-row">
       <div className="popup-container">
-        {/* <AiOutlineClose onClick={onClose} className="close-icon" /> */}
         <br></br>
         <div className={`popup-content ${status}`}>
           <p>{title}</p>
