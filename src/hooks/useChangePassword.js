@@ -9,7 +9,7 @@ import { auth, firestore } from "../firebase/firebase";
 const useChangePassword = async (newPassword, email, currentPassword, uid) => {
   const user = auth.currentUser;
   if (!user) {
-    return { Title: "Error", Message: "No user is signed in", Status: "error" };
+    return { Title: "Lỗi", Message: "Người dùng chưa đăng nhập", Status: "error" };
   }
 
   try {
@@ -22,12 +22,12 @@ const useChangePassword = async (newPassword, email, currentPassword, uid) => {
     await updateDoc(userRef, { pass: newPassword });
 
     return {
-      Title: "Success",
-      Message: "Password updated successfully",
+      Title: "Thông báo",
+      Message: "Cập nhật thành công",
       Status: "success",
     };
   } catch (error) {
-    return { Title: "Error", Message: error.message, Status: "error" };
+    return { Title: "Lỗi", Message: error.message, Status: "error" };
   }
 };
 

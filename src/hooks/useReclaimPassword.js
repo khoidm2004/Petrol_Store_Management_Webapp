@@ -13,7 +13,7 @@ const useReclaimPassword = async (email) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     return {
-      Title: "Error",
+      Title: "Lỗi",
       Message: `Error Code:${errorCode} (${errorMessage})`,
       Status: "error",
     };

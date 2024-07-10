@@ -23,8 +23,8 @@ const useLogin = () => {
         return { Title: "Success" };
       } else {
         return {
-          Title: "Error",
-          Message: "UserCred Not Found",
+          Title: "Lỗi",
+          Message: "Không tìm thấy thông tin người dùng",
           Status: "error",
         };
       }

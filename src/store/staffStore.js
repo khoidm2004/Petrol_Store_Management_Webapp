@@ -43,8 +43,8 @@ const useStaffStore = create((set) => ({
 
       if (!staffQuerySnapshot.empty) {
         return {
-          Title: "Error",
-          Message: "Email has been used",
+          Title: "Lỗi",
+          Message: "Email đã được đăng ký",
           Status: "error",
         };
       }
@@ -58,13 +58,13 @@ const useStaffStore = create((set) => ({
         staff: [...state.staff, { id: staffId, ...newStaff, staffId }],
       }));
       return {
-        Title: "Success",
-        Message: "Adding Successfully",
+        Title: "Thông báo",
+        Message: "Thêm thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -94,8 +94,6 @@ const useStaffStore = create((set) => ({
         );
       });
 
-      console.log(shiftMatch);
-
       const batch = writeBatch(firestore);
       shiftMatch.forEach((shift) => {
         const shiftDocRef = doc(firestore, "shift", shift.shiftId);
@@ -116,13 +114,13 @@ const useStaffStore = create((set) => ({
         ),
       }));
       return {
-        Title: "Success",
-        Message: "Modifying Successfully",
+        Title: "Thông báo",
+        Message: "Chỉnh sửa thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -140,7 +138,7 @@ const useStaffStore = create((set) => ({
       const staffFullNameQuerySnapshot = await getDocs(qFullName);
 
       if (staffEmailQuerySnapshot.empty && staffFullNameQuerySnapshot.empty) {
-        return { Title: "Error", Message: "Staff Not Found", Status: "error" };
+        return { Title: "Lỗi", Message: "Không tìm thấy nhân viên", Status: "error" };
       }
 
       if (!staffEmailQuerySnapshot.empty) {
@@ -161,7 +159,7 @@ const useStaffStore = create((set) => ({
         set({ staff: staffList2 });
       }
     } catch (error) {
-      return { Title: "Error", Message: error.message, Status: "error" };
+      return { Title: "Lỗi", Message: error.message, Status: "error" };
     }
   },
 }));
