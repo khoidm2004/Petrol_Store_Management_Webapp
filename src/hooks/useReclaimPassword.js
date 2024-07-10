@@ -2,7 +2,6 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 
 const useReclaimPassword = async (email) => {
-
   try {
     await sendPasswordResetEmail(auth, email);
     return {
@@ -14,7 +13,7 @@ const useReclaimPassword = async (email) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     return {
-      Title: "Error",
+      Title: "Lỗi",
       Message: `Error Code:${errorCode} (${errorMessage})`,
       Status: "error",
     };

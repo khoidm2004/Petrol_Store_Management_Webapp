@@ -20,6 +20,13 @@ const useLogin = () => {
         const docSnap = await getDoc(docRef);
         localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
         loginUser(docSnap.data());
+        return { Title: "Success" };
+      } else {
+        return {
+          Title: "Lỗi",
+          Message: "Không tìm thấy thông tin người dùng",
+          Status: "error",
+        };
       }
     } catch (error) {
       return { Title: "Error", Message: error.message, Status: "error" };

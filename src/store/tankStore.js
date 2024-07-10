@@ -21,7 +21,6 @@ const useTankStore = create((set) => ({
       tid: doc.id,
       ...doc.data(),
     }));
-
     set({ tanks: tankList });
   },
 
@@ -46,8 +45,8 @@ const useTankStore = create((set) => ({
       const tankIdQuerySnapshot = await getDocs(qId);
       if (!tankIdQuerySnapshot.empty) {
         return {
-          Title: "Error",
-          Message: "Tank Id has been used",
+          Title: "Lỗi",
+          Message: "Id bể đã được sử dụng",
           Status: "error",
         };
       }
@@ -57,8 +56,8 @@ const useTankStore = create((set) => ({
       const tankCodeQuerySnapshot = await getDocs(qCode);
       if (!tankCodeQuerySnapshot.empty) {
         return {
-          Title: "Error",
-          Message: "Tank Code has been used",
+          Title: "Lỗi",
+          Message: "Mã bể đã được sử dụng",
           Status: "error",
         };
       }
@@ -72,20 +71,20 @@ const useTankStore = create((set) => ({
         tanks: [...state.tanks, { id: tid, ...newTank, tid }],
       }));
       return {
-        Title: "Success",
-        Message: "Adding Successfully",
+        Title: "Thông báo",
+        Message: "Thêm thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
     }
   },
 
-  //Able to modify everything except tid
+  //Able to modify everything except id
   modifyTank: async (inputs) => {
     try {
       const { tid, ...updatedTank } = inputs;
@@ -98,13 +97,13 @@ const useTankStore = create((set) => ({
         ),
       }));
       return {
-        Title: "Success",
-        Message: "Modifying Successfully",
+        Title: "Thành công",
+        Message: "Chỉnh sửa thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -128,7 +127,7 @@ const useTankStore = create((set) => ({
         tankCodeQuerySnapshot.empty &&
         tankNameQuerySnapshot.empty
       ) {
-        return { Title: "Error", Message: "Tank Not Found", Status: "error" };
+        return { Title: "Lỗi", Message: "Không tìm thấy bể", Status: "error" };
       }
 
       if (!tankIdQuerySnapshot.empty) {
@@ -158,7 +157,7 @@ const useTankStore = create((set) => ({
         set({ tanks: tankList3 });
       }
     } catch (error) {
-      return { Title: "Error", Message: error.message, Status: "error" };
+      return { Title: "Lỗi", Message: error.message, Status: "error" };
     }
   },
 }));

@@ -1,21 +1,10 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, getDocs, limit, query } from "firebase/firestore";
 import { firestore } from "../../firebase/firebase";
 
 const useFetchRevenue = async (limitAmount) => {
   try {
     const revenueRef = collection(firestore, "revenue");
-    const qRevenue = query(
-      revenueRef,
-      orderBy("date", "desc"),
-      limit(limitAmount)
-    );
+    const qRevenue = query(revenueRef, limit(limitAmount));
     const revenueSnapshot = await getDocs(qRevenue);
     const revenueList = revenueSnapshot.docs.map((doc) => ({
       rid: doc.rid,
@@ -23,7 +12,7 @@ const useFetchRevenue = async (limitAmount) => {
     }));
     return revenueList;
   } catch (error) {
-    return { Title: "Error", Message: error.message, Status: "error" };
+    return { Title: "Lỗi", Message: error.message, Status: "error" };
   }
 };
 

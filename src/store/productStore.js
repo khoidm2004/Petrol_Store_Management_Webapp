@@ -32,6 +32,7 @@ const useProductStore = create((set) => ({
       productId: doc.id,
       ...doc.data(),
     }));
+
     set({ product: productList });
   },
 
@@ -47,8 +48,8 @@ const useProductStore = create((set) => ({
 
       if (!productQuerySnapshot.empty) {
         return {
-          Title: "Error",
-          Message: "Product Code has been used",
+          Title: "Lỗi",
+          Message: "Mã sản phẩm đã được dùng",
           Status: "error",
         };
       }
@@ -64,13 +65,14 @@ const useProductStore = create((set) => ({
         ],
       }));
       return {
-        Title: "Success",
-        Message: "Adding Sucessfully",
+        Title: "Thông báo",
+        Message: "Thêm thành công",
         Status: "success",
+        productId: productId,
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -86,17 +88,17 @@ const useProductStore = create((set) => ({
 
       set((state) => ({
         product: state.product.map((item) =>
-          item.productId === productId ? { ...item, ...updatedProduct } : item
+          item.productId === productId ? { ...item, ...inputs } : item
         ),
       }));
       return {
-        Title: "Success",
-        Message: "Modifying Successfully",
+        Title: "Thông báo",
+        Message: "Chỉnh sửa thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -116,8 +118,8 @@ const useProductStore = create((set) => ({
 
       if (productCodeQuerySnapshot.empty && productNameQuerySnapshot.empty) {
         return {
-          Title: "Error",
-          Message: "Product Not Found",
+          Title: "Lỗi",
+          Message: "Không tìm thấy sản phẩm",
           Status: "error",
         };
       }
@@ -140,7 +142,7 @@ const useProductStore = create((set) => ({
         set({ product: productList2 });
       }
     } catch (error) {
-      return { Title: "Error", Message: error.message, Status: "error" };
+      return { Title: "Lỗi", Message: error.message, Status: "error" };
     }
   },
 }));

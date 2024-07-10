@@ -1,3 +1,4 @@
+// Hook uses to preview and change the image
 import { useState } from "react";
 
 const usePreviewImage = () => {
@@ -11,8 +12,8 @@ const usePreviewImage = () => {
       if (file.size > maxFileSizeInBytes) {
         setSelectedFile(null);
         setError({
-          Title: "Error",
-          Message: "File size must be less than 2MB",
+          Title: "Lỗi",
+          Message: "Kích thước file phải nhỏ hơn 2MB",
           Status: "error",
         });
         return;
@@ -31,7 +32,6 @@ const usePreviewImage = () => {
       setError(null);
     }
   };
-
   return { selectedFile, error, setSelectedFile, handleImageChange };
 };
 

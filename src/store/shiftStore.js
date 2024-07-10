@@ -25,10 +25,11 @@ const useShiftStore = create((set) => ({
 
   /*
   const newShift = {
+    shiftId: string
     startTime: number
     endTime: number
     pumpList: object{pumpName:string, pumpCode:string, firstMeterReadingByMoney:number, firstMeterReadingByLitre:number}
-    employeeList: object{fullName, email}
+    employeeList: array[]
     productList: object{productName, productCode, productPrice}
   }
   */
@@ -42,16 +43,16 @@ const useShiftStore = create((set) => ({
       await updateDoc(doc(firestore, "shift", shiftId), { shiftId });
 
       set((state) => ({
-        shifts: [...state.shifts, { id: shiftId, ...newShift, shiftId }],
+        shifts: [...state.shifts, { id: docRef, ...newShift, shiftId }],
       }));
       return {
-        Title: "Success",
-        Message: "Adding Successfully",
+        Title: "Thông báo",
+        Message: "Thêm thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
@@ -71,13 +72,13 @@ const useShiftStore = create((set) => ({
       }));
 
       return {
-        Title: "Success",
-        Description: "Modifying Successfully",
+        Title: "Thông báo",
+        Description: "Chỉnh sửa thành công",
         Status: "success",
       };
     } catch (error) {
       return {
-        Title: "Error",
+        Title: "Lỗi",
         Message: error.message,
         Status: "error",
       };
