@@ -1,15 +1,11 @@
+/* General Styles */
 .revenue {
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
   width: 100%;
 }
 
-.tilte_revenue {
+.title_revenue {
   margin-bottom: 20px;
-}
-
-.tilte_revenue h1,
-.tilte_revenue p {
-  text-align: center;
 }
 
 .Row {
@@ -23,33 +19,39 @@
   flex-direction: column;
 }
 
-/* Định dạng cho biểu đồ cột */
+.date-selector {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 .chartRevenue {
   width: 48%;
-  height: auto;
-  padding: 0px 0px 0px 0px;
+  padding: 0;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   border: 1px solid #166bcc;
-  border-top: 0px;
-  border-bottom: 0px;
+  border-top: 0;
+  border-bottom: 0;
 }
 
 .chart {
   height: 320px;
 }
+
 .title_xemChitiet {
+  height: 60px;
   width: 100%;
   padding: 10px;
   border: none;
   border-top: 1px solid #166bcc;
-  border-bottom: 0px;
+  border-bottom: 0;
   background-color: #f3f7fc;
   font-weight: bold;
   text-align: left;
   cursor: pointer;
-  border-radius: 8px 8px 0px 0px;
+  border-radius: 8px 8px 0 0;
 }
 
 .button_xemChitiet button {
@@ -58,10 +60,10 @@
   border: none;
   border-bottom: 1px solid #166bcc;
   background-color: #f3f7fc;
-  color: #000000;
+  color: #000;
   text-align: left;
   cursor: pointer;
-  border-radius: 0px 0px 6px 6px;
+  border-radius: 0 0 6px 6px;
   position: relative;
   overflow: hidden;
 }
@@ -70,11 +72,10 @@
   color: #004bb5;
   font-weight: 500;
 }
-/* ------------------ */
 
 .row_image {
   display: flex;
-  flex-wrap: wrap; /* Cho phép các phần tử chuyển xuống dòng khi không đủ không gian */
+  flex-wrap: wrap;
   justify-content: space-around;
   gap: 5px;
 }
@@ -87,7 +88,7 @@
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 2px;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 10px; /* Khoảng cách giữa các object_body */
+  margin-bottom: 10px;
 }
 
 .object_a {
@@ -106,13 +107,12 @@
   transform: translateY(-5px) scale(1.05);
   border-color: #004bb5;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
 }
 
 .object_box {
   position: absolute;
   top: 15px;
-  left: 0px;
+  left: 0;
   height: 32px;
   min-width: 30px;
   padding: 0 5px;
@@ -137,11 +137,28 @@
 }
 
 @media (max-width: 768px) {
-  .object_body {
-    flex: 1 1 40%; /* Đảm bảo các phần tử sẽ chuyển xuống dòng khi màn hình thu nhỏ hơn */
+  .pump_Revenue {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    height: 230px;
+  }
+
+  .chartRevenue {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .title_revenue h1 {
+    font-size: 20px;
+  }
+
+  .title_revenue p {
+    font-size: 14px;
   }
 }
-/* ---------------- */
+
 .doanh_thuTable {
   margin-top: 20px;
 }
@@ -156,26 +173,21 @@
 
 .borders {
   border: 2px solid #166bcc;
-  border-radius: 0px 0px 9px 9px;
-  border-top: 0px;
+  border-radius: 0 0 9px 9px;
+  border-top: 0;
 }
 
 .containerRevenue {
   margin: 0 auto;
   padding: 20px;
   border: 2px solid #166bcc;
-  border-bottom: 0px;
-  border-radius: 9px 9px 0px 0px;
+  border-bottom: 0;
+  border-radius: 9px 9px 0 0;
   width: 100%;
   background-color: #ffffff;
 }
 
-.date-selector {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.viewRevenue{
+.viewRevenue {
   width: 70%;
 }
 
@@ -191,13 +203,8 @@
   overflow-x: auto;
 }
 
-.pump_Revenue {
-  width: 300px;
-  height: auto;
-}
-
 .table thead th {
-  border: 0px solid #ddd;
+  border: 0 solid #ddd;
   background-color: #f3f7fc;
   font-weight: 700;
   border-bottom: 1px solid #166bcc;
@@ -224,7 +231,7 @@
   text-align: right;
 }
 
-.number_STT{
+.number_STT {
   width: 100px;
 }
 
@@ -235,19 +242,20 @@
 .inputRevenue {
   font-size: 10px;
 }
+
 .headerRevenue {
   display: flex;
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0 20px;
+  padding: 5px 20px;
   font-weight: 700;
-  height: 50px;
   justify-content: space-between;
 }
 
 .headerRevenue p {
   margin: 0;
 }
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -267,234 +275,109 @@
   }
 }
 
+@media (max-width: 390px) {
+  .headerRevenue {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 594px) {
+  .theadRevenue{
+    display: none;
+  }
+
+  .tbodyRevenue tr th, .noneRevenue {
+    display: none;
+  }
+
+  .tbodyRevenue tr .noneRevenue {
+    display: none;
+  }
+
+  .tbodyRevenue tr td {
+    display: block;
+    text-align: right;
+    padding: 18px;
+    position: relative; 
+  }
+
+  .tbodyRevenue tr td::before {
+    content: attr(data-title);
+    display: block;
+    color: #166bcc;
+    font-weight: bold;
+    margin-bottom: 5px; 
+    position: absolute;
+    left: 8px; 
+    top: 8px; 
+    font-size: 12px;
+  }
+
+  .tbodyRevenue tr td::after {
+    content: attr(data-label);
+    display: block;
+    position: absolute;
+    left: 8px; 
+    top: 28px;
+    font-size: 14px; 
+  }
+
+  .empty {
+    display: block;
+    margin-bottom: 32px;
+    border: 0;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
+
+  ul{
+    padding-left: 0;
+  }
+
+  h4{
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 950px) {
   .table-container {
-    display: flex;
     flex-direction: column-reverse;
-    align-items: center;
-    overflow-x: auto;
   }
 }
 
 @media (max-width: 768px) {
-  .Row {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .chartRevenue {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .object_body {
-    width: 90%;
-  }
-
-  .title_revenue h1 {
-    font-size: 20px;
-  }
-
-  .title_revenue p {
-    font-size: 14px;
-  }
-  
-  .object_box {
-    position: absolute;
-    top: 15px;
-    left: 0px;
-    height: 32px;
-    min-width: 30px;
-    padding: 0 5px;
-    text-align: center;
-    font-weight: bold;
-    line-height: 32px;
-    background-color: orange;
-    color: #fff;
-  }
-  
-  .object_box::before {
-    position: absolute;
-    display: block;
-    content: '';
-    top: 0;
-    right: -16px;
-    width: 0;
-    height: 0;
-    border-top: 16px solid transparent;
-    border-bottom: 16px solid transparent;
-    border-left: 16px solid orange;
-  }
-  
-  @media (max-width: 768px) {
-    .object_body {
-      flex: 1 1 40%;
-    }
-  }
-  /* ---------------- */
-  .doanh_thuTable {
-      margin-top: 20px;
-  }
-
   .doanh_thu {
     width: 100%;
   }
 
   .ton_kho {
     width: 100%;
-    overflow-x: auto;
   }
 
-  .pump_Revenue{
-    width: 300px;
-    height: auto;   
-  }
-  
-  .table thead th{
-    border: 0px solid #ddd;
-    background-color: #f3f7fc;
-    font-weight: 700;
-    border-bottom: 1px solid #166bcc;
-    cursor: pointer;
+  .table {
+    font-size: 14px;
   }
 
-  .table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid black;
-    cursor: pointer;
-  }
-
-  .table tbody tr:hover{
-    background-color: #1f62b4; 
-    color: #0f0f0f;
-    border-bottom: 1px solid #166bcc;
-  }
-    
-  .left_sum{
-    text-align: left;
-  }
-
-  .right_sum{
-    text-align: right;
-  }
-
-  .inputRevenue{
-    font-size: 10px;
-  }
-
-  .loader {
-    position: fixed;
-    z-index: 9999; 
-    top: 40%; 
-    left: 50%; 
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    margin: auto;
-    border-radius: 50%;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #1882c8; 
-    animation: spin 1s infinite linear; 
-  }
-
-  .right{
-    text-align: right;
-  }
-
-  .headerRevenue{
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px 20px;
-    font-weight: 700;
+  .title_xemChitiet{
     height: auto;
-    justify-content: space-between
-  }
-
-  
-  .headerRevenue p{
-    margin: 0;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); } 
-    100% { transform: rotate(360deg); } 
-  }
-
-  .circular {
-    animation: rotate 2s linear infinite;
-  }
-
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (max-width: 390px) {
-    .headerRevenue{
-      display: flex;
-      flex-direction: column;
-      text-align: center;
-    }
-  }
-  @media (max-width: 950px){
-    .table-container {
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: center;
-      overflow-x: auto;
-    }
-  }
-  
-
-  @media (max-width: 768px) {
-    .Row {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .chartRevenue {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .object_body {
-      width: 90%;
-    }
-
-    .title_revenue h1 {
-      font-size: 20px;
-    }
-
-    .title_revenue p {
-      font-size: 14px;
-    }
-
-    .table {
-      font-size: 14px;
-    }
-
-    .doanh_thu{
-      width: 100%;
-    }
-
-    .ton_kho{
-      width: 100%;
-    }
   }
 }
 
+.date-selector {
+  width: auto;
+  margin-left: 40px;
+  position: relative;
+}
 
-.customDatePicker {
+.customDatePicker{
   font-size: 14px;
   color: #333;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 4px; 
 }
 
 .loader {
-  position: absolute; 
+  position: absolute;
   top: 45%;
   left: 45%;
   transform: translate(-50%, -50%);
@@ -508,7 +391,7 @@
 }
 
 .over {
-  position: relative; 
+  position: relative;
   width: 100%;
   height: 100%;
 }

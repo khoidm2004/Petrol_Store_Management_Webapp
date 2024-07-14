@@ -71,18 +71,15 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+
 .firsttable select {
-  background-color: transparent;
+  background-color: #cfe4fa;
   color: inherit;
   font-weight: bold;
   border: none;
   outline: none;
   cursor: pointer;
   width: 100%;
-}
-
-.firsttable select:hover {
-  border-bottom: 0.5px solid black;
 }
 
 .chart-container {

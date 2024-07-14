@@ -23,9 +23,8 @@ const Include = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductSubMenuOpen, setIsProductSubMenuOpen] = useState(false);
   const location = useLocation();
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [validPath, setValidPath] = useState(false); // Default to false
-  const [currentPath, setCurrentPath] = useState(null); // Default to null
+  const [validPath, setValidPath] = useState(false);
+  const [currentPath, setCurrentPath] = useState(null);
 
   const routes = [
     "/",
@@ -36,11 +35,6 @@ const Include = () => {
     "/pump",
     "/account",
   ];
-
-  useEffect(() => {
-    setValidPath(routes.includes(location.pathname));
-    setCurrentPath(location.pathname);
-  }, []);
 
   useEffect(() => {
     setValidPath(routes.includes(location.pathname));
@@ -59,7 +53,6 @@ const Include = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setWindowWidth(window.innerWidth);
       if (window.innerWidth <= 768) {
         setIsMenuOpen(false);
       }
@@ -99,7 +92,7 @@ const Include = () => {
 
   return (
     <>
-      {!validPath ? null : (
+      {validPath && (
         <header className={`header`}>
           <div className="burger burgerCenter" onClick={toggleMenu}>
             {isMenuOpen ? (
@@ -108,7 +101,7 @@ const Include = () => {
               <FaArrowCircleRight className="tab_menu" />
             )}
           </div>
-          <a href="http://localhost:5173/">
+          <a href="/">
             <span id="logo">PIACOM</span>
           </a>
           <p id="title_header">
@@ -118,7 +111,7 @@ const Include = () => {
         </header>
       )}
       <div className={`body ${isMenuOpen ? "menu-open" : ""}`}>
-        {!validPath ? null : (
+        {validPath && (
           <div
             className={`navbar-menu tab`}
             style={{ width: isMenuOpen ? 200 : 0 }}

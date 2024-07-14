@@ -5,7 +5,7 @@ import { TbEyeEdit } from "react-icons/tb";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import "./staff.css";
-import Popup from "../Popup/Popup";
+import Popup from "../Popup/Popup.jsx";
 
 const Staff = () => {
   const staff = useStaffStore((state) => state.staff);
@@ -186,6 +186,10 @@ const Staff = () => {
       staffMember.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  if (searchQuery !== "" && currentPage !== 1) {
+    setCurrentPage(1);
+  }
+
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
   const displayedStaff = filteredStaff.slice(
@@ -203,34 +207,8 @@ const Staff = () => {
     setCurrentPage(page);
   };
 
-  const [showOverlay, setShowOverlay] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="revenue">
-      {/* {showOverlay && (
-        <div className="overlay">
-          <div className="loader">
-            <svg className="circular" viewBox="25 25 50 50">
-              <circle
-                className="path"
-                cx="50"
-                cy="50"
-                r="20"
-                fill="none"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-              />
-            </svg>
-          </div>
-        </div>
-      )} */}
       <header className="header_staff">
         <p>THÔNG TIN NHÂN VIÊN</p>
         <div className="search-container">
@@ -272,7 +250,9 @@ const Staff = () => {
               {displayedStaff.length > 0 ? (
                 displayedStaff.map((staffMember, index) => (
                   <tr key={staffMember.staffId} className="col" id="mainstate">
-                    <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
+                    <td className="center_sum">
+                      {indexOfFirstStaff + index + 1}
+                    </td>
                     <td>
                       {staffMember.fullName} - {staffMember.email}
                     </td>

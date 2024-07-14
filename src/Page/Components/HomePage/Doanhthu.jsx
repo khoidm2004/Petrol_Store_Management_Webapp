@@ -136,8 +136,7 @@ const Revenue = () => {
     labels: ["Thể tích bể", "Mặt hàng tồn"],
     datasets: [
       {
-        label: "Tồn kho",
-        data: [totalQuantity, totalIncome],
+        data: [totalIncome, totalQuantity],
         backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
         hoverOffset: 10,
       },
@@ -213,16 +212,7 @@ const Revenue = () => {
   const [perPage] = useState(5);
   const indexOfLastStaff = currentPage * perPage;
   const indexOfFirstStaff = indexOfLastStaff - perPage;
-  let displayedStaff = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
-  // const test = {
-
-  // }
-  // displayedStaff = displayedStaff.sort((a, b) => {
-  //   return (
-  //     a.startTime -
-  //     b.startTime
-  //   );
-  // });
+  let displayedLog = dailyData.slice(indexOfFirstStaff, indexOfLastStaff);
   const totalPages = Math.ceil(dailyData.length / perPage);
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -295,7 +285,7 @@ const Revenue = () => {
   }, []);
   return (
     <div className="revenue">
-      <div className="tilte_revenue">
+      <div className="tilte_revenue" style={{ textAlign: "center" }}>
         <h1>Chuyên gia Xăng dầu số hàng đầu Việt Nam</h1>
         <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>
       </div>
@@ -374,8 +364,8 @@ const Revenue = () => {
                 <div className="content">
                   <h4>{formatDatestring(formattedDateRevenue)}</h4>
                   <div className="table-container">
-                    <table className="table firsttable">
-                      <thead>
+                    <table className="table firsttable tableRevenue">
+                      <thead className="theadRevenue">
                         <tr>
                           <th className="center_sum">STT</th>
                           <th>Mặt hàng</th>
@@ -383,18 +373,18 @@ const Revenue = () => {
                           <th className="right_sum">Sản lượng</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="tbodyRevenue">
                         {displayedRevenue.length > 0 ? (
                           displayedRevenue.map((item, index) => (
-                            <tr key={index}>
-                              <td className="center_sum">
+                            <tr key={index} className="empty">
+                              <th className="center_sum">
                                 {indexOfFirstRevenue + index + 1}
-                              </td>
-                              <td>{item.productName}</td>
-                              <td className="right_sum">
+                              </th>
+                              <td data-title="Mặt hàng">{item.productName}</td>
+                              <td className="right_sum" data-title="Doanh thu">
                                 {formatNumberWithCommas(item.productRevenue)}
                               </td>
-                              <td className="right_sum">
+                              <td className="right_sum" data-title="Sản lượng">
                                 {formatNumberWithCommas(item.productQuantity)}
                               </td>
                             </tr>
@@ -495,8 +485,8 @@ const Revenue = () => {
         <div className="chartRevenue">
           <div className="title_xemChitiet">TỒN KHO</div>
           <div className="chart">
-              <div className="over">
-                {loading ? (
+            <div className="over">
+              {loading ? (
                 <div className="loader">
                   <svg className="circular" viewBox="25 25 50 50">
                     <circle
@@ -521,7 +511,7 @@ const Revenue = () => {
               ) : (
                 <div className="no-data">Không có dữ liệu</div>
               )}
-          </div>
+            </div>
           </div>
           <div className="button_xemChitiet">
             <button
@@ -552,29 +542,46 @@ const Revenue = () => {
               <hr />
               <div className="content">
                 <div className="table-container">
-                  <table className="table">
-                    <thead>
+                  <table className="table tableRevenue">
+                    <thead className="theadRevenue">
                       <tr>
                         <th className="center_sum">STT</th>
                         <th>Bể</th>
                         <th className="right_sum">Thể tích bể</th>
-                        <th>Mặt hàng tồn</th>
-                        <th className="right_sum">Số lượng </th>
+                        <th>Mặt hàng</th>
+                        <th className="right_sum">Số lượng hàng tồn</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="tbodyRevenue">
                       {displayedLeft.length > 0 ? (
                         displayedLeft.map((item, index) => (
-                          <tr key={index} onClick={() => handleRowClick(item)}>
-                            <td className="center_sum">
+                          <tr
+                            key={index}
+                            className="empty"
+                            onClick={() => handleRowClick(item)}
+                          >
+                            <th
+                              className="center_sum noneRevenue"
+                              data-label="STT"
+                            >
                               {indexOfFirstLeft + index + 1}
-                            </td>
-                            <td>{item.tankName}</td>
-                            <td className="right_sum">
+                            </th>
+                            <td className="noneRevenue">{item.tankName}</td>
+                            <td
+                              className="right_sum"
+                              data-label={item.tankName}
+                              data-title="Bể"
+                            >
                               {formatNumberWithCommas(item.tankVolume)}
                             </td>
-                            <td>{item.product.productName}</td>
-                            <td className="right_sum">
+                            <td className="noneRevenue">
+                              {item.product.productName}
+                            </td>
+                            <td
+                              className="right_sum"
+                              data-label={item.product.productName}
+                              data-title="Mặt hàng dư"
+                            >
                               {formatNumberWithCommas(
                                 item.product.quantity_left
                               )}
@@ -670,8 +677,8 @@ const Revenue = () => {
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  selectedItem.tankVolume,
-                                  selectedItem.product.quantity_left,
+                                  selectedItem.tankVolume ?? 0,
+                                  selectedItem.product?.quantity_left ?? 0,
                                 ],
                                 backgroundColor: [
                                   "rgb(255, 99, 132)",
@@ -719,8 +726,8 @@ const Revenue = () => {
             </div>
           </header>
           <div className="doanh_thuTable ">
-            <table className="firsttable_shift">
-              <thead>
+            <table className="firsttable_shift tableRevenue">
+              <thead className="theadRevenue">
                 <tr>
                   <th className="center_sum">STT</th>
                   <th>Vòi bơm</th>
@@ -729,20 +736,24 @@ const Revenue = () => {
                   <th className="right_sum">Số cuối</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="tbodyRevenue">
                 {displayedPumpRevenue.length > 0 ? (
                   displayedPumpRevenue.map((staffMember, index) => (
-                    <tr key={staffMember.id} className="col" id="mainstate">
-                      <td className="center_sum">
+                    <tr
+                      key={staffMember.id || index}
+                      className="empty"
+                      id="mainstate"
+                    >
+                      <th className="center_sum">
                         {indexOfFirstPumpRevenue + index + 1}
-                      </td>
-                      <td>{staffMember.pumpName}</td>
-                      <td>{staffMember.productName}</td>
-                      <td className="right_sum">
+                      </th>
+                      <td data-title="Vòi bơm">{staffMember.pumpName}</td>
+                      <td data-title="Mặt hàng">{staffMember.productName}</td>
+                      <td className="right_sum" data-title="Số đầu">
                         {" "}
                         {formatNumberWithSixNumber(staffMember.fNum)}
                       </td>
-                      <td className="right_sum">
+                      <td className="right_sum" data-title="Số cuối">
                         {formatNumberWithSixNumber(staffMember.lNum)}
                       </td>
                     </tr>
@@ -892,8 +903,8 @@ const Revenue = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {displayedStaff.length > 0 ? (
-                      displayedStaff.map((item, index) => (
+                    {displayedLog.length > 0 ? (
+                      displayedLog.map((item, index) => (
                         <tr key={index} className="center_sum">
                           <td>
                             {timeConverter(Date.parse(item.startTime)).time}
@@ -910,14 +921,14 @@ const Revenue = () => {
                     )}
                   </tbody>
                   <tfoot>
-                    {displayedStaff.length > 4 ? (
+                    {displayedLog.length > 4 ? (
                       <tr>
                         <td className="center_sum" colSpan={2}>
                           ....
                         </td>
                       </tr>
                     ) : null}
-                    {displayedStaff.length > 0 ? (
+                    {displayedLog.length > 0 ? (
                       <tr>
                         <th className="left_sum">Tổng:</th>
                         <th className="center_sum" colSpan={5}>
@@ -966,8 +977,8 @@ const Revenue = () => {
                   <div className="content">
                     <h4>{formatDatestring(formattedDateLog)}</h4>
                     <div className="table-container">
-                      <table className="table">
-                        <thead>
+                      <table className="table tableRevenue">
+                        <thead className="theadRevenue">
                           <tr>
                             <th className="center_sum">Giờ phát sinh</th>
                             <th>Mặt hàng</th>
@@ -977,23 +988,33 @@ const Revenue = () => {
                             <th className="right_sum">Thành tiền</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          {displayedStaff.length > 0 ? (
-                            displayedStaff.map((item, index) => (
+                        <tbody className="tbodyRevenue">
+                          {displayedLog.length > 0 ? (
+                            displayedLog.map((item, index) => (
                               <tr key={index}>
-                                <td className="center_sum">
+                                <td
+                                  className="center_sum"
+                                  data-title="Giờ phát sinh"
+                                >
                                   {
                                     timeConverter(Date.parse(item.startTime))
                                       .time
                                   }
                                 </td>
-                                <td>{item.productName}</td>
-                                <td>{item.pumpName}</td>
-                                <td className="right_sum">
+                                <td data-title="Mặt hàng">
+                                  {item.productName}
+                                </td>
+                                <td data-title="Vòi bơm">{item.pumpName}</td>
+                                <td className="right_sum" data-title="Đơn giá">
                                   {formatNumberWithCommas(item.productPrice)}
                                 </td>
-                                <td className="right_sum">{item.quantity}</td>
-                                <td className="right_sum">
+                                <td className="right_sum" data-title="Số lượng">
+                                  {item.quantity}
+                                </td>
+                                <td
+                                  className="right_sum"
+                                  data-title="Thành tiền"
+                                >
                                   {formatNumberWithCommas(item.totalAmount)}
                                 </td>
                               </tr>
@@ -1010,8 +1031,8 @@ const Revenue = () => {
                             </tr>
                           )}
                         </tbody>
-                        <tfoot>
-                          {displayedStaff.length > 4 ? (
+                        <tfoot className="tbodyRevenue">
+                          {displayedLog.length > 4 ? (
                             <tr>
                               <td colSpan={6} className="center_sum">
                                 {" "}
@@ -1019,12 +1040,12 @@ const Revenue = () => {
                               </td>
                             </tr>
                           ) : null}
-                          {displayedStaff.length > 0 ? (
+                          {displayedLog.length > 0 ? (
                             <tr>
-                              <td className="left_sum" colSpan={5}>
+                              <th className="left_sum" colSpan={5}>
                                 Tổng:
-                              </td>
-                              <td className="right_sum">
+                              </th>
+                              <td className="right_sum" data-title="Tổng tiền">
                                 {total.toLocaleString("vi-VN")}
                               </td>
                             </tr>
@@ -1032,7 +1053,7 @@ const Revenue = () => {
                         </tfoot>
                       </table>
                     </div>
-                    {displayedStaff.length > 0 && (
+                    {displayedLog.length > 0 && (
                       <div className="pagination">
                         <p>
                           <span>

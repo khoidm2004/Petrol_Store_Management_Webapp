@@ -7,7 +7,7 @@ import { TbEyeEdit } from "react-icons/tb";
 import { FaRegMinusSquare } from "react-icons/fa";
 import "chart.js/auto";
 import "./staff.css";
-import Popup from "../Popup/Popup";
+import Popup from "../Popup/Popup.jsx";
 import { timeConverter } from "../../../utils/timeConverter.js";
 
 const Shift = () => {
@@ -148,7 +148,6 @@ const Shift = () => {
     const newEmployeeList = { ...selectedShift.employeeList };
     delete newEmployeeList[key];
 
-    // Re-index the employees
     const reIndexedEmployeeList = {};
     Object.values(newEmployeeList).forEach((employee, index) => {
       const newKey = `Staff${index + 1}`;
@@ -210,21 +209,11 @@ const Shift = () => {
     }));
   };
 
-  const [showOverlay, setShowOverlay] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const [searchQuery, setSearchQuery] = useState("");
   const filteredShifts = shifts.filter((shift) => {
     const filteredEmployees = Object.values(shift.employeeList).some(
-      (employee) => {
-        return employee.fullName
+      (shifts) => {
+        return shifts.fullName
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
       }
@@ -235,11 +224,14 @@ const Shift = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
 
-  const indexOfLastStaff = currentPage * perPage;
-  const indexOfFirstStaff = indexOfLastStaff - perPage;
-  const displayedStaff = filteredShifts.slice(
-    indexOfFirstStaff,
-    indexOfLastStaff
+  if (searchQuery !== "" && currentPage !== 1) {
+    setCurrentPage(1);
+  }
+  const indexOfLastShift = currentPage * perPage;
+  const indexOfFirstShift = indexOfLastShift - perPage;
+  const displayedShift = filteredShifts.slice(
+    indexOfFirstShift,
+    indexOfLastShift
   );
 
   const totalPages = Math.ceil(filteredShifts.length / perPage);
@@ -254,23 +246,6 @@ const Shift = () => {
 
   return (
     <div className="revenue">
-      {/* {showOverlay && (
-        <div className="overlay">
-          <div className="loader">
-            <svg className="circular" viewBox="25 25 50 50">
-              <circle
-                className="path"
-                cx="50"
-                cy="50"
-                r="20"
-                fill="none"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-              />
-            </svg>
-          </div>
-        </div>
-      )} */}
       <header className="header_staff">
         <p>THÔNG TIN CA BÁN HÀNG</p>
         <div className="search-container">
@@ -303,8 +278,8 @@ const Shift = () => {
               </tr>
             </thead>
             <tbody>
-              {displayedStaff.length > 0 ? (
-                displayedStaff.map((shift, index) => {
+              {displayedShift.length > 0 ? (
+                displayedShift.map((shift, index) => {
                   const startTime = Date.parse(shift.startTime);
                   const endTime = Date.parse(shift.endTime);
                   const duration = endTime - startTime;
@@ -315,8 +290,14 @@ const Shift = () => {
                   );
 
                   return (
-                    <tr className="col" id="mainstate" key={shift.ShiftId}>
-                      <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
+                    <tr
+                      className="col"
+                      id="mainstate"
+                      key={shift.ShiftId || index}
+                    >
+                      <td className="center_sum">
+                        {indexOfFirstShift + index + 1}
+                      </td>
                       <td>
                         {timeConverter(Date.parse(shift.startTime)).date} :{" "}
                         {timeConverter(Date.parse(shift.startTime)).time}
@@ -326,10 +307,13 @@ const Shift = () => {
                       </td>
                       <td>{`${hours} giờ ${minutes} phút`}</td>
                       <td>
-                        {Object.values(shift.employeeList)
-                          .map((pump) => pump.fullName)
-                          .join(" - ")}
+                        {Object.values(shift.employeeList).map(
+                          (pump, index) => (
+                            <div key={index}>{pump.fullName}</div>
+                          )
+                        )}
                       </td>
+
                       <td className="icon_editview">
                         <TbEyeEdit
                           className="icon_menu"
@@ -348,14 +332,14 @@ const Shift = () => {
               )}
             </tbody>
             <tfoot>
-              {displayedStaff.length > 0 && (
+              {displayedShift.length > 0 && (
                 <tr>
                   <td colSpan={6} className="noLine">
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
-                          {Math.min(indexOfLastStaff, shifts.length)} của{" "}
+                          Đang hiển thị {indexOfFirstShift + 1} đến{" "}
+                          {Math.min(indexOfLastShift, shifts.length)} của{" "}
                           {shifts.length} Ca Bán Hàng{" "}
                         </span>
                       </p>
@@ -511,7 +495,7 @@ const Shift = () => {
               </div>
               <hr />
               <div>
-                <h5>MẶT HÀNG</h5>
+                <h5>MẶT HÀNG - VÒI BƠM</h5>
                 <div className="Staff">
                   {Object.entries(selectedShift.productList).map(
                     ([key, product]) => (
@@ -775,10 +759,8 @@ const Shift = () => {
               </div>
               <hr />
               <div className="Row">
-                <div className="Row">
-                  <h5>MẶT HÀNG</h5>
-                  <h5>VÒI BƠM</h5>
-                </div>
+                <h5>MẶT HÀNG - VÒI BƠM</h5>
+
                 <div className="Staff">
                   {Object.entries(newShift.productList).map(
                     ([key, product]) => (

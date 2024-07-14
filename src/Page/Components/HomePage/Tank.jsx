@@ -6,7 +6,7 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
-import Popup from "../Popup/Popup";
+import Popup from "../Popup/Popup.jsx";
 
 const Tank = () => {
   const tanks = useTankStore((state) => state.tanks);
@@ -26,7 +26,7 @@ const Tank = () => {
   const [selectedTank, setSelectedTank] = useState(null);
   const [addingTank, setAddingTank] = useState(false);
   const tankId = Math.floor(100000 + Math.random() * 900000);
-  const quantity_left = Math.floor(100 + Math.random() * 9);
+  const quantity_left = Math.floor(1000 + Math.random() * 90);
 
   const [viewMode, setViewMode] = useState("fullUse");
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +50,7 @@ const Tank = () => {
   useEffect(() => {
     fetchTank();
     fetchProduct();
-  }, [fetchTank, fetchProduct]);
+  }, [fetchTank]);
 
   useEffect(() => {
     if (product.length > 0) {
@@ -187,7 +187,7 @@ const Tank = () => {
     (TankMember) => TankMember.tankStatus === "NOT ON USE"
   );
 
-  const filteredStaff = (
+  const filteredTank = (
     viewMode === "fullUse"
       ? tanks
       : viewMode === "use"
@@ -203,14 +203,14 @@ const Tank = () => {
       return a.tankCode - b.tankCode;
     });
 
-  const indexOfLastStaff = currentPage * perPage;
-  const indexOfFirstStaff = indexOfLastStaff - perPage;
-  const displayedStaff = filteredStaff.slice(
-    indexOfFirstStaff,
-    indexOfLastStaff
-  );
+  if (searchQuery !== "" && currentPage !== 1) {
+    setCurrentPage(1);
+  }
+  const indexOfLastTank = currentPage * perPage;
+  const indexOfFirstTank = indexOfLastTank - perPage;
+  const displayedTank = filteredTank.slice(indexOfFirstTank, indexOfLastTank);
 
-  const totalPages = Math.ceil(filteredStaff.length / perPage);
+  const totalPages = Math.ceil(filteredTank.length / perPage);
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -219,35 +219,8 @@ const Tank = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
   };
 
-  const [showOverlay, setShowOverlay] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="revenue">
-      {/* {showOverlay && (
-        <div className="overlay">
-          <div className="loader">
-            <svg className="circular" viewBox="25 25 50 50">
-              <circle
-                className="path"
-                cx="50"
-                cy="50"
-                r="20"
-                fill="none"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-              />
-            </svg>
-          </div>
-        </div>
-      )} */}
       <header className="header_staff">
         <p>THÔNG TIN BỂ</p>
         <div className="search-container">
@@ -288,11 +261,11 @@ const Tank = () => {
               </tr>
             </thead>
             <tbody>
-              {displayedStaff.length > 0 ? (
-                displayedStaff.map((TankMember, index) => (
+              {displayedTank.length > 0 ? (
+                displayedTank.map((TankMember, index) => (
                   <tr key={TankMember.tankCode}>
                     <td className="center_sum">
-                      {indexOfFirstStaff + index + 1}
+                      {indexOfFirstTank + index + 1}
                     </td>
                     <td> {TankMember.tankCode} </td>
                     <td>{TankMember.tankName}</td>
@@ -315,13 +288,13 @@ const Tank = () => {
               )}
               <tr>
                 <td colSpan="4">
-                  {displayedStaff.length > 0 && (
+                  {displayedTank.length > 0 && (
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
-                          {Math.min(indexOfLastStaff, filteredStaff.length)} của{" "}
-                          {filteredStaff.length} mục{" "}
+                          Đang hiển thị {indexOfFirstTank + 1} đến{" "}
+                          {Math.min(indexOfLastTank, filteredTank.length)} của{" "}
+                          {filteredTank.length} mục{" "}
                         </span>
                       </p>
                       <ul className="pagination-list">

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./LoginForm.css";
 import { AiOutlineClose } from "react-icons/ai";
 import coverimages from "../../../assets/images/coverimages.png";
-import user from "../../../assets/images/user.png";
+import userAccount from "../../../assets/images/userAccount.png";
 import useLogin from "../../../hooks/useLogin.js";
 import useReclaimPassword from "../../../hooks/useReclaimPassword";
 import Popup from "../Popup/Popup";
@@ -139,7 +139,7 @@ const LoginForm = () => {
         <img src={coverimages} alt="Cover" id="coverimage" />
         <form>
           <div className="wrapper">
-            <img src={user} alt="User" id="userlogo" />
+            <img src={userAccount} alt="User" id="userlogo" />
             <div className="input-box">
               <input
                 type="text"

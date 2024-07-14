@@ -7,19 +7,17 @@ import { Doughnut } from "react-chartjs-2";
 import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
-import Popup from "../Popup/Popup";
+import Popup from "../Popup/Popup.jsx";
 
 const Pump = () => {
+  
   const pumps = usePumpStore((state) => state.pumps);
   const fetchPump = usePumpStore((state) => state.fetchPump);
   const addPump = usePumpStore((state) => state.addPump);
   const modifyPump = usePumpStore((state) => state.modifyPump);
-  const product = useProductStore((state) => state.product);
-  const fetchProduct = useProductStore((state) => state.fetchProduct);
 
-  const tanks = useTankStore((state) => state.tanks);
-  const fetchTank = useTankStore((state) => state.fetchTank);
-
+  const {  tanks, fetchTank } = useTankStore();
+  const { product, fetchProduct } = useProductStore();
   const [selectedPump, setSelectedPump] = useState(null);
   const [addingStaff, setAddingStaff] = useState(false);
   const pumpId = Math.floor(100000 + Math.random() * 900000);
@@ -81,8 +79,8 @@ const Pump = () => {
     }
   }, [tanks]);
 
-  const handleEdit = (staffMember) => {
-    setSelectedPump(staffMember);
+  const handleEdit = (pumpMember) => {
+    setSelectedPump(pumpMember);
   };
 
   const dataPump_product = tanks.map((tank) => ({
@@ -191,10 +189,10 @@ const Pump = () => {
   };
 
   const firstNumber = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "ON USE"
+    (pumpMember) => pumpMember.pumpStatus === "ON USE"
   ).length;
   const secondNumber = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "NOT ON USE"
+    (pumpMember) => pumpMember.pumpStatus === "NOT ON USE"
   ).length;
 
   const data = {
@@ -209,39 +207,35 @@ const Pump = () => {
     ],
   };
 
-  const workingStaff = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "ON USE"
-  );
-  const notWorkingStaff = pumps.filter(
-    (staffMember) => staffMember.pumpStatus === "NOT ON USE"
+  const workingPump = pumps.filter((pumps) => pumps.pumpStatus === "ON USE");
+  const notWorkingPump = pumps.filter(
+    (pumps) => pumps.pumpStatus === "NOT ON USE"
   );
 
-  const filteredStaff = (
+  const filteredPump = (
     viewMode === "fullUse"
       ? pumps
       : viewMode === "use"
-      ? workingStaff
-      : notWorkingStaff
+      ? workingPump
+      : notWorkingPump
   )
     .filter(
-      (staffMember) =>
-        staffMember.pumpCode.toString().includes(searchQuery) ||
-        staffMember.pumpName.toLowerCase().includes(searchQuery.toLowerCase())
+      (pumps) =>
+        pumps.pumpCode.toString().includes(searchQuery) ||
+        pumps.pumpName.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
       return a.pumpCode - b.pumpCode;
     });
 
-  const indexOfLastStaff = currentPage * perPage;
-  const indexOfFirstStaff = indexOfLastStaff - perPage;
-  const displayedStaff = filteredStaff.slice(
-    indexOfFirstStaff,
-    indexOfLastStaff
-  );
+  if (searchQuery !== "" && currentPage !== 1) {
+    setCurrentPage(1);
+  }
+  const indexOfLastPump = currentPage * perPage;
+  const indexOfFirstPump = indexOfLastPump - perPage;
+  const displayedPump = filteredPump.slice(indexOfFirstPump, indexOfLastPump);
 
-  const totalPages = Math.ceil(filteredStaff.length / perPage);
-
-  const [showOverlay, setShowOverlay] = useState(true);
+  const totalPages = Math.ceil(filteredPump.length / perPage);
 
   const closePopup = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
@@ -251,33 +245,8 @@ const Pump = () => {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="revenue">
-      {/* {showOverlay && (
-        <div className="overlay">
-          <div class="loader">
-            <svg class="circular" viewBox="25 25 50 50">
-              <circle
-                class="path"
-                cx="50"
-                cy="50"
-                r="20"
-                fill="none"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-              />
-            </svg>
-          </div>
-        </div>
-      )} */}
       <header className="header_staff">
         <p>THÔNG TIN VÒI BƠM</p>
         <div className="search-container">
@@ -318,18 +287,18 @@ const Pump = () => {
               </tr>
             </thead>
             <tbody>
-              {displayedStaff.length > 0 ? (
-                displayedStaff.map((staffMember, index) => (
-                  <tr key={staffMember.pumpCode} className="col" id="mainstate">
-                    <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
-                    <td> {staffMember.pumpCode} </td>
-                    <td>
-                      {staffMember.pumpName}
+              {displayedPump.length > 0 ? (
+                displayedPump.map((items, index) => (
+                  <tr key={items.pumpCode} className="col" id="mainstate">
+                    <td className="center_sum">
+                      {indexOfFirstPump + index + 1}
                     </td>
+                    <td> {items.pumpCode} </td>
+                    <td>{items.pumpName}</td>
                     <td className="icon_editview">
                       <TbEyeEdit
                         className="icon_menu"
-                        onClick={() => handleEdit(staffMember)}
+                        onClick={() => handleEdit(items)}
                       />
                     </td>
                   </tr>
@@ -345,13 +314,13 @@ const Pump = () => {
               )}
               <tr>
                 <td colSpan="4" className="noLine">
-                  {displayedStaff.length > 0 && (
+                  {displayedPump.length > 0 && (
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
-                          {Math.min(indexOfLastStaff, filteredStaff.length)} của{" "}
-                          {filteredStaff.length} mục{" "}
+                          Đang hiển thị {indexOfFirstPump + 1} đến{" "}
+                          {Math.min(indexOfLastPump, filteredPump.length)} của{" "}
+                          {filteredPump.length} mục{" "}
                         </span>
                       </p>
                       <ul className="pagination-list">

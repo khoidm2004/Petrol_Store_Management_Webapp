@@ -7,6 +7,8 @@ import useChangePassword from "../../../hooks/useChangePassword";
 import Popup from "../Popup/Popup";
 import useLogout from "../../../hooks/useLogout";
 import Footer from "../Footer/Footer";
+import userAccount from "../../../assets/images/userAccount.png";
+
 import { useNavigate } from "react-router-dom";
 
 export const Account = () => {
@@ -185,7 +187,13 @@ export const Account = () => {
             onClick={() => document.getElementById("fileInput").click()}
             style={{ cursor: "pointer" }}
           >
-            <img src={profile.avatar} alt="Profile" className="profile_image" />
+            {
+            profile.avatar === "" ? (
+              <img src={userAccount} alt="Profile" className="profile_image" />
+            ) : (
+              <img src={profile.avatar} alt="Profile" className="profile_image" />
+            )
+          }
           </div>
           <input
             type="file"

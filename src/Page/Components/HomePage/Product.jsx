@@ -34,7 +34,6 @@ const Product = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showOverlay, setShowOverlay] = useState(true);
 
   useEffect(() => {
     fetchProduct();
@@ -94,10 +93,10 @@ const Product = () => {
   };
 
   const firstNumber = product.filter(
-    (staffMember) => staffMember.productStatus === "ON SALE"
+    (productMember) => productMember.productStatus === "ON SALE"
   ).length;
   const secondNumber = product.filter(
-    (staffMember) => staffMember.productStatus === "NOT ON SALE"
+    (productMember) => productMember.productStatus === "NOT ON SALE"
   ).length;
 
   const data = {
@@ -119,7 +118,7 @@ const Product = () => {
     (ProductMember) => ProductMember.productStatus === "NOT ON SALE"
   );
 
-  const filteredStaff = (
+  const filteredProduct = (
     viewMode === "fullSale"
       ? product
       : viewMode === "sale"
@@ -137,14 +136,18 @@ const Product = () => {
       return a.productCode - b.productCode;
     });
 
-  const indexOfLastStaff = currentPage * perPage;
-  const indexOfFirstStaff = indexOfLastStaff - perPage;
-  const displayedStaff = filteredStaff.slice(
-    indexOfFirstStaff,
-    indexOfLastStaff
+  if (searchQuery !== "" && currentPage !== 1) {
+    setCurrentPage(1);
+  }
+
+  const indexOfLastProduct = currentPage * perPage;
+  const indexOfFirstProduct = indexOfLastProduct - perPage;
+  const displayedProduct = filteredProduct.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
   );
 
-  const totalPages = Math.ceil(filteredStaff.length / perPage);
+  const totalPages = Math.ceil(filteredProduct.length / perPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -154,34 +157,8 @@ const Product = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="revenue">
-      {/* {showOverlay && (
-        <div className="overlay">
-          <div className="loader">
-            <svg className="circular" viewBox="25 25 50 50">
-              <circle
-                className="path"
-                cx="50"
-                cy="50"
-                r="20"
-                fill="none"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-              />
-            </svg>
-          </div>
-        </div>
-      )} */}
-
       <header className="header_staff">
         <p>THÔNG TIN MẶT HÀNG</p>
         <div className="search-container">
@@ -223,16 +200,14 @@ const Product = () => {
               </tr>
             </thead>
             <tbody>
-              {displayedStaff.length > 0 ? (
-                displayedStaff.map((ProductMember, index) => (
-                  <tr 
-                    key={ProductMember.productId}
-                  >
-                    <td className="center_sum">{indexOfFirstStaff + index + 1}</td>
-                    <td>{ProductMember.productCode}</td>
-                    <td>
-                       {ProductMember.productName}
+              {displayedProduct.length > 0 ? (
+                displayedProduct.map((ProductMember, index) => (
+                  <tr key={ProductMember.productId}>
+                    <td className="center_sum">
+                      {indexOfFirstProduct + index + 1}
                     </td>
+                    <td>{ProductMember.productCode}</td>
+                    <td>{ProductMember.productName}</td>
                     <td className="icon_editview">
                       <TbEyeEdit
                         className="icon_menu"
@@ -252,13 +227,13 @@ const Product = () => {
               )}
               <tr>
                 <td colSpan="4" className="noLine">
-                  {displayedStaff.length > 0 && (
+                  {displayedProduct.length > 0 && (
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
-                          {Math.min(indexOfLastStaff, filteredStaff.length)} trên{" "}
-                          {filteredStaff.length} mặt hàng
+                          Đang hiển thị {indexOfFirstProduct + 1} đến{" "}
+                          {Math.min(indexOfLastProduct, filteredProduct.length)}{" "}
+                          trên {filteredProduct.length} mặt hàng
                         </span>
                       </p>
                       <ul className="pagination-list">

@@ -90,7 +90,6 @@
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 10px;
-  background-image: url("../../../assets/images/user.png");
   transition: box-shadow 0.3s;
 }
 
@@ -276,6 +275,19 @@ input:focus {
 }
 
 @media (max-width: 767px) {
+  .rowPasswordForget {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .profile_info .changePassWord {
+    width: 100%;
+  }
+
   .text-account {
     padding-left: 0;
     font-size: 20px;
