@@ -20,7 +20,11 @@ const useLogin = () => {
         const docSnap = await getDoc(docRef);
         localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
         loginUser(docSnap.data());
-        return { Title: "Success" };
+        return {
+          Title: "Thành công",
+          Message: "Đăng nhập thành công",
+          Status: "success",
+        };
       } else {
         return {
           Title: "Lỗi",
