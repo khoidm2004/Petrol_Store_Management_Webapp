@@ -290,10 +290,17 @@ const Shift = () => {
                   const endTime = Date.parse(shift.endTime);
                   const duration = endTime - startTime;
 
-                  const hours = Math.floor(duration / (1000 * 60 * 60));
-                  const minutes = Math.floor(
-                    (duration % (1000 * 60 * 60)) / (1000 * 60)
-                  );
+                  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+                  const days = Math.floor(duration / millisecondsPerDay);
+                  const hours = Math.floor((duration % millisecondsPerDay) / (1000 * 60 * 60));
+                  const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+
+                  let durationString = '';
+                  if (days > 0) {
+                      durationString = `${days} ngày ${hours} giờ ${minutes} phút`;
+                  } else {
+                      durationString = `${hours} giờ ${minutes} phút`;
+                  }
 
                   return (
                     <tr
@@ -311,7 +318,7 @@ const Shift = () => {
                         {timeConverter(Date.parse(shift.endTime)).date} :{" "}
                         {timeConverter(Date.parse(shift.endTime)).time}
                       </td>
-                      <td>{`${hours} giờ ${minutes} phút`}</td>
+                      <td>{durationString}</td>
                       <td>
                         {Object.values(shift.employeeList).map(
                           (pump, index) => (
