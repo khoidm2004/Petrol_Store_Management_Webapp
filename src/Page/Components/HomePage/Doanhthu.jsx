@@ -108,7 +108,7 @@ const Revenue = () => {
       }
     };
     fetchLogs();
-  }, [formattedSelectedDateLog]);
+  }, [formattedSelectedDateLog, useFetchLog]);
 
   useEffect(() => {
     const fetchData = async () => {

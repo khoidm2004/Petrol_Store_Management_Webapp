@@ -1,5 +1,5 @@
 // LoginForm.js
-import React, { useState } from "react";
+import { useState } from "react";
 import "./LoginForm.css";
 import { AiOutlineClose } from "react-icons/ai";
 import coverimages from "../../../assets/images/coverimages.png";
@@ -168,7 +168,7 @@ const LoginForm = () => {
               </a>
             </div>
           </div>
-          <button type="submit" disabled={loading} onClick={handleSubmit}>
+          <button type="submit" disabled={loading} onSubmit                             ={handleSubmit}>
             SIGN IN
           </button>
         </form>
@@ -176,7 +176,7 @@ const LoginForm = () => {
       <Footer />
       {showResetModal && (
         <>
-          <div className="overlay" onClick={handleResetCancel}></div>
+          <div className="overlay" onSubmit={handleResetCancel}></div>
           <div className="modals">
             <div className="modal-content">
               <AiOutlineClose

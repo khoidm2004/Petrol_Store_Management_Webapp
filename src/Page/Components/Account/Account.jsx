@@ -21,7 +21,7 @@ export const Account = () => {
     status: "",
   });
   const [passwordError, setPasswordError] = useState("");
-  const { editProfile, isLoading } = useEditProfile();
+  const { editProfile} = useEditProfile();
   const [formPass, setFormPass] = useState({ pass: "", passNew: "" });
   const [profile, setProfile] = useState({
     uid: user.uid,
@@ -201,7 +201,7 @@ export const Account = () => {
         message: "Đổi thành công",
         status: "success",
       });
-      const test = await handleLogout();
+      await handleLogout();
       window.location.href = "/";
     } else {
       setPopup({
