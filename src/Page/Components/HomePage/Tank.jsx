@@ -381,7 +381,7 @@ const Tank = () => {
                 {" "}
                 Mã
                 <input
-                  type="text"
+                  type="number"
                   value={parseInt(selectedTank.tankCode)}
                   readOnly
                 />
@@ -391,7 +391,7 @@ const Tank = () => {
                 {" "}
                 Thể tích
                 <input
-                  type="text"
+                  type="number"
                   value={parseInt(selectedTank.tankVolume)}
                   onChange={(e) =>
                     setSelectedTank({
