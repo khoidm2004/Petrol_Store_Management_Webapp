@@ -56,7 +56,7 @@ const LoginForm = () => {
     }
     try {
       const result = await login(formData);
-      if (result.Title === "Success") {
+      if (result.Status === "success") {
         setPopup({
           show: true,
           title: result.Title,
@@ -164,7 +164,6 @@ const LoginForm = () => {
                 placeholder="PASSWORD"
                 value={formData.password}
                 onChange={handleChange}
-             
               />
             </div>
             <div className="remember-forgot">

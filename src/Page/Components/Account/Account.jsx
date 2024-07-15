@@ -21,7 +21,7 @@ export const Account = () => {
     status: "",
   });
   const [passwordError, setPasswordError] = useState("");
-  const { editProfile} = useEditProfile();
+  const { editProfile } = useEditProfile();
   const [formPass, setFormPass] = useState({ pass: "", passNew: "" });
   const [profile, setProfile] = useState({
     uid: user.uid,
@@ -98,44 +98,49 @@ export const Account = () => {
 
   const handleSave = async () => {
     try {
-        if(!profile.phoneNum || !profile.fullName || !profile.email || !profile.storeName){
-          setPopup({
-            show: true,
-            title: "Thông báo",
-            message: "Vui lòng nhập đầy đủ thông tin.",
-            status: "warning",
-          });
-          return;
-        }
-
-        if(!validateEmail(profile.email)){
-          setPopup({
-            show: true,
-            title: "Thông báo",
-            message: "Vui lòng nhập đúng định dạng của email.",
-            status: "warning",
-          });
-          return;
-        }
-
-        if(!validatePhoneNumber(profile.phoneNum)){
-          setPopup({
-            show: true,
-            title: "Thông báo",
-            message: "Vui lòng nhập đúng định dạng của số điện thoại.",
-            status: "warning",
-          });
-          return;
-        }
-        
-        const result = await editProfile(profile, selectedFile);
+      if (
+        !profile.phoneNum ||
+        !profile.fullName ||
+        !profile.email ||
+        !profile.storeName
+      ) {
         setPopup({
           show: true,
-          title: result.Title,
-          message: result.Message,
-          status: result.Status,
+          title: "Thông báo",
+          message: "Vui lòng nhập đầy đủ thông tin.",
+          status: "warning",
         });
-        setSelectedFile(null);
+        return;
+      }
+
+      if (!validateEmail(profile.email)) {
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: "Vui lòng nhập đúng định dạng của email.",
+          status: "warning",
+        });
+        return;
+      }
+
+      if (!validatePhoneNumber(profile.phoneNum)) {
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: "Vui lòng nhập đúng định dạng của số điện thoại.",
+          status: "warning",
+        });
+        return;
+      }
+
+      const result = await editProfile(profile, selectedFile);
+      setPopup({
+        show: true,
+        title: result.Title,
+        message: result.Message,
+        status: result.Status,
+      });
+      setSelectedFile(null);
     } catch (error) {
       return { Title: "Error" };
     }
@@ -224,13 +229,15 @@ export const Account = () => {
             onClick={() => document.getElementById("fileInput").click()}
             style={{ cursor: "pointer" }}
           >
-            {
-            profile.avatar === "" ? (
+            {profile.avatar === "" ? (
               <img src={userAccount} alt="Profile" className="profile_image" />
             ) : (
-              <img src={profile.avatar} alt="Profile" className="profile_image" />
-            )
-          }
+              <img
+                src={profile.avatar}
+                alt="Profile"
+                className="profile_image"
+              />
+            )}
           </div>
           <input
             type="file"
