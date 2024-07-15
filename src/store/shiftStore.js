@@ -66,8 +66,8 @@ const useShiftStore = create((set) => ({
       }));
 
       return {
-        Title: "Thông báo",
-        Description: "Chỉnh sửa thành công",
+        Title: "Thành công",
+        Message: "Chỉnh sửa thành công",
         Status: "success",
       };
     } catch (error) {
