@@ -1,7 +1,3 @@
 {
-  "builds": [{ "src": "build", "use": "@vercel/node" }],
-  "env": {
-    "NODE_OPTIONS": "--openssl-legacy-provider"
-  },
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }
