@@ -376,7 +376,7 @@ const Staff = () => {
             <label>
               Số điện thoại
               <input
-                type="number"
+                type="text"
                 value={selectedStaff.phoneNum}
                 onChange={(e) =>
                   setSelectedStaff({
@@ -444,7 +444,7 @@ const Staff = () => {
             <label>
               Số điện thoại
               <input
-                type="number"
+                type="text"
                 value={newStaff.phoneNum}
                 onChange={(e) =>
                   setNewStaff({ ...newStaff, phoneNum: e.target.value })

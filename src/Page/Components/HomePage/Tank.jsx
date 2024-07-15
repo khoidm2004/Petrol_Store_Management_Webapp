@@ -108,7 +108,6 @@ const Tank = () => {
     }
   };
 
-  console.log(newTank)
   const handleAddTank = async () => {
     if (!newTank.tankName || !newTank.tankCode || !newTank.tankVolume) {
       setPopup({
