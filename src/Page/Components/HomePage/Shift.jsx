@@ -68,6 +68,16 @@ const Shift = () => {
 
       const differenceInHours = (end - start) / (1000 * 60 * 60);
 
+      if (differenceInHours < 0) {
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: "Quãng thời gian của ca không hợp lệ.",
+          status: "info",
+        });
+        return;
+      }
+
       if (differenceInHours < 2) {
         setPopup({
           show: true,
@@ -113,6 +123,16 @@ const Shift = () => {
     const end = new Date(newShift.endTime);
 
     const differenceInHours = (end - start) / (1000 * 60 * 60);
+
+    if (differenceInHours < 0) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Quãng thời gian của ca không hợp lệ.",
+        status: "info",
+      });
+      return;
+    }
 
     if (differenceInHours < 2) {
       setPopup({
@@ -170,7 +190,6 @@ const Shift = () => {
     const newProductList = { ...selectedShift.productList };
     delete newProductList[key];
 
-    // Re-index the employees
     const reIndexedProductList = {};
     Object.values(newProductList).forEach((product, index) => {
       const newKey = `Product${index + 1}`;
@@ -292,14 +311,18 @@ const Shift = () => {
 
                   const millisecondsPerDay = 1000 * 60 * 60 * 24;
                   const days = Math.floor(duration / millisecondsPerDay);
-                  const hours = Math.floor((duration % millisecondsPerDay) / (1000 * 60 * 60));
-                  const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+                  const hours = Math.floor(
+                    (duration % millisecondsPerDay) / (1000 * 60 * 60)
+                  );
+                  const minutes = Math.floor(
+                    (duration % (1000 * 60 * 60)) / (1000 * 60)
+                  );
 
-                  let durationString = '';
+                  let durationString = "";
                   if (days > 0) {
-                      durationString = `${days} ngày ${hours} giờ ${minutes} phút`;
+                    durationString = `${days} ngày ${hours} giờ ${minutes} phút`;
                   } else {
-                      durationString = `${hours} giờ ${minutes} phút`;
+                    durationString = `${hours} giờ ${minutes} phút`;
                   }
 
                   return (
