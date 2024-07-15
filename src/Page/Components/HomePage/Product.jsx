@@ -46,7 +46,13 @@ const Product = () => {
   const saveChanges = async () => {
     if (selectedProduct) {
       try {
-        await modifyProduct(selectedProduct);
+        const result = await modifyProduct(selectedProduct);
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
         setSelectedProduct(null);
       } catch (error) {
         console.error("Save error:", error);

@@ -97,7 +97,13 @@ const Tank = () => {
           return;
         }
 
-        await modifyTank(selectedTank);
+        const result = await modifyTank(selectedTank);
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
         setSelectedTank(null);
       } catch (error) {
         console.error("Save error:", error);

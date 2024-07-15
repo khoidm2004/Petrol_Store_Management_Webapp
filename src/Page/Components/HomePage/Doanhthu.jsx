@@ -548,7 +548,7 @@ const Revenue = () => {
                         <th className="center_sum">STT</th>
                         <th>Bể</th>
                         <th className="right_sum">Thể tích bể</th>
-                        <th>Mặt hàng</th>
+                        <th className="right_sum">Mặt hàng</th>
                         <th className="right_sum">Số lượng hàng tồn</th>
                       </tr>
                     </thead>
@@ -574,7 +574,7 @@ const Revenue = () => {
                             >
                               {formatNumberWithCommas(item.tankVolume)}
                             </td>
-                            <td className="noneRevenue">
+                            <td className="noneRevenue right_sum">
                               {item.product.productName}
                             </td>
                             <td

@@ -79,7 +79,13 @@ const Shift = () => {
       }
 
       try {
-        const status = await modifyShift(selectedShift);
+        const result = await modifyShift(selectedShift);
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
         setSelectedShift(null);
       } catch (error) {
         console.error("Save error:", error);
@@ -656,9 +662,11 @@ const Shift = () => {
                     )}
                 </div>
               </div>
-              <button className="send" onClick={saveChanges}>
-                LƯU
-              </button>
+              <div className="right_sum">
+                <button className="send" onClick={saveChanges}>
+                  LƯU
+                </button>
+              </div>
             </div>
           </>
         )}

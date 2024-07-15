@@ -73,7 +73,7 @@ export const Account = () => {
     if (selectedFile) {
       setProfile((prevProfile) => ({
         ...prevProfile,
-        avatar: selectedFile,
+        avatar: selectedFile || "",
       }));
     }
   }, [selectedFile]);
@@ -86,9 +86,48 @@ export const Account = () => {
     }));
   };
 
+  const validatePhoneNumber = (phoneNum) => {
+    const re = /^\d{10}$/;
+    return re.test(String(phoneNum));
+  };
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSave = async () => {
     try {
-      if (selectedFile) {
+        if(!profile.phoneNum || !profile.fullName || !profile.email || !profile.storeName){
+          setPopup({
+            show: true,
+            title: "Thông báo",
+            message: "Vui lòng nhập đầy đủ thông tin.",
+            status: "warning",
+          });
+          return;
+        }
+
+        if(!validateEmail(profile.email)){
+          setPopup({
+            show: true,
+            title: "Thông báo",
+            message: "Vui lòng nhập đúng định dạng của email.",
+            status: "warning",
+          });
+          return;
+        }
+
+        if(!validatePhoneNumber(profile.phoneNum)){
+          setPopup({
+            show: true,
+            title: "Thông báo",
+            message: "Vui lòng nhập đúng định dạng của số điện thoại.",
+            status: "warning",
+          });
+          return;
+        }
+        
         const result = await editProfile(profile, selectedFile);
         setPopup({
           show: true,
@@ -97,7 +136,6 @@ export const Account = () => {
           status: result.Status,
         });
         setSelectedFile(null);
-      }
     } catch (error) {
       return { Title: "Error" };
     }
@@ -180,7 +218,6 @@ export const Account = () => {
   };
   return (
     <div className="Staff">
-      <div className="text-account">ACCOUNT</div>
       <div className="page_account">
         <div className="profile_image_section">
           <div
@@ -230,7 +267,7 @@ export const Account = () => {
 
             <label htmlFor="phoneNum">PHONE NUMBER</label>
             <input
-              type="number"
+              type="text"
               name="phoneNum"
               value={profile.phoneNum}
               onChange={handleChange}
