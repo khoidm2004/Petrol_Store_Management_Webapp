@@ -1,8 +1,5 @@
 {
   "builds": [{ "src": "build", "use": "@vercel/node" }],
-  "engines": {
-    "node": "20.x"
-  },
   "env": {
     "NODE_OPTIONS": "--openssl-legacy-provider"
   }
