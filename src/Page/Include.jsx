@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { TbReportSearch } from "react-icons/tb";
 import { IoMdPeople } from "react-icons/io";
 import { FaBoxes } from "react-icons/fa";

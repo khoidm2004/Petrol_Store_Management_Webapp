@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./notFound.css";
 import useAuthStore from "../../../store/authStore.js";
 

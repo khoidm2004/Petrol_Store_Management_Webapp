@@ -118,7 +118,13 @@ const Pump = () => {
           return;
         }
 
-        await modifyPump(selectedPump);
+        const result = await modifyPump(selectedPump);
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
         setSelectedPump(null);
       } catch (error) {
         console.error("Save error:", error);
