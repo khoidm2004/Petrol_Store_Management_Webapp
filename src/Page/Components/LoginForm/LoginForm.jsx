@@ -57,6 +57,12 @@ const LoginForm = () => {
     try {
       const result = await login(formData);
       if (result.Title === "Success") {
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
         window.location.href = "/";
       } else {
         setPopup({
@@ -148,7 +154,6 @@ const LoginForm = () => {
                 placeholder="USERNAME"
                 value={formData.email}
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="input-box">
@@ -159,7 +164,7 @@ const LoginForm = () => {
                 placeholder="PASSWORD"
                 value={formData.password}
                 onChange={handleChange}
-                required
+             
               />
             </div>
             <div className="remember-forgot">
@@ -168,7 +173,7 @@ const LoginForm = () => {
               </a>
             </div>
           </div>
-          <button type="submit" disabled={loading} onSubmit                             ={handleSubmit}>
+          <button type="submit" disabled={loading} onClick={handleSubmit}>
             SIGN IN
           </button>
         </form>
