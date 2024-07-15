@@ -70,49 +70,45 @@ const Tank = () => {
   };
 
   const saveChanges = async () => {
-    if (selectedTank) {
-      try {
-        if (
-          !selectedTank.tankName ||
-          !selectedTank.tankCode ||
-          !selectedTank.tankVolume
-        ) {
-          setPopup({
-            show: true,
-            title: "Thông báo",
-            message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
-            status: "warning",
-          });
-          return;
-        }
+    if (
+      !selectedTank.tankName ||
+      !selectedTank.tankCode ||
+      !selectedTank.tankVolume
+    ) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        status: "warning",
+      });
+      return;
+    }
 
-        if (
-          10000 >= selectedTank.tankVolume ||
-          selectedTank.tankVolume >= 25000
-        ) {
-          setPopup({
-            show: true,
-            title: "Thông báo",
-            message: "Thể tích bể từ 10000 đến 25000.",
-            status: "warning",
-          });
-          return;
-        }
+    if (10000 > parseInt(selectedTank.tankVolume) || parseInt(selectedTank.tankVolume) > 25000) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Thể tích bể từ 10000 đến 25000.",
+        status: "info",
+      });
+      return;
+    }
 
-        const result = await modifyTank(selectedTank);
-        setPopup({
-          show: true,
-          title: result.Title,
-          message: result.Message,
-          status: result.Status,
-        });
-        setSelectedTank(null);
-      } catch (error) {
-        console.error("Save error:", error);
-      }
+    try {
+      const result = await modifyTank(selectedTank);
+      setPopup({
+        show: true,
+        title: result.Title,
+        message: result.Message,
+        status: result.Status,
+      });
+      setSelectedTank(null);
+    } catch (error) {
+      console.error("Save error:", error);
     }
   };
 
+  console.log(newTank)
   const handleAddTank = async () => {
     if (!newTank.tankName || !newTank.tankCode || !newTank.tankVolume) {
       setPopup({
@@ -124,7 +120,7 @@ const Tank = () => {
       return;
     }
 
-    if (10000 >= newTank.tankVolume && newTank.tankVolume <= 25000) {
+    if (newTank.tankVolume < 10000 || newTank.tankVolume > 25000) {
       setPopup({
         show: true,
         title: "Thông báo",
