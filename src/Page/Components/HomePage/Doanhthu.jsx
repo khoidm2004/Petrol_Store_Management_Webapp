@@ -991,7 +991,7 @@ const Revenue = () => {
                         <tbody className="tbodyRevenue">
                           {displayedLog.length > 0 ? (
                             displayedLog.map((item, index) => (
-                              <tr key={index}>
+                              <tr key={index} className="empty">
                                 <td
                                   className="center_sum"
                                   data-title="Giờ phát sinh"
