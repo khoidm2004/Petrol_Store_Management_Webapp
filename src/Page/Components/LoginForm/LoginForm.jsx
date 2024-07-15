@@ -142,10 +142,10 @@ const LoginForm = () => {
       className={`login-form-container ${showResetModal ? "modal-open" : ""}`}
     >
       <main>
-        <img src={coverimages} alt="Cover" id="coverimage" />
+        <img src={coverimages} id="coverimage" />
         <form>
           <div className="wrapper">
-            <img src={userAccount} alt="User" id="userlogo" />
+            <img src={userAccount} id="userlogo" />
             <div className="input-box">
               <input
                 type="text"
