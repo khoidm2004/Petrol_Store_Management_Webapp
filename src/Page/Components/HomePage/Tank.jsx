@@ -81,6 +81,7 @@ const Tank = () => {
             show: true,
             title: "Thông báo",
             message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+            status: "warning",
           });
           return;
         }
@@ -93,6 +94,7 @@ const Tank = () => {
             show: true,
             title: "Thông báo",
             message: "Thể tích bể từ 10000 đến 25000.",
+            status: "warning",
           });
           return;
         }
