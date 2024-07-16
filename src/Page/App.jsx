@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -11,14 +10,7 @@ import NotFoundPage from "./Components/NotFound/notFound.jsx";
 import useAuthStore from "../store/authStore.js";
 
 const App = () => {
-  const { user, setUser } = useAuthStore();
-
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user-info"));
-    if (storedUser) {
-      setUser(storedUser);
-    }
-  }, [setUser]);
+  const { user} = useAuthStore();
 
   return (
     <Router>

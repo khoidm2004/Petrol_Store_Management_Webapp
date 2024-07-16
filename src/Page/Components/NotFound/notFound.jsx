@@ -1,15 +1,9 @@
-import { useEffect } from "react";
 import "./notFound.css";
 import useAuthStore from "../../../store/authStore.js";
 
 const NotFoundPage = () => {
-  const { user, setUser } = useAuthStore();
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user-info"));
-    if (storedUser) {
-      setUser(storedUser);
-    }
-  }, [setUser]);
+  const { user } = useAuthStore();
+
   return (
     <div className="not-found">
       <div className="not-found-container">
