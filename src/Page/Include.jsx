@@ -217,7 +217,7 @@ const Include = () => {
           <Route path="/tank" element={<Tank />} />
           <Route path="/pump" element={<Pump />} />
           <Route path="/account" element={<Account />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </>
