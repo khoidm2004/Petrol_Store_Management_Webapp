@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Routes
+  Routes,
+  Navigate,
 } from "react-router-dom";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Include from "./Include";
@@ -23,7 +24,10 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/auth" element={<LoginForm />} />
-        <Route path="/*" element={user ? <Include /> : <NotFoundPage />} />
+        <Route
+          path="/*"
+          element={user ? <Include /> : <Navigate to="/auth" />}
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
