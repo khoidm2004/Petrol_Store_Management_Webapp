@@ -10,7 +10,7 @@ import NotFoundPage from "./Components/NotFound/notFound.jsx";
 import useAuthStore from "../store/authStore.js";
 
 const App = () => {
-  const { user} = useAuthStore();
+  const { user } = useAuthStore();
 
   return (
     <Router>
