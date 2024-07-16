@@ -342,7 +342,7 @@ const Revenue = () => {
               className="overlay"
               onClick={() => setShowBarDetail(false)}
             ></div>
-            <div className="viewShift viewRevenue">
+            <div className="viewShift">
               <AiOutlineClose
                 className="close_icon"
                 onClick={() => setShowBarDetail(false)}
@@ -364,7 +364,7 @@ const Revenue = () => {
                 <div className="content">
                   <h4>{formatDatestring(formattedDateRevenue)}</h4>
                   <div className="table-container">
-                    <table className="table firsttable tableRevenue">
+                    <table className="firsttable_shift">
                       <thead className="theadRevenue">
                         <tr>
                           <th className="center_sum">STT</th>
@@ -542,7 +542,7 @@ const Revenue = () => {
               <hr />
               <div className="content">
                 <div className="table-container">
-                  <table className="table tableRevenue">
+                  <table className="firsttable_shift">
                     <thead className="theadRevenue">
                       <tr>
                         <th className="center_sum">STT</th>
@@ -726,7 +726,7 @@ const Revenue = () => {
             </div>
           </header>
           <div className="doanh_thuTable ">
-            <table className="firsttable_shift tableRevenue">
+            <table className="firsttable_shift">
               <thead className="theadRevenue">
                 <tr>
                   <th className="center_sum">STT</th>
@@ -895,7 +895,7 @@ const Revenue = () => {
             <div className="content">
               <h4 className="timeLog">{formatDatestring(formattedDateLog)}</h4>
               <div className="table-container">
-                <table className="table">
+                <table className="firsttable_shift">
                   <thead>
                     <tr className="center_sum">
                       <th>Giờ phát sinh</th>
@@ -977,7 +977,7 @@ const Revenue = () => {
                   <div className="content">
                     <h4>{formatDatestring(formattedDateLog)}</h4>
                     <div className="table-container">
-                      <table className="table tableRevenue">
+                      <table className="firsttable_shift">
                         <thead className="theadRevenue">
                           <tr>
                             <th className="center_sum">Giờ phát sinh</th>
