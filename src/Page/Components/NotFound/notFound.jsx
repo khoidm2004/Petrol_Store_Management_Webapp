@@ -1,7 +1,7 @@
 import "./notFound.css";
 import useAuthStore from "../../../store/authStore.js";
 
-const NotFoundPage = () => {
+const NotFound = () => {
   const { user } = useAuthStore();
 
   return (
@@ -16,4 +16,4 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default NotFound;
