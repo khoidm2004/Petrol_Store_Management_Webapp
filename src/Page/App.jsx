@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import Include from "./Include";
 import NotFound from "./Components/NotFound/notFound.jsx";
@@ -18,9 +13,10 @@ const App = () => {
         <Route path="/auth" element={<LoginForm />} />
         <Route
           path="/*"
-          element={user ? <Include /> : <Navigate to="/auth" />}
+          element={user ? <Include /> : <Navigate to="/auth" replace />}
+          key={user ? "include" : "auth"}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} key="not-found" />
       </Routes>
     </Router>
   );
