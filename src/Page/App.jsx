@@ -20,7 +20,7 @@ const App = () => {
           path="/"
           element={user ? <Include /> : <Navigate to="/auth" />}
         />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
