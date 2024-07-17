@@ -151,7 +151,7 @@ const Include = () => {
               <div className="navbar__li-box">
                 <li className="navbar__li" onClick={toggleProductSubMenu}>
                   <span className="menu-text" style={{ fontWeight: "bold" }}>
-                    <FaBoxes className="icon_menu" /> QUẢN LÝ
+                    <FaBoxes className="icon_menu" /> CẤU HÌNH 
                   </span>
                 </li>
                 {isProductSubMenuOpen && (

@@ -581,7 +581,7 @@ const Shift = () => {
                                     value={
                                       pumpEntry.firstMeterReadingByMoney || ""
                                     }
-                                    placeholder="Số công tơ (M)"
+                                    placeholder="Số công tơ (VND)"
                                     onChange={(e) => {
                                       const newValue = e.target.value;
                                       setSelectedShift((prevShift) => ({
