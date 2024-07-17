@@ -106,7 +106,7 @@ const Product = () => {
   ).length;
 
   const data = {
-    labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
+    labels: ["Đang kinh doanh", "Đã ngừng kinh doanh"],
     datasets: [
       {
         label: "Mặt hàng",
@@ -199,7 +199,7 @@ const Product = () => {
                   >
                     <option value="fullSale">Tất cả mặt hàng</option>
                     <option value="sale">Đang kinh doanh</option>
-                    <option value="notSale">Ngừng kinh doanh</option>
+                    <option value="notSale">Đã ngừng kinh doanh</option>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -368,7 +368,7 @@ const Product = () => {
                   }
                 >
                   <option value="ON SALE">Đang kinh doanh</option>
-                  <option value="NOT ON SALE">Ngừng kinh doanh</option>
+                  <option value="NOT ON SALE">Đã ngừng kinh doanh</option>
                 </select>
               </label>
               <button className="send" onClick={saveChanges}>
@@ -448,22 +448,6 @@ const Product = () => {
                 />
               </label>
               <br />
-              <label>
-                {" "}
-                Trạng thái
-                <select
-                  value={newProduct.productStatus}
-                  onChange={(e) =>
-                    setNewProduct({
-                      ...newProduct,
-                      productStatus: e.target.value,
-                    })
-                  }
-                >
-                  <option value="ON SALE">Đang kinh doanh</option>
-                  <option value="NOT ON SALE">Ngừng kinh doanh</option>
-                </select>
-              </label>
               <button className="send" onClick={handleAddProduct}>
                 THÊM
               </button>

@@ -240,7 +240,7 @@ const Staff = () => {
                     value={viewMode}
                   >
                     <option value="working">Đang làm việc</option>
-                    <option value="notWorking">Ngừng làm việc</option>
+                    <option value="notWorking">Đã nghỉ việc</option>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -399,7 +399,7 @@ const Staff = () => {
                 }
               >
                 <option value="IS WORKING">Đang làm việc</option>
-                <option value="ISN'T WORKING">Ngừng làm việc</option>
+                <option value="ISN'T WORKING">Đã nghỉ việc</option>
               </select>
             </label>
             <br />
@@ -450,19 +450,6 @@ const Staff = () => {
                   setNewStaff({ ...newStaff, phoneNum: e.target.value })
                 }
               />
-            </label>
-            <br />
-            <label>
-              Trạng thái
-              <select
-                value={newStaff.workingStatus}
-                onChange={(e) =>
-                  setNewStaff({ ...newStaff, workingStatus: e.target.value })
-                }
-              >
-                <option value="IS WORKING">Đang làm việc</option>
-                <option value="ISN'T WORKING">Ngừng làm việc</option>
-              </select>
             </label>
             <br />
             <button type="button" onClick={handleAddStaff}>

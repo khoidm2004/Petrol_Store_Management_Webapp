@@ -202,7 +202,7 @@ const Pump = () => {
   ).length;
 
   const data = {
-    labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
+    labels: ["Đang kinh doanh", "Đã ngừng hoạt động"],
     datasets: [
       {
         label: "VOI BƠM",
@@ -286,7 +286,7 @@ const Pump = () => {
                   >
                     <option value="fullUse">Tất cả vòi bơm</option>
                     <option value="use">Đang sử dụng</option>
-                    <option value="noUse">Ngừng sử dụng</option>
+                    <option value="noUse">Đã ngừng hoạt động</option>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -525,19 +525,6 @@ const Pump = () => {
                 />
               </label>
               <br />
-              <label>
-                {" "}
-                Trạng thái
-                <select
-                  value={newStaff.pumpStatus}
-                  onChange={(e) =>
-                    setNewStaff({ ...newStaff, pumpStatus: e.target.value })
-                  }
-                >
-                  <option value="ON USE">Đang kinh doanh</option>
-                  <option value="NOT ON USE">Ngừng kinh doanh</option>
-                </select>
-              </label>
               <label>
                 {" "}
                 Mặt hàng

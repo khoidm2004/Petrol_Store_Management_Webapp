@@ -172,7 +172,7 @@ const Tank = () => {
   ).length;
 
   const data = {
-    labels: ["Đang kinh doanh", "Ngừng kinh doanh"],
+    labels: ["Đang kinh doanh", "Đã ngừng hoạt động"],
     datasets: [
       {
         label: "Bể",
@@ -257,7 +257,7 @@ const Tank = () => {
                   >
                     <option value="fullUse">Tất cả bể</option>
                     <option value="use">Đang sử dụng</option>
-                    <option value="notUse">Ngừng sử dụng</option>
+                    <option value="notUse">Đã ngừng hoạt động</option>
                   </select>
                 </th>
                 <th>Chi tiết</th>
@@ -410,7 +410,7 @@ const Tank = () => {
                   }
                 >
                   <option value="ON USE">Đang kinh doanh</option>
-                  <option value="NOT ON USE">Ngừng kinh doanh</option>
+                  <option value="NOT ON USE">Đã ngừng hoạt động</option>
                 </select>
               </label>
 
@@ -504,20 +504,6 @@ const Tank = () => {
                 />
               </label>
               <br />
-              <label>
-                {" "}
-                Trạng thái
-                <select
-                  value={newTank.tankStatus}
-                  onChange={(e) =>
-                    setNewTank({ ...newTank, tankStatus: e.target.value })
-                  }
-                >
-                  <option value="ON USE">Đang kinh doanh</option>
-                  <option value="NOT ON USE">Ngừng kinh doanh</option>
-                </select>
-              </label>
-
               <label>
                 {" "}
                 Mặt hàng

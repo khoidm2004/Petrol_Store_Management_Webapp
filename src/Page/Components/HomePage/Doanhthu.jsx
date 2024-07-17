@@ -1,5 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 import "chart.js/auto";
 import "./Revenue.css";
 import useFetchLog from "../../../hooks/FetchHooks/useFetchLog.js";
@@ -38,8 +41,6 @@ const Revenue = () => {
   const [logData, setLogData] = useState([]);
   const [dailyData, setDailyData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [totalQuantity, setTotalQuantity] = useState(0);
   const [logExists, setLogExists] = useState(false);
   const [showBarDetail, setShowBarDetail] = useState(false);
   const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
@@ -110,38 +111,21 @@ const Revenue = () => {
     fetchLogs();
   }, [formattedSelectedDateLog, useFetchLog]);
 
+  const [selectedItem, setSelectedItem] = useState([null]);
+
   useEffect(() => {
     const fetchData = async () => {
       setLeftData(tanks);
-      const totalQuantity = tanks.reduce(
-        (sum, item) => sum + parseInt(item.product.quantity_left),
-        0
-      );
-      const totalIncome = tanks.reduce(
-        (sum, item) => sum + parseInt(item.tankVolume),
-        0
-      );
-      setTotalIncome(totalIncome);
-      setTotalQuantity(totalQuantity);
+      if (tanks.length > 0) {
+        setSelectedItem(tanks[0]);
+      }
     };
     fetchData();
   }, [tanks]);
 
-  const [selectedItem, setSelectedItem] = useState(null);
   const handleRowClick = useCallback((item) => {
     setSelectedItem(item);
   }, []);
-
-  const doughnutData = {
-    labels: ["Thể tích bể", "Mặt hàng tồn"],
-    datasets: [
-      {
-        data: [totalIncome, totalQuantity],
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
-        hoverOffset: 10,
-      },
-    ],
-  };
 
   const [dataRevenue, setDataRevenue] = useState([]);
 
@@ -502,10 +486,37 @@ const Revenue = () => {
                 </div>
               ) : tanks.length > 0 ? (
                 <Doughnut
-                  data={doughnutData}
+                  data={{
+                    labels: ["Khoảng bể trống", "Mặt hàng tồn"],
+                    datasets: [
+                      {
+                        label: "Tồn kho",
+                        data: [
+                          selectedItem.tankVolume ?? 0 -
+                          selectedItem.product?.quantity_left ?? 0,
+                          selectedItem.product?.quantity_left ?? 0,
+                        ],
+                        backgroundColor: [
+                          "rgb(255, 99, 132)",
+                          "rgb(54, 162, 235)",
+                        ],
+                        hoverBackgroundColor: [
+                          "rgb(255, 159, 192)",
+                          "rgb(104, 182, 255)",
+                        ],
+                        hoverOffset: 2,
+                      },
+                    ],
+                  }}
                   options={{
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: selectedItem.tankName ?? "Lỗi chọn bể",
+                      },
+                    },
                   }}
                 />
               ) : (
@@ -546,9 +557,9 @@ const Revenue = () => {
                     <thead className="theadRevenue">
                       <tr>
                         <th className="center_sum">STT</th>
-                        <th>Bể</th>
+                        <th>Bể - Mặt hàng</th>
                         <th className="right_sum">Thể tích bể</th>
-                        <th className="right_sum">Mặt hàng</th>
+                        {/* <th className="right_sum">Mặt hàng</th> */}
                         <th className="right_sum">Số lượng hàng tồn</th>
                       </tr>
                     </thead>
@@ -574,13 +585,13 @@ const Revenue = () => {
                             >
                               {formatNumberWithCommas(item.tankVolume)}
                             </td>
-                            <td className="noneRevenue right_sum">
+                            {/* <td className="noneRevenue right_sum">
                               {item.product.productName}
-                            </td>
+                            </td> */}
                             <td
                               className="right_sum"
                               data-label={item.product.productName}
-                              data-title="Mặt hàng dư"
+                              data-title="Mặt hàng"
                             >
                               {formatNumberWithCommas(
                                 item.product.quantity_left
@@ -672,12 +683,13 @@ const Revenue = () => {
                       <div className="pump_Revenue">
                         <Doughnut
                           data={{
-                            labels: ["Thể tích bể", "Số lượng hàng tồn"],
+                            labels: ["Khoảng bể trống", "Số lượng hàng tồn"],
                             datasets: [
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  selectedItem.tankVolume ?? 0,
+                                  selectedItem.tankVolume ?? 0 -
+                                  selectedItem.product?.quantity_left ?? 0,
                                   selectedItem.product?.quantity_left ?? 0,
                                 ],
                                 backgroundColor: [
@@ -694,7 +706,7 @@ const Revenue = () => {
                             plugins: {
                               title: {
                                 display: true,
-                                text: selectedItem.tankName,
+                                text: selectedItem.tankName ?? null,
                               },
                             },
                           }}
@@ -730,10 +742,11 @@ const Revenue = () => {
               <thead className="theadRevenue">
                 <tr>
                   <th className="center_sum">STT</th>
-                  <th>Vòi bơm</th>
-                  <th>Mặt hàng</th>
+                  <th>Vòi bơm - Mặt hàng</th>
+                  {/* <th>Mặt hàng</th> */}
                   <th className="right_sum">Số đầu</th>
                   <th className="right_sum">Số cuối</th>
+                  <th className="right_sum">Doanh thu</th>
                 </tr>
               </thead>
               <tbody className="tbodyRevenue">
@@ -748,13 +761,15 @@ const Revenue = () => {
                         {indexOfFirstPumpRevenue + index + 1}
                       </th>
                       <td data-title="Vòi bơm">{staffMember.pumpName}</td>
-                      <td data-title="Mặt hàng">{staffMember.productName}</td>
+                      {/* <td data-title="Mặt hàng">{staffMember.productName}</td> */}
                       <td className="right_sum" data-title="Số đầu">
-                        {" "}
-                        {formatNumberWithSixNumber(staffMember.fNum)}
+                        {formatNumberWithCommas(staffMember.fNum)}
                       </td>
                       <td className="right_sum" data-title="Số cuối">
-                        {formatNumberWithSixNumber(staffMember.lNum)}
+                        {formatNumberWithCommas(staffMember.lNum)}
+                      </td>
+                      <td className="right_sum" data-title="Doanh thu">
+                        {formatNumberWithCommas(staffMember.lNum - staffMember.fNum)}
                       </td>
                     </tr>
                   ))
@@ -879,7 +894,7 @@ const Revenue = () => {
         </div>
         <div className="ton_kho">
           <div className="containerRevenue">
-            <h6>LƯỢNG TỒN TRONG CA</h6>
+            <h6>LOG TRONG CA</h6>
             <hr />
             <div className="date-selector">
               <DatePicker
@@ -960,7 +975,7 @@ const Revenue = () => {
                   onClick={() => setLogExists(false)}
                   className="close_icon"
                 />
-                <h4>LƯỢNG TỒN TRONG CA</h4>
+                <h4>LOG TRONG CA</h4>
                 <hr />
                 <div>
                   <div className="date-selector">
