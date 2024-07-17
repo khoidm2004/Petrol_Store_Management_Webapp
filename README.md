@@ -8,5 +8,7 @@
 - Front-End: Vite + React
 - Back-End: Firebase
 - Testing: Jest
+- Deploy: Vercel
 
-## Demo ▶️
+## [Demo ▶️](https://youtu.be/rAtj6H6lkM4)
+![App Image](https://i.ibb.co/tzTtxRf/Screenshot-1.png)
