@@ -5,7 +5,13 @@ import { FaBoxes } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { AiOutlineShopping } from "react-icons/ai";
-import { Route, Routes, useLocation, Link } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useLocation,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import Product from "./Components/HomePage/Product.jsx";
 import Tank from "./Components/HomePage/Tank.jsx";
 import Pump from "./Components/HomePage/Pump.jsx";
@@ -13,10 +19,9 @@ import Shift from "./Components/HomePage/Shift.jsx";
 import Staff from "./Components/HomePage/Staff.jsx";
 import Account from "./Components/Account/Account.jsx";
 import Revenue from "./Components/HomePage/Doanhthu.jsx";
-import NotFoundPage from "./Components/NotFound/notFound.jsx";
+import NotFound from "./Components/NotFound/notFound.jsx";
 import { FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
 import "./Components/HomePage/HomePage.scss";
-import { useNavigate } from "react-router-dom";
 import useLogout from "../hooks/useLogout.js";
 
 const Include = () => {
@@ -85,6 +90,7 @@ const Include = () => {
 
   const navigate = useNavigate();
   const { handleLogout } = useLogout();
+
   const handleLogouts = () => {
     handleLogout();
     navigate("/auth");
@@ -93,7 +99,7 @@ const Include = () => {
   return (
     <>
       {validPath && (
-        <header className={`header`}>
+        <header className="header">
           <div className="burger burgerCenter" onClick={toggleMenu}>
             {isMenuOpen ? (
               <FaArrowCircleLeft className="tab_menu" />
@@ -217,7 +223,7 @@ const Include = () => {
           <Route path="/tank" element={<Tank />} />
           <Route path="/pump" element={<Pump />} />
           <Route path="/account" element={<Account />} />
-          <Route path="/*" element={<NotFoundPage />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </div>
     </>
