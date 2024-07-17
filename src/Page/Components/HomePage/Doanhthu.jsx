@@ -366,7 +366,8 @@ const Revenue = () => {
                               </th>
                               <td data-title="Mặt hàng">{item.productName}</td>
                               <td className="right_sum" data-title="Doanh thu">
-                                {formatNumberWithCommas(item.productRevenue)} VND
+                                {formatNumberWithCommas(item.productRevenue)}{" "}
+                                VND
                               </td>
                               <td className="right_sum" data-title="Sản lượng">
                                 {formatNumberWithCommas(item.productQuantity)} L
@@ -492,8 +493,9 @@ const Revenue = () => {
                       {
                         label: "Tồn kho",
                         data: [
-                          selectedItem.tankVolume ?? 0 -
-                          selectedItem.product?.quantity_left ?? 0,
+                          selectedItem.tankVolume ??
+                            0 - selectedItem.product?.quantity_left ??
+                            0,
                           selectedItem.product?.quantity_left ?? 0,
                         ],
                         backgroundColor: [
@@ -595,7 +597,8 @@ const Revenue = () => {
                             >
                               {formatNumberWithCommas(
                                 item.product.quantity_left
-                              )} L
+                              )}{" "}
+                              L
                             </td>
                           </tr>
                         ))
@@ -688,8 +691,9 @@ const Revenue = () => {
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  selectedItem.tankVolume ?? 0 -
-                                  selectedItem.product?.quantity_left ?? 0,
+                                  selectedItem.tankVolume ??
+                                    0 - selectedItem.product?.quantity_left ??
+                                    0,
                                   selectedItem.product?.quantity_left ?? 0,
                                 ],
                                 backgroundColor: [
@@ -769,7 +773,9 @@ const Revenue = () => {
                         {formatNumberWithCommas(staffMember.lNum)}
                       </td>
                       <td className="right_sum" data-title="Doanh thu">
-                        {formatNumberWithCommas(staffMember.lNum - staffMember.fNum)}
+                        {formatNumberWithCommas(
+                          staffMember.lNum - staffMember.fNum
+                        )}
                       </td>
                     </tr>
                   ))
@@ -912,19 +918,22 @@ const Revenue = () => {
               <div className="table-container">
                 <table className="firsttable_shift">
                   <thead>
-                    <tr className="center_sum">
-                      <th>Giờ phát sinh</th>
-                      <th>Thành tiền</th>
+                    <tr>
+                      <th className="center_sum">Giờ phát sinh</th>
+                      <th className="right_sum">Thành tiền</th>
                     </tr>
                   </thead>
                   <tbody>
                     {displayedLog.length > 0 ? (
                       displayedLog.map((item, index) => (
-                        <tr key={index} className="center_sum">
-                          <td>
+                        <tr key={index}>
+                          <td className="center_sum">
                             {timeConverter(Date.parse(item.startTime)).time}
                           </td>
-                          <td> {formatNumberWithCommas(item.totalAmount)} VND</td>
+                          <td className="right_sum">
+                            {" "}
+                            {formatNumberWithCommas(item.totalAmount)} VND
+                          </td>
                         </tr>
                       ))
                     ) : (
@@ -946,10 +955,11 @@ const Revenue = () => {
                     {displayedLog.length > 0 ? (
                       <tr>
                         <th className="left_sum">Tổng:</th>
-                        <th className="center_sum" colSpan={5}>
+                        <th className="right_sum" colSpan={5}>
                           {formatNumberWithCommas(
                             total.toLocaleString("vi-VN")
-                          )} VND
+                          )}{" "}
+                          VND
                         </th>
                       </tr>
                     ) : null}
@@ -1021,7 +1031,8 @@ const Revenue = () => {
                                 </td>
                                 <td data-title="Vòi bơm">{item.pumpName}</td>
                                 <td className="right_sum" data-title="Đơn giá">
-                                  {formatNumberWithCommas(item.productPrice)} VND
+                                  {formatNumberWithCommas(item.productPrice)}{" "}
+                                  VND
                                 </td>
                                 <td className="right_sum" data-title="Số lượng">
                                   {item.quantity}

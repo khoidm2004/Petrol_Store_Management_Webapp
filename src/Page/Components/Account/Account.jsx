@@ -45,23 +45,23 @@ export const Account = () => {
   const { selectedFile, error, setSelectedFile, handleImageChange } =
     usePreviewImage();
 
-    useEffect(() => {
-      const errors = [];
-    
-      if (formPass.pass.length < 6) {
-        errors.push("Mật khẩu phải có ít nhất 6 ký tự.");
-      }
-      if (!/[A-Z]/.test(formPass.pass)) {
-        errors.push("Mật khẩu phải chứa ít nhất một chữ viết hoa.");
-      }
-      if (!/\d/.test(formPass.pass)) {
-        errors.push("Mật khẩu phải chứa ít nhất một số.");
-      }
-      if (!/[@$!%*?&]/.test(formPass.pass)) {
-        errors.push("Mật khẩu phải chứa ít nhất một ký tự đặc biệt.");
-      }
-      setPasswordError(errors);
-    }, [formPass.pass]);   
+  useEffect(() => {
+    const errors = [];
+
+    if (formPass.pass.length < 6) {
+      errors.push("Mật khẩu phải có ít nhất 6 ký tự.");
+    }
+    if (!/[A-Z]/.test(formPass.pass)) {
+      errors.push("Mật khẩu phải chứa ít nhất một chữ viết hoa.");
+    }
+    if (!/\d/.test(formPass.pass)) {
+      errors.push("Mật khẩu phải chứa ít nhất một số.");
+    }
+    if (!/[@$!%*?&]/.test(formPass.pass)) {
+      errors.push("Mật khẩu phải chứa ít nhất một ký tự đặc biệt.");
+    }
+    setPasswordError(errors);
+  }, [formPass.pass]);
 
   useEffect(() => {
     if (selectedFile) {
@@ -106,7 +106,7 @@ export const Account = () => {
         });
         return;
       }
-    
+
       if (!validateEmail(profile.email)) {
         setPopup({
           show: true,
@@ -167,8 +167,8 @@ export const Account = () => {
       return;
     }
 
-    const passLocal = JSON.parse(localStorage.getItem('user-info'));
-    if(passLocal.pass.trim() !== passwordOld.trim()){
+    const passLocal = JSON.parse(localStorage.getItem("user-info"));
+    if (passLocal.pass.trim() !== passwordOld.trim()) {
       setPopup({
         show: true,
         title: "Thông báo",
@@ -327,11 +327,12 @@ export const Account = () => {
                     value={formPass.passNew}
                     onChange={handleChangePass}
                   />
-                  {passwordError.length > 0 && passwordError.map((error, index) => (
-                    <span key={index} className="password-error">
-                      {error}
-                    </span>
-                  ))}
+                  {passwordError.length > 0 &&
+                    passwordError.map((error, index) => (
+                      <span key={index} className="password-error">
+                        {error}
+                      </span>
+                    ))}
                 </div>
                 <button onClick={handleChangePassword}>SUBMIT</button>
                 {resetStatus && <p className="reset-status">{resetStatus}</p>}
@@ -339,7 +340,11 @@ export const Account = () => {
             </>
           )}
           <div className="rowButton">
-            <button type="button" className="button_account" onClick={handleSave}>
+            <button
+              type="button"
+              className="button_account"
+              onClick={handleSave}
+            >
               SAVE
             </button>
             <button className="button_account" onClick={handleResetClick}>
