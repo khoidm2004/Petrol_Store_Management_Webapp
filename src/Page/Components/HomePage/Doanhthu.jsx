@@ -891,7 +891,7 @@ const Revenue = () => {
         </div>
         <div className="ton_kho">
           <div className="containerRevenue">
-            <h6>LƯỢNG TỒN TRONG CA</h6>
+            <h6>LOG TRONG CA</h6>
             <hr />
             <div className="date-selector">
               <DatePicker
@@ -972,7 +972,7 @@ const Revenue = () => {
                   onClick={() => setLogExists(false)}
                   className="close_icon"
                 />
-                <h4>LƯỢNG TỒN TRONG CA</h4>
+                <h4>LOG TRONG CA</h4>
                 <hr />
                 <div>
                   <div className="date-selector">
