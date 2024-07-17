@@ -8,7 +8,6 @@ const Footer = () => {
   return (
     <>
       <div className="footer_container">
-        <div className="footer_content_container"></div>
         <div className="footer_info">
           <h1>PIACOM</h1>
           <h4>Công ty Cổ phần Tin học Viễn thông Petrolimex</h4>
