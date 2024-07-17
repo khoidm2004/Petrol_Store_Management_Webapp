@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 import "chart.js/auto";
 import "./Revenue.css";
@@ -492,7 +492,8 @@ const Revenue = () => {
                       {
                         label: "Tồn kho",
                         data: [
-                          (selectedItem.tankVolume - selectedItem.product?.quantity_left) ?? 0,
+                          selectedItem.tankVolume -
+                            selectedItem.product?.quantity_left ?? 0,
                           selectedItem.product?.quantity_left ?? 0,
                         ],
                         backgroundColor: [
@@ -500,8 +501,8 @@ const Revenue = () => {
                           "rgb(54, 162, 235)",
                         ],
                         hoverBackgroundColor: [
-                          'rgb(255, 159, 192)',
-                          'rgb(104, 182, 255)',
+                          "rgb(255, 159, 192)",
+                          "rgb(104, 182, 255)",
                         ],
                         hoverOffset: 2,
                       },
@@ -515,8 +516,7 @@ const Revenue = () => {
                         display: true,
                         text: selectedItem.tankName ?? "Lỗi chọn bể",
                       },
-      
-                    }, 
+                    },
                   }}
                 />
               ) : (
@@ -557,9 +557,9 @@ const Revenue = () => {
                     <thead className="theadRevenue">
                       <tr>
                         <th className="center_sum">STT</th>
-                        <th>Bể</th>
+                        <th>Bể - Mặt hàng</th>
                         <th className="right_sum">Thể tích bể</th>
-                        <th className="right_sum">Mặt hàng</th>
+                        {/* <th className="right_sum">Mặt hàng</th> */}
                         <th className="right_sum">Số lượng hàng tồn</th>
                       </tr>
                     </thead>
@@ -585,13 +585,13 @@ const Revenue = () => {
                             >
                               {formatNumberWithCommas(item.tankVolume)}
                             </td>
-                            <td className="noneRevenue right_sum">
+                            {/* <td className="noneRevenue right_sum">
                               {item.product.productName}
-                            </td>
+                            </td> */}
                             <td
                               className="right_sum"
                               data-label={item.product.productName}
-                              data-title="Mặt hàng dư"
+                              data-title="Mặt hàng"
                             >
                               {formatNumberWithCommas(
                                 item.product.quantity_left
@@ -688,7 +688,8 @@ const Revenue = () => {
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  (selectedItem.tankVolume - selectedItem.product?.quantity_left) ?? 0,
+                                  selectedItem.tankVolume -
+                                    selectedItem.product?.quantity_left ?? 0,
                                   selectedItem.product?.quantity_left ?? 0,
                                 ],
                                 backgroundColor: [
