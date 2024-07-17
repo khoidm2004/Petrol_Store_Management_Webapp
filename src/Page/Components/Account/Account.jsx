@@ -21,6 +21,7 @@ export const Account = () => {
     status: "",
   });
   const [passwordError, setPasswordError] = useState("");
+  const [passwordOld, setPasswordOld] = useState("");
   const { editProfile } = useEditProfile();
   const [formPass, setFormPass] = useState({ pass: "", passNew: "" });
   const [profile, setProfile] = useState({
@@ -44,30 +45,23 @@ export const Account = () => {
   const { selectedFile, error, setSelectedFile, handleImageChange } =
     usePreviewImage();
 
-  useEffect(() => {
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    const minLengthMessage = "Mật khẩu phải có ít nhất 6 ký tự.";
-    const uppercaseMessage = "Mật khẩu phải chứa ít nhất một chữ viết hoa.";
-    const numberMessage = "Mật khẩu phải chứa ít nhất một số.";
-    const specialCharMessage = "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.";
-
-    let errorMessage = "";
-
-    if (formPass.pass.length < 6) {
-      errorMessage = minLengthMessage;
-    } else if (!/[A-Z]/.test(formPass.pass)) {
-      errorMessage = uppercaseMessage;
-    } else if (!/\d/.test(formPass.pass)) {
-      errorMessage = numberMessage;
-    } else if (!/[@$!%*?&]/.test(formPass.pass)) {
-      errorMessage = specialCharMessage;
-    } else if (!passwordRegex.test(formPass.pass)) {
-      errorMessage = "Mật khẩu không hợp lệ.";
-    }
-
-    setPasswordError(errorMessage);
-  }, [formPass.pass]);
+    useEffect(() => {
+      const errors = [];
+    
+      if (formPass.pass.length < 6) {
+        errors.push("Mật khẩu phải có ít nhất 6 ký tự.");
+      }
+      if (!/[A-Z]/.test(formPass.pass)) {
+        errors.push("Mật khẩu phải chứa ít nhất một chữ viết hoa.");
+      }
+      if (!/\d/.test(formPass.pass)) {
+        errors.push("Mật khẩu phải chứa ít nhất một số.");
+      }
+      if (!/[@$!%*?&]/.test(formPass.pass)) {
+        errors.push("Mật khẩu phải chứa ít nhất một ký tự đặc biệt.");
+      }
+      setPasswordError(errors);
+    }, [formPass.pass]);   
 
   useEffect(() => {
     if (selectedFile) {
@@ -112,7 +106,7 @@ export const Account = () => {
         });
         return;
       }
-
+    
       if (!validateEmail(profile.email)) {
         setPopup({
           show: true,
@@ -173,6 +167,16 @@ export const Account = () => {
       return;
     }
 
+    const passLocal = JSON.parse(localStorage.getItem('user-info'));
+    if(passLocal.pass.trim() !== passwordOld.trim()){
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Mật khẩu cũ không chính xác.",
+        status: "warning",
+      });
+      return;
+    }
     if (formPass.pass !== formPass.passNew) {
       setPopup({
         show: true,
@@ -183,7 +187,7 @@ export const Account = () => {
       return;
     }
 
-    if (passwordError !== "") {
+    if (passwordError.length > 0) {
       setPopup({
         show: true,
         title: "Thông báo",
@@ -220,6 +224,10 @@ export const Account = () => {
 
   const closePopup = () => {
     setPopup({ show: false, title: "", message: "", status: "error" });
+  };
+
+  const handleOldPasswordChange = (e) => {
+    setPasswordOld(e.target.value);
   };
   return (
     <div className="Staff">
@@ -287,21 +295,6 @@ export const Account = () => {
               value={profile.storeName}
               onChange={handleChange}
             />
-
-            <label htmlFor="pass">PASSWORD</label>
-            <div className="rowPasswordForget">
-              <input
-                readOnly
-                type="password"
-                name="pass"
-                value={profile.pass}
-                onChange={handleChange}
-                className="changePassWord"
-              />
-              <button className="buttonChangePass " onClick={handleResetClick}>
-                Đổi mật khẩu
-              </button>
-            </div>
           </div>
           {showResetModal && (
             <>
@@ -316,6 +309,13 @@ export const Account = () => {
                   <input
                     type="password"
                     name="pass"
+                    placeholder="Mật khẩu cũ"
+                    value={passwordOld}
+                    onChange={handleOldPasswordChange}
+                  />
+                  <input
+                    type="password"
+                    name="pass"
                     placeholder="Mật khẩu mới"
                     value={formPass.pass}
                     onChange={handleChangePass}
@@ -327,19 +327,25 @@ export const Account = () => {
                     value={formPass.passNew}
                     onChange={handleChangePass}
                   />
-                  {passwordError && (
-                    <span className="password-error">{passwordError}</span>
-                  )}
+                  {passwordError.length > 0 && passwordError.map((error, index) => (
+                    <span key={index} className="password-error">
+                      {error}
+                    </span>
+                  ))}
                 </div>
                 <button onClick={handleChangePassword}>SUBMIT</button>
                 {resetStatus && <p className="reset-status">{resetStatus}</p>}
               </div>
             </>
           )}
-
-          <button type="button" className="button_account" onClick={handleSave}>
-            SAVE
-          </button>
+          <div className="rowButton">
+            <button type="button" className="button_account" onClick={handleSave}>
+              SAVE
+            </button>
+            <button className="button_account" onClick={handleResetClick}>
+              Đổi mật khẩu
+            </button>
+          </div>
         </div>
       </div>
       <Footer />

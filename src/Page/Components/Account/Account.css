@@ -192,7 +192,7 @@ input:focus {
 .modal-content + button {
   width: 100%;
   padding: 10px;
-  margin: 30px 20px 0px 0px;
+  margin: 10px 0px 0px 0px;
   background-color: #166bcc;
   color: white;
   border: none;
@@ -244,9 +244,11 @@ input:focus {
 }
 
 .password-error {
+  width: 100%;
   color: #e53e3e;
   font-size: 14px;
-  margin-top: 4px;
+  text-align: left;
+  padding: 0 0 0 8px;
 }
 
 .rowPasswordForget {
@@ -254,7 +256,7 @@ input:focus {
   justify-content: space-around;
   gap: 5px;
 }
-/* Responsive Styles */
+
 @media (min-width: 768px) {
   .page_account {
     flex-direction: row;
@@ -275,6 +277,19 @@ input:focus {
   }
 }
 
+.rowButton{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+@media (max-width: 400px) {
+  .rowButton{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+}
 @media (max-width: 767px) {
   .rowPasswordForget {
     display: flex;
