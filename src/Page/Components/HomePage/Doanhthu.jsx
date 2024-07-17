@@ -742,10 +742,11 @@ const Revenue = () => {
               <thead className="theadRevenue">
                 <tr>
                   <th className="center_sum">STT</th>
-                  <th>Vòi bơm</th>
-                  <th>Mặt hàng</th>
+                  <th>Vòi bơm - Mặt hàng</th>
+                  {/* <th>Mặt hàng</th> */}
                   <th className="right_sum">Số đầu</th>
                   <th className="right_sum">Số cuối</th>
+                  <th className="right_sum">Doanh thu</th>
                 </tr>
               </thead>
               <tbody className="tbodyRevenue">
@@ -760,13 +761,15 @@ const Revenue = () => {
                         {indexOfFirstPumpRevenue + index + 1}
                       </th>
                       <td data-title="Vòi bơm">{staffMember.pumpName}</td>
-                      <td data-title="Mặt hàng">{staffMember.productName}</td>
+                      {/* <td data-title="Mặt hàng">{staffMember.productName}</td> */}
                       <td className="right_sum" data-title="Số đầu">
-                        {" "}
-                        {formatNumberWithSixNumber(staffMember.fNum)}
+                        {formatNumberWithCommas(staffMember.fNum)}
                       </td>
                       <td className="right_sum" data-title="Số cuối">
-                        {formatNumberWithSixNumber(staffMember.lNum)}
+                        {formatNumberWithCommas(staffMember.lNum)}
+                      </td>
+                      <td className="right_sum" data-title="Doanh thu">
+                        {formatNumberWithCommas(staffMember.lNum - staffMember.fNum)}
                       </td>
                     </tr>
                   ))
