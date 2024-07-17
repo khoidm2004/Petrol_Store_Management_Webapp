@@ -10,5 +10,5 @@
 - Testing: Jest
 - Deploy: Vercel
 
-## [Demo ▶️](https://youtu.be/rAtj6H6lkM4)
+## Demo ▶️
 ![App Image](https://i.ibb.co/tzTtxRf/Screenshot-1.png)
