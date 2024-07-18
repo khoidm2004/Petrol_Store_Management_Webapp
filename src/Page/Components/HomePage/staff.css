@@ -399,6 +399,58 @@ input{
   text-align: right;
 }
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 35px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  top: 2.5px;
+  left: 2.5px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(15px);
+}
+
+.switch input:not(:checked) + .slider:before {
+  transform: translateX(0);
+  color: transparent;
+}
+
+
 @media (max-width: 900px) {
   .product-item,
   .pump-item {
@@ -465,3 +517,4 @@ input{
     width: 150px;
   }
 }
+
