@@ -311,14 +311,20 @@ const Shift = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const filteredShifts = shifts.filter((shift) => {
+    const searchLower = searchQuery.toLowerCase();
     const filteredEmployees = Object.values(shift.employeeList).some(
-      (shifts) => {
-        return shifts.fullName
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
-      }
+      (employee) => employee.fullName.toLowerCase().includes(searchLower)
     );
-    return filteredEmployees;
+
+    const filteredStart = timeConverter(Date.parse(shift.startTime))
+      .date.toLowerCase()
+      .includes(searchLower);
+
+    const filteredEnd = timeConverter(Date.parse(shift.endTime))
+      .date.toLowerCase()
+      .includes(searchLower);
+
+    return filteredEmployees || filteredStart || filteredEnd;
   });
 
   const [currentPage, setCurrentPage] = useState(1);
