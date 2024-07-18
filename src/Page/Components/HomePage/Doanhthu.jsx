@@ -868,7 +868,7 @@ const Revenue = () => {
           </div>
           <br />
           <div className="row_image">
-            <div className="object_body">
+            <div className="object_body staffRevenue">
               <div className="object_box"> {staffNumber} </div>
               <Link className="object_a" to="/staff">
                 <IoMdPeople />

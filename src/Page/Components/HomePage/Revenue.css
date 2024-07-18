@@ -140,6 +140,18 @@
   height: 230px;
 }
 
+@media (max-width: 1200px) {
+  .staffRevenue {
+    order: 4;
+  }
+}
+
+@media (max-width: 907px) {
+  .staffRevenue {
+    order: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .chartRevenue {
     width: 100%;
