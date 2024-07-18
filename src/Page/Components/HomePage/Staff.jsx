@@ -48,7 +48,7 @@ const Staff = () => {
   };
 
   const validatePhoneNumber = (phoneNum) => {
-    const re = /^\d{10}$/;
+    const re = /^(?:\+84|0|84|0084)\d{9}$/;
     return re.test(String(phoneNum));
   };
 

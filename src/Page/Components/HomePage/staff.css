@@ -83,14 +83,17 @@
 }
 
 .chart-container {
-  width: 100%;
-  max-height: 400px;
+  width: 30%;
+  max-height: 300px;
   position: relative;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
 }
 
+.box_staff{
+  width: 70%;;
+}
 thead > tr > th {
   background-color: #f3f7fc;
   font-weight: 700;
@@ -155,9 +158,11 @@ tr:hover {
   margin-bottom: 10px;
   border: none;
   border-bottom: 1px solid black;
-  padding-left: 10px;
 }
 
+input{
+  padding-left: 10px;
+}
 .viewStaff button,
 .addStaff button {
   border: none;
@@ -372,7 +377,7 @@ tr:hover {
 
 .Staffs {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .noLine {
@@ -394,37 +399,22 @@ tr:hover {
   text-align: right;
 }
 
-/* Responsive Design */
-@media (min-width: 1400px) {
-  .chart-container {
-    width: 40%;
-  }
-
-  .box_staff {
-    width: 60%;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1500px) {
-  .Staffs {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .chart-container {
-    width: 30%;
-  }
-
-  .box_staff {
-    width: 70%;
-  }
-}
-
 @media (max-width: 900px) {
   .product-item,
   .pump-item {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  .box_staff{
+    width: 100%;
+  }
+
+  .chart-container{
+    width: 100%;
+  }
+  .Staffs{
+    flex-direction: column;
   }
 }
 
@@ -435,10 +425,6 @@ tr:hover {
   }
 }
 @media (max-width: 767px) {
-  .pagination > p {
-    display: none;
-  }
-
   .pagination-item {
     width: 50%;
     text-align: center;
@@ -455,9 +441,17 @@ tr:hover {
     width: 100%;
     margin-left: 0px;
   }
-  
 }
 
+@media (max-width:653px) {
+  .pagination > p {
+    display: none;
+  }
+
+  .pagination {
+    justify-content:flex-end;
+  }
+}
 @media (max-width: 480px) {
   .firsttable select {
     font-size: 14px;
