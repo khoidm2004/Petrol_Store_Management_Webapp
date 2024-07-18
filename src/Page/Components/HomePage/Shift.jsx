@@ -30,6 +30,7 @@ const Shift = () => {
   const [newShift, setNewShift] = useState({
     startTime: "",
     endTime: "",
+    shiftStatus: "open",
     pumpList: {},
     employeeList: {},
     productList: {},
@@ -66,17 +67,17 @@ const Shift = () => {
       const start = new Date(selectedShift.startTime);
       const end = new Date(selectedShift.endTime);
 
-      const differenceInHours = (end - start) / (1000 * 60 * 60);
-
-      if (differenceInHours < 0) {
+      if (start >= end) {
         setPopup({
           show: true,
           title: "Thông báo",
-          message: "Quãng thời gian của ca không hợp lệ.",
+          message: "Thời gian bắt đầu phải trước thời gian kết thúc.",
           status: "info",
         });
         return;
       }
+
+      const differenceInHours = (end - start) / (1000 * 60 * 60);
 
       if (differenceInHours < 2) {
         setPopup({
@@ -86,6 +87,43 @@ const Shift = () => {
           status: "info",
         });
         return;
+      }
+
+      for (let shift of shifts) {
+        if (shift.id === selectedShift.id) continue;
+
+        const existingStart = new Date(shift.startTime);
+        const existingEnd = new Date(shift.endTime);
+
+        if (start >= existingStart && start < existingEnd) {
+          setPopup({
+            show: true,
+            title: "Thông báo",
+            message: "Thời gian bắt đầu của ca mới nằm trong một ca đã có",
+            status: "warning",
+          });
+          return;
+        }
+
+        if (end > existingStart && end <= existingEnd) {
+          setPopup({
+            show: true,
+            title: "Thông báo",
+            message: "Thời gian kết thúc của ca mới nằm trong một ca đã có",
+            status: "warning",
+          });
+          return;
+        }
+
+        if (start <= existingStart && end >= existingEnd) {
+          setPopup({
+            show: true,
+            title: "Thông báo",
+            message: `Thời gian ca mới đang bao gồm một ca đã có.`,
+            status: "warning",
+          });
+          return;
+        }
       }
 
       try {
@@ -122,26 +160,62 @@ const Shift = () => {
     const start = new Date(newShift.startTime);
     const end = new Date(newShift.endTime);
 
-    const differenceInHours = (end - start) / (1000 * 60 * 60);
-
-    if (differenceInHours < 0) {
+    if (start >= end) {
       setPopup({
         show: true,
         title: "Thông báo",
-        message: "Quãng thời gian của ca không hợp lệ.",
+        message: "Thời gian bắt đầu phải trước thời gian kết thúc.",
         status: "info",
       });
       return;
     }
 
+    const differenceInHours = (end - start) / (1000 * 60 * 60);
+
     if (differenceInHours < 2) {
       setPopup({
         show: true,
         title: "Thông báo",
-        message: "Thời gian tối thiểu kết thúc sau 2 tiếng sau khi bắt đầu.",
+        message:
+          "Thời gian kết thúc phải ít nhất 2 tiếng sau thời gian bắt đầu.",
         status: "info",
       });
       return;
+    }
+
+    for (let shift of shifts) {
+      const existingStart = new Date(shift.startTime);
+      const existingEnd = new Date(shift.endTime);
+
+      if (start >= existingStart && start < existingEnd) {
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: "Thời gian bắt đầu của ca mới nằm trong một ca đã có",
+          status: "warning",
+        });
+        return;
+      }
+
+      if (end > existingStart && end <= existingEnd) {
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: "Thời gian kết thúc của ca mới nằm trong một ca đã có",
+          status: "warning",
+        });
+        return;
+      }
+
+      if (start <= existingStart && end >= existingEnd) {
+        setPopup({
+          show: true,
+          title: "Thông báo",
+          message: `Thời gian ca mới đang bao gồm một ca đã có.`,
+          status: "warning",
+        });
+        return;
+      }
     }
 
     try {
@@ -155,6 +229,7 @@ const Shift = () => {
       setNewShift({
         startTime: "",
         endTime: "",
+        shiftStatus: "open",
         pumpList: {},
         employeeList: {},
         productList: {},
@@ -164,7 +239,7 @@ const Shift = () => {
       setPopup({
         show: true,
         title: "Thông báo",
-        message: error,
+        message: error.message || error,
         status: "error",
       });
     }
@@ -269,6 +344,32 @@ const Shift = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
   };
 
+  const handleStatusChange = async (shiftToUpdate) => {
+    try {
+      let updatedShift;
+      if (shiftToUpdate.shiftStatus === "open") {
+        const endTime = new Date().toISOString().slice(0, 16);
+        updatedShift = { ...shiftToUpdate, shiftStatus: "closed", endTime };
+      } else {
+        updatedShift = { ...shiftToUpdate, shiftStatus: "open" };
+      }
+
+      const result = await modifyShift(updatedShift);
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Trạng thái ca đã được cập nhật thành công.",
+        status: "success",
+      });
+    } catch (error) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Đã xảy ra lỗi khi cập nhật trạng thái ca.",
+        status: "error",
+      });
+    }
+  };
   return (
     <div className="revenue">
       <header className="header_staff">
@@ -299,6 +400,7 @@ const Shift = () => {
                 <th>Ca bán hàng</th>
                 <th>Thời lượng</th>
                 <th>Nhân viên phụ trách</th>
+                <th className="center_sum">Đóng/Mở ca</th>
                 <th className="view_chitiet">Chi tiết</th>
               </tr>
             </thead>
@@ -349,7 +451,16 @@ const Shift = () => {
                           )
                         )}
                       </td>
-
+                      <td className="center_sum">
+                        <label className="switch">
+                          <input
+                            type="checkbox"
+                            checked={shift.shiftStatus === "open"}
+                            onChange={() => handleStatusChange(shift)}
+                          />
+                          <span className="slider"></span>
+                        </label>
+                      </td>
                       <td className="icon_editview">
                         <TbEyeEdit
                           className="icon_menu"
