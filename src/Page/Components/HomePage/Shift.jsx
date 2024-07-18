@@ -401,7 +401,7 @@ const Shift = () => {
                 <th>Thời lượng</th>
                 <th>Nhân viên phụ trách</th>
                 <th className="center_sum">Đóng/Mở ca</th>
-                <th className="view_chitiet">Chi tiết</th>
+                <th className="right_sum">Chi tiết</th>
               </tr>
             </thead>
             <tbody>
@@ -451,7 +451,7 @@ const Shift = () => {
                           )
                         )}
                       </td>
-                      <td className="center_sum">
+                      <td className="right_sum">
                         <label className="switch">
                           <input
                             type="checkbox"
@@ -461,7 +461,7 @@ const Shift = () => {
                           <span className="slider"></span>
                         </label>
                       </td>
-                      <td className="icon_editview">
+                      <td className="icon_editview right_sum">
                         <TbEyeEdit
                           className="icon_menu"
                           onClick={() => handleEdit(shift)}

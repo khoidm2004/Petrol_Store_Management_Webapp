@@ -450,7 +450,9 @@ input{
   color: transparent;
 }
 
-
+.box_shift{
+  font-size: 16px;
+}
 @media (max-width: 900px) {
   .product-item,
   .pump-item {
@@ -468,6 +470,10 @@ input{
   .Staffs{
     flex-direction: column;
   }
+
+  .box_shift{
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 850px) {
@@ -475,11 +481,46 @@ input{
   .addShift label {
     width: 100%;
   }
+
+  .box_shift{
+    font-size: 13px;
+  }
+
+  .header_staff{
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 416px) {
+  .box_shift{
+    font-size: 10px;
+  }
+
+  .icon_editview{
+    font-size: 15px;
+  }
+
+  .header_staff{
+    font-size: 14px;
+  }
+  .push{
+    width: 60px;
+    height: 30px;
+    font-size: 14px;
+  }
 }
 @media (max-width: 767px) {
   .pagination-item {
     width: 50%;
     text-align: center;
+  }
+
+  .box_shift{
+    font-size: 12px;
+  }
+
+  .header_staff{
+    font-size: 16px;
   }
 
   .viewStaff input,
@@ -503,6 +544,9 @@ input{
   .pagination {
     justify-content:flex-end;
   }
+  .box_shift{
+    font-size: 11px;
+  }
 }
 @media (max-width: 480px) {
   .firsttable select {
@@ -515,6 +559,9 @@ input{
 
   .search-input:focus {
     width: 150px;
+  }
+  .box_shift{
+    font-size: 10px;
   }
 }
 

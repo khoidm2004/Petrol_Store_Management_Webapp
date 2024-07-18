@@ -254,10 +254,6 @@ const Revenue = () => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const formatNumberWithSixNumber = (num) => {
-    return num.toString().padStart(6, "0");
-  };
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
