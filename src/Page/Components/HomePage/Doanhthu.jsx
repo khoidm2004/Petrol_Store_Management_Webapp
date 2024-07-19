@@ -263,6 +263,8 @@ const Revenue = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const formatLabel = (value, unit) => `${value} ${unit}`;
   return (
     <div className="revenue">
       <div className="tilte_revenue" style={{ textAlign: "center" }}>
@@ -305,6 +307,47 @@ const Revenue = () => {
                   options={{
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                      tooltip: {
+                        callbacks: {
+                          label: function (context) {
+                            const label = context.dataset.label || "";
+                            const value = context.raw || 0;
+                            const unit = label.includes("DOANH THU")
+                              ? "VND"
+                              : "L";
+                            return `${label}: ${value} ${unit}`;
+                          },
+                        },
+                      },
+                      datalabels: {
+                        display: true,
+                        formatter: (value, context) => {
+                          const unit = context.dataset.label.includes(
+                            "DOANH THU"
+                          )
+                            ? "VND"
+                            : "L";
+                          return `${value} ${unit}`;
+                        },
+                        anchor: "end",
+                        align: "top",
+                        offset: 4,
+                        font: {
+                          size: 12,
+                          weight: "bold",
+                          color: "white",
+                        },
+                      },
+                    },
+                    scales: {
+                      x: {
+                        beginAtZero: true,
+                      },
+                      y: {
+                        beginAtZero: true,
+                      },
+                    },
                   }}
                 />
               ) : (
@@ -484,21 +527,20 @@ const Revenue = () => {
               ) : tanks.length > 0 ? (
                 <Doughnut
                   data={{
-                    labels: ["Khoảng bể trống", "Mặt hàng tồn"],
+                    labels: ["Khoảng bể trống", "Số lượng hàng tồn"],
                     datasets: [
                       {
                         label: "Tồn kho",
                         data: [
-                          selectedItem.tankVolume ??
-                            0 - selectedItem.product?.quantity_left ??
-                            0,
+                          (selectedItem.tankVolume ?? 0) -
+                            (selectedItem.product?.quantity_left ?? 0),
                           selectedItem.product?.quantity_left ?? 0,
                         ],
                         backgroundColor: [
                           "rgb(255, 99, 132)",
                           "rgb(54, 162, 235)",
                         ],
-                        hoverOffset: 2,
+                        hoverOffset: 1,
                       },
                     ],
                   }}
@@ -508,7 +550,22 @@ const Revenue = () => {
                     plugins: {
                       title: {
                         display: true,
-                        text: selectedItem.tankName ?? "Lỗi chọn bể",
+                        text: selectedItem.tankName ?? null,
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function (context) {
+                            const label = context.label || "";
+                            const value = context.raw || "";
+                            return `${label}: ${formatLabel(value, "L")}`;
+                          },
+                        },
+                      },
+                      datalabels: {
+                        formatter: (value, context) => {
+                          return formatLabel(value, "L");
+                        },
+                        color: "#fff",
                       },
                     },
                   }}
@@ -703,6 +760,24 @@ const Revenue = () => {
                               title: {
                                 display: true,
                                 text: selectedItem.tankName ?? null,
+                              },
+                              tooltip: {
+                                callbacks: {
+                                  label: function (context) {
+                                    const label = context.label || "";
+                                    const value = context.raw || "";
+                                    return `${label}: ${formatLabel(
+                                      value,
+                                      "L"
+                                    )}`;
+                                  },
+                                },
+                              },
+                              datalabels: {
+                                formatter: (value, context) => {
+                                  return formatLabel(value, "L");
+                                },
+                                color: "#fff",
                               },
                             },
                           }}

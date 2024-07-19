@@ -466,6 +466,9 @@ const Product = () => {
                   display: true,
                   text: "MẶT HÀNG",
                 },
+                datalabels: {
+                  display: false, 
+                },
               },
             }}
           />

@@ -554,6 +554,9 @@ const Tank = () => {
                   display: true,
                   text: "BỂ",
                 },
+                datalabels: {
+                  display: false, 
+                },
               },
             }}
           />

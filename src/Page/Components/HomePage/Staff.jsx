@@ -340,6 +340,9 @@ const Staff = () => {
                   display: true,
                   text: "NHÂN VIÊN",
                 },
+                datalabels: {
+                  display: false,
+                },
               },
             }}
           />

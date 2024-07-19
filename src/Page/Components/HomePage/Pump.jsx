@@ -604,6 +604,9 @@ const Pump = () => {
                   display: true,
                   text: "VÒI BƠM",
                 },
+                datalabels: {
+                  display: false, 
+                },
               },
             }}
           />
