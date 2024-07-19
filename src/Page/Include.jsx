@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { TbReportSearch } from "react-icons/tb";
 import { IoMdPeople } from "react-icons/io";
-import { FaBoxes } from "react-icons/fa";
+import { FaBoxes, FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { AiOutlineShopping } from "react-icons/ai";
@@ -20,7 +20,6 @@ import Staff from "./Components/HomePage/Staff.jsx";
 import Account from "./Components/Account/Account.jsx";
 import Revenue from "./Components/HomePage/Doanhthu.jsx";
 import NotFound from "./Components/NotFound/notFound.jsx";
-import { FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
 import "./Components/HomePage/HomePage.scss";
 import useLogout from "../hooks/useLogout.js";
 
@@ -28,8 +27,7 @@ const Include = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductSubMenuOpen, setIsProductSubMenuOpen] = useState(false);
   const location = useLocation();
-  const [validPath, setValidPath] = useState(false);
-  const [currentPath, setCurrentPath] = useState(null);
+  const [currentPath, setCurrentPath] = useState(location.pathname);
 
   const routes = [
     "/",
@@ -42,7 +40,6 @@ const Include = () => {
   ];
 
   useEffect(() => {
-    setValidPath(routes.includes(location.pathname));
     setCurrentPath(location.pathname);
   }, [location.pathname]);
 
@@ -74,8 +71,8 @@ const Include = () => {
     const handleClickOutside = (event) => {
       if (
         isMenuOpen &&
-        event.target.closest(".navbar-menu") === null &&
-        event.target.closest(".burger") === null
+        !event.target.closest(".navbar-menu") &&
+        !event.target.closest(".burger")
       ) {
         setIsMenuOpen(false);
       }
@@ -98,7 +95,7 @@ const Include = () => {
 
   return (
     <>
-      {validPath && (
+      {routes.includes(currentPath) && (
         <header className="header">
           <div className="burger burgerCenter" onClick={toggleMenu}>
             {isMenuOpen ? (
@@ -107,9 +104,9 @@ const Include = () => {
               <FaArrowCircleRight className="tab_menu" />
             )}
           </div>
-          <a href="/">
+          <Link href="/">
             <span id="logo">PIACOM</span>
-          </a>
+          </Link>
           <p id="title_header">
             CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
             PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
@@ -117,15 +114,12 @@ const Include = () => {
         </header>
       )}
       <div className={`body ${isMenuOpen ? "menu-open" : ""}`}>
-        {validPath && (
-          <div
-            className={`navbar-menu tab`}
-            style={{ width: isMenuOpen ? 200 : 0 }}
-          >
+        {routes.includes(currentPath) && (
+          <nav className={`navbar-menu ${isMenuOpen ? "open" : ""}`}>
             <ul className="navbar__list">
               <div className="navbar__li-box">
                 <li className={`navbar__li ${isActive("/") ? "active" : ""}`}>
-                  <Link className="menu-text" to="/">
+                  <Link className="menu-text menu-text-tab1" to="/">
                     <TbReportSearch className="icon_menu" /> DOANH THU
                   </Link>
                 </li>
@@ -134,24 +128,24 @@ const Include = () => {
                 <li
                   className={`navbar__li ${isActive("/shift") ? "active" : ""}`}
                 >
-                  <Link className="menu-text" to="/shift">
+                  <Link className="menu-text menu-text-tab1" to="/shift">
                     <AiOutlineShopping className="icon_menu" /> CA BÁN
                   </Link>
                 </li>
               </div>
-              <div className="navbar__li-box">
+              <div className="navbar__li-box ">
                 <li
                   className={`navbar__li ${isActive("/staff") ? "active" : ""}`}
                 >
-                  <Link className="menu-text" to="/staff">
+                  <Link className="menu-text menu-text-tab1" to="/staff">
                     <IoMdPeople className="icon_menu" /> NHÂN VIÊN
                   </Link>
                 </li>
               </div>
               <div className="navbar__li-box">
                 <li className="navbar__li" onClick={toggleProductSubMenu}>
-                  <span className="menu-text" style={{ fontWeight: "bold" }}>
-                    <FaBoxes className="icon_menu" /> CẤU HÌNH 
+                  <span className="menu-text menu-text-tab1" style={{ fontWeight: "bold" }}>
+                    <FaBoxes className="icon_menu" /> CẤU HÌNH
                   </span>
                 </li>
                 {isProductSubMenuOpen && (
@@ -195,25 +189,21 @@ const Include = () => {
                       isActive("/account") ? "active" : ""
                     }`}
                   >
-                    <Link className="menu-text" to="/account">
+                    <Link className="menu-text menu-text-tab1" to="/account">
                       <MdAccountCircle className="icon_menu" /> TÀI KHOẢN
                     </Link>
                   </li>
                 </div>
                 <div className="navbar__li-box">
-                  <li
-                    className={`navbar__li ${
-                      isActive("/logout") ? "active" : ""
-                    }`}
-                  >
-                    <a className="menu-text" onClick={handleLogouts}>
+                  <li className="navbar__li">
+                    <a className="menu-text menu-text-tab1" onClick={handleLogouts}>
                       <IoLogOut className="icon_menu" /> ĐĂNG XUẤT
                     </a>
                   </li>
                 </div>
               </ul>
             </div>
-          </div>
+          </nav>
         )}
         <Routes>
           <Route path="/" element={<Revenue />} />
