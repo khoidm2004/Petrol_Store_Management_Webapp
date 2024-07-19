@@ -151,6 +151,11 @@ a {
   margin-top: auto;
 }
 
+@media (max-height: 400px) {
+  .navbar-menu{
+    overflow: scroll;
+  }
+}
 @media (max-width: 768px) {
   .navbar-menu {
     height: auto;
