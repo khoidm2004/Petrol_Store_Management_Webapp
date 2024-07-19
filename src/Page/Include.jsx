@@ -40,6 +40,7 @@ const Include = () => {
   ];
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setCurrentPath(location.pathname);
   }, [location.pathname]);
 

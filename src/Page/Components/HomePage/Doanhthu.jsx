@@ -498,10 +498,6 @@ const Revenue = () => {
                           "rgb(255, 99, 132)",
                           "rgb(54, 162, 235)",
                         ],
-                        hoverBackgroundColor: [
-                          "rgb(255, 159, 192)",
-                          "rgb(104, 182, 255)",
-                        ],
                         hoverOffset: 2,
                       },
                     ],
