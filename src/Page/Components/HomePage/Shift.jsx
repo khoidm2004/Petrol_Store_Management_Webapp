@@ -31,7 +31,6 @@ const Shift = () => {
     startTime: "",
     endTime: "",
     shiftStatus: "open",
-    pumpList: {},
     employeeList: {},
     productList: {},
   });
@@ -41,6 +40,7 @@ const Shift = () => {
     fetchShift();
     fetchPump();
     fetchStaff();
+    manageShifts();
   }, [fetchShift]);
 
   const handleEdit = (shift) => {
@@ -230,7 +230,6 @@ const Shift = () => {
         startTime: "",
         endTime: "",
         shiftStatus: "open",
-        pumpList: {},
         employeeList: {},
         productList: {},
       });
@@ -310,22 +309,24 @@ const Shift = () => {
   };
 
   const [searchQuery, setSearchQuery] = useState("");
-  const filteredShifts = shifts.filter((shift) => {
-    const searchLower = searchQuery.toLowerCase();
-    const filteredEmployees = Object.values(shift.employeeList).some(
-      (employee) => employee.fullName.toLowerCase().includes(searchLower)
-    );
+  const filteredShifts = shifts
+    .filter((shift) => {
+      const searchLower = searchQuery.toLowerCase();
+      const filteredEmployees = Object.values(shift.employeeList).some(
+        (employee) => employee.fullName.toLowerCase().includes(searchLower)
+      );
 
-    const filteredStart = timeConverter(Date.parse(shift.startTime))
-      .date.toLowerCase()
-      .includes(searchLower);
+      const filteredStart = timeConverter(Date.parse(shift.startTime))
+        .date.toLowerCase()
+        .includes(searchLower);
 
-    const filteredEnd = timeConverter(Date.parse(shift.endTime))
-      .date.toLowerCase()
-      .includes(searchLower);
+      const filteredEnd = timeConverter(Date.parse(shift.endTime))
+        .date.toLowerCase()
+        .includes(searchLower);
 
-    return filteredEmployees || filteredStart || filteredEnd;
-  });
+      return filteredEmployees || filteredStart || filteredEnd;
+    })
+    .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
@@ -354,13 +355,28 @@ const Shift = () => {
     try {
       let updatedShift;
       if (shiftToUpdate.shiftStatus === "open") {
-        const endTime = new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().slice(0, 16);
+        const endTime = new Date(new Date().getTime() + 7 * 60 * 60 * 1000)
+          .toISOString()
+          .slice(0, 16);
         updatedShift = { ...shiftToUpdate, shiftStatus: "closed", endTime };
       } else {
+        const openShiftExists = shifts.some(
+          (shift) => shift.shiftStatus === "open"
+        );
+
+        if (openShiftExists) {
+          setPopup({
+            show: true,
+            title: "Thông báo",
+            message: "Đang có ca bán hàng đang hoạt động.",
+            status: "error",
+          });
+          return;
+        }
         updatedShift = { ...shiftToUpdate, shiftStatus: "open" };
       }
 
-      const result = await modifyShift(updatedShift);
+      await modifyShift(updatedShift);
       setPopup({
         show: true,
         title: "Thông báo",
@@ -376,6 +392,54 @@ const Shift = () => {
       });
     }
   };
+
+  const handleCheckPush = () => {
+    const openShiftExists = shifts.some(
+      (shift) => shift.shiftStatus === "open"
+    );
+
+    if (openShiftExists) {
+      setPopup({
+        show: true,
+        title: "Thông báo",
+        message: "Vẫn còn ca đang hoạt động.",
+        status: "error",
+      });
+    } else {
+      setAddingShift(true);
+    }
+  };
+
+  const manageShifts = async () => {
+    const now = new Date(new Date().getTime() + 7 * 60 * 60 * 1000)
+      .toISOString()
+      .slice(0, 16);
+
+    const expiredShifts = shifts.filter(
+      (shift) =>
+        shift.shiftStatus === "open" &&
+        new Date(shift.endTime).toISOString().slice(0, 16) < now
+    );
+
+    for (const shift of expiredShifts) {
+      const updatedShift = { ...shift, shiftStatus: "closed" };
+      await modifyShift(updatedShift);
+    }
+
+    const upcomingShifts = shifts.filter(
+      (shift) =>
+        shift.shiftStatus === "open" &&
+        new Date(shift.startTime).toISOString().slice(0, 16) <= now &&
+        new Date(shift.endTime).toISOString().slice(0, 16) > now
+    );
+
+    for (const shift of upcomingShifts) {
+      if (shift.shiftStatus === "closed") {
+        const updatedShift = { ...shift, shiftStatus: "open" };
+        await modifyShift(updatedShift);
+      }
+    }
+  };
   return (
     <div className="revenue">
       <header className="header_staff">
@@ -389,11 +453,7 @@ const Shift = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <button
-          type="button"
-          className="push"
-          onClick={() => setAddingShift(true)}
-        >
+        <button type="button" className="push" onClick={handleCheckPush}>
           THÊM
         </button>
       </header>
@@ -809,10 +869,28 @@ const Shift = () => {
                     )}
                 </div>
               </div>
-              <div className="right_sum">
-                <button className="send" onClick={saveChanges}>
-                  LƯU
-                </button>
+              <div className="Row">
+                <div className="left_sum">
+                  <h5> Đóng/ Mở ca </h5>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={selectedShift.shiftStatus === "open"}
+                      onChange={(e) =>
+                        setSelectedShift((prevShift) => ({
+                          ...prevShift,
+                          shiftStatus: e.target.checked ? "open" : "closed",
+                        }))
+                      }
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="right_sum">
+                  <button className="send" onClick={saveChanges}>
+                    LƯU
+                  </button>
+                </div>
               </div>
             </div>
           </>
@@ -1095,10 +1173,28 @@ const Shift = () => {
                     )}
                 </div>
               </div>
-              <div  className="right_sum">
-              <button className="send" onClick={handleAddShift}>
-                THÊM
-              </button>
+              <div className="Row">
+                <div className="left_sum">
+                  <h5> Đóng/ Mở ca </h5>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={newShift.shiftStatus === "closed"}
+                      onChange={(e) =>
+                        setNewShift((prevShift) => ({
+                          ...prevShift,
+                          shiftStatus: e.target.checked ? "closed" : "open",
+                        }))
+                      }
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <div className="right_sum">
+                  <button className="send" onClick={handleAddShift}>
+                    THÊM
+                  </button>
+                </div>
               </div>
             </div>
           </>
