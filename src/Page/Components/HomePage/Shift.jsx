@@ -354,7 +354,7 @@ const Shift = () => {
     try {
       let updatedShift;
       if (shiftToUpdate.shiftStatus === "open") {
-        const endTime = new Date().toISOString().slice(0, 16);
+        const endTime = new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().slice(0, 16);
         updatedShift = { ...shiftToUpdate, shiftStatus: "closed", endTime };
       } else {
         updatedShift = { ...shiftToUpdate, shiftStatus: "open" };
