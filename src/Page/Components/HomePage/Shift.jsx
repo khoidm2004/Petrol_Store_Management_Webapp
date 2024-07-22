@@ -41,7 +41,7 @@ const Shift = () => {
     fetchPump();
     fetchStaff();
     manageShifts();
-  }, [fetchShift, shifts]);
+  }, [fetchShift]);
 
   const handleEdit = (shift) => {
     setSelectedShift(shift);
@@ -421,7 +421,6 @@ const Shift = () => {
         new Date(shift.endTime).toISOString().slice(0, 16) < now
     );
 
-    console.log(expiredShifts)
     for (const shift of expiredShifts) {
       const updatedShift = { ...shift, shiftStatus: "closed" };
       await modifyShift(updatedShift);
@@ -528,7 +527,12 @@ const Shift = () => {
                           <input
                             type="checkbox"
                             checked={shift.shiftStatus === "open"}
-                            onChange={() => handleStatusChange(shift)}
+                            onChange={() => {
+                              if (new Date(shift.endTime).toISOString().slice(0, 16) >= new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 16)) {
+                                handleStatusChange(shift);
+                              }
+                            }}
+                            disabled={new Date(shift.endTime).toISOString().slice(0, 16) < new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 16)}
                           />
                           <span className="slider"></span>
                         </label>
