@@ -478,19 +478,24 @@ const Shift = () => {
                   const duration = endTime - startTime;
 
                   const millisecondsPerDay = 1000 * 60 * 60 * 24;
+                  const millisecondsPerHour = 1000 * 60 * 60;
+                  const millisecondsPerMinute = 1000 * 60;
+
                   const days = Math.floor(duration / millisecondsPerDay);
                   const hours = Math.floor(
-                    (duration % millisecondsPerDay) / (1000 * 60 * 60)
+                    (duration % millisecondsPerDay) / millisecondsPerHour
                   );
                   const minutes = Math.floor(
-                    (duration % (1000 * 60 * 60)) / (1000 * 60)
+                    (duration % millisecondsPerHour) / millisecondsPerMinute
                   );
 
                   let durationString = "";
                   if (days > 0) {
                     durationString = `${days} ngày ${hours} giờ ${minutes} phút`;
-                  } else {
+                  } else if (days === 0 && hours > 0) {
                     durationString = `${hours} giờ ${minutes} phút`;
+                  } else {
+                    durationString = `${minutes} phút`;
                   }
 
                   return (
