@@ -43,8 +43,21 @@ const Staff = () => {
   };
 
   const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
+    const basicEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!basicEmailRegex.test(String(email).toLowerCase())) {
+      return false;
+    }
+    const domainPart = email.split("@")[1];
+    const noNumberAfterAtRegex = /^[^\d]+$/;
+    if (!noNumberAfterAtRegex.test(domainPart)) {
+      return false;
+    }
+    const validDomainRegex = /^[^\s@]+@(gmail\.com|outlook\.com)$/;
+    if (!validDomainRegex.test(String(email).toLowerCase())) {
+      return false;
+    }
+
+    return true;
   };
 
   const validatePhoneNumber = (phoneNum) => {
