@@ -105,9 +105,9 @@ const Include = () => {
               <FaArrowCircleRight className="tab_menu" />
             )}
           </div>
-          <Link href="/" id="logoLink">
+          <a href="/" id="logoLink">
             <span id="logo">PIACOM</span>
-          </Link>
+          </a>
           <p id="title_header">
             CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
             PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
