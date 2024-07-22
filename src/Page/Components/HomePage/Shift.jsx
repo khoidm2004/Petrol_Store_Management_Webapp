@@ -41,7 +41,7 @@ const Shift = () => {
     fetchPump();
     fetchStaff();
     manageShifts();
-  }, [fetchShift]);
+  }, [fetchShift, shifts]);
 
   const handleEdit = (shift) => {
     setSelectedShift(shift);
@@ -421,6 +421,7 @@ const Shift = () => {
         new Date(shift.endTime).toISOString().slice(0, 16) < now
     );
 
+    console.log(expiredShifts)
     for (const shift of expiredShifts) {
       const updatedShift = { ...shift, shiftStatus: "closed" };
       await modifyShift(updatedShift);
