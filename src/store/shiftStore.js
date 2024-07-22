@@ -1,4 +1,11 @@
-import { addDoc, collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import {
+  getDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import { create } from "zustand";
 import { firestore } from "../firebase/firebase.js";
 
@@ -30,15 +37,23 @@ const useShiftStore = create((set) => ({
 
   addShift: async (newShift) => {
     try {
-      const shiftRef = collection(firestore, "shift");
-      const docRef = await addDoc(shiftRef, newShift);
+      const counterRef = doc(firestore, "counter", "shiftCounter");
+      const counterDoc = await getDoc(counterRef);
 
-      const shiftId = docRef.id;
-      await updateDoc(doc(firestore, "shift", shiftId), { shiftId });
+      let currentCount = counterDoc.data().count;
+
+      currentCount += 1;
+      await updateDoc(counterRef, { count: currentCount });
+
+      const shiftId = currentCount.toString();
+      const shiftRef = doc(firestore, "shift", shiftId);
+
+      await setDoc(shiftRef, { ...newShift, shiftId });
 
       set((state) => ({
-        shifts: [...state.shifts, { id: docRef, ...newShift, shiftId }],
+        shifts: [...state.shifts, { ...newShift, shiftId }],
       }));
+
       return {
         Title: "Thông báo",
         Message: "Thêm thành công",
