@@ -344,12 +344,13 @@ const Revenue = () => {
                         },
                         anchor: "end",
                         align: "top",
-                        offset: 4,
+                        offset: -5,
                         font: {
                           size: 12,
                           weight: "bold",
                           color: "white",
                         },
+                        clip: true,
                       },
                     },
                     scales: {
