@@ -105,7 +105,7 @@ const Include = () => {
               <FaArrowCircleRight className="tab_menu" />
             )}
           </div>
-          <Link href="/">
+          <Link href="/" id="logoLink">
             <span id="logo">PIACOM</span>
           </Link>
           <p id="title_header">
