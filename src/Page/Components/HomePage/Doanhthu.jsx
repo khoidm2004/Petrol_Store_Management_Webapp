@@ -265,6 +265,18 @@ const Revenue = () => {
   }, []);
 
   const formatLabel = (value, unit) => `${value} ${unit}`;
+
+  const [displayDataLabels, setDisplayDataLabels] = useState(true);
+
+  const updateDataLabelDisplay = () => {
+    setDisplayDataLabels(window.innerWidth >= 768);
+  };
+
+  useEffect(() => {
+    updateDataLabelDisplay();
+    window.addEventListener('resize', updateDataLabelDisplay);
+    return () => window.removeEventListener('resize', updateDataLabelDisplay);
+  }, []);
   return (
     <div className="revenue">
       <div className="tilte_revenue" style={{ textAlign: "center" }}>
@@ -321,7 +333,7 @@ const Revenue = () => {
                         },
                       },
                       datalabels: {
-                        display: true,
+                        display: displayDataLabels,
                         formatter: (value, context) => {
                           const unit = context.dataset.label.includes(
                             "DOANH THU"
