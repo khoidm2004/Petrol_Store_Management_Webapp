@@ -913,9 +913,8 @@ const Shift = () => {
                 </div>
               </div>
               <hr />
-              <div className="Row">
+              <div>
                 <h5>MẶT HÀNG - VÒI BƠM</h5>
-
                 <div className="Staff">
                   {Object.entries(newShift.productList).map(
                     ([key, product]) => (
@@ -1096,9 +1095,11 @@ const Shift = () => {
                     )}
                 </div>
               </div>
+              <div  className="right_sum">
               <button className="send" onClick={handleAddShift}>
                 THÊM
               </button>
+              </div>
             </div>
           </>
         )}
