@@ -394,20 +394,20 @@ const Shift = () => {
   };
 
   const handleCheckPush = () => {
-    const openShiftExists = shifts.some(
-      (shift) => shift.shiftStatus === "open"
-    );
+    // const openShiftExists = shifts.some(
+    //   (shift) => shift.shiftStatus === "open"
+    // );
 
-    if (openShiftExists) {
-      setPopup({
-        show: true,
-        title: "Thông báo",
-        message: "Vẫn còn ca đang hoạt động.",
-        status: "error",
-      });
-    } else {
+    // if (openShiftExists) {
+    //   setPopup({
+    //     show: true,
+    //     title: "Thông báo",
+    //     message: "Vẫn còn ca đang hoạt động.",
+    //     status: "error",
+    //   });
+    // } else {
       setAddingShift(true);
-    }
+    // }
   };
 
   const manageShifts = async () => {
