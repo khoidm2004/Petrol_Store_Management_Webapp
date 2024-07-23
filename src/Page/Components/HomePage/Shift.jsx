@@ -41,7 +41,7 @@ const Shift = () => {
     fetchPump();
     fetchStaff();
     manageShifts();
-  }, [fetchShift, shifts]);
+  }, [fetchShift]);
 
   const handleEdit = (shift) => {
     setSelectedShift(shift);
