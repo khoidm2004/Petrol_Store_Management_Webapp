@@ -289,6 +289,7 @@ const Pump = () => {
                     <option value="noUse">Đã ngừng hoạt động</option>
                   </select>
                 </th>
+                <th>Bể</th>
                 <th>Chi tiết</th>
               </tr>
             </thead>
@@ -301,6 +302,7 @@ const Pump = () => {
                     </td>
                     <td> {items.pumpCode} </td>
                     <td>{items.pumpName}</td>
+                    <td>{items.tank.tankName}</td>
                     <td className="icon_editview">
                       <TbEyeEdit
                         className="icon_menu"
@@ -311,7 +313,7 @@ const Pump = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="center_sum">
+                  <td colSpan="5" className="center_sum">
                     {searchQuery
                       ? "Không tìm thấy thông tin Vòi bơm."
                       : "Chưa có thông tin vòi bơm."}
@@ -319,7 +321,7 @@ const Pump = () => {
                 </tr>
               )}
               <tr>
-                <td colSpan="4" className="noLine">
+                <td colSpan="5" className="noLine">
                   {displayedPump.length > 0 && (
                     <div className="pagination">
                       <p>
