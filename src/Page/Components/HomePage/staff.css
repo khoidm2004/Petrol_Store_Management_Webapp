@@ -481,6 +481,9 @@ input{
     width: 100%;
   }
 
+  h5 + .switch{
+    width: 35px;
+  }
   .box_shift{
     font-size: 13px;
   }

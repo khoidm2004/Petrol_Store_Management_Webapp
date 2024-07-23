@@ -30,7 +30,7 @@ const Shift = () => {
   const [newShift, setNewShift] = useState({
     startTime: "",
     endTime: "",
-    shiftStatus: "open",
+    shiftStatus: "closed",
     employeeList: {},
     productList: {},
   });
@@ -41,7 +41,7 @@ const Shift = () => {
     fetchPump();
     fetchStaff();
     manageShifts();
-  }, [fetchShift]);
+  }, [fetchShift, shifts]);
 
   const handleEdit = (shift) => {
     setSelectedShift(shift);
@@ -229,7 +229,7 @@ const Shift = () => {
       setNewShift({
         startTime: "",
         endTime: "",
-        shiftStatus: "open",
+        shiftStatus: "closed",
         employeeList: {},
         productList: {},
       });
@@ -411,33 +411,28 @@ const Shift = () => {
   };
 
   const manageShifts = async () => {
-    const now = new Date(new Date().getTime() + 7 * 60 * 60 * 1000)
-      .toISOString()
-      .slice(0, 16);
-
+    const now = new Date();
     const expiredShifts = shifts.filter(
       (shift) =>
         shift.shiftStatus === "open" &&
-        new Date(shift.endTime).toISOString().slice(0, 16) < now
+        new Date(shift.endTime).getTime() < now.getTime()
     );
-
+  
     for (const shift of expiredShifts) {
       const updatedShift = { ...shift, shiftStatus: "closed" };
       await modifyShift(updatedShift);
     }
-
+  
     const upcomingShifts = shifts.filter(
       (shift) =>
-        shift.shiftStatus === "open" &&
-        new Date(shift.startTime).toISOString().slice(0, 16) <= now &&
-        new Date(shift.endTime).toISOString().slice(0, 16) > now
+        shift.shiftStatus === "closed" &&
+        new Date(shift.startTime).getTime() <= now.getTime() &&
+        new Date(shift.endTime).getTime() > now.getTime()
     );
-
+  
     for (const shift of upcomingShifts) {
-      if (shift.shiftStatus === "closed") {
-        const updatedShift = { ...shift, shiftStatus: "open" };
-        await modifyShift(updatedShift);
-      }
+      const updatedShift = { ...shift, shiftStatus: "open" };
+      await modifyShift(updatedShift);
     }
   };
   return (
@@ -466,7 +461,7 @@ const Shift = () => {
                 <th>Ca bán hàng</th>
                 <th>Thời lượng</th>
                 <th>Nhân viên phụ trách</th>
-                <th className="center_sum">Đóng/Mở ca</th>
+                <th className="right_sum">Đóng/Mở ca</th>
                 <th className="right_sum">Chi tiết</th>
               </tr>
             </thead>
@@ -528,12 +523,40 @@ const Shift = () => {
                             type="checkbox"
                             checked={shift.shiftStatus === "open"}
                             onChange={() => {
-                              if (new Date(shift.endTime).toISOString().slice(0, 16) >= new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 16)) {
-                                handleStatusChange(shift);
+                              const now = new Date().getTime();
+                              const shiftStartTime = new Date(
+                                shift.startTime
+                              ).getTime();
+                              const shiftEndTime = new Date(
+                                shift.endTime
+                              ).getTime();
+
+                              if (now < shiftStartTime - 5 * 60 * 1000) {
+                                setPopup({
+                                  show: true,
+                                  title: "Thông báo",
+                                  message:
+                                    "Không thể mở ca vì chưa đến thời gian cho phép.",
+                                  status: "info",
+                                });
+                                return;
                               }
+
+                              if (shiftEndTime < now) {
+                                setPopup({
+                                  show: true,
+                                  title: "Thông báo",
+                                  message:
+                                    "Không thể mở ca do đã quá thời gian",
+                                  status: "info",
+                                });
+                                return;
+                              }
+
+                              handleStatusChange(shift);
                             }}
-                            disabled={new Date(shift.endTime).toISOString().slice(0, 16) < new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 16)}
                           />
+
                           <span className="slider"></span>
                         </label>
                       </td>
@@ -879,8 +902,8 @@ const Shift = () => {
                     )}
                 </div>
               </div>
-              <div className="Row">
-                <div className="left_sum">
+              {/* <div className="Row"> */}
+              {/* <div className="left_sum">
                   <h5> Đóng/ Mở ca </h5>
                   <label className="switch">
                     <input
@@ -895,13 +918,13 @@ const Shift = () => {
                     />
                     <span className="slider"></span>
                   </label>
-                </div>
-                <div className="right_sum">
-                  <button className="send" onClick={saveChanges}>
-                    LƯU
-                  </button>
-                </div>
+                </div> */}
+              <div className="right_sum">
+                <button className="send" onClick={saveChanges}>
+                  LƯU
+                </button>
               </div>
+              {/* </div> */}
             </div>
           </>
         )}
@@ -1183,29 +1206,29 @@ const Shift = () => {
                     )}
                 </div>
               </div>
-              <div className="Row">
-                <div className="left_sum">
+              {/* <div className="Row"> */}
+              {/* <div className="left_sum">
                   <h5> Đóng/ Mở ca </h5>
                   <label className="switch">
                     <input
                       type="checkbox"
-                      checked={newShift.shiftStatus === "closed"}
+                      checked={newShift.shiftStatus === "open"}
                       onChange={(e) =>
                         setNewShift((prevShift) => ({
                           ...prevShift,
-                          shiftStatus: e.target.checked ? "closed" : "open",
+                          shiftStatus: e.target.checked ? "open" : "closed",
                         }))
                       }
                     />
                     <span className="slider"></span>
                   </label>
-                </div>
-                <div className="right_sum">
-                  <button className="send" onClick={handleAddShift}>
-                    THÊM
-                  </button>
-                </div>
+                </div> */}
+              <div className="right_sum">
+                <button className="send" onClick={handleAddShift}>
+                  THÊM
+                </button>
               </div>
+              {/* </div> */}
             </div>
           </>
         )}
