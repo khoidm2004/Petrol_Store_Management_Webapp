@@ -578,7 +578,7 @@ const Revenue = () => {
                         formatter: (value, context) => {
                           return formatLabel(value, "L");
                         },
-                        color: "#fff",
+                        color: "#000000",
                       },
                     },
                   }}
@@ -790,7 +790,7 @@ const Revenue = () => {
                                 formatter: (value, context) => {
                                   return formatLabel(value, "L");
                                 },
-                                color: "#fff",
+                                color: "#000000",
                               },
                             },
                           }}
