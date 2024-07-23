@@ -4,7 +4,7 @@ const Popup = ({ title, message, status, onClose }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       onClose();
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timeout);
   }, [onClose]);
