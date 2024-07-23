@@ -170,7 +170,7 @@ const Product = () => {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Tìm kiếm..."
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
