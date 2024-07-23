@@ -270,13 +270,13 @@ export const Account = () => {
             className="button_account"
             onClick={() => document.getElementById("fileInput").click()}
           >
-            CHANGE
+            THAY ĐỔI
           </button>
         </div>
 
         <div className="profile_info_section">
           <div className="profile_info">
-            <label htmlFor="fullName">NAME</label>
+            <label htmlFor="fullName">TÊN</label>
             <input
               type="text"
               name="fullName"
@@ -292,7 +292,7 @@ export const Account = () => {
               className="email"
             />
 
-            <label htmlFor="phoneNum">PHONE NUMBER</label>
+            <label htmlFor="phoneNum">SỐ ĐIỆN THOẠI</label>
             <input
               type="text"
               name="phoneNum"
@@ -357,10 +357,10 @@ export const Account = () => {
               className="button_account"
               onClick={handleSave}
             >
-              SAVE
+              LƯU LẠI
             </button>
             <button className="button_account" onClick={handleResetClick}>
-              Đổi mật khẩu
+              ĐỔI MẬT KHẨU
             </button>
           </div>
         </div>

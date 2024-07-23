@@ -145,7 +145,7 @@ const LoginForm = () => {
                 type="text"
                 name="email"
                 id="email"
-                placeholder="USERNAME"
+                placeholder="EMAIL"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -155,19 +155,19 @@ const LoginForm = () => {
                 type="password"
                 name="password"
                 id="password"
-                placeholder="PASSWORD"
+                placeholder="MẬT KHẨU"
                 value={formData.password}
                 onChange={handleChange}
               />
             </div>
             <div className="remember-forgot">
               <a href="#/" onClick={handleResetClick}>
-                Forgot account?
+                Quên mật khẩu?
               </a>
             </div>
           </div>
           <button type="submit" disabled={loading} onClick={handleSubmit}>
-            SIGN IN
+            ĐĂNG NHẬP
           </button>
         </form>
       </main>
@@ -184,12 +184,12 @@ const LoginForm = () => {
               <h2>ĐỔI MẬT KHẨU</h2>
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Nhập email của bạn"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
               />
             </div>
-            <button onClick={handleResetSubmit}>SUBMIT</button>
+            <button onClick={handleResetSubmit}>GỬI</button>
             {resetStatus && <p className="reset-status">{resetStatus}</p>}
           </div>
         </>
