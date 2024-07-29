@@ -274,8 +274,8 @@ const Revenue = () => {
 
   useEffect(() => {
     updateDataLabelDisplay();
-    window.addEventListener('resize', updateDataLabelDisplay);
-    return () => window.removeEventListener('resize', updateDataLabelDisplay);
+    window.addEventListener("resize", updateDataLabelDisplay);
+    return () => window.removeEventListener("resize", updateDataLabelDisplay);
   }, []);
   return (
     <div className="revenue">
@@ -328,7 +328,9 @@ const Revenue = () => {
                             const unit = label.includes("DOANH THU")
                               ? "VND"
                               : "L";
-                            return `${label}: ${value} ${unit}`;
+                            return `${label}: ${formatNumberWithCommas(
+                              value
+                            )} ${unit}`;
                           },
                         },
                       },
@@ -340,7 +342,7 @@ const Revenue = () => {
                           )
                             ? "VND"
                             : "L";
-                          return `${value} ${unit}`;
+                          return `${formatNumberWithCommas(value)} ${unit}`;
                         },
                         anchor: "end",
                         align: "top",
@@ -570,13 +572,19 @@ const Revenue = () => {
                           label: function (context) {
                             const label = context.label || "";
                             const value = context.raw || "";
-                            return `${label}: ${formatLabel(value, "L")}`;
+                            return `${label}: ${formatLabel(
+                              formatNumberWithCommas(value),
+                              "L"
+                            )}`;
                           },
                         },
                       },
                       datalabels: {
                         formatter: (value, context) => {
-                          return formatLabel(value, "L");
+                          return formatLabel(
+                            formatNumberWithCommas(value),
+                            "L"
+                          );
                         },
                         color: "#000000",
                       },
@@ -780,7 +788,7 @@ const Revenue = () => {
                                     const label = context.label || "";
                                     const value = context.raw || "";
                                     return `${label}: ${formatLabel(
-                                      value,
+                                      formatNumberWithCommas(value),
                                       "L"
                                     )}`;
                                   },
@@ -788,7 +796,10 @@ const Revenue = () => {
                               },
                               datalabels: {
                                 formatter: (value, context) => {
-                                  return formatLabel(value, "L");
+                                  return formatLabel(
+                                    formatNumberWithCommas(value),
+                                    "L"
+                                  );
                                 },
                                 color: "#000000",
                               },
