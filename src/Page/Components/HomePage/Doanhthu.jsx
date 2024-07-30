@@ -20,6 +20,8 @@ import usePumpStore from "../../../store/pumpStore.js";
 import useStaffStore from "../../../store/staffStore.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
+import useLogout from "../../../hooks/useLogout";
 
 const Revenue = () => {
   const { product, fetchProduct } = useProductStore();
@@ -46,6 +48,8 @@ const Revenue = () => {
   const [showDoughnutDetail, setShowDoughnutDetail] = useState(false);
   const [leftData, setLeftData] = useState([]);
 
+  const navigate = useNavigate();
+  const { handleLogout } = useLogout();
   const handleDateChangeLog = (e) => {
     setSelectedDateLog(e);
   };
@@ -277,6 +281,26 @@ const Revenue = () => {
     window.addEventListener("resize", updateDataLabelDisplay);
     return () => window.removeEventListener("resize", updateDataLabelDisplay);
   }, []);
+
+  const [logoutTimer, setLogoutTimer] = useState(null);
+  useEffect(() => {
+    startLogoutTimer();
+    return () => {
+      clearTimeout(logoutTimer);
+    };
+  }, []);
+
+  const startLogoutTimer = () => {
+    localStorage.setItem('lastActivity', new Date().getTime());
+
+    const timer = setTimeout(logout, 4*60*60*1000);
+    setLogoutTimer(timer);
+  };
+
+  const logout = () => {
+    handleLogout();
+    navigate("/auth");
+  };
   return (
     <div className="revenue">
       <div className="tilte_revenue" style={{ textAlign: "center" }}>
