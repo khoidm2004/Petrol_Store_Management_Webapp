@@ -688,7 +688,23 @@ const Shift = () => {
                         </p>
                         <FaRegMinusSquare
                           className="push_icon"
-                          onClick={() => handleRemoveEmployee(key)}
+                          onClick={() => {
+                            const now = new Date().getTime();
+                              const shiftEndTime = new Date(
+                                selectedShift.endTime
+                              ).getTime();
+
+                              if (shiftEndTime < now) {
+                                setPopup({
+                                  show: true,
+                                  title: "Thông báo",
+                                  message:
+                                    "Không thể sửa do đã quá thời gian",
+                                  status: "info",
+                                });
+                                return;
+                              }
+                            handleRemoveEmployee(key)}}
                         />
                       </div>
                     )
@@ -700,6 +716,21 @@ const Shift = () => {
                         <select
                           value=""
                           onChange={(e) => {
+                            const now = new Date().getTime();
+                            const shiftEndTime = new Date(
+                              selectedShift.endTime
+                            ).getTime();
+
+                            if (shiftEndTime < now) {
+                              setPopup({
+                                show: true,
+                                title: "Thông báo",
+                                message:
+                                  "Không thể thêm do đã quá thời gian",
+                                status: "info",
+                              });
+                              return;
+                            }
                             const selectedStaff = staff.find(
                               (p) => p.email === e.target.value
                             );
@@ -825,7 +856,23 @@ const Shift = () => {
                         </div>
                         <FaRegMinusSquare
                           className="push_icon"
-                          onClick={() => handleRemoveProduct(key)}
+                          onClick={() => {
+                            const now = new Date().getTime();
+                            const shiftEndTime = new Date(
+                              selectedShift.endTime
+                            ).getTime();
+
+                            if (shiftEndTime < now) {
+                              setPopup({
+                                show: true,
+                                title: "Thông báo",
+                                message:
+                                  "Không thể sửa do đã quá thời gian",
+                                status: "info",
+                              });
+                              return;
+                            }
+                            handleRemoveProduct(key)}}
                         />
                       </div>
                     )
@@ -837,6 +884,21 @@ const Shift = () => {
                         <select
                           value=""
                           onChange={(e) => {
+                            const now = new Date().getTime();
+                            const shiftEndTime = new Date(
+                              selectedShift.endTime
+                            ).getTime();
+
+                            if (shiftEndTime < now) {
+                              setPopup({
+                                show: true,
+                                title: "Thông báo",
+                                message:
+                                  "Không thể thêm do đã quá thời gian",
+                                status: "info",
+                              });
+                              return;
+                            }
                             const selectedProduct = product.find(
                               (p) =>
                                 parseInt(p.productCode) ===
@@ -902,29 +964,28 @@ const Shift = () => {
                     )}
                 </div>
               </div>
-              {/* <div className="Row"> */}
-              {/* <div className="left_sum">
-                  <h5> Đóng/ Mở ca </h5>
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      checked={selectedShift.shiftStatus === "open"}
-                      onChange={(e) =>
-                        setSelectedShift((prevShift) => ({
-                          ...prevShift,
-                          shiftStatus: e.target.checked ? "open" : "closed",
-                        }))
-                      }
-                    />
-                    <span className="slider"></span>
-                  </label>
-                </div> */}
               <div className="right_sum">
-                <button className="send" onClick={saveChanges}>
+                <button className="send" onClick={() => {
+                  const now = new Date().getTime();
+                  const shiftEndTime = new Date(
+                    selectedShift.endTime
+                  ).getTime();
+
+                  if (shiftEndTime < now) {
+                    setPopup({
+                      show: true,
+                      title: "Thông báo",
+                      message:
+                        "Không thể lưu lại do đã quá thời gian",
+                      status: "info",
+                    });
+                    return;
+                  }
+
+                  saveChanges}}>
                   LƯU
                 </button>
               </div>
-              {/* </div> */}
             </div>
           </>
         )}

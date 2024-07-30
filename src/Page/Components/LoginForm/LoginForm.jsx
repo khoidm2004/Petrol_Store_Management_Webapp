@@ -57,6 +57,7 @@ const LoginForm = () => {
     try {
       const result = await login(formData);
       if (result.Status === "success") {
+        
         window.location.href = "/";
       } else {
         setPopup({
