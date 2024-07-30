@@ -100,7 +100,7 @@ const LoginForm = () => {
     if (!validateEmail(resetEmail)) {
       setPopup({
         show: true,
-        title: "Thông báo",
+        title: "Lỗi",
         message: "Vui lòng nhập đúng định dạng email.",
         status: "error",
       });
@@ -110,7 +110,7 @@ const LoginForm = () => {
       const result = await useReclaimPassword(resetEmail);
       setPopup({
         show: true,
-        title: "Thông báo",
+        title: result.Title,
         message: result.Message,
         status: result.Status,
       });
