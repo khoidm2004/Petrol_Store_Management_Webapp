@@ -976,7 +976,7 @@ const Shift = () => {
                       show: true,
                       title: "Thông báo",
                       message:
-                        "Không thể lưu lại do đã quá thời gian",
+                        "Quá thời gian để lưu",
                       status: "info",
                     });
                     return;
