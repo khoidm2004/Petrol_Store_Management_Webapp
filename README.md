@@ -1,8 +1,8 @@
 # Petrol Store Management Web Application ⛽
 
 ## Authors 👷
-- Nguyen Tan Hai (Design + Front-End)
-- Khoi Do (Back-End + Testing + Deploy)
+- [Nguyen Tan Hai](https://github.com/leafclover01) (Design + Front-End)
+- [Khoi Do](https://github.com/khoidm2004) (Back-End + Testing + Deploy)
 
 ## Tech stacks 💻
 - Front-End: Vite + React
