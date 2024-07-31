@@ -785,9 +785,9 @@ const Revenue = () => {
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  selectedItem.tankVolume ??
-                                    0 - selectedItem.product?.quantity_left ??
-                                    0,
+                                  (selectedItem.tankVolume ??
+                                    0) - (selectedItem.product?.quantity_left ??
+                                    0),
                                   selectedItem.product?.quantity_left ?? 0,
                                 ],
                                 backgroundColor: [
