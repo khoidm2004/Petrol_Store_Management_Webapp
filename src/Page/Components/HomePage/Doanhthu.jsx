@@ -291,9 +291,9 @@ const Revenue = () => {
   }, []);
 
   const startLogoutTimer = () => {
-    localStorage.setItem('lastActivity', new Date().getTime());
+    localStorage.setItem("lastActivity", new Date().getTime());
 
-    const timer = setTimeout(logout, 4*60*60*1000);
+    const timer = setTimeout(logout, 4 * 60 * 60 * 1000);
     setLogoutTimer(timer);
   };
 
@@ -310,16 +310,18 @@ const Revenue = () => {
       <div className="Row">
         <div className="chartRevenue">
           <div className="title_xemChitiet Row">
-            DOANH THU SẢN LƯỢNG
-            <DatePicker
-              selected={selectedDateRevenue}
-              onChange={handleDateChangeRevenue}
-              value={selectedDateRevenue}
-              dateFormat="yyyy-MM-dd"
-              className="inputRevenue customDatePicker"
-              highlightDates={highlightDatesRevenue}
-              shouldHighlightWeekends
-            />
+            <p>DOANH THU SẢN LƯỢNG</p>
+            <div>
+              <DatePicker
+                selected={selectedDateRevenue}
+                onChange={handleDateChangeRevenue}
+                value={selectedDateRevenue}
+                dateFormat="yyyy-MM-dd"
+                className="inputRevenue customDatePicker"
+                highlightDates={highlightDatesRevenue}
+                shouldHighlightWeekends
+              />
+            </div>
           </div>
           <div className="chart">
             <div className="over">
@@ -785,9 +787,8 @@ const Revenue = () => {
                               {
                                 label: "Tồn kho",
                                 data: [
-                                  (selectedItem.tankVolume ??
-                                    0) - (selectedItem.product?.quantity_left ??
-                                    0),
+                                  (selectedItem.tankVolume ?? 0) -
+                                    (selectedItem.product?.quantity_left ?? 0),
                                   selectedItem.product?.quantity_left ?? 0,
                                 ],
                                 backgroundColor: [
