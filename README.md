@@ -1,4 +1,6 @@
 # Petrol Store Management Web Application ⛽
+## Description
+- Developed a comprehensive petrol station management system that streamlines operations with secure authentication, real-time tank monitoring, employee shift scheduling, product catalog management, and a centralized admin dashboard.
 
 ## Authors 👷
 - [Nguyen Tan Hai](https://github.com/ntanhai04) (Design + Front-End)
