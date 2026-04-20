@@ -5,6 +5,7 @@ import { FaBoxes, FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { AiOutlineShopping } from "react-icons/ai";
+import { IoLanguage } from "react-icons/io5";
 import {
   Route,
   Routes,
@@ -12,6 +13,7 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Product from "./Components/HomePage/Product.jsx";
 import Tank from "./Components/HomePage/Tank.jsx";
 import Pump from "./Components/HomePage/Pump.jsx";
@@ -24,6 +26,7 @@ import "./Components/HomePage/HomePage.scss";
 import useLogout from "../hooks/useLogout.js";
 
 const Include = () => {
+  const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductSubMenuOpen, setIsProductSubMenuOpen] = useState(false);
   const location = useLocation();
@@ -94,24 +97,64 @@ const Include = () => {
     navigate("/auth");
   };
 
+  const handleLanguageChange = (language) => {
+    i18n.changeLanguage(language);
+    localStorage.setItem("language", language);
+  };
+
   return (
     <>
       {routes.includes(currentPath) && (
         <header className="header">
-          <div className="burger burgerCenter" onClick={toggleMenu}>
-            {isMenuOpen ? (
-              <FaArrowCircleLeft className="tab_menu" />
-            ) : (
-              <FaArrowCircleRight className="tab_menu" />
-            )}
+          <div className="header-left">
+            <div className="burger burgerCenter" onClick={toggleMenu}>
+              {isMenuOpen ? (
+                <FaArrowCircleLeft className="tab_menu" />
+              ) : (
+                <FaArrowCircleRight className="tab_menu" />
+              )}
+            </div>
+            <a href="/" id="logoLink">
+              <span id="logo">PIACOM</span>
+            </a>
           </div>
-          <a href="/" id="logoLink">
-            <span id="logo">PIACOM</span>
-          </a>
-          <p id="title_header">
-            CÔNG TY CP TIN HỌC VIỄN THÔNG PETROLIMEX <br />
-            PETROLIMEX INFORMATION TECHNOLOGY AND TELECOMMUNICATION JSC
-          </p>
+          <div className="header-right">
+            <p id="title_header">
+              {t("header.company")} <br />
+              {t("header.companyEn")}
+            </p>
+            <div
+              className="language-switcher"
+              role="group"
+              aria-label={t("languageSwitcher.ariaLabel")}
+            >
+              <span className="language-switcher__icon" aria-hidden="true">
+                <IoLanguage />
+              </span>
+              <button
+                type="button"
+                className={`language-switcher__btn ${
+                  i18n.language.startsWith("vi") ? "is-active" : ""
+                }`}
+                onClick={() => handleLanguageChange("vi")}
+                aria-label="Tiếng Việt"
+                aria-pressed={i18n.language.startsWith("vi")}
+              >
+                VI
+              </button>
+              <button
+                type="button"
+                className={`language-switcher__btn ${
+                  i18n.language.startsWith("fi") ? "is-active" : ""
+                }`}
+                onClick={() => handleLanguageChange("fi")}
+                aria-label="Suomi"
+                aria-pressed={i18n.language.startsWith("fi")}
+              >
+                FI
+              </button>
+            </div>
+          </div>
         </header>
       )}
       <div className={`body ${isMenuOpen ? "menu-open" : ""}`}>
@@ -121,7 +164,7 @@ const Include = () => {
               <div className="navbar__li-box">
                 <li className={`navbar__li ${isActive("/") ? "active" : ""}`}>
                   <Link className="menu-text menu-text-tab1" to="/">
-                    <TbReportSearch className="icon_menu" /> DOANH THU
+                    <TbReportSearch className="icon_menu" /> {t("nav.revenue")}
                   </Link>
                 </li>
               </div>
@@ -130,7 +173,7 @@ const Include = () => {
                   className={`navbar__li ${isActive("/shift") ? "active" : ""}`}
                 >
                   <Link className="menu-text menu-text-tab1" to="/shift">
-                    <AiOutlineShopping className="icon_menu" /> CA BÁN
+                    <AiOutlineShopping className="icon_menu" /> {t("nav.shift")}
                   </Link>
                 </li>
               </div>
@@ -139,14 +182,14 @@ const Include = () => {
                   className={`navbar__li ${isActive("/staff") ? "active" : ""}`}
                 >
                   <Link className="menu-text menu-text-tab1" to="/staff">
-                    <IoMdPeople className="icon_menu" /> NHÂN VIÊN
+                    <IoMdPeople className="icon_menu" /> {t("nav.staff")}
                   </Link>
                 </li>
               </div>
               <div className="navbar__li-box">
                 <li className="navbar__li" onClick={toggleProductSubMenu}>
                   <span className="menu-text menu-text-tab1" style={{ fontWeight: "bold" }}>
-                    <FaBoxes className="icon_menu" /> CẤU HÌNH
+                    <FaBoxes className="icon_menu" /> {t("nav.config")}
                   </span>
                 </li>
                 {isProductSubMenuOpen && (
@@ -157,7 +200,7 @@ const Include = () => {
                       }`}
                     >
                       <Link className="menu-text menu-text-tab2" to="/product">
-                        MẶT HÀNG
+                        {t("nav.product")}
                       </Link>
                     </li>
                     <li
@@ -166,7 +209,7 @@ const Include = () => {
                       }`}
                     >
                       <Link className="menu-text menu-text-tab2" to="/tank">
-                        BỂ
+                        {t("nav.tank")}
                       </Link>
                     </li>
                     <li
@@ -175,7 +218,7 @@ const Include = () => {
                       }`}
                     >
                       <Link className="menu-text menu-text-tab2" to="/pump">
-                        VÒI BƠM
+                        {t("nav.pump")}
                       </Link>
                     </li>
                   </ul>
@@ -191,14 +234,14 @@ const Include = () => {
                     }`}
                   >
                     <Link className="menu-text menu-text-tab1" to="/account">
-                      <MdAccountCircle className="icon_menu" /> TÀI KHOẢN
+                      <MdAccountCircle className="icon_menu" /> {t("nav.account")}
                     </Link>
                   </li>
                 </div>
                 <div className="navbar__li-box">
                   <li className="navbar__li">
                     <a className="menu-text menu-text-tab1" onClick={handleLogouts}>
-                      <IoLogOut className="icon_menu" /> ĐĂNG XUẤT
+                      <IoLogOut className="icon_menu" /> {t("nav.logout")}
                     </a>
                   </li>
                 </div>

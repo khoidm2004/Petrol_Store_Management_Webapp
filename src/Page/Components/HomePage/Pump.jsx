@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import usePumpStore from "../../../store/pumpStore.js";
 import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
@@ -8,8 +8,10 @@ import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup.jsx";
+import { useTranslation } from "react-i18next";
 
 const Pump = () => {
+  const { t } = useTranslation();
   
   const pumps = usePumpStore((state) => state.pumps);
   const fetchPump = usePumpStore((state) => state.fetchPump);
@@ -94,8 +96,8 @@ const Pump = () => {
         if (!selectedPump.pumpCode || !selectedPump.pumpName) {
           setPopup({
             show: true,
-            title: "Lỗi",
-            message: "Vui lòng nhập đầy đủ và đúng thông tin vòi.",
+            title: t("common.error"),
+            message: t("messages.fillPumpInfo"),
             status: "warning",
           });
           return;
@@ -111,8 +113,8 @@ const Pump = () => {
         if (!isMatched) {
           setPopup({
             show: true,
-            title: "Lỗi",
-            message: "Không tìm thấy cặp Bể và Mặt Hàng tương ứng.",
+            title: t("common.error"),
+            message: t("messages.tankProductMismatch"),
             status: "error",
           });
           return;
@@ -136,8 +138,8 @@ const Pump = () => {
     if (!newStaff.pumpCode || !newStaff.pumpName) {
       setPopup({
         show: true,
-        title: "Lỗi",
-        message: "Vui lòng nhập đầy đủ và đúng thông tin vòi.",
+        title: t("common.error"),
+        message: t("messages.fillPumpInfo"),
         status: "warning",
       });
       return;
@@ -152,8 +154,8 @@ const Pump = () => {
     if (!isMatched) {
       setPopup({
         show: true,
-        title: "Lỗi",
-        message: "Không tìm thấy cặp Bể và Mặt Hàng tương ứng.",
+        title: t("common.error"),
+        message: t("messages.tankProductMismatch"),
         status: "error",
       });
       return;
@@ -201,17 +203,20 @@ const Pump = () => {
     (pumpMember) => pumpMember.pumpStatus === "NOT ON USE"
   ).length;
 
-  const data = {
-    labels: ["Đang kinh doanh", "Đã ngừng hoạt động"],
-    datasets: [
-      {
-        label: "VOI BƠM",
-        data: [firstNumber, secondNumber],
-        backgroundColor: ["Green", "Red"],
-        hoverOffset: 20,
-      },
-    ],
-  };
+  const data = useMemo(
+    () => ({
+      labels: [t("messages.pumpActive"), t("messages.pumpInactive")],
+      datasets: [
+        {
+          label: t("charts.pump"),
+          data: [firstNumber, secondNumber],
+          backgroundColor: ["Green", "Red"],
+          hoverOffset: 20,
+        },
+      ],
+    }),
+    [firstNumber, secondNumber, t]
+  );
 
   const workingPump = pumps.filter((pumps) => pumps.pumpStatus === "ON USE");
   const notWorkingPump = pumps.filter(
@@ -254,11 +259,11 @@ const Pump = () => {
   return (
     <div className="revenue">
       <header className="header_staff">
-        <p>THÔNG TIN VÒI BƠM</p>
+        <p>{t("pages.pumpInfo")}</p>
         <div className="search-container">
           <input
             type="text"
-            placeholder="Tìm kiếm..."
+            placeholder={t("common.search")}
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -269,7 +274,7 @@ const Pump = () => {
           className="push"
           onClick={() => setAddingStaff(true)}
         >
-          THÊM
+          {t("common.add")}
         </button>
       </header>
       <div className="Staffs">
@@ -277,20 +282,20 @@ const Pump = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th className="center_sum">STT</th>
-                <th>Mã vòi bơm</th>
+                <th className="center_sum">{t("tables.stt")}</th>
+                <th>{t("tables.pumpCode")}</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
                   >
-                    <option value="fullUse">Tất cả vòi bơm</option>
-                    <option value="use">Đang sử dụng</option>
-                    <option value="noUse">Đã ngừng hoạt động</option>
+                    <option value="fullUse">{t("messages.allPumps")}</option>
+                    <option value="use">{t("messages.pumpInUse")}</option>
+                    <option value="noUse">{t("messages.pumpNotInUse")}</option>
                   </select>
                 </th>
-                <th>Bể</th>
-                <th>Chi tiết</th>
+                <th>{t("tables.tank")}</th>
+                <th>{t("tables.detail")}</th>
               </tr>
             </thead>
             <tbody>
@@ -315,8 +320,8 @@ const Pump = () => {
                 <tr>
                   <td colSpan="5" className="center_sum">
                     {searchQuery
-                      ? "Không tìm thấy thông tin Vòi bơm."
-                      : "Chưa có thông tin vòi bơm."}
+                      ? t("messages.pumpNotFound")
+                      : t("messages.pumpEmpty")}
                   </td>
                 </tr>
               )}
@@ -326,9 +331,11 @@ const Pump = () => {
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstPump + 1} đến{" "}
-                          {Math.min(indexOfLastPump, filteredPump.length)} của{" "}
-                          {filteredPump.length} mục{" "}
+                          {t("pagination.pumpList", {
+                            from: indexOfFirstPump + 1,
+                            to: Math.min(indexOfLastPump, filteredPump.length),
+                            total: filteredPump.length,
+                          })}
                         </span>
                       </p>
                       <ul className="pagination-list">
@@ -341,7 +348,7 @@ const Pump = () => {
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                           >
-                            Trước
+                            {t("common.previous")}
                           </button>
                         </li>
                         {Array.from({ length: totalPages }, (_, index) => (
@@ -365,7 +372,7 @@ const Pump = () => {
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                           >
-                            Sau
+                            {t("common.next")}
                           </button>
                         </li>
                       </ul>
@@ -383,14 +390,14 @@ const Pump = () => {
               onClick={() => setSelectedPump(null)}
             ></div>
             <div className="viewStaff">
-              <h2>VÒI BƠM</h2>
+              <h2>{t("messages.pumpModal")}</h2>
               <AiOutlineClose
                 onClick={() => setSelectedPump(null)}
                 className="close-icon"
               />
               <label>
                 {" "}
-                Tên
+                {t("tables.name")}
                 <input
                   type="text"
                   value={selectedPump.pumpName}
@@ -405,7 +412,7 @@ const Pump = () => {
               <br />
               <label>
                 {" "}
-                Mã
+                {t("messages.code")}
                 <input
                   type="text"
                   value={parseInt(selectedPump.pumpCode)}
@@ -415,7 +422,7 @@ const Pump = () => {
               <br />
               <label>
                 {" "}
-                Trạng thái
+                {t("tables.status")}
                 <select
                   value={selectedPump.pumpStatus}
                   onChange={(e) =>
@@ -425,13 +432,13 @@ const Pump = () => {
                     })
                   }
                 >
-                  <option value="ON USE">Đang hoạt động</option>
-                  <option value="NOT ON USE">Ngừng hoạt động</option>
+                  <option value="ON USE">{t("messages.pumpActive")}</option>
+                  <option value="NOT ON USE">{t("messages.pumpInactive")}</option>
                 </select>
               </label>
               <label>
                 {" "}
-                Mặt hàng
+                {t("tables.product")}
                 <select
                   value={selectedPump.product.productCode}
                   onChange={(e) => {
@@ -460,7 +467,7 @@ const Pump = () => {
               </label>
               <label>
                 {" "}
-                Bể
+                {t("tables.tank")}
                 <select
                   value={selectedPump.tank.tankCode}
                   onChange={(e) => {
@@ -484,7 +491,7 @@ const Pump = () => {
                 </select>
               </label>
               <button className="send" onClick={saveChanges}>
-                OK
+                {t("messages.ok")}
               </button>
             </div>
           </>
@@ -496,14 +503,14 @@ const Pump = () => {
               onClick={() => setAddingStaff(false)}
             ></div>
             <div className="addStaff">
-              <h2>Thêm Vòi Bơm Mới</h2>
+              <h2>{t("messages.newPumpTitle")}</h2>
               <AiOutlineClose
                 onClick={() => setAddingStaff(false)}
                 className="close-icon"
               />
               <label>
                 {" "}
-                Tên
+                {t("tables.name")}
                 <input
                   type="text"
                   value={newStaff.pumpName}
@@ -515,7 +522,7 @@ const Pump = () => {
               <br />
               <label>
                 {" "}
-                Mã
+                {t("messages.code")}
                 <input
                   type="text"
                   onChange={(e) =>
@@ -529,7 +536,7 @@ const Pump = () => {
               <br />
               <label>
                 {" "}
-                Mặt hàng
+                {t("tables.product")}
                 <select
                   value={newStaff.product.productCode}
                   onChange={(e) => {
@@ -556,13 +563,13 @@ const Pump = () => {
                       </option>
                     ))
                   ) : (
-                    <option>Chưa có thông tin mặt hàng</option>
+                    <option>{t("messages.noProductInfo")}</option>
                   )}
                 </select>
               </label>
               <label>
                 {" "}
-                Bể
+                {t("tables.tank")}
                 <select
                   value={newStaff.tank.tankCode}
                   onChange={(e) => {
@@ -585,12 +592,12 @@ const Pump = () => {
                       </option>
                     ))
                   ) : (
-                    <option>Chưa có thông tin bể</option>
+                    <option>{t("messages.noTankInfo")}</option>
                   )}
                 </select>
               </label>
               <button className="send" onClick={handleAddStaff}>
-                THÊM
+                {t("common.add")}
               </button>
             </div>
           </>
@@ -604,7 +611,7 @@ const Pump = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: "VÒI BƠM",
+                  text: t("messages.pumpModal"),
                 },
                 datalabels: {
                   display: false, 

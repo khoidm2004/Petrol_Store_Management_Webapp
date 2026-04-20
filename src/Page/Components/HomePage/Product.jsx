@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import useProductStore from "../../../store/productStore.js";
 import { AiOutlineClose } from "react-icons/ai";
 import { Doughnut } from "react-chartjs-2";
@@ -6,8 +6,10 @@ import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import Popup from "../Popup/Popup";
 import "./staff.css";
+import { useTranslation } from "react-i18next";
 
 const Product = () => {
+  const { t } = useTranslation();
   const product = useProductStore((state) => state.product);
   const fetchProduct = useProductStore((state) => state.fetchProduct);
   const modifyProduct = useProductStore((state) => state.modifyProduct);
@@ -69,8 +71,8 @@ const Product = () => {
     ) {
       setPopup({
         show: true,
-        title: "Lỗi",
-        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        title: t("common.error"),
+        message: t("messages.productEnterFull"),
         status: "error",
       });
       return;
@@ -105,17 +107,20 @@ const Product = () => {
     (productMember) => productMember.productStatus === "NOT ON SALE"
   ).length;
 
-  const data = {
-    labels: ["Đang kinh doanh", "Đã ngừng kinh doanh"],
-    datasets: [
-      {
-        label: "Mặt hàng",
-        data: [firstNumber, secondNumber],
-        backgroundColor: ["Green", "Red"],
-        hoverOffset: 10,
-      },
-    ],
-  };
+  const data = useMemo(
+    () => ({
+      labels: [t("messages.onSale"), t("messages.notOnSale")],
+      datasets: [
+        {
+          label: t("charts.product"),
+          data: [firstNumber, secondNumber],
+          backgroundColor: ["Green", "Red"],
+          hoverOffset: 10,
+        },
+      ],
+    }),
+    [firstNumber, secondNumber, t]
+  );
 
   const workingProduct = product.filter(
     (ProductMember) => ProductMember.productStatus === "ON SALE"
@@ -166,11 +171,11 @@ const Product = () => {
   return (
     <div className="revenue">
       <header className="header_staff">
-        <p>THÔNG TIN MẶT HÀNG</p>
+        <p>{t("pages.productInfo")}</p>
         <div className="search-container">
           <input
             type="text"
-            placeholder="Tìm kiếm..."
+            placeholder={t("common.search")}
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -181,7 +186,7 @@ const Product = () => {
           className="push"
           onClick={() => setAddingProduct(true)}
         >
-          THÊM
+          {t("common.add")}
         </button>
       </header>
       <div className="Staffs">
@@ -189,20 +194,20 @@ const Product = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th className="center_sum">STT</th>
-                <th>Mã mặt hàng</th>
+                <th className="center_sum">{t("tables.stt")}</th>
+                <th>{t("tables.productCode")}</th>
 
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
                   >
-                    <option value="fullSale">Tất cả mặt hàng</option>
-                    <option value="sale">Đang kinh doanh</option>
-                    <option value="notSale">Đã ngừng kinh doanh</option>
+                    <option value="fullSale">{t("messages.allProducts")}</option>
+                    <option value="sale">{t("messages.onSale")}</option>
+                    <option value="notSale">{t("messages.notOnSale")}</option>
                   </select>
                 </th>
-                <th>Chi tiết</th>
+                <th>{t("tables.detail")}</th>
               </tr>
             </thead>
             <tbody>
@@ -226,8 +231,8 @@ const Product = () => {
                 <tr>
                   <td colSpan="4" className="center_sum">
                     {searchQuery
-                      ? "Không tìm thấy thông tin mặt hàng."
-                      : "Chưa có thông tin mặt hàng."}
+                      ? t("messages.productNotFound")
+                      : t("messages.productEmpty")}
                   </td>
                 </tr>
               )}
@@ -237,9 +242,14 @@ const Product = () => {
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstProduct + 1} đến{" "}
-                          {Math.min(indexOfLastProduct, filteredProduct.length)}{" "}
-                          trên {filteredProduct.length} mặt hàng
+                          {t("pagination.productList", {
+                            from: indexOfFirstProduct + 1,
+                            to: Math.min(
+                              indexOfLastProduct,
+                              filteredProduct.length
+                            ),
+                            total: filteredProduct.length,
+                          })}
                         </span>
                       </p>
                       <ul className="pagination-list">
@@ -252,7 +262,7 @@ const Product = () => {
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                           >
-                            Trước
+                            {t("common.previous")}
                           </button>
                         </li>
                         {Array.from({ length: totalPages }, (_, index) => (
@@ -276,7 +286,7 @@ const Product = () => {
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                           >
-                            Sau
+                            {t("common.next")}
                           </button>
                         </li>
                       </ul>
@@ -294,14 +304,14 @@ const Product = () => {
               onClick={() => setSelectedProduct(null)}
             ></div>
             <div className="viewStaff">
-              <h2>MẶT HÀNG</h2>
+              <h2>{t("messages.productModal")}</h2>
               <AiOutlineClose
                 onClick={() => setSelectedProduct(null)}
                 className="close-icon"
               />
               <label>
                 {" "}
-                Tên
+                {t("tables.name")}
                 <input
                   type="text"
                   value={selectedProduct.productName}
@@ -316,7 +326,7 @@ const Product = () => {
               <br />
               <label>
                 {" "}
-                Mã
+                {t("messages.code")}
                 <input
                   type="number"
                   value={parseInt(selectedProduct.productCode)}
@@ -326,7 +336,7 @@ const Product = () => {
               <br />
               <label>
                 {" "}
-                Giá
+                {t("tables.price")}
                 <input
                   type="number"
                   value={selectedProduct.productPrice}
@@ -341,10 +351,10 @@ const Product = () => {
               <br />
               <label>
                 {" "}
-                Màu
+                {t("tables.color")}
                 <input
                   type="text"
-                  placeholder="Tên màu"
+                  placeholder={t("tables.colorPlaceholder")}
                   value={selectedProduct.productColor}
                   onChange={(e) =>
                     setSelectedProduct({
@@ -357,7 +367,7 @@ const Product = () => {
               <br />
               <label>
                 {" "}
-                Trạng thái
+                {t("tables.status")}
                 <select
                   value={selectedProduct.productStatus}
                   onChange={(e) =>
@@ -367,12 +377,12 @@ const Product = () => {
                     })
                   }
                 >
-                  <option value="ON SALE">Đang kinh doanh</option>
-                  <option value="NOT ON SALE">Đã ngừng kinh doanh</option>
+                  <option value="ON SALE">{t("messages.onSale")}</option>
+                  <option value="NOT ON SALE">{t("messages.notOnSale")}</option>
                 </select>
               </label>
               <button className="send" onClick={saveChanges}>
-                OK
+                {t("messages.ok")}
               </button>
             </div>
           </>
@@ -384,14 +394,14 @@ const Product = () => {
               onClick={() => setAddingProduct(false)}
             ></div>
             <div className="addStaff">
-              <h2>Thêm Mặt Hàng Mới</h2>
+              <h2>{t("messages.newProductTitle")}</h2>
               <AiOutlineClose
                 onClick={() => setAddingProduct(false)}
                 className="close-icon"
               />
               <label>
                 {" "}
-                Tên
+                {t("tables.name")}
                 <input
                   type="text"
                   value={newProduct.productName}
@@ -406,7 +416,7 @@ const Product = () => {
               <br />
               <label>
                 {" "}
-                Mã
+                {t("messages.code")}
                 <input
                   type="number"
                   onChange={(e) =>
@@ -420,7 +430,7 @@ const Product = () => {
               <br />
               <label>
                 {" "}
-                Giá
+                {t("tables.price")}
                 <input
                   type="number"
                   onChange={(e) =>
@@ -434,10 +444,10 @@ const Product = () => {
               <br />
               <label>
                 {" "}
-                Màu
+                {t("tables.color")}
                 <input
                   type="text"
-                  placeholder="Tên màu"
+                  placeholder={t("tables.colorPlaceholder")}
                   value={newProduct.productColor}
                   onChange={(e) =>
                     setNewProduct({
@@ -449,7 +459,7 @@ const Product = () => {
               </label>
               <br />
               <button className="send" onClick={handleAddProduct}>
-                THÊM
+                {t("common.add")}
               </button>
             </div>
           </>
@@ -464,7 +474,7 @@ const Product = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: "MẶT HÀNG",
+                  text: t("messages.productModal"),
                 },
                 datalabels: {
                   display: false, 

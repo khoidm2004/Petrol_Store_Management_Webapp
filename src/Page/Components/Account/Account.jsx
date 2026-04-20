@@ -8,11 +8,14 @@ import Popup from "../Popup/Popup";
 import useLogout from "../../../hooks/useLogout";
 import Footer from "../Footer/Footer";
 import userAccount from "../../../assets/images/userAccount.png";
+import { useTranslation } from "react-i18next";
 
 import { useNavigate } from "react-router-dom";
+import { parseUserInfoFromStorage } from "../../../utils/userInfoStorage.js";
 
 export const Account = () => {
-  const user = JSON.parse(localStorage.getItem("user-info")) || {};
+  const { t } = useTranslation();
+  const user = parseUserInfoFromStorage() || {};
   const { handleLogout } = useLogout();
   const [popup, setPopup] = useState({
     show: false,
@@ -49,19 +52,19 @@ export const Account = () => {
     const errors = [];
 
     if (formPass.pass.length < 6) {
-      errors.push("Mật khẩu phải có ít nhất 6 ký tự.");
+      errors.push(t("account.passwordRuleLength"));
     }
     if (!/[A-Z]/.test(formPass.pass)) {
-      errors.push("Mật khẩu phải chứa ít nhất một chữ viết hoa.");
+      errors.push(t("account.passwordRuleUpper"));
     }
     if (!/\d/.test(formPass.pass)) {
-      errors.push("Mật khẩu phải chứa ít nhất một số.");
+      errors.push(t("account.passwordRuleNumber"));
     }
     if (!/[@$!%*?&]/.test(formPass.pass)) {
-      errors.push("Mật khẩu phải chứa ít nhất một ký tự đặc biệt.");
+      errors.push(t("account.passwordRuleSpecial"));
     }
     setPasswordError(errors);
-  }, [formPass.pass]);
+  }, [formPass.pass, t]);
 
   useEffect(() => {
     if (selectedFile) {
@@ -112,8 +115,8 @@ export const Account = () => {
       ) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Vui lòng nhập đầy đủ thông tin.",
+          title: t("common.notification"),
+          message: t("auth.requiredInfo"),
           status: "warning",
         });
         return;
@@ -122,8 +125,8 @@ export const Account = () => {
       if (!validateEmail(profile.email)) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Vui lòng nhập đúng định dạng của email.",
+          title: t("common.notification"),
+          message: t("account.invalidEmail"),
           status: "warning",
         });
         return;
@@ -132,8 +135,8 @@ export const Account = () => {
       if (!validatePhoneNumber(profile.phoneNum)) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Vui lòng nhập đúng định dạng của số điện thoại.",
+          title: t("common.notification"),
+          message: t("account.invalidPhone"),
           status: "warning",
         });
         return;
@@ -172,19 +175,28 @@ export const Account = () => {
     if (!formPass.pass || !formPass.pass) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đầy đủ thông tin để đổi mậu khẩu.",
+        title: t("common.notification"),
+        message: t("account.requiredInfoPassword"),
         status: "warning",
       });
       return;
     }
 
-    const passLocal = JSON.parse(localStorage.getItem("user-info"));
+    const passLocal = parseUserInfoFromStorage();
+    if (!passLocal?.pass) {
+      setPopup({
+        show: true,
+        title: t("common.notification"),
+        message: t("account.requiredInfoPassword"),
+        status: "warning",
+      });
+      return;
+    }
     if (passLocal.pass.trim() !== passwordOld.trim()) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Mật khẩu cũ không chính xác.",
+        title: t("common.notification"),
+        message: t("account.wrongOldPassword"),
         status: "warning",
       });
       return;
@@ -192,8 +204,8 @@ export const Account = () => {
     if (formPass.pass !== formPass.passNew) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập trùng pass nhập lại.",
+        title: t("common.notification"),
+        message: t("account.passwordMismatch"),
         status: "warning",
       });
       return;
@@ -202,8 +214,8 @@ export const Account = () => {
     if (passwordError.length > 0) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng lập đủ điều kiện.",
+        title: t("common.notification"),
+        message: t("account.passwordConditions"),
         status: "warning",
       });
       return;
@@ -218,8 +230,8 @@ export const Account = () => {
     if (result) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Đổi thành công",
+        title: t("common.notification"),
+        message: t("account.changeSuccess"),
         status: "success",
       });
       await handleLogout();
@@ -270,13 +282,13 @@ export const Account = () => {
             className="button_account"
             onClick={() => document.getElementById("fileInput").click()}
           >
-            THAY ĐỔI
+            {t("account.change")}
           </button>
         </div>
 
         <div className="profile_info_section">
           <div className="profile_info">
-            <label htmlFor="fullName">TÊN</label>
+            <label htmlFor="fullName">{t("account.name")}</label>
             <input
               type="text"
               name="fullName"
@@ -292,7 +304,7 @@ export const Account = () => {
               className="email"
             />
 
-            <label htmlFor="phoneNum">SỐ ĐIỆN THOẠI</label>
+            <label htmlFor="phoneNum">{t("account.phone")}</label>
             <input
               type="text"
               name="phoneNum"
@@ -300,7 +312,7 @@ export const Account = () => {
               onChange={handleChange}
             />
 
-            <label htmlFor="storeName">QUẢN LÝ CỬA HÀNG</label>
+            <label htmlFor="storeName">{t("account.storeManager")}</label>
             <input
               type="text"
               name="storeName"
@@ -317,25 +329,25 @@ export const Account = () => {
                     onClick={handleResetCancel}
                     className="close-icon"
                   />
-                  <h2>Đổi mật khẩu</h2>
+                  <h2>{t("account.changePassword")}</h2>
                   <input
                     type="password"
                     name="pass"
-                    placeholder="Mật khẩu cũ"
+                    placeholder={t("account.oldPassword")}
                     value={passwordOld}
                     onChange={handleOldPasswordChange}
                   />
                   <input
                     type="password"
                     name="pass"
-                    placeholder="Mật khẩu mới"
+                    placeholder={t("account.newPassword")}
                     value={formPass.pass}
                     onChange={handleChangePass}
                   />
                   <input
                     type="password"
                     name="passNew"
-                    placeholder="Nhập lại mật khẩu"
+                    placeholder={t("account.confirmPassword")}
                     value={formPass.passNew}
                     onChange={handleChangePass}
                   />
@@ -346,7 +358,7 @@ export const Account = () => {
                       </span>
                     ))}
                 </div>
-                <button onClick={handleChangePassword}>SUBMIT</button>
+                <button onClick={handleChangePassword}>{t("common.submit")}</button>
                 {resetStatus && <p className="reset-status">{resetStatus}</p>}
               </div>
             </>
@@ -357,10 +369,10 @@ export const Account = () => {
               className="button_account"
               onClick={handleSave}
             >
-              LƯU LẠI
+              {t("account.saveProfile")}
             </button>
             <button className="button_account" onClick={handleResetClick}>
-              ĐỔI MẬT KHẨU
+              {t("account.changePasswordBtn")}
             </button>
           </div>
         </div>

@@ -8,8 +8,10 @@ import useLogin from "../../../hooks/useLogin.js";
 import useReclaimPassword from "../../../hooks/useReclaimPassword";
 import Popup from "../Popup/Popup";
 import Footer from "../Footer/Footer.jsx";
+import { useTranslation } from "react-i18next";
 
 const LoginForm = () => {
+  const { t } = useTranslation();
   const { login, loading } = useLogin();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showResetModal, setShowResetModal] = useState(false);
@@ -38,8 +40,8 @@ const LoginForm = () => {
     if (!formData.email || !formData.password) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đầy đủ thông tin.",
+        title: t("common.notification"),
+        message: t("auth.requiredInfo"),
         status: "warning",
       });
       return;
@@ -48,8 +50,8 @@ const LoginForm = () => {
     if (!validateEmail(formData.email)) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đúng định dạng email.",
+        title: t("common.notification"),
+        message: t("auth.invalidEmailFormat"),
         status: "error",
       });
       return;
@@ -70,8 +72,8 @@ const LoginForm = () => {
     } catch (error) {
       setPopup({
         show: true,
-        title: "Login Error",
-        message: "Invalid email or password",
+        title: t("auth.loginError"),
+        message: t("auth.invalidCredentials"),
         status: "error",
       });
     }
@@ -91,8 +93,8 @@ const LoginForm = () => {
     if (!resetEmail) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đầy đủ thông tin.",
+        title: t("common.notification"),
+        message: t("auth.requiredInfo"),
         status: "warning",
       });
       return;
@@ -101,8 +103,8 @@ const LoginForm = () => {
     if (!validateEmail(resetEmail)) {
       setPopup({
         show: true,
-        title: "Lỗi",
-        message: "Vui lòng nhập đúng định dạng email.",
+        title: t("common.error"),
+        message: t("auth.invalidEmailFormat"),
         status: "error",
       });
       return;
@@ -121,8 +123,8 @@ const LoginForm = () => {
     } catch (error) {
       setPopup({
         show: true,
-        title: "Reset Password Error",
-        message: "Unable to reset password",
+        title: t("auth.resetPasswordError"),
+        message: t("auth.resetPasswordFailed"),
         status: "error",
       });
     }
@@ -156,19 +158,19 @@ const LoginForm = () => {
                 type="password"
                 name="password"
                 id="password"
-                placeholder="MẬT KHẨU"
+                placeholder={t("auth.password")}
                 value={formData.password}
                 onChange={handleChange}
               />
             </div>
             <div className="remember-forgot">
               <a href="#/" onClick={handleResetClick}>
-                Quên mật khẩu?
+                {t("auth.forgotPassword")}
               </a>
             </div>
           </div>
           <button type="submit" disabled={loading} onClick={handleSubmit}>
-            ĐĂNG NHẬP
+            {t("auth.login")}
           </button>
         </form>
       </main>
@@ -182,15 +184,15 @@ const LoginForm = () => {
                 onClick={handleResetCancel}
                 className="close-icon"
               />
-              <h2>ĐỔI MẬT KHẨU</h2>
+              <h2>{t("auth.resetPassword")}</h2>
               <input
                 type="email"
-                placeholder="Nhập email của bạn"
+                placeholder={t("auth.enterEmail")}
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
               />
             </div>
-            <button onClick={handleResetSubmit}>GỬI</button>
+            <button onClick={handleResetSubmit}>{t("common.submit")}</button>
             {resetStatus && <p className="reset-status">{resetStatus}</p>}
           </div>
         </>

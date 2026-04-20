@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import useTankStore from "../../../store/tankStore.js";
 import useProductStore from "../../../store/productStore.js";
 import { AiOutlineClose } from "react-icons/ai";
@@ -7,8 +7,10 @@ import { TbEyeEdit } from "react-icons/tb";
 import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup.jsx";
+import { useTranslation } from "react-i18next";
 
 const Tank = () => {
+  const { t } = useTranslation();
   const tanks = useTankStore((state) => state.tanks);
   const fetchTank = useTankStore((state) => state.fetchTank);
   const addTank = useTankStore((state) => state.addTank);
@@ -77,8 +79,8 @@ const Tank = () => {
     ) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        title: t("common.notification"),
+        message: t("messages.fillTankInfo"),
         status: "warning",
       });
       return;
@@ -87,8 +89,8 @@ const Tank = () => {
     if (10000 > parseInt(selectedTank.tankVolume) || parseInt(selectedTank.tankVolume) > 25000) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Thể tích bể từ 10000 đến 25000.",
+        title: t("common.notification"),
+        message: t("messages.tankVolumeRange"),
         status: "info",
       });
       return;
@@ -112,8 +114,8 @@ const Tank = () => {
     if (!newTank.tankName || !newTank.tankCode || !newTank.tankVolume) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đầy đủ thông tin bể.",
+        title: t("common.notification"),
+        message: t("messages.fillTankInfo"),
         status: "warning",
       });
       return;
@@ -122,8 +124,8 @@ const Tank = () => {
     if (newTank.tankVolume < 10000 || newTank.tankVolume > 25000) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Thể tích bể từ 10000 đến 25000.",
+        title: t("common.notification"),
+        message: t("messages.tankVolumeRange"),
         status: "info",
       });
       return;
@@ -157,7 +159,7 @@ const Tank = () => {
     } catch (error) {
       setPopup({
         show: true,
-        title: "Lỗi",
+        title: t("common.error"),
         message: error,
         status: "error",
       });
@@ -171,17 +173,20 @@ const Tank = () => {
     (TankMember) => TankMember.tankStatus === "NOT ON USE"
   ).length;
 
-  const data = {
-    labels: ["Đang kinh doanh", "Đã ngừng hoạt động"],
-    datasets: [
-      {
-        label: "Bể",
-        data: [firstNumber, secondNumber],
-        backgroundColor: ["Green", "Red"],
-        hoverOffset: 10,
-      },
-    ],
-  };
+  const data = useMemo(
+    () => ({
+      labels: [t("messages.tankOperating"), t("messages.tankStopped")],
+      datasets: [
+        {
+          label: t("charts.tank"),
+          data: [firstNumber, secondNumber],
+          backgroundColor: ["Green", "Red"],
+          hoverOffset: 10,
+        },
+      ],
+    }),
+    [firstNumber, secondNumber, t]
+  );
 
   const workingTank = tanks.filter(
     (TankMember) => TankMember.tankStatus === "ON USE"
@@ -225,11 +230,11 @@ const Tank = () => {
   return (
     <div className="revenue">
       <header className="header_staff">
-        <p>THÔNG TIN BỂ</p>
+        <p>{t("pages.tankInfo")}</p>
         <div className="search-container">
           <input
             type="text"
-            placeholder="Tìm kiếm..."
+            placeholder={t("common.search")}
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -240,7 +245,7 @@ const Tank = () => {
           className="push"
           onClick={() => setAddingTank(true)}
         >
-          THÊM
+          {t("common.add")}
         </button>
       </header>
       <div className="Staffs">
@@ -248,19 +253,19 @@ const Tank = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th className="center_sum">STT</th>
-                <th> Mã bể</th>
+                <th className="center_sum">{t("tables.stt")}</th>
+                <th> {t("tables.tankCode")}</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
                   >
-                    <option value="fullUse">Tất cả bể</option>
-                    <option value="use">Đang sử dụng</option>
-                    <option value="notUse">Đã ngừng hoạt động</option>
+                    <option value="fullUse">{t("messages.allTanks")}</option>
+                    <option value="use">{t("messages.tankInUse")}</option>
+                    <option value="notUse">{t("messages.tankNotInUse")}</option>
                   </select>
                 </th>
-                <th>Chi tiết</th>
+                <th>{t("tables.detail")}</th>
               </tr>
             </thead>
             <tbody>
@@ -284,8 +289,8 @@ const Tank = () => {
                 <tr>
                   <td colSpan="4" className="center_sum">
                     {searchQuery
-                      ? "Không tìm thấy thông tin bể."
-                      : "Chưa có thông tin bể."}
+                      ? t("messages.tankNotFound")
+                      : t("messages.tankEmpty")}
                   </td>
                 </tr>
               )}
@@ -295,9 +300,11 @@ const Tank = () => {
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstTank + 1} đến{" "}
-                          {Math.min(indexOfLastTank, filteredTank.length)} của{" "}
-                          {filteredTank.length} mục{" "}
+                          {t("pagination.tankList", {
+                            from: indexOfFirstTank + 1,
+                            to: Math.min(indexOfLastTank, filteredTank.length),
+                            total: filteredTank.length,
+                          })}
                         </span>
                       </p>
                       <ul className="pagination-list">
@@ -310,7 +317,7 @@ const Tank = () => {
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                           >
-                            Trước
+                            {t("common.previous")}
                           </button>
                         </li>
                         {Array.from({ length: totalPages }, (_, index) => (
@@ -334,7 +341,7 @@ const Tank = () => {
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                           >
-                            Sau
+                            {t("common.next")}
                           </button>
                         </li>
                       </ul>
@@ -352,14 +359,14 @@ const Tank = () => {
               onClick={() => setSelectedTank(null)}
             ></div>
             <div className="viewStaff">
-              <h2>Bể</h2>
+              <h2>{t("messages.tankModal")}</h2>
               <AiOutlineClose
                 onClick={() => setSelectedTank(null)}
                 className="close-icon"
               />
               <label>
                 {" "}
-                Tên
+                {t("tables.name")}
                 <input
                   type="text"
                   value={selectedTank.tankName}
@@ -374,7 +381,7 @@ const Tank = () => {
               <br />
               <label>
                 {" "}
-                Mã
+                {t("messages.code")}
                 <input
                   type="number"
                   value={parseInt(selectedTank.tankCode)}
@@ -384,7 +391,7 @@ const Tank = () => {
               <br />
               <label>
                 {" "}
-                Thể tích
+                {t("messages.volume")}
                 <input
                   type="number"
                   value={parseInt(selectedTank.tankVolume)}
@@ -399,7 +406,7 @@ const Tank = () => {
               <br />
               <label>
                 {" "}
-                Trạng thái
+                {t("tables.status")}
                 <select
                   value={selectedTank.tankStatus}
                   onChange={(e) =>
@@ -409,14 +416,14 @@ const Tank = () => {
                     })
                   }
                 >
-                  <option value="ON USE">Đang kinh doanh</option>
-                  <option value="NOT ON USE">Đã ngừng hoạt động</option>
+                  <option value="ON USE">{t("messages.tankOperating")}</option>
+                  <option value="NOT ON USE">{t("messages.tankStopped")}</option>
                 </select>
               </label>
 
               <label>
                 {" "}
-                Mặt hàng
+                {t("tables.product")}
                 <select
                   value={selectedTank.product.productCode}
                   onChange={(e) => {
@@ -445,12 +452,12 @@ const Tank = () => {
                       </option>
                     ))
                   ) : (
-                    <option> Chưa có thông tin mặt hàng</option>
+                    <option> {t("messages.noProductInfo")}</option>
                   )}
                 </select>
               </label>
               <button className="send" onClick={saveChanges}>
-                OK
+                {t("messages.ok")}
               </button>
             </div>
           </>
@@ -459,14 +466,14 @@ const Tank = () => {
           <>
             <div className="overlay" onClick={() => setAddingTank(false)}></div>
             <div className="addStaff">
-              <h2>Thêm Bể Mới</h2>
+              <h2>{t("messages.newTankTitle")}</h2>
               <AiOutlineClose
                 onClick={() => setAddingTank(false)}
                 className="close-icon"
               />
               <label>
                 {" "}
-                Tên
+                {t("tables.name")}
                 <input
                   type="text"
                   value={newTank.tankName}
@@ -478,7 +485,7 @@ const Tank = () => {
               <br />
               <label>
                 {" "}
-                Mã
+                {t("messages.code")}
                 <input
                   type="number"
                   onChange={(e) =>
@@ -492,7 +499,7 @@ const Tank = () => {
               <br />
               <label>
                 {" "}
-                Thể tích
+                {t("messages.volume")}
                 <input
                   type="number"
                   onChange={(e) =>
@@ -506,7 +513,7 @@ const Tank = () => {
               <br />
               <label>
                 {" "}
-                Mặt hàng
+                {t("tables.product")}
                 <select
                   onChange={(e) => {
                     const selectedProduct = product.find(
@@ -532,12 +539,12 @@ const Tank = () => {
                       </option>
                     ))
                   ) : (
-                    <option> Chưa có thông tin mặt hàng</option>
+                    <option> {t("messages.noProductInfo")}</option>
                   )}
                 </select>
               </label>
               <button className="send" onClick={handleAddTank}>
-                THÊM
+                {t("common.add")}
               </button>
             </div>
           </>
@@ -552,7 +559,7 @@ const Tank = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: "BỂ",
+                  text: t("charts.tank"),
                 },
                 datalabels: {
                   display: false, 

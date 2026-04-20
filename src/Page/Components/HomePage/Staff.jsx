@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import useStaffStore from "../../../store/staffStore.js";
 import { AiOutlineClose } from "react-icons/ai";
 import { TbEyeEdit } from "react-icons/tb";
@@ -6,8 +6,10 @@ import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup.jsx";
+import { useTranslation } from "react-i18next";
 
 const Staff = () => {
+  const { t } = useTranslation();
   const staff = useStaffStore((state) => state.staff);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
   const addStaff = useStaffStore((state) => state.addStaff);
@@ -73,8 +75,8 @@ const Staff = () => {
     ) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        title: t("common.notification"),
+        message: t("messages.staffEnterFull"),
         status: "warning",
       });
       return;
@@ -83,8 +85,8 @@ const Staff = () => {
     if (!validatePhoneNumber(selectedStaff.phoneNum)) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập số điện thoại gồm 10 chữ số.",
+        title: t("common.notification"),
+        message: t("messages.staffPhone10"),
         status: "warning",
       });
       return;
@@ -95,14 +97,14 @@ const Staff = () => {
       setSelectedStaff(null);
       setPopup({
         show: true,
-        title: "Thông báo",
+        title: t("common.notification"),
         message: status.Message,
         status: status.Status,
       });
     } catch (error) {
       setPopup({
         show: true,
-        title: "Lỗi",
+        title: t("common.error"),
         message: error.Message,
         status: error,
       });
@@ -113,8 +115,8 @@ const Staff = () => {
     if (!newStaff.fullName || !newStaff.email || !newStaff.phoneNum) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đầy đủ thông tin nhân viên.",
+        title: t("common.notification"),
+        message: t("messages.staffEnterFull"),
         status: "warning",
       });
       return;
@@ -123,8 +125,8 @@ const Staff = () => {
     if (!validateEmail(newStaff.email)) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập đúng định dạng email.",
+        title: t("common.notification"),
+        message: t("messages.emailInvalid"),
         status: "warning",
       });
       return;
@@ -133,8 +135,8 @@ const Staff = () => {
     if (!validatePhoneNumber(newStaff.phoneNum)) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng nhập số điện thoại gồm 10 chữ số.",
+        title: t("common.notification"),
+        message: t("messages.staffPhone10"),
         status: "warning",
       });
       return;
@@ -158,7 +160,7 @@ const Staff = () => {
     } catch (error) {
       setPopup({
         show: true,
-        title: "Lỗi",
+        title: t("common.error"),
         message: error.Message,
         status: error,
       });
@@ -172,17 +174,20 @@ const Staff = () => {
     (staffMember) => staffMember.workingStatus === "ISN'T WORKING"
   ).length;
 
-  const data = {
-    labels: ["Đang làm việc", "Đã nghỉ việc "],
-    datasets: [
-      {
-        label: "NHÂN VIÊN",
-        data: [firstNumber, secondNumber],
-        backgroundColor: ["GREEN", "RED"],
-        hoverOffset: 10,
-      },
-    ],
-  };
+  const data = useMemo(
+    () => ({
+      labels: [t("messages.working"), t("messages.notWorking")],
+      datasets: [
+        {
+          label: t("charts.staff"),
+          data: [firstNumber, secondNumber],
+          backgroundColor: ["GREEN", "RED"],
+          hoverOffset: 10,
+        },
+      ],
+    }),
+    [firstNumber, secondNumber, t]
+  );
 
   const workingStaff = staff.filter(
     (staffMember) => staffMember.workingStatus === "IS WORKING"
@@ -223,11 +228,11 @@ const Staff = () => {
   return (
     <div className="revenue">
       <header className="header_staff">
-        <p>THÔNG TIN NHÂN VIÊN</p>
+        <p>{t("pages.staffInfo")}</p>
         <div className="search-container">
           <input
             type="text"
-            placeholder="Tìm kiếm..."
+            placeholder={t("common.search")}
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -238,7 +243,7 @@ const Staff = () => {
           className="push"
           onClick={() => setAddingStaff(true)}
         >
-          THÊM
+          {t("common.add")}
         </button>
       </header>
       <div className="Staffs">
@@ -246,17 +251,17 @@ const Staff = () => {
           <table className="firsttable">
             <thead>
               <tr className="titleOneline">
-                <th className="center_sum">STT</th>
+                <th className="center_sum">{t("tables.stt")}</th>
                 <th>
                   <select
                     onChange={(e) => setViewMode(e.target.value)}
                     value={viewMode}
                   >
-                    <option value="working">Đang làm việc</option>
-                    <option value="notWorking">Đã nghỉ việc</option>
+                    <option value="working">{t("messages.working")}</option>
+                    <option value="notWorking">{t("messages.notWorking")}</option>
                   </select>
                 </th>
-                <th>Chi tiết</th>
+                <th>{t("tables.detail")}</th>
               </tr>
             </thead>
             <tbody>
@@ -281,8 +286,8 @@ const Staff = () => {
                 <tr>
                   <td colSpan="3" className="center_sum">
                     {searchQuery
-                      ? "Không tìm thấy thông tin nhân viên."
-                      : "Chưa có thông tin nhân viên."}
+                      ? t("messages.staffNotFound")
+                      : t("messages.staffEmpty")}
                   </td>
                 </tr>
               )}
@@ -292,9 +297,11 @@ const Staff = () => {
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstStaff + 1} đến{" "}
-                          {Math.min(indexOfLastStaff, filteredStaff.length)}{" "}
-                          trên {filteredStaff.length} nhân viên{" "}
+                          {t("pagination.staffList", {
+                            from: indexOfFirstStaff + 1,
+                            to: Math.min(indexOfLastStaff, filteredStaff.length),
+                            total: filteredStaff.length,
+                          })}
                         </span>
                       </p>
                       <ul className="pagination-list">
@@ -307,7 +314,7 @@ const Staff = () => {
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                           >
-                            Trước
+                            {t("common.previous")}
                           </button>
                         </li>
                         {Array.from({ length: totalPages }, (_, index) => (
@@ -331,7 +338,7 @@ const Staff = () => {
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                           >
-                            Sau
+                            {t("common.next")}
                           </button>
                         </li>
                       </ul>
@@ -351,7 +358,7 @@ const Staff = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: "NHÂN VIÊN",
+                  text: t("charts.staff"),
                 },
                 datalabels: {
                   display: false,
@@ -365,13 +372,13 @@ const Staff = () => {
         <>
           <div className="overlay" onClick={() => setSelectedStaff(null)}></div>
           <div className="viewStaff">
-            <h2>NHÂN VIÊN</h2>
+            <h2>{t("charts.staff")}</h2>
             <AiOutlineClose
               onClick={() => setSelectedStaff(null)}
               className="close-icon"
             />
             <label>
-              Tên
+              {t("tables.name")}
               <input
                 type="text"
                 value={selectedStaff.fullName}
@@ -385,12 +392,12 @@ const Staff = () => {
             </label>
             <br />
             <label>
-              Email
+              {t("tables.email")}
               <input type="text" value={selectedStaff.email} readOnly />
             </label>
             <br />
             <label>
-              Số điện thoại
+              {t("tables.phone")}
               <input
                 type="text"
                 value={selectedStaff.phoneNum}
@@ -404,7 +411,7 @@ const Staff = () => {
             </label>
             <br />
             <label>
-              Trạng thái
+              {t("tables.status")}
               <select
                 value={selectedStaff.workingStatus}
                 onChange={(e) =>
@@ -414,13 +421,13 @@ const Staff = () => {
                   })
                 }
               >
-                <option value="IS WORKING">Đang làm việc</option>
-                <option value="ISN'T WORKING">Đã nghỉ việc</option>
+                <option value="IS WORKING">{t("messages.working")}</option>
+                <option value="ISN'T WORKING">{t("messages.notWorking")}</option>
               </select>
             </label>
             <br />
             <button type="button" onClick={saveChanges}>
-              Lưu
+              {t("common.save")}
             </button>
           </div>
         </>
@@ -430,13 +437,13 @@ const Staff = () => {
         <>
           <div className="overlay" onClick={() => setAddingStaff(false)}></div>
           <div className="addStaff">
-            <h2>Thêm nhân viên mới</h2>
+            <h2>{t("messages.newStaffTitle")}</h2>
             <AiOutlineClose
               onClick={() => setAddingStaff(false)}
               className="close-icon"
             />
             <label>
-              Tên
+              {t("tables.name")}
               <input
                 type="text"
                 value={newStaff.fullName}
@@ -447,7 +454,7 @@ const Staff = () => {
             </label>
             <br />
             <label>
-              Email
+              {t("tables.email")}
               <input
                 type="text"
                 value={newStaff.email}
@@ -458,7 +465,7 @@ const Staff = () => {
             </label>
             <br />
             <label>
-              Số điện thoại
+              {t("tables.phone")}
               <input
                 type="text"
                 value={newStaff.phoneNum}
@@ -469,7 +476,7 @@ const Staff = () => {
             </label>
             <br />
             <button type="button" onClick={handleAddStaff}>
-              Thêm
+              {t("messages.addButton")}
             </button>
           </div>
         </>

@@ -25,3 +25,7 @@ dist-ssr
 
 .env
 .vercel
+# Added by code-review-graph
+.code-review-graph/
+.claude/
+.cursor/

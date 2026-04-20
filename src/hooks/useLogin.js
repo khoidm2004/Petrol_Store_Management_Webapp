@@ -18,8 +18,16 @@ const useLogin = () => {
       if (userCred) {
         const docRef = doc(firestore, "user", userCred.user.uid);
         const docSnap = await getDoc(docRef);
-        localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
-        loginUser(docSnap.data());
+        if (!docSnap.exists()) {
+          return {
+            Title: "Lỗi",
+            Message: "Không tìm thấy thông tin người dùng trong hệ thống",
+            Status: "error",
+          };
+        }
+        const profile = docSnap.data();
+        localStorage.setItem("user-info", JSON.stringify(profile));
+        loginUser(profile);
         return {
           Title: "Thành công",
           Message: "Đăng nhập thành công",

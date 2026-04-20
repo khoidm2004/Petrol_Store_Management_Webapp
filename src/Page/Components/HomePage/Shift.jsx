@@ -9,8 +9,10 @@ import "chart.js/auto";
 import "./staff.css";
 import Popup from "../Popup/Popup.jsx";
 import { timeConverter } from "../../../utils/timeConverter.js";
+import { useTranslation } from "react-i18next";
 
 const Shift = () => {
+  const { t } = useTranslation();
   const shifts = useShiftStore((state) => state.shifts);
   const fetchShift = useShiftStore((state) => state.fetchShift);
   const addShift = useShiftStore((state) => state.addShift);
@@ -57,8 +59,8 @@ const Shift = () => {
       ) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Vui lòng điền đẩy đủ thông tin của ca.",
+          title: t("common.notification"),
+          message: t("shift.fillInfo"),
           status: "warning",
         });
         return;
@@ -70,8 +72,8 @@ const Shift = () => {
       if (start >= end) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Thời gian bắt đầu phải trước thời gian kết thúc.",
+          title: t("common.notification"),
+          message: t("shift.startBeforeEnd"),
           status: "info",
         });
         return;
@@ -82,8 +84,8 @@ const Shift = () => {
       if (differenceInHours < 2) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Thời gian tối thiểu kết thúc sau 2 tiếng sau khi bắt đầu.",
+          title: t("common.notification"),
+          message: t("shift.minDurationEdit"),
           status: "info",
         });
         return;
@@ -98,8 +100,8 @@ const Shift = () => {
         if (start >= existingStart && start < existingEnd) {
           setPopup({
             show: true,
-            title: "Thông báo",
-            message: "Thời gian bắt đầu của ca mới nằm trong một ca đã có",
+            title: t("common.notification"),
+            message: t("shift.startOverlaps"),
             status: "warning",
           });
           return;
@@ -108,8 +110,8 @@ const Shift = () => {
         if (end > existingStart && end <= existingEnd) {
           setPopup({
             show: true,
-            title: "Thông báo",
-            message: "Thời gian kết thúc của ca mới nằm trong một ca đã có",
+            title: t("common.notification"),
+            message: t("shift.endOverlaps"),
             status: "warning",
           });
           return;
@@ -118,8 +120,8 @@ const Shift = () => {
         if (start <= existingStart && end >= existingEnd) {
           setPopup({
             show: true,
-            title: "Thông báo",
-            message: `Thời gian ca mới đang bao gồm một ca đã có.`,
+            title: t("common.notification"),
+            message: t("shift.spansExisting"),
             status: "warning",
           });
           return;
@@ -150,8 +152,8 @@ const Shift = () => {
     ) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Vui lòng điền đầy đủ thông tin của ca.",
+        title: t("common.notification"),
+        message: t("shift.fillInfo"),
         status: "warning",
       });
       return;
@@ -163,8 +165,8 @@ const Shift = () => {
     if (start >= end) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Thời gian bắt đầu phải trước thời gian kết thúc.",
+        title: t("common.notification"),
+        message: t("shift.startBeforeEnd"),
         status: "info",
       });
       return;
@@ -175,9 +177,8 @@ const Shift = () => {
     if (differenceInHours < 2) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message:
-          "Thời gian kết thúc phải ít nhất 2 tiếng sau thời gian bắt đầu.",
+        title: t("common.notification"),
+        message: t("shift.minDurationAdd"),
         status: "info",
       });
       return;
@@ -190,8 +191,8 @@ const Shift = () => {
       if (start >= existingStart && start < existingEnd) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Thời gian bắt đầu của ca mới nằm trong một ca đã có",
+          title: t("common.notification"),
+            message: t("shift.startOverlaps"),
           status: "warning",
         });
         return;
@@ -200,8 +201,8 @@ const Shift = () => {
       if (end > existingStart && end <= existingEnd) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: "Thời gian kết thúc của ca mới nằm trong một ca đã có",
+          title: t("common.notification"),
+          message: t("shift.endOverlaps"),
           status: "warning",
         });
         return;
@@ -210,8 +211,8 @@ const Shift = () => {
       if (start <= existingStart && end >= existingEnd) {
         setPopup({
           show: true,
-          title: "Thông báo",
-          message: `Thời gian ca mới đang bao gồm một ca đã có.`,
+          title: t("common.notification"),
+          message: t("shift.spansExisting"),
           status: "warning",
         });
         return;
@@ -237,7 +238,7 @@ const Shift = () => {
     } catch (error) {
       setPopup({
         show: true,
-        title: "Thông báo",
+        title: t("common.notification"),
         message: error.message || error,
         status: "error",
       });
@@ -367,8 +368,8 @@ const Shift = () => {
         if (openShiftExists) {
           setPopup({
             show: true,
-            title: "Thông báo",
-            message: "Đang có ca bán hàng đang hoạt động.",
+            title: t("common.notification"),
+            message: t("shift.anotherOpen"),
             status: "error",
           });
           return;
@@ -379,15 +380,15 @@ const Shift = () => {
       await modifyShift(updatedShift);
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Trạng thái ca đã được cập nhật thành công.",
+        title: t("common.notification"),
+        message: t("shift.statusOk"),
         status: "success",
       });
     } catch (error) {
       setPopup({
         show: true,
-        title: "Thông báo",
-        message: "Đã xảy ra lỗi khi cập nhật trạng thái ca.",
+        title: t("common.notification"),
+        message: t("shift.statusErr"),
         status: "error",
       });
     }
@@ -401,7 +402,7 @@ const Shift = () => {
     // if (openShiftExists) {
     //   setPopup({
     //     show: true,
-    //     title: "Thông báo",
+    //     title: t("common.notification"),
     //     message: "Vẫn còn ca đang hoạt động.",
     //     status: "error",
     //   });
@@ -438,18 +439,18 @@ const Shift = () => {
   return (
     <div className="revenue">
       <header className="header_staff">
-        <p>THÔNG TIN CA BÁN HÀNG</p>
+        <p>{t("pages.shiftInfo")}</p>
         <div className="search-container">
           <input
             type="text"
-            placeholder="Tìm kiếm..."
+            placeholder={t("common.search")}
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <button type="button" className="push" onClick={handleCheckPush}>
-          THÊM
+          {t("common.add")}
         </button>
       </header>
       <div>
@@ -457,12 +458,12 @@ const Shift = () => {
           <table className="firsttable_shift">
             <thead>
               <tr className="titleOneline">
-                <th className="center_sum">STT</th>
-                <th>Ca bán hàng</th>
-                <th>Thời lượng</th>
-                <th>Nhân viên phụ trách</th>
-                <th className="right_sum">Đóng/Mở ca</th>
-                <th className="right_sum">Chi tiết</th>
+                <th className="center_sum">{t("tables.stt")}</th>
+                <th>{t("tables.shiftName")}</th>
+                <th>{t("tables.duration")}</th>
+                <th>{t("tables.staffOnDuty")}</th>
+                <th className="right_sum">{t("tables.closeOpen")}</th>
+                <th className="right_sum">{t("tables.detail")}</th>
               </tr>
             </thead>
             <tbody>
@@ -486,11 +487,15 @@ const Shift = () => {
 
                   let durationString = "";
                   if (days > 0) {
-                    durationString = `${days} ngày ${hours} giờ ${minutes} phút`;
+                    durationString = t("shift.durationDays", {
+                      days,
+                      hours,
+                      minutes,
+                    });
                   } else if (days === 0 && hours > 0) {
-                    durationString = `${hours} giờ ${minutes} phút`;
+                    durationString = t("shift.durationHM", { hours, minutes });
                   } else {
-                    durationString = `${minutes} phút`;
+                    durationString = t("shift.durationM", { minutes });
                   }
 
                   return (
@@ -534,9 +539,8 @@ const Shift = () => {
                               if (now < shiftStartTime - 5 * 60 * 1000) {
                                 setPopup({
                                   show: true,
-                                  title: "Thông báo",
-                                  message:
-                                    "Không thể mở ca vì chưa đến thời gian cho phép.",
+                                  title: t("common.notification"),
+                                  message: t("shift.openEarly"),
                                   status: "info",
                                 });
                                 return;
@@ -545,9 +549,8 @@ const Shift = () => {
                               if (shiftEndTime < now) {
                                 setPopup({
                                   show: true,
-                                  title: "Thông báo",
-                                  message:
-                                    "Không thể mở ca do đã quá thời gian",
+                                  title: t("common.notification"),
+                                  message: t("shift.openLate"),
                                   status: "info",
                                 });
                                 return;
@@ -572,7 +575,7 @@ const Shift = () => {
               ) : (
                 <tr>
                   <td colSpan={6} className="center_sum">
-                    Chưa tồn tại ca bán hàng
+                    {t("shift.emptyList")}
                   </td>
                 </tr>
               )}
@@ -584,9 +587,11 @@ const Shift = () => {
                     <div className="pagination">
                       <p>
                         <span>
-                          Đang hiển thị {indexOfFirstShift + 1} đến{" "}
-                          {Math.min(indexOfLastShift, shifts.length)} của{" "}
-                          {shifts.length} Ca Bán Hàng{" "}
+                          {t("pagination.shiftList", {
+                            from: indexOfFirstShift + 1,
+                            to: Math.min(indexOfLastShift, shifts.length),
+                            total: shifts.length,
+                          })}
                         </span>
                       </p>
                       <ul className="pagination-list">
@@ -599,7 +604,7 @@ const Shift = () => {
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                           >
-                            Trước
+                            {t("common.previous")}
                           </button>
                         </li>
                         {Array.from({ length: totalPages }, (_, index) => (
@@ -623,7 +628,7 @@ const Shift = () => {
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                           >
-                            Sau
+                            {t("common.next")}
                           </button>
                         </li>
                       </ul>
@@ -642,10 +647,10 @@ const Shift = () => {
               onClick={() => setSelectedShift(null)}
             ></div>
             <div className="viewShift" value="">
-              <h2>Ca Bán Hàng</h2>
+              <h2>{t("shift.shiftModalTitle")}</h2>
               <div className="Row">
                 <label htmlFor="">
-                  Thời gian bắt đầu
+                  {t("shift.startTime")}
                   <input
                     type="datetime-local"
                     className="time"
@@ -660,7 +665,7 @@ const Shift = () => {
                   <hr />
                 </label>
                 <label htmlFor="">
-                  Thời gian kết thúc
+                  {t("shift.endTime")}
                   <input
                     type="datetime-local"
                     className="time"
@@ -677,7 +682,7 @@ const Shift = () => {
               </div>
               <hr />
               <div>
-                <h5>NHÂN VIÊN</h5>
+                <h5>{t("nav.staff")}</h5>
                 <div className="Staff">
                   {Object.entries(selectedShift.employeeList).map(
                     ([key, staffs]) => (
@@ -697,9 +702,8 @@ const Shift = () => {
                               if (shiftEndTime < now) {
                                 setPopup({
                                   show: true,
-                                  title: "Thông báo",
-                                  message:
-                                    "Không thể sửa do đã quá thời gian",
+                                  title: t("common.notification"),
+                                  message: t("shift.editExpired"),
                                   status: "info",
                                 });
                                 return;
@@ -724,9 +728,8 @@ const Shift = () => {
                             if (shiftEndTime < now) {
                               setPopup({
                                 show: true,
-                                title: "Thông báo",
-                                message:
-                                  "Không thể thêm do đã quá thời gian",
+                                title: t("common.notification"),
+                                message: t("shift.addExpired"),
                                 status: "info",
                               });
                               return;
@@ -751,7 +754,7 @@ const Shift = () => {
                             }));
                           }}
                         >
-                          <option value="">Thêm Nhân Viên</option>
+                          <option value="">{t("shift.addStaff")}</option>
                           {staff.map(
                             (newStaff) =>
                               !Object.values(selectedShift.employeeList).some(
@@ -772,7 +775,7 @@ const Shift = () => {
               </div>
               <hr />
               <div>
-                <h5>MẶT HÀNG - VÒI BƠM</h5>
+                <h5>{t("shift.productPumpSection")}</h5>
                 <div className="Staff">
                   {Object.entries(selectedShift.productList).map(
                     ([key, product]) => (
@@ -793,7 +796,7 @@ const Shift = () => {
                                     value={
                                       pumpEntry.firstMeterReadingByLitre || ""
                                     }
-                                    placeholder="Số công tơ (L)"
+                                    placeholder={t("messages.meterL")}
                                     onChange={(e) => {
                                       const newValue = e.target.value;
                                       setSelectedShift((prevShift) => ({
@@ -822,7 +825,7 @@ const Shift = () => {
                                     value={
                                       pumpEntry.firstMeterReadingByMoney || ""
                                     }
-                                    placeholder="Số công tơ (VND)"
+                                    placeholder={t("messages.meterVnd")}
                                     onChange={(e) => {
                                       const newValue = e.target.value;
                                       setSelectedShift((prevShift) => ({
@@ -851,7 +854,7 @@ const Shift = () => {
                               )
                             )}
                           {Object.entries(product.pumpList).length === 0 && (
-                            <div>Chưa có Vòi bơm tương ứng với mặt hàng</div>
+                            <div>{t("messages.noPumpForProduct")}</div>
                           )}
                         </div>
                         <FaRegMinusSquare
@@ -865,9 +868,8 @@ const Shift = () => {
                             if (shiftEndTime < now) {
                               setPopup({
                                 show: true,
-                                title: "Thông báo",
-                                message:
-                                  "Không thể sửa do đã quá thời gian",
+                                title: t("common.notification"),
+                                message: t("shift.editExpired"),
                                 status: "info",
                               });
                               return;
@@ -892,9 +894,8 @@ const Shift = () => {
                             if (shiftEndTime < now) {
                               setPopup({
                                 show: true,
-                                title: "Thông báo",
-                                message:
-                                  "Không thể thêm do đã quá thời gian",
+                                title: t("common.notification"),
+                                message: t("shift.addExpired"),
                                 status: "info",
                               });
                               return;
@@ -942,7 +943,7 @@ const Shift = () => {
                             }));
                           }}
                         >
-                          <option value="">Thêm Mặt Hàng</option>
+                          <option value="">{t("shift.addProduct")}</option>
                           {product.map(
                             (newProduct) =>
                               !Object.values(selectedShift.productList).some(
@@ -974,16 +975,16 @@ const Shift = () => {
                   if (shiftEndTime < now) {
                     setPopup({
                       show: true,
-                      title: "Thông báo",
-                      message:
-                        "Quá thời gian để lưu",
+                      title: t("common.notification"),
+                      message: t("shift.saveExpired"),
                       status: "info",
                     });
                     return;
                   }
 
-                  saveChanges}}>
-                  LƯU
+                  saveChanges();
+                }}>
+                  {t("common.save")}
                 </button>
               </div>
             </div>
@@ -997,10 +998,10 @@ const Shift = () => {
               onClick={() => setAddingShift(false)}
             ></div>
             <div className="addShift">
-              <h2>Thêm Ca Mới</h2>
+              <h2>{t("shift.addNewShift")}</h2>
               <div className="Row">
                 <label htmlFor="startTime">
-                  Thời gian bắt đầu
+                  {t("shift.startTime")}
                   <input
                     type="datetime-local"
                     id="startTime"
@@ -1011,7 +1012,7 @@ const Shift = () => {
                   />
                 </label>
                 <label htmlFor="endTime">
-                  Thời gian kết thúc
+                  {t("shift.endTime")}
                   <input
                     type="datetime-local"
                     id="endTime"
@@ -1024,7 +1025,7 @@ const Shift = () => {
               </div>
               <hr />
               <div>
-                <h5>NHÂN VIÊN</h5>
+                <h5>{t("nav.staff")}</h5>
                 <div className="Staff">
                   {Object.entries(newShift.employeeList).map(
                     ([key, staffs]) => (
@@ -1065,7 +1066,7 @@ const Shift = () => {
                             }));
                           }}
                         >
-                          <option value="">Thêm Nhân Viên</option>
+                          <option value="">{t("shift.addStaff")}</option>
                           {staff.map(
                             (newStaff) =>
                               !Object.values(newShift.employeeList).some(
@@ -1086,7 +1087,7 @@ const Shift = () => {
               </div>
               <hr />
               <div>
-                <h5>MẶT HÀNG - VÒI BƠM</h5>
+                <h5>{t("shift.productPumpSection")}</h5>
                 <div className="Staff">
                   {Object.entries(newShift.productList).map(
                     ([key, product]) => (
@@ -1118,7 +1119,7 @@ const Shift = () => {
                                         `pump${index + 1}`
                                       ]?.firstMeterReadingByLitre || ""
                                     }
-                                    placeholder="Số công tơ (L)"
+                                    placeholder={t("messages.meterL")}
                                     onChange={(e) => {
                                       const newValue = e.target.value;
                                       setNewShift((prevShift) => ({
@@ -1153,7 +1154,7 @@ const Shift = () => {
                                         `pump${index + 1}`
                                       ]?.firstMeterReadingByMoney || ""
                                     }
-                                    placeholder="Số công tơ (M)"
+                                    placeholder={t("messages.meterMoneyShort")}
                                     onChange={(e) => {
                                       const newValue = e.target.value;
                                       setNewShift((prevShift) => ({
@@ -1185,7 +1186,7 @@ const Shift = () => {
                                 </div>
                               ))
                           ) : (
-                            <div>Chưa có Vòi bơm tương ứng với mặt hàng</div>
+                            <div>{t("messages.noPumpForProduct")}</div>
                           )}
                         </div>
                         <FaRegMinusSquare
@@ -1245,7 +1246,7 @@ const Shift = () => {
                             }));
                           }}
                         >
-                          <option value="">Thêm Mặt Hàng</option>
+                          <option value="">{t("shift.addProduct")}</option>
                           {product.map(
                             (newProduct) =>
                               !Object.values(newShift.productList).some(
@@ -1286,7 +1287,7 @@ const Shift = () => {
                 </div> */}
               <div className="right_sum">
                 <button className="send" onClick={handleAddShift}>
-                  THÊM
+                  {t("common.add")}
                 </button>
               </div>
               {/* </div> */}

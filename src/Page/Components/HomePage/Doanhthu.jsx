@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -22,8 +22,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import useLogout from "../../../hooks/useLogout";
+import { useTranslation } from "react-i18next";
 
 const Revenue = () => {
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language.startsWith("fi") ? "fi-FI" : "vi-VN";
   const { product, fetchProduct } = useProductStore();
   const { staff, fetchStaff } = useStaffStore();
   const { pumps, fetchPump } = usePumpStore();
@@ -62,13 +65,13 @@ const Revenue = () => {
     setSelectedDatePumpRevenue(e);
   };
 
-  const formattedDateLog = selectedDateLog.toLocaleDateString("vi-VN", {
+  const formattedDateLog = selectedDateLog.toLocaleDateString(dateLocale, {
     month: "numeric",
     year: "numeric",
     day: "numeric",
   });
 
-  const formattedDateRevenue = selectedDateRevenue.toLocaleDateString("vi-VN", {
+  const formattedDateRevenue = selectedDateRevenue.toLocaleDateString(dateLocale, {
     month: "numeric",
     year: "numeric",
     day: "numeric",
@@ -76,7 +79,7 @@ const Revenue = () => {
 
   const formatDatestring = (dateString) => {
     const [day, month, year] = dateString.split("/");
-    return `Ngày ${day} tháng ${month} năm ${year}`;
+    return t("date.longDate", { day, month, year });
   };
 
   useEffect(() => {
@@ -154,25 +157,28 @@ const Revenue = () => {
     items: [],
   };
 
-  const barData = {
-    labels: currentData.items.map((item) => item.productName),
-    datasets: [
-      {
-        label: "DOANH THU",
-        data: currentData.items.map((item) => item.productRevenue),
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-      {
-        label: "SẢN LƯỢNG",
-        data: currentData.items.map((item) => item.productQuantity),
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
+  const barData = useMemo(
+    () => ({
+      labels: currentData.items.map((item) => item.productName),
+      datasets: [
+        {
+          label: t("charts.revenue"),
+          data: currentData.items.map((item) => item.productRevenue),
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+        {
+          label: t("charts.volume"),
+          data: currentData.items.map((item) => item.productQuantity),
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+      ],
+    }),
+    [currentData.items, t]
+  );
   const [revenueData, setRevenueData] = useState([]);
 
   useEffect(() => {
@@ -304,13 +310,13 @@ const Revenue = () => {
   return (
     <div className="revenue">
       <div className="tilte_revenue" style={{ textAlign: "center" }}>
-        <h1>Chuyên gia Xăng dầu số hàng đầu Việt Nam</h1>
-        <p>Chuyển đổi số hiệu quả, nâng cao năng suất hoạt động.</p>
+        <h1>{t("dashboard.title")}</h1>
+        <p>{t("dashboard.subtitle")}</p>
       </div>
       <div className="Row">
         <div className="chartRevenue">
           <div className="title_xemChitiet Row">
-            <p>DOANH THU SẢN LƯỢNG</p>
+            <p>{t("dashboard.revenueVolumeTitle")}</p>
             <div>
               <DatePicker
                 selected={selectedDateRevenue}
@@ -351,9 +357,8 @@ const Revenue = () => {
                           label: function (context) {
                             const label = context.dataset.label || "";
                             const value = context.raw || 0;
-                            const unit = label.includes("DOANH THU")
-                              ? "VND"
-                              : "L";
+                            const unit =
+                              context.datasetIndex === 0 ? "VND" : "L";
                             return `${label}: ${formatNumberWithCommas(
                               value
                             )} ${unit}`;
@@ -363,11 +368,8 @@ const Revenue = () => {
                       datalabels: {
                         display: displayDataLabels,
                         formatter: (value, context) => {
-                          const unit = context.dataset.label.includes(
-                            "DOANH THU"
-                          )
-                            ? "VND"
-                            : "L";
+                          const unit =
+                            context.datasetIndex === 0 ? "VND" : "L";
                           return `${formatNumberWithCommas(value)} ${unit}`;
                         },
                         anchor: "end",
@@ -392,12 +394,12 @@ const Revenue = () => {
                   }}
                 />
               ) : (
-                <div className="no-data">Không có dữ liệu</div>
+                <div className="no-data">{t("common.noData")}</div>
               )}
             </div>
           </div>
           <div className="button_xemChitiet">
-            <button onClick={() => setShowBarDetail(true)}>Xem chi tiết</button>
+            <button onClick={() => setShowBarDetail(true)}>{t("common.detail")}</button>
           </div>
         </div>
         {showBarDetail && (
@@ -411,7 +413,7 @@ const Revenue = () => {
                 className="close_icon"
                 onClick={() => setShowBarDetail(false)}
               />
-              <h4>Chi tiết Doanh thu Sản lượng</h4>
+              <h4>{t("dashboard.revenueDetailTitle")}</h4>
               <hr></hr>
               <div>
                 <div className="date-selector">
@@ -431,10 +433,10 @@ const Revenue = () => {
                     <table className="firsttable_shift">
                       <thead className="theadRevenue">
                         <tr>
-                          <th className="center_sum">STT</th>
-                          <th>Mặt hàng</th>
-                          <th className="right_sum">Doanh thu</th>
-                          <th className="right_sum">Sản lượng</th>
+                          <th className="center_sum">{t("tables.stt")}</th>
+                          <th>{t("tables.product")}</th>
+                          <th className="right_sum">{t("tables.revenue")}</th>
+                          <th className="right_sum">{t("tables.volume")}</th>
                         </tr>
                       </thead>
                       <tbody className="tbodyRevenue">
@@ -444,12 +446,20 @@ const Revenue = () => {
                               <th className="center_sum">
                                 {indexOfFirstRevenue + index + 1}
                               </th>
-                              <td data-title="Mặt hàng">{item.productName}</td>
-                              <td className="right_sum" data-title="Doanh thu">
+                              <td data-title={t("tables.product")}>
+                                {item.productName}
+                              </td>
+                              <td
+                                className="right_sum"
+                                data-title={t("tables.revenue")}
+                              >
                                 {formatNumberWithCommas(item.productRevenue)}{" "}
                                 VND
                               </td>
-                              <td className="right_sum" data-title="Sản lượng">
+                              <td
+                                className="right_sum"
+                                data-title={t("tables.volume")}
+                              >
                                 {formatNumberWithCommas(item.productQuantity)} L
                               </td>
                             </tr>
@@ -457,7 +467,7 @@ const Revenue = () => {
                         ) : (
                           <tr>
                             <td colSpan="4" className="center_sum">
-                              Không có dữ liệu
+                              {t("messages.noData")}
                             </td>
                           </tr>
                         )}
@@ -467,13 +477,14 @@ const Revenue = () => {
                               <div className="pagination">
                                 <p>
                                   <span>
-                                    Đang hiển thị {indexOfFirstRevenue + 1} đến{" "}
-                                    {Math.min(
-                                      indexOfLastRevenue,
-                                      currentData.items.length
-                                    )}{" "}
-                                    / {currentData.items.length} của doanh thu
-                                    và sản lượng
+                                    {t("pagination.revenueRows", {
+                                      from: indexOfFirstRevenue + 1,
+                                      to: Math.min(
+                                        indexOfLastRevenue,
+                                        currentData.items.length
+                                      ),
+                                      total: currentData.items.length,
+                                    })}
                                   </span>
                                 </p>
                                 <ul className="pagination-list">
@@ -490,7 +501,7 @@ const Revenue = () => {
                                       }
                                       disabled={currentPageRevenue === 1}
                                     >
-                                      Trước
+                                      {t("common.previous")}
                                     </button>
                                   </li>
                                   {Array.from(
@@ -531,7 +542,7 @@ const Revenue = () => {
                                         currentPageRevenue === totalPagesRevenue
                                       }
                                     >
-                                      Sau
+                                      {t("common.next")}
                                     </button>
                                   </li>
                                 </ul>
@@ -548,7 +559,9 @@ const Revenue = () => {
           </>
         )}
         <div className="chartRevenue">
-          <div className="title_xemChitiet">TỒN KHO</div>
+          <div className="title_xemChitiet">
+            {t("dashboard.inventoryTitle")}
+          </div>
           <div className="chart">
             <div className="over">
               {loading ? (
@@ -568,10 +581,13 @@ const Revenue = () => {
               ) : tanks.length > 0 ? (
                 <Doughnut
                   data={{
-                    labels: ["Khoảng bể trống", "Số lượng hàng tồn"],
+                    labels: [
+                      t("charts.emptyTankSpace"),
+                      t("charts.stockQuantity"),
+                    ],
                     datasets: [
                       {
-                        label: "Tồn kho",
+                        label: t("charts.inventory"),
                         data: [
                           (selectedItem.tankVolume ?? 0) -
                             (selectedItem.product?.quantity_left ?? 0),
@@ -618,7 +634,7 @@ const Revenue = () => {
                   }}
                 />
               ) : (
-                <div className="no-data">Không có dữ liệu</div>
+                <div className="no-data">{t("common.noData")}</div>
               )}
             </div>
           </div>
@@ -632,7 +648,7 @@ const Revenue = () => {
                 }
               }}
             >
-              Xem chi tiết
+              {t("common.detail")}
             </button>
           </div>
         </div>
@@ -647,18 +663,18 @@ const Revenue = () => {
                 onClick={() => setShowDoughnutDetail(false)}
                 className="close_icon"
               />
-              <h4>TỒN KHO</h4>
+              <h4>{t("dashboard.inventoryTitle")}</h4>
               <hr />
               <div className="content">
                 <div className="table-container">
                   <table className="firsttable_shift">
                     <thead className="theadRevenue">
                       <tr>
-                        <th className="center_sum">STT</th>
-                        <th>Bể - Mặt hàng</th>
-                        <th className="right_sum">Thể tích bể</th>
+                        <th className="center_sum">{t("tables.stt")}</th>
+                        <th>{t("tables.tankAndProduct")}</th>
+                        <th className="right_sum">{t("tables.tankVolume")}</th>
                         {/* <th className="right_sum">Mặt hàng</th> */}
-                        <th className="right_sum">Số lượng hàng tồn</th>
+                        <th className="right_sum">{t("tables.stockOnHand")}</th>
                       </tr>
                     </thead>
                     <tbody className="tbodyRevenue">
@@ -671,7 +687,7 @@ const Revenue = () => {
                           >
                             <th
                               className="center_sum noneRevenue"
-                              data-label="STT"
+                              data-label={t("tables.stt")}
                             >
                               {indexOfFirstLeft + index + 1}
                             </th>
@@ -679,7 +695,7 @@ const Revenue = () => {
                             <td
                               className="right_sum"
                               data-label={item.tankName}
-                              data-title="Bể"
+                              data-title={t("tables.tank")}
                             >
                               {formatNumberWithCommas(item.tankVolume)} L
                             </td>
@@ -689,7 +705,7 @@ const Revenue = () => {
                             <td
                               className="right_sum"
                               data-label={item.product.productName}
-                              data-title="Mặt hàng"
+                              data-title={t("tables.product")}
                             >
                               {formatNumberWithCommas(
                                 item.product.quantity_left
@@ -701,7 +717,7 @@ const Revenue = () => {
                       ) : (
                         <tr>
                           <td colSpan="5" className="center_sum">
-                            Chưa có dữ liệu về tồn kho của bể
+                            {t("messages.noTankStockData")}
                           </td>
                         </tr>
                       )}
@@ -711,9 +727,14 @@ const Revenue = () => {
                             <div className="pagination">
                               <p>
                                 <span>
-                                  Đang Hiển Thị {indexOfFirstLeft + 1} Đến{" "}
-                                  {Math.min(indexOfLastLeft, leftData.length)}{" "}
-                                  Của {leftData.length} Bể
+                                  {t("pagination.tankRows", {
+                                    from: indexOfFirstLeft + 1,
+                                    to: Math.min(
+                                      indexOfLastLeft,
+                                      leftData.length
+                                    ),
+                                    total: leftData.length,
+                                  })}
                                 </span>
                               </p>
                               <ul className="pagination-list">
@@ -728,7 +749,7 @@ const Revenue = () => {
                                     }
                                     disabled={currentPageLeft === 1}
                                   >
-                                    Trước
+                                    {t("common.previous")}
                                   </button>
                                 </li>
                                 {Array.from(
@@ -767,7 +788,7 @@ const Revenue = () => {
                                       currentPageLeft === totalPagesLeft
                                     }
                                   >
-                                    Sau
+                                    {t("common.next")}
                                   </button>
                                 </li>
                               </ul>
@@ -782,10 +803,13 @@ const Revenue = () => {
                       <div className="pump_Revenue">
                         <Doughnut
                           data={{
-                            labels: ["Khoảng bể trống", "Số lượng hàng tồn"],
+                            labels: [
+                              t("charts.emptyTankSpace"),
+                              t("charts.stockQuantity"),
+                            ],
                             datasets: [
                               {
-                                label: "Tồn kho",
+                                label: t("charts.inventory"),
                                 data: [
                                   (selectedItem.tankVolume ?? 0) -
                                     (selectedItem.product?.quantity_left ?? 0),
@@ -844,7 +868,7 @@ const Revenue = () => {
       <div className="Row">
         <div className="Column doanh_thu">
           <header className="headerRevenue">
-            <p>DOANH THU VÒI BƠM</p>
+            <p>{t("dashboard.pumpRevenueTitle")}</p>
             <div>
               <DatePicker
                 selected={selectedDatePumpRevenue}
@@ -861,12 +885,12 @@ const Revenue = () => {
             <table className="firsttable_shift">
               <thead className="theadRevenue">
                 <tr>
-                  <th className="center_sum">STT</th>
-                  <th>Vòi bơm - Mặt hàng</th>
+                  <th className="center_sum">{t("tables.stt")}</th>
+                  <th>{t("tables.pumpAndProduct")}</th>
                   {/* <th>Mặt hàng</th> */}
-                  <th className="right_sum">Số đầu</th>
-                  <th className="right_sum">Số cuối</th>
-                  <th className="right_sum">Doanh thu</th>
+                  <th className="right_sum">{t("tables.startReading")}</th>
+                  <th className="right_sum">{t("tables.endReading")}</th>
+                  <th className="right_sum">{t("tables.revenue")}</th>
                 </tr>
               </thead>
               <tbody className="tbodyRevenue">
@@ -880,15 +904,26 @@ const Revenue = () => {
                       <th className="center_sum">
                         {indexOfFirstPumpRevenue + index + 1}
                       </th>
-                      <td data-title="Vòi bơm">{staffMember.pumpName}</td>
+                      <td data-title={t("tables.pump")}>
+                        {staffMember.pumpName}
+                      </td>
                       {/* <td data-title="Mặt hàng">{staffMember.productName}</td> */}
-                      <td className="right_sum" data-title="Số đầu">
+                      <td
+                        className="right_sum"
+                        data-title={t("tables.startReading")}
+                      >
                         {formatNumberWithCommas(staffMember.fNum)}
                       </td>
-                      <td className="right_sum" data-title="Số cuối">
+                      <td
+                        className="right_sum"
+                        data-title={t("tables.endReading")}
+                      >
                         {formatNumberWithCommas(staffMember.lNum)}
                       </td>
-                      <td className="right_sum" data-title="Doanh thu">
+                      <td
+                        className="right_sum"
+                        data-title={t("tables.revenue")}
+                      >
                         {formatNumberWithCommas(
                           staffMember.lNum - staffMember.fNum
                         )}
@@ -898,7 +933,7 @@ const Revenue = () => {
                 ) : (
                   <tr>
                     <td colSpan="5" className="center_sum">
-                      Chưa có dữ liệu về doanh thu vòi bơm
+                      {t("messages.noPumpRevenueData")}
                     </td>
                   </tr>
                 )}
@@ -908,12 +943,14 @@ const Revenue = () => {
                       <div className="pagination">
                         <p>
                           <span>
-                            Đang Hiển Thị {indexOfFirstPumpRevenue + 1} Đến{" "}
-                            {Math.min(
-                              indexOfLastPumpRevenue,
-                              pumpRevenueData.items.length
-                            )}{" "}
-                            Của {pumpRevenueData.items.length} Vòi Bơm
+                            {t("pagination.pumpRows", {
+                              from: indexOfFirstPumpRevenue + 1,
+                              to: Math.min(
+                                indexOfLastPumpRevenue,
+                                pumpRevenueData.items.length
+                              ),
+                              total: pumpRevenueData.items.length,
+                            })}
                           </span>
                         </p>
                         <ul className="pagination-list">
@@ -930,7 +967,7 @@ const Revenue = () => {
                               }
                               disabled={currentPagePumpRevenue === 1}
                             >
-                              Trước
+                              {t("common.previous")}
                             </button>
                           </li>
                           {Array.from(
@@ -971,7 +1008,7 @@ const Revenue = () => {
                                 currentPagePumpRevenue === totalPagesPumpRevenue
                               }
                             >
-                              Sau
+                              {t("common.next")}
                             </button>
                           </li>
                         </ul>
@@ -988,35 +1025,35 @@ const Revenue = () => {
               <div className="object_box"> {staffNumber} </div>
               <Link className="object_a" to="/staff">
                 <IoMdPeople />
-                <span>NHÂN VIÊN</span>
+                <span>{t("nav.staff")}</span>
               </Link>
             </div>
             <div className="object_body">
               <div className="object_box"> {productNumber} </div>
               <Link to="/product" className="object_a">
                 <AiOutlineProduct />
-                <span>MẶT HÀNG</span>
+                <span>{t("nav.product")}</span>
               </Link>
             </div>
             <div className="object_body">
               <div className="object_box"> {pumpNumber} </div>
               <Link to="/pump" className="object_a">
                 <PiGasPumpBold />
-                <span>VÒI BƠM</span>
+                <span>{t("nav.pump")}</span>
               </Link>
             </div>
             <div className="object_body">
               <div className="object_box"> {tankNumber} </div>
               <Link to="/tank" className="object_a">
                 <GiFuelTank />
-                <span> BỂ </span>
+                <span> {t("nav.tank")} </span>
               </Link>
             </div>
           </div>
         </div>
         <div className="ton_kho">
           <div className="containerRevenue">
-            <h6>LOG TRONG CA</h6>
+            <h6>{t("dashboard.shiftLogTitle")}</h6>
             <hr />
             <div className="date-selector">
               <DatePicker
@@ -1035,8 +1072,8 @@ const Revenue = () => {
                 <table className="firsttable_shift">
                   <thead>
                     <tr>
-                      <th className="center_sum">Giờ phát sinh</th>
-                      <th className="right_sum">Thành tiền</th>
+                      <th className="center_sum">{t("tables.timeOccurred")}</th>
+                      <th className="right_sum">{t("tables.amount")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1055,7 +1092,7 @@ const Revenue = () => {
                     ) : (
                       <tr>
                         <td colSpan="2" className="center_sum">
-                          Không có dữ liệu về log phát sinh
+                          {t("messages.noLogData")}
                         </td>
                       </tr>
                     )}
@@ -1070,10 +1107,10 @@ const Revenue = () => {
                     ) : null}
                     {displayedLog.length > 0 ? (
                       <tr>
-                        <th className="left_sum">Tổng:</th>
+                        <th className="left_sum">{t("tables.total")}</th>
                         <th className="right_sum" colSpan={5}>
                           {formatNumberWithCommas(
-                            total.toLocaleString("vi-VN")
+                            total.toLocaleString(dateLocale)
                           )}{" "}
                           VND
                         </th>
@@ -1088,7 +1125,7 @@ const Revenue = () => {
             className="button_xemChitiet borders"
             onClick={() => setLogExists(true)}
           >
-            <button>Xem chi tiết</button>
+            <button>{t("common.detail")}</button>
           </div>
           {logExists && (
             <>
@@ -1101,7 +1138,7 @@ const Revenue = () => {
                   onClick={() => setLogExists(false)}
                   className="close_icon"
                 />
-                <h4>LOG TRONG CA</h4>
+                <h4>{t("dashboard.logDetailTitle")}</h4>
                 <hr />
                 <div>
                   <div className="date-selector">
@@ -1121,12 +1158,14 @@ const Revenue = () => {
                       <table className="firsttable_shift">
                         <thead className="theadRevenue">
                           <tr>
-                            <th className="center_sum">Giờ phát sinh</th>
-                            <th>Mặt hàng</th>
-                            <th>Vòi bơm</th>
-                            <th className="right_sum">Đơn giá</th>
-                            <th className="right_sum">Số lượng</th>
-                            <th className="right_sum">Thành tiền</th>
+                            <th className="center_sum">
+                              {t("tables.timeOccurred")}
+                            </th>
+                            <th>{t("tables.product")}</th>
+                            <th>{t("tables.pump")}</th>
+                            <th className="right_sum">{t("tables.unitPrice")}</th>
+                            <th className="right_sum">{t("tables.quantity")}</th>
+                            <th className="right_sum">{t("tables.amount")}</th>
                           </tr>
                         </thead>
                         <tbody className="tbodyRevenue">
@@ -1135,27 +1174,35 @@ const Revenue = () => {
                               <tr key={index} className="empty">
                                 <td
                                   className="center_sum"
-                                  data-title="Giờ phát sinh"
+                                  data-title={t("tables.timeOccurred")}
                                 >
                                   {
                                     timeConverter(Date.parse(item.startTime))
                                       .time
                                   }
                                 </td>
-                                <td data-title="Mặt hàng">
+                                <td data-title={t("tables.product")}>
                                   {item.productName}
                                 </td>
-                                <td data-title="Vòi bơm">{item.pumpName}</td>
-                                <td className="right_sum" data-title="Đơn giá">
+                                <td data-title={t("tables.pump")}>
+                                  {item.pumpName}
+                                </td>
+                                <td
+                                  className="right_sum"
+                                  data-title={t("tables.unitPrice")}
+                                >
                                   {formatNumberWithCommas(item.productPrice)}{" "}
                                   VND
                                 </td>
-                                <td className="right_sum" data-title="Số lượng">
+                                <td
+                                  className="right_sum"
+                                  data-title={t("tables.quantity")}
+                                >
                                   {item.quantity}
                                 </td>
                                 <td
                                   className="right_sum"
-                                  data-title="Thành tiền"
+                                  data-title={t("tables.amount")}
                                 >
                                   {formatNumberWithCommas(item.totalAmount)} VND
                                 </td>
@@ -1168,7 +1215,7 @@ const Revenue = () => {
                                 className="center_sum
         "
                               >
-                                Không có dữ liệu về log phát sinh
+                                {t("messages.noLogData")}
                               </td>
                             </tr>
                           )}
@@ -1185,10 +1232,13 @@ const Revenue = () => {
                           {displayedLog.length > 0 ? (
                             <tr>
                               <th className="left_sum" colSpan={5}>
-                                Tổng:
+                                {t("tables.total")}
                               </th>
-                              <td className="right_sum" data-title="Tổng tiền">
-                                {total.toLocaleString("vi-VN")} VND
+                              <td
+                                className="right_sum"
+                                data-title={t("tables.totalMoney")}
+                              >
+                                {total.toLocaleString(dateLocale)} VND
                               </td>
                             </tr>
                           ) : null}
@@ -1199,9 +1249,11 @@ const Revenue = () => {
                       <div className="pagination">
                         <p>
                           <span>
-                            Đang Hiển Thị {indexOfFirstStaff + 1} Đến{" "}
-                            {Math.min(indexOfLastStaff, dailyData.length)} Của{" "}
-                            {dailyData.length} Log{" "}
+                            {t("pagination.logRows", {
+                              from: indexOfFirstStaff + 1,
+                              to: Math.min(indexOfLastStaff, dailyData.length),
+                              total: dailyData.length,
+                            })}
                           </span>
                         </p>
                         <ul className="pagination-list">
@@ -1214,7 +1266,7 @@ const Revenue = () => {
                               onClick={() => handlePageChange(currentPage - 1)}
                               disabled={currentPage === 1}
                             >
-                              Trước
+                              {t("common.previous")}
                             </button>
                           </li>
                           {Array.from({ length: totalPages }, (_, index) => (
@@ -1240,7 +1292,7 @@ const Revenue = () => {
                               onClick={() => handlePageChange(currentPage + 1)}
                               disabled={currentPage === totalPages}
                             >
-                              Sau
+                              {t("common.next")}
                             </button>
                           </li>
                         </ul>

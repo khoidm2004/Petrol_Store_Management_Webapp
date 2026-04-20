@@ -4,7 +4,7 @@ import useAuthStore from "../store/authStore.js";
 import {
   collection,
   doc,
-  getDoc,
+  getDocs,
   query,
   setDoc,
   where,
@@ -17,10 +17,10 @@ const useSignUpWithEmailAndPassword = () => {
   const loginUser = useAuthStore();
 
   const signup = async (inputs) => {
-    const userRef = collection(firestore, "users");
+    const userRef = collection(firestore, "user");
 
     const q = query(userRef, where("email", "==", inputs.email));
-    const querySnapshot = await getDoc(q);
+    const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
       return {
@@ -54,7 +54,7 @@ const useSignUpWithEmailAndPassword = () => {
           avatar: "",
           storeName: "",
         };
-        await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
+        await setDoc(doc(firestore, "user", newUser.user.uid), userDoc);
         localStorage.setItem("user-info", JSON.stringify(userDoc));
         loginUser(userDoc);
       }
