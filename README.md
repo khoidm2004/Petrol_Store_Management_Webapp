@@ -12,5 +12,9 @@
 - Testing: Jest
 - Deploy: Vercel
 
+## User Credentials For Testing
+- Email: admin@gmail.com
+- Password: Admin123*#
+
 ## [Demo▶️](https://youtu.be/h0Jt_eXuO68)
 ![App Image](https://i.ibb.co/svc4qcx/Piacom.jpg)
